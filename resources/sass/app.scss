@@ -1,0 +1,110 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+$fa-font-path:        "../webfonts";
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+
+
+body #app nav.navbar .navbar-brand {
+	text-transform: lowercase;
+	font-weight: 700;
+	color: #0057e3;
+	font-size: 45px;
+	:hover {
+		color: #0057e3;
+	}
+
+	.badge.brand-logo {
+		padding: 10px 15px 5px 15px;
+		font-weight: 700;
+		font-size: 46px;
+		background: #0090ff;
+		color: #FFFFFF;
+		vertical-align: middle;
+		margin-right: 10px;
+		text-transform: uppercase;
+		border-radius: 10px;
+	}
+}
+
+// Calendars page
+
+.filter-links {
+	margin-bottom: 20px;
+
+	.btn {
+		margin-left: 3px;
+	}
+
+	.btn.active, .btn:hover {
+		background: #e4ebf4;
+		border: 1px solid #e2e9f3;
+
+		// background: #e4ebf4;
+		// border: 1px solid red;
+	}
+}
+
+
+.filter-content {
+	
+	.item {
+		display: none;
+	}
+
+	.item.active {
+		display: block;
+	}
+
+	.calendarsDataSorting a.sort-link {
+		text-transform: uppercase;
+		color: #5d6b7b;
+	}
+
+	.calendarsDataSorting a.sort-link i {
+		font-size: 13px;
+	}
+
+	.calendarsDataSorting a.sort-link:hover {
+		text-decoration: none;
+			color: #131b26;
+	}
+}
+
+// Add Calendar Modal 
+
+#addCalendarModal .modal-body {
+	padding-left: 3rem;
+	padding-right: 3rem;
+}
+
+#addCalendarForm input[name="event-date"] {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#addCalendarForm .alert {
+	width: 70%;
+	float: right;
+	margin-top: 10px;
+	text-align: center;
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+

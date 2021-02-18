@@ -50,13 +50,40 @@ class HomeController extends Controller
         $this->client->setAccessToken(json_encode($this->googleClientToken));
         
         $service = new Google_Service_Calendar($this->client);
-        $calendars  = $service->calendarList->listCalendarList();
-        foreach ($calendars->items as $calendar) {
+
+        $calendarsData = $service->calendarList->listCalendarList();
+
+        $calendars = $calendarsData->getItems();
+        
+
+        $calData = [];
+
+        foreach ($calendars as $calendar) {
+
+
 
             $calendarData = $service->calendars->get($calendar->id);
 
-            $results = $service->events->listEvents($calendar->id);
-            $calendar->events = $results->getItems();
+            $eventsData = $service->events->listEvents($calendar->id);
+            $calendar->events = $eventsData->getItems();
+            foreach ($calendar->events as $event) {
+
+                $dateTime = $event->start->date ? $event->start->date : $event->start->dateTime;
+                $startDateTime = new \DateTime($dateTime);
+
+                $dateTime = $event->end->date ? $event->end->date : $event->end->dateTime;
+                $endDateTime = new \DateTime($dateTime);
+
+              
+
+                $event->startDate = date_format($startDateTime, 'd/m/Y');
+                $event->startTime = date_format($startDateTime, 'h:i A');
+
+                $event->endDate = date_format($endDateTime, 'd/m/Y');
+                $event->endTime = date_format($endDateTime, 'h:i A');
+            }
+
+           
 
             $calendar->lastUpdated = count($calendar->events) > 0 ? $calendar->events[0]->updated : NULL;
 
@@ -66,12 +93,22 @@ class HomeController extends Controller
                 }
             }
 
-            $date = new \DateTime($calendar->lastUpdated);
-            $calendar->lastUpdated = $calendar->lastUpdated ? date_format($date, 'd.m.Y') : NULL;
+            $now = new \DateTime;
+            $ago = new \DateTime($calendar->lastUpdated);
+            $diff = $now->diff($ago);
+
+            if ($diff->y > 0 || $diff->m > 0 || $diff->d > 2 || $diff->h > 48) {
+                $calendar->lastUpdated = $calendar->lastUpdated ? date_format($ago, 'd.m.Y') : NULL;
+            } else {
+                $calendar->lastUpdated = $calendar->lastUpdated ? \Carbon\Carbon::createFromTimeStamp(strtotime($calendar->lastUpdated))->diffForHumans() : NULL;
+            }
+
         }
 
-        return view('home', ['calendars' => json_encode($calendars->items, JSON_UNESCAPED_UNICODE)]);
+        return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
     }
+
+   
 
     public function addNewCalendarAction(Request $request)
     {

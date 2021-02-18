@@ -66,11 +66,35 @@ body #app nav.navbar .navbar-brand {
 		display: block;
 	}
 
+	.calendarsDataSorting {
+		margin-bottom: 5px;
+	}
+
 	.calendarsDataSorting a.sort-link {
 		text-transform: uppercase;
 		color: #5d6b7b;
+		font-weight: 700;
+
+		.fas {
+			line-height: 1.6em;
+			font-size: 14px;
+		}
 	}
 
+	.calendars-list .card {
+		padding: 5px 5px 5px 10px;
+		margin-top: 10px;
+	}
+
+	.calendars-list .actions button {
+
+		margin-right: 5px;
+
+		.fas, .far {
+			margin-right: 5px;
+		}
+	}
+		
 	.calendarsDataSorting a.sort-link i {
 		font-size: 13px;
 	}
@@ -79,7 +103,10 @@ body #app nav.navbar .navbar-brand {
 		text-decoration: none;
 			color: #131b26;
 	}
+
+
 }
+
 
 // Add Calendar Modal 
 
@@ -101,10 +128,22 @@ body #app nav.navbar .navbar-brand {
 }
 
 
+
+
+
+.calendars-list .actions .btn-open {
+    color: #3490dc;
+    padding: 3px 3px 3px 8px;
+}
+
+.calendars-list .actions .btn-share, .calendars-list .actions .btn-delete {
+    color: #949fae;
+}
+
+// Vue js transitions
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-

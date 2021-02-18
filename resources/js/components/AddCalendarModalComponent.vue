@@ -57,26 +57,32 @@
 									    <div class="col-md-2">Notes</div>
 									    <div class="col-md-2"></div>
 									</div>
+									
 
-							  		<ul class="list-group list-group-flush">
+									<div class="card-body">
 
-							  			<li class="list-group-item">
-							    			<div class="row">
-							    				<div class="col-md-2">9/30/20</div>
-								    			<div class="col-md-2">5:30 PM - 6:30 PM</div>
-								    			<div class="col-md-2">255 Washington St. Westwood, MA</div>
-								    			<div class="col-md-2">Practice</div>
-								    			<div class="col-md-2">Arrive 5 minutes early</div>
-								    			<div class="col-md-2">
-								    				<button class="btn btn btn-outline-secondary"><i class="fas fa-pencil-alt"></i></button>
-								    				<button class="btn btn btn-outline-secondary"><i class="far fa-trash-alt"></i></button>
-								    				<button class="btn btn btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></button>
+										<ul class="list-group list-group-flush">
+
+								  			<li class="list-group-item">
+								    			<div class="row">
+								    				<div class="col-md-2">9/30/20</div>
+									    			<div class="col-md-2">5:30 PM - 6:30 PM</div>
+									    			<div class="col-md-2">255 Washington St. Westwood, MA</div>
+									    			<div class="col-md-2">Practice</div>
+									    			<div class="col-md-2">Arrive 5 minutes early</div>
+									    			<div class="col-md-2">
+									    				<button class="btn btn-outline-secondary btn-sm"><i class="fas fa-pencil-alt"></i></button>
+									    				<button class="btn btn-outline-secondary btn-sm"><i class="far fa-trash-alt"></i></button>
+									    				<button class="btn btn-outline-secondary btn-sm"><i class="fas fa-ellipsis-h"></i></button>
+									    			</div>
 								    			</div>
-							    			</div>
-							    		</li>
+								    		</li>
 
-							  		</ul>
+								  		</ul>
 
+										
+									</div>
+							  		
 							  		<transition name="fade">
 								  		<div class="card-footer" v-if="showNewEventDataForm">
 								    		<div class="row">
@@ -317,7 +323,7 @@
 
 					.then(function() {
 						currentObj.formRequestProcess = false;
-						currentObj.inputDisabled = false;
+						// currentObj.inputDisabled = false;
 					});
 
 				}

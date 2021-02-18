@@ -31,18 +31,29 @@
                         <div class="calendarsDataSorting">
                             <div class="row">
                                 <div class="col-3">
-                                    <a class="sort-link" href="#">Name <i class="fas fa-arrow-down"></i></a>
+                                    <a class="sort-link" href="#">
+                                        Name <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                        <!-- <i class="fas fa-sort-amount-down"></i> -->
+                                        <!-- <i class="fas fa-sort-amount-up-alt"></i> -->
+                                        <!-- <i class="fas fa-sort-amount-up"></i> -->
+                                    </a>
                                 </div>
                                 <div class="col-1">
-                                    <a class="sort-link" href="#">Events <i class="fas fa-arrow-down"></i></a>
-                                </div>
-                                <div class="col-3">
-                                    <a class="sort-link" href="#">Owner <i class="fas fa-arrow-down"></i></a>
-                                </div>
-                                <div class="col-3">
-                                    <a class="sort-link" href="#">Last Updated <i class="fas fa-arrow-down"></i></a>
+                                    <a class="sort-link" href="#">
+                                        Events <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                    </a>
                                 </div>
                                 <div class="col-2">
+                                    <a class="sort-link" href="#">
+                                        Owner <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="sort-link" href="#">
+                                        Updated <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                    </a>
+                                </div>
+                                <div class="col-4">
 
                                 </div>
                             </div>
@@ -50,10 +61,13 @@
 
                         <div class="calendars-list">
                             
-                            <div v-for="calendar in calendars" class="card calendar-single">
+                            <div v-for="calendar in calendars">
 
+                               
 
-                                
+                                <calendar-component :calendar="calendar" ref='calendar'></calendar-component>
+
+                                <!--
                                 <div class="card-heading">
                                     <div class="row align-items-center">
                                         <div class="col-3">
@@ -62,7 +76,7 @@
                                         <div class="col-1">
                                             {{ calendar.events.length }}
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-2">
                                             <span v-if="calendar.accessRole == 'owner'">
                                                 me
                                             </span>
@@ -70,21 +84,34 @@
                                                 other
                                             </span>
                                         </div>
-                                        <div class="col-1">
-                                            <!--9 hours ago-->
+                                        <div class="col-2">
+                                            
                                             {{ calendar.lastUpdated }}
                                         </div>
-                                        <div class="col-4 text-right">
-                                            <!-- <button type="button" class="btn btn-primary" name="button"><i class="fa fa-user-o"></i>Share</button>
-                                            <button type="button" class="btn btn-primary" name="button"><i class="fa fa-bell-o"></i>Subscribe</button> -->
-                                            <button type="button" class="btn btn-light pull-right" name="button"><i class="fas fa-angle-down"></i></button>
+                                        <div class="col-4 text-right actions">
+
+                                            <button type="button" class="btn btn-primary btn-sm" name="button">
+                                                <i class="fas fa-user-friends"></i> Share
+                                            </button>
+
+                                            <button type="button" class="btn btn-outline-primary btn-sm" name="button">
+                                                <i class="far fa-bell"></i> Subscribe ???
+                                            </button>
+
+                                            <button type="button" class="btn btn-outline-secondary btn-sm" name="button">
+                                                <i class="far fa-bell"></i> Unsubscribe ???
+                                            </button>
+
+                                            <button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDataForm(this)">
+                                                <i class="fas fa-angle-down"></i>
+                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
 
-                                <!--
+                                
                                 <div class="card-body">
-
 
                                     <div class="row align-items-center">
                                         <div class="col-lg-6">
@@ -130,7 +157,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            -->
+                                -->
                             </div>
 
                         </div>
@@ -147,6 +174,10 @@
 </template>
 
 <script>
+
+   
+
+
 
     export default {
 

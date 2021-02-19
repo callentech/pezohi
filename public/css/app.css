@@ -16218,6 +16218,10 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   text-align: center;
 }
 
+#addCalendarEventForm .alert {
+  text-align: center;
+}
+
 .calendars-list .actions .btn-open {
   color: #3490dc;
   padding: 3px 3px 3px 8px;

@@ -6,7 +6,7 @@
         <div class="col-xl-11">
             
  
-            <calendars-component :data="{{ $calendars }}"></all-calendars-component>
+            <all-calendars-component :data="{{ $calendars }}" new_event_form_action="{{ route('addNewCalendarEvent') }}" csrf_token="{{ csrf_token() }}"></all-calendars-component>
 
             
             
@@ -119,4 +119,5 @@
 </div>
 
 <add-calendar-component  form_action="{{ route('addNewCalendar') }}" csrf_token="{{ csrf_token() }}"></add-calendar-component>
+
 @endsection

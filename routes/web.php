@@ -25,6 +25,7 @@ Route::get('auth/google/callback', [App\Http\Controllers\GoogleController::class
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/calendar-new', [App\Http\Controllers\HomeController::class, 'addNewCalendarAction'])->name('addNewCalendar');
+Route::post('/calendar-new-event', [App\Http\Controllers\HomeController::class, 'addNewCalendarEventAction'])->name('addNewCalendarEvent');
 
 
 

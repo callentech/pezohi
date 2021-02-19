@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
+
 use Carbon\Carbon;
 
 use Auth;
@@ -74,8 +76,6 @@ class HomeController extends Controller
                 $dateTime = $event->end->date ? $event->end->date : $event->end->dateTime;
                 $endDateTime = new \DateTime($dateTime);
 
-              
-
                 $event->startDate = date_format($startDateTime, 'd/m/Y');
                 $event->startTime = date_format($startDateTime, 'h:i A');
 
@@ -113,8 +113,6 @@ class HomeController extends Controller
     public function addNewCalendarAction(Request $request)
     {
         session_start();
-
-
         if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
             return json_encode([
                 'code' => 0
@@ -146,5 +144,106 @@ class HomeController extends Controller
 
     }
 
-   
+    public function addNewCalendarEventAction(Request $request)
+    {
+        /*
+        var_dump($request->all());
+        exit;
+
+        array(6) {
+          ["_token"]=>              string(40) "WVqtwRasXCAXTMcZeLiGxg6fb9ZM48juq7zn0cL1"
+          ["calendar_id"]=>         string(52) "dvu11sq4uvbi9k9inpc5ggt9t8@group.calendar.google.com"
+          ["new-event-datetime"]=>  string(10) "01.02.2021"
+          ["new-event-address"]=>   string(7) "Address"
+          ["new-event-type"]=>      string(4) "game"
+          ["new-event-notes"]=>     string(5) "Notes"
+        }
+
+        */
+
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $request->validate([
+            'calendar_id' => 'required',
+            'new_event_datetime' => 'required',
+            'new_event_address' => 'required',
+            'new_event_type' => 'required',
+            'new_event_notes' => 'required'
+        ]);
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+
+        $service = new Google_Service_Calendar($this->client);
+
+
+        $adminEmails = \DB::table('users')
+            ->where('role', 'admin')
+            ->pluck('email');
+
+        $attendees = [];
+        foreach ($adminEmails as $email) {
+            $attendees[] = ['email' => $email];
+        }
+
+        
+        $date = new \DateTime($request->new_event_datetime);
+
+        $event = new \Google_Service_Calendar_Event([
+            'summary' => 'Event',
+            'location' => $request->new_event_address,
+            'description' => $request->new_event_notes,
+            
+            'start' => [
+                'dateTime' => date_format($date, 'c'),
+                'timeZone' => date_format($date, 'e'),
+            ],
+            
+            'end' => [
+                'dateTime' => date_format($date, 'c'),
+                'timeZone' => date_format($date, 'e'),
+            ],
+
+            'extendedProperties' => [
+                'private' => [
+                    'type' => $request->new_event_type
+                ]
+            ],
+            
+            
+            'attendees' => $attendees,
+            
+            'reminders' => [
+                'useDefault' => FALSE,
+                'overrides' => [
+                    array('method' => 'email', 'minutes' => 24 * 60),
+                    array('method' => 'popup', 'minutes' => 10),
+                ],
+            ],
+        ]);
+
+        $calendarId = $request->calendar_id;
+        $event = $service->events->insert($calendarId, $event);
+        // printf('Event created: %s\n', $event->htmlLink);
+
+
+
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'event' => $event
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getAdminsEmails()
+    {
+        $admins = User::where('role', 'admin')->get();
+    }
+
 }

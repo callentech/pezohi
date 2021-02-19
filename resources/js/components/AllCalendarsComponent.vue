@@ -65,7 +65,7 @@
 
                                
 
-                                <calendar-component :calendar="calendar" ref='calendar'></calendar-component>
+                                <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
 
                                 <!--
                                 <div class="card-heading">
@@ -181,7 +181,7 @@
 
     export default {
 
-        props:['data'],
+        props:['data', 'new_event_form_action', 'csrf_token'],
 
         data() {
             return {

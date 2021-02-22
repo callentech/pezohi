@@ -206,7 +206,11 @@
             },
 
             showAddCalendarModal: function() {
-                jQuery('#addCalendarModal').modal('show');
+                //jQuery('#addCalendarModal').modal('show');
+
+                this.$root.$refs.addEditCalendarModal.showAddCalendarModal();
+
+               
             }
         },
 

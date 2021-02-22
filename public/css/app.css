@@ -16187,6 +16187,28 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   padding: 5px 5px 5px 10px;
   margin-top: 10px;
 }
+.filter-content .calendars-list .dropdown-calendar-actions {
+  display: inline;
+  position: relative;
+}
+.filter-content .calendars-list .dropdown-calendar-actions .items {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  z-index: 1;
+  background: #FFF;
+  padding: 10px 10px 0 10px;
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 3px;
+  width: 120px;
+}
+.filter-content .calendars-list .dropdown-calendar-actions .items a {
+  text-align: left;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
 .filter-content .calendars-list .actions button {
   margin-right: 5px;
 }

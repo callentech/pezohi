@@ -86,6 +86,33 @@ body #app nav.navbar .navbar-brand {
 		margin-top: 10px;
 	}
 
+	.calendars-list .dropdown-calendar-actions {
+		display: inline;
+		position: relative;
+
+		.items {
+			display: flex;
+		    flex-direction: column;
+		    // border: 1px solid red;
+		    position: absolute;
+		    right: 0;
+		    top: 40px;
+		    z-index: 1;
+		    background: #FFF;
+			padding: 10px 10px 0 10px;
+			-webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+			-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+			box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+			border-radius: 3px;
+			width: 120px;
+
+			a {
+				text-align: left;
+				text-decoration: none;
+				margin-bottom: 10px;
+			}
+		}
+	}
 	.calendars-list .actions button {
 
 		margin-right: 5px;

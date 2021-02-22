@@ -27,7 +27,7 @@ Vue.component('calendars-list-event-component', require('./components/CalendarsL
 
 
 
-Vue.component('add-calendar-component', require('./components/AddCalendarModalComponent.vue').default);
+Vue.component('add-edit-calendar-modal-component', require('./components/AddEditCalendarModalComponent.vue').default);
 
 
 
@@ -42,9 +42,78 @@ Vue.component('add-calendar-component', require('./components/AddCalendarModalCo
 const app = new Vue({
     el: '#app',
 
+    data() {
+    	return {
+    	// 	modal_data: {
+    	// 		title: '',
+    	// 		form_action: '',
+    	// 		calendarData: null
+    	// 	}
+    		
+    	}
+    },
+
     methods: {
-    	showAddCalendarModal: function() {
-			jQuery('#addCalendarModal').modal('show');
-		}
+  //   	showAddCalendarModal: function() {
+		// 	this.modal_data.title = 'Add Calendar';
+		// 	this.modal_data.form_action = '/calendar-new';
+		// 	jQuery('#addEditCalendarModal').modal('show');
+		// },
+
+		// showEditCalendarModal: function(calendarId) {
+
+		// 	let currentObj = this;
+
+		// 	axios.post('/calendar-get-data', { calendar_id: calendarId })
+			
+		// 		.then(function (response) {
+
+		// 			console.log(response.data);
+
+		// 			currentObj.modal_data.calendarData = response.data.data.calendarData;
+
+		// 			// if (response.data.code == 1) {
+		// 			// 	currentObj.requestSuccess = 'Success create calendar';
+		// 			// 	currentObj.addCalendarResetForm();
+		// 			// 	setTimeout(function() {
+		// 			// 		currentObj.requestSuccess = false;
+		// 			// 		jQuery('#addCalendarModal').modal('hide');
+		// 			// 		location.reload();
+		// 			// 	}, 3000);
+		// 			// } else {
+		// 			// 	currentObj.requestDanger = 'Error Request';
+		// 			// }
+		// 		})
+		// 		.catch(function (error) {
+		// 			// if (error.response.status == 422) {
+		// 			// 	currentObj.requestDanger = error.response.data.message;
+		// 			// 	form.classList.add('was-validated');
+		// 			// } else {
+		// 			// 	currentObj.requestDanger = 'Error Request';
+		// 			// }
+		// 		})
+		// 		.then(function() {
+		// 			//currentObj.formRequestProcess = false;
+		// 			// currentObj.inputDisabled = false;
+		// 	});
+
+
+
+
+
+		// 	this.modal_data.title = 'Edit Calendar';
+		// 	this.modal_data.form_action = '/calendar-edit';
+
+		// 	//this.modal_data.eventData = [];
+			
+
+
+
+
+
+		// 	jQuery('#addEditCalendarModal').modal('show');
+
+
+		// }
     }
 });

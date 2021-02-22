@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 
+use Illuminate\Support\Str;
+
 use Carbon\Carbon;
 
 use Auth;
@@ -55,19 +57,62 @@ class HomeController extends Controller
 
         $calendarsData = $service->calendarList->listCalendarList();
 
-        $calendars = $calendarsData->getItems();
+        $calendarsItems = $calendarsData->getItems();
+
+        $calendars = [];
+
+        foreach ($calendarsItems as $calendar) {
+
+            // Exclude Birthdays && Holidays Calendars
+            if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->id, ['addressbook#contacts@group.v.calendar.google.com'])) {
+                continue;
+            }
+
+           
+
+            $eventsData = $service->events->listEvents($calendar->id);
+
+            $calendar->events= $eventsData->getItems();
+
+
+            
+
+
+            $calendars[] = $calendar;
+        }
+
+
         
-
-        $calData = [];
-
-        foreach ($calendars as $calendar) {
+        /*
+      
 
 
+        foreach ($calendars as &$calendar) {
 
+            // Exclude Birthdays && Holidays Calendars
+
+            if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com'])) {
+                
+                unset($calendar);
+
+                continue;
+            }
+            // var_dump($calendar->id);
+
+            // var_dump(Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']));
+
+            // if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->id, ['addressbook#contacts@group.v.calendar.google.com'])) {
+            //     continue;
+            // }
+            
             $calendarData = $service->calendars->get($calendar->id);
 
             $eventsData = $service->events->listEvents($calendar->id);
+
             $calendar->events = $eventsData->getItems();
+
+            
+            
             foreach ($calendar->events as $event) {
 
                 $dateTime = $event->start->date ? $event->start->date : $event->start->dateTime;
@@ -82,6 +127,8 @@ class HomeController extends Controller
                 $event->endDate = date_format($endDateTime, 'd/m/Y');
                 $event->endTime = date_format($endDateTime, 'h:i A');
             }
+
+
 
            
 
@@ -104,6 +151,8 @@ class HomeController extends Controller
             }
 
         }
+
+        */
 
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
     }
@@ -241,9 +290,73 @@ class HomeController extends Controller
         ], JSON_UNESCAPED_UNICODE);
     }
 
-    public function getAdminsEmails()
+    public function editCalendarAction(Request $request) 
     {
-        $admins = User::where('role', 'admin')->get();
+        // var_dump($request->all());
+        // exit;
+
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $request->validate([
+            'calendar_id' => 'required',
+            'calendar_name' => 'required'
+        ]);
+
+        
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        $calendar = $service->calendars->get($request->calendar_id);
+        $calendar->setSummary($request->calendar_name);
+
+        $updatedCalendar = $service->calendars->update($request->calendar_id, $calendar);
+
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'updatedCalendar' => $updatedCalendar,
+                'message' => 'Data updated successfully'
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+
+
+    }
+
+
+    public function getCalendarDataAction(Request $request)
+    {
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $request->validate([
+            'calendar_id' => 'required'
+        ]);
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        $calendarData = $service->calendars->get($request->calendar_id);
+        $calendarEvents = $service->events->listEvents($request->calendar_id);
+       
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'calendarData' => $calendarData,
+                'calendarEvents' => $calendarEvents
+            ]
+        ], JSON_UNESCAPED_UNICODE);
     }
 
 }

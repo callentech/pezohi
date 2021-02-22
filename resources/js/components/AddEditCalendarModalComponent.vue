@@ -6,24 +6,25 @@
 	<div class="component-wrapper">
 
 
-		<div class="modal fade" id="addCalendarModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addCalendarModalLabel" aria-hidden="true">
+		<div class="modal fade" id="addEditCalendarModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addCalendarModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-xl">
 				<div class="modal-content">
 
 					<div class="modal-header">
-						<h5 class="modal-title w-100 text-center">Add new Calendar</h5>
+						<h5 class="modal-title w-100 text-center">{{ modal_title }}</h5>
 					    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					    	<span aria-hidden="true">&times;</span>
 					    </button>
 					</div>
 					<div class="modal-body">
 
+						
 
-						<form id="addCalendarForm" class="needs-validation" :action="form_action" method="POST" @submit="addCalendarSubmit" novalidate>
+						<form id="addCalendarForm" class="needs-validation" :action="form_action" method="POST" @submit="addEditCalendarSubmit" novalidate>
 
 							<input type="hidden" name="_token" :value="csrf_token">
+							<input type="hidden" name="calendar_id" :value="calendar_id">
 
-							
 							<div class="form-row">
 
 						    	<div class="form-group col-md-6">
@@ -34,12 +35,12 @@
 
 						    	<div class="form-group col-md-6">
 						      		<label for="owner_email_address">Owner's Email Address</label>
-						      		<input type="email" name="owner_email_address" class="form-control" id="owner_email_address" v-model="owner_email_address" equired :disabled="inputDisabled">
+						      		<input type="email" name="owner_email_address" class="form-control" id="owner_email_address" v-model="owner_email_address" equired disabled>
 						      		<div class="invalid-feedback">Please provide a valid Email Address.</div>
 
 						      		<div class="form-check form-check-inline">
-									  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" :disabled="inputDisabled">
-									  <label class="form-check-label" for="inlineCheckbox1">Owned by me</label>
+									  <input class="form-check-input" type="checkbox" id="owned_by_me_checkbox" disabled checked>
+									  <label class="form-check-label" for="owned_by_me_checkbox">Owned by me</label>
 									</div>
 						    	</div>
 
@@ -63,13 +64,23 @@
 
 										<ul class="list-group list-group-flush">
 
-								  			<li class="list-group-item">
+								  			<li v-for="event in calendar_events.items" class="list-group-item">
+								  				
 								    			<div class="row">
-								    				<div class="col-md-2">9/30/20</div>
-									    			<div class="col-md-2">5:30 PM - 6:30 PM</div>
-									    			<div class="col-md-2">255 Washington St. Westwood, MA</div>
-									    			<div class="col-md-2">Practice</div>
-									    			<div class="col-md-2">Arrive 5 minutes early</div>
+								    				<!-- <div class="col-md-2">9/30/20</div> -->
+								    				<div class="col-md-2">{{ event.start.dateTime|formatDate('MMMM D, YYYY')  }}</div>
+									    			<!-- <div class="col-md-2">5:30 PM - 6:30 PM</div> -->
+									    			<div class="col-md-2">{{ event.startTime }} - {{ event.endTime }}</div>
+									    			<!-- <div class="col-md-2">255 Washington St. Westwood, MA</div> -->
+
+									    			<div class="col-md-2">{{ event.location }}</div>
+									    			<!-- <div class="col-md-2">Practice</div> -->
+									    			<div class="col-md-2">
+									    				<div  v-if="typeof event.extendedProperties !== 'undefined' && typeof event.extendedProperties.private.type !== 'undefined'">
+															{{event.extendedProperties.private.type | capitalize}}
+														</div>
+									    			</div>
+									    			<div class="col-md-2">{{ event.description }}</div>
 									    			<div class="col-md-2">
 									    				<button class="btn btn-outline-secondary btn-sm"><i class="fas fa-pencil-alt"></i></button>
 									    				<button class="btn btn-outline-secondary btn-sm"><i class="far fa-trash-alt"></i></button>
@@ -172,13 +183,19 @@
 	
 	export default {
 		
-		props:['form_action', 'csrf_token'],
+		//props:['form_action', 'csrf_token', 'modal_title'],
+		//props:['modal_data'],
 
 		data() {
 			return {
 
+				modal_title: '',
+				csrf_token: '',
 				owner_email_address: '',
 				calendar_name: '',
+				calendar_id: '',
+				calendar_events: [],
+				form_action: '',
 
 
 				inputDisabled: false,
@@ -206,6 +223,10 @@
 			}
 		},
 
+		created() {
+        	this.$root.$refs.addEditCalendarModal = this;
+    	},
+
 		components: {
         	datePicker,
         	DateRangePicker
@@ -221,6 +242,66 @@
         },
 
 		methods: {
+
+
+			showAddCalendarModal: function() {
+				this.modal_title = 'Add Calendar';
+				this.form_action = '/calendar-new';
+				
+				this.calendar_name = '';
+				
+				jQuery('#addEditCalendarModal').modal('show');
+			},
+
+			showEditCalendarModal: function(id) {
+				
+				let currentObj = this;
+				axios.post('/calendar-get-data', { calendar_id: id })
+			
+				.then(function (response) {
+
+					console.log(response);
+
+					currentObj.modal_title = 'Edit Calendar';
+					currentObj.form_action = '/calendar-edit';
+					
+					currentObj.calendar_id = id;
+					currentObj.calendar_name = response.data.data.calendarData.summary;
+
+					currentObj.calendar_events = response.data.data.calendarEvents;
+
+
+
+					jQuery('#addEditCalendarModal').modal('show');
+
+					// if (response.data.code == 1) {
+					// 	currentObj.requestSuccess = 'Success create calendar';
+					// 	currentObj.addCalendarResetForm();
+					// 	setTimeout(function() {
+					// 		currentObj.requestSuccess = false;
+					// 		jQuery('#addCalendarModal').modal('hide');
+					// 		location.reload();
+					// 	}, 3000);
+					// } else {
+					// 	currentObj.requestDanger = 'Error Request';
+					// }
+				})
+				.catch(function (error) {
+					console.log(error);
+					// if (error.response.status == 422) {
+					// 	currentObj.requestDanger = error.response.data.message;
+					// 	form.classList.add('was-validated');
+					// } else {
+					// 	currentObj.requestDanger = 'Error Request';
+					// }
+				})
+				.then(function() {
+					//currentObj.formRequestProcess = false;
+					// currentObj.inputDisabled = false;
+				});
+
+			},
+
 
 			showAddEventForm: function(event) {
 				event.preventDefault();
@@ -248,7 +329,7 @@
 			},
 
 			
-			addCalendarSubmit: function(event) {
+			addEditCalendarSubmit: function(event) {
 
 				event.preventDefault();
 		        event.stopPropagation();
@@ -256,8 +337,65 @@
 		        this.requestSuccess = false;
 				this.requestDanger = false;
 
-		        
 
+				let currentObj = this;
+				let form = event.target;
+
+				if (form.checkValidity() === false) {
+					form.classList.add('was-validated');
+				} else {
+
+					let url = event.target.action;
+					let formData = new FormData(form);
+
+					axios.interceptors.request.use(function (config) {
+					    // Do something before request is sent
+					    currentObj.formRequestProcess = true;
+					    currentObj.inputDisabled = true;
+					    return config;
+					}, function (error) {
+					    // Do something with request error
+					    return Promise.reject(error);
+					});
+
+					axios.post(url, formData)
+					.then(function(response) {
+
+						
+
+						// if (response.data.code == 1) {
+						// 	currentObj.requestSuccess = response.data.data.message;
+
+						// 	currentObj.addCalendarResetForm();
+
+						// } else {
+						// 	currentObj.requestDanger = 'Request Error';
+						// }
+
+					})
+					.catch(function (error) {
+
+						if (error && error.response.status == 422) {
+							currentObj.requestDanger = error.response.data.message;
+							form.classList.add('was-validated');
+						} else {
+							currentObj.requestDanger = 'Request Error';
+						}
+
+					})
+					.then(function() {
+
+					});
+
+
+					
+
+					
+
+				}
+
+		        
+				/*
 				let form = event.target;
 
 				if (form.checkValidity() === false) {
@@ -328,11 +466,29 @@
 
 				}
 
+				*/
+
 			}
 		},
 
 		mounted() {
+			this.csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+			this.owner_email_address = document.querySelector('meta[name="current_user_email"]').getAttribute('content');
+		},
 
+		filters: {
+  			capitalize: function (value) {
+    			if (!value) return ''
+    			value = value.toString()
+    			return value.charAt(0).toUpperCase() + value.slice(1)
+  			},
+
+  			formatDate: function(value) {
+  				let date = new Date(value);
+  				let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
+  				return date.getDate()+'.'+month+'.'+date.getFullYear();
+  			}
+  
 		}
 	}
 

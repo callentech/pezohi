@@ -27,6 +27,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/calendar-new', [App\Http\Controllers\HomeController::class, 'addNewCalendarAction'])->name('addNewCalendar');
 Route::post('/calendar-new-event', [App\Http\Controllers\HomeController::class, 'addNewCalendarEventAction'])->name('addNewCalendarEvent');
 
+Route::post('/calendar-edit', [App\Http\Controllers\HomeController::class, 'editCalendarAction'])->name('editCalendar');
+
+
+
+
+Route::post('/calendar-get-data', [App\Http\Controllers\HomeController::class, 'getCalendarDataAction']);
+
 
 
 

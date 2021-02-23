@@ -16223,25 +16223,46 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   color: #131b26;
 }
 
+/*
 #addCalendarModal .modal-body {
-  padding-left: 3rem;
-  padding-right: 3rem;
+	padding-left: 3rem;
+	padding-right: 3rem;
 }
 
-#addCalendarForm input[name=event-date] {
-  padding-left: 5px;
-  padding-right: 5px;
+#addCalendarForm input[name="event-date"] {
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 #addCalendarForm .alert {
-  width: 70%;
-  float: right;
-  margin-top: 10px;
+	width: 70%;
+	float: right;
+	margin-top: 10px;
+	text-align: center;
+}
+*/
+#addCalendarEventForm .alert {
   text-align: center;
 }
 
-#addCalendarEventForm .alert {
-  text-align: center;
+#addEditCalendarForm .alert {
+  margin-top: 10px;
+}
+
+#calendarData {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+#calendarDataTable {
+  font-size: 13px;
+}
+#calendarDataTable thead tr th.actions {
+  width: 15%;
+}
+
+#newEventDataForm td {
+  padding-top: 0.8rem;
 }
 
 .calendars-list .actions .btn-open {

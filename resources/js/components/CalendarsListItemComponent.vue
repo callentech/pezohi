@@ -46,7 +46,7 @@
 			                <div class="items" v-if="showCalendarDropdownActions">
 			                	<a href="javascript:void(0)" @click="showAddEditCalendarModal(calendar.id)"><i class="far fa-edit"></i> Edit</a>
 			                	<a href=""><i class="far fa-clone"></i> Duplicate</a>
-			                	<a href=""><i class="far fa-trash-alt"></i> Delete</a>
+			                	<a href="javascript:void(0)" @click="showConfirmCalendarDelete(calendar.id)"><i class="far fa-trash-alt"></i> Delete</a>
 			                </div>
 			            </transition>
 						
@@ -133,15 +133,15 @@
 	            	
 				  		<div class="card-footer" v-if="showNewEventDataForm">
 
-				  			<form id="addCalendarEventForm" class="needs-validation" action="new_event_form_action" method="POST" submit="addEventSubmit" novalidate>
+				  			<form id="addCalendarEventForm" class="needs-validation" action="/calendar-new-event" @submit="addEventSubmit" novalidate>
 
 				  				
 				  				<input type="hidden" name="calendar_id" :value="calendar.id">
 
 					    		<div class="row">
 
-				    				<!-- <div class="input-group input-group-sm mb-3 col-md-2">
-										<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="inputDisabled" placeholder="dd.mm.YYYY" required></date-picker>
+				    				<div class="input-group input-group-sm mb-3 col-md-2">
+										<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="requestProcess" placeholder="dd.mm.YYYY" required></date-picker>
 										<div class="input-group-append">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
@@ -150,9 +150,9 @@
 									
 
 					    			<div class="input-group input-group-sm mb-3 col-md-2">
-										<input type="text" class="form-control" placeholder="H:MM PM - H:MM PM" :disabled="inputDisabled" required value="05:20 PM - 10:35 PM">
+										<input type="text" class="form-control" placeholder="H:MM PM - H:MM PM" :disabled="requestProcess" required value="05:20 PM - 10:35 PM">
 										<div class="invalid-feedback">Please provide a valid times.</div>
-									</div> -->
+									</div>
 
 					    			<div class="col-md-2">
 					    				<input type="text" name="new_event_address" class="form-control form-control-sm" placeholder="Address" required>
@@ -175,14 +175,14 @@
 
 					    			<div class="col-md-2 text-right">
 					    				<button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
-					    				<button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button> 
+					    				<!-- <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>  -->
 					    				<button type="button" class="btn btn-outline-secondary btn-sm"><i class="fas fa-times"></i></button>
 					    			</div>
 				    			</div>
 
 				    			
-									<div class="alert alert-success" role="alert"></div>
-									<div class="alert alert-danger" role="alert"></div>
+									<div v-if="requestSuccess" class="alert alert-success" role="alert">{{ requestSuccess }}</div>
+									<div v-if="requestDanger"class="alert alert-danger" role="alert">{{ requestDanger }}</div>
 								
 
 			    			</form>
@@ -198,15 +198,39 @@
 </template>
 
 <script>
+
+	import datePicker from 'vue-bootstrap-datetimepicker';
+	import DateRangePicker from 'vue2-daterange-picker'
+
+	import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+	import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+
 	export default {
 
 		props:['calendar'],
+
+		components: {
+			datePicker,
+			DateRangePicker
+		},
 
 		data() {
 			return {
 				showBody: false,
 				showCalendarDropdownActions: false,
-				showNewEventDataForm: false
+				showNewEventDataForm: false,
+
+				dateOptions: {
+					format: 'DD.MM.YYYY',
+					useCurrent: true
+				},
+
+				requestProcess: false,
+
+				requestDanger: false,
+				requestSuccess: false,
+
+				newEventData: {}
 			}
 		},
 
@@ -248,7 +272,87 @@
 
 			showAddEventForm: function() {
 				this.showNewEventDataForm = true;
-			}
+			},
+
+			showConfirmCalendarDelete: function(id) {
+				this.showBody = false;
+				this.showCalendarDropdownActions = false;
+				this.$root.$refs.allCalendars.showConfirmCalendarDelete(id);
+            },
+
+            addEventSubmit: function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+
+				/*
+
+				let currentObj = this;
+
+				let dateArray = this.newEventData.dateTime.split('.');
+				let dateTime = new Date(dateArray[2], dateArray[1]-1, dateArray[0]);
+
+				let newEvent = {
+					id: 'new',
+					start:  {
+						dateTime: dateTime
+					},
+					location: this.newEventData.address,
+					extendedProperties: {
+						private: {
+							type: this.newEventData.type
+						}
+					},
+					description: this.newEventData.notes
+				};
+
+				this.calendar_events.items.push(newEvent);
+				
+				let formData = new FormData();
+				formData.append('calendar_id', currentObj.calendar_id);
+				formData.append('new_event_datetime', this.newEventData.dateTime);
+				formData.append('new_event_address', this.newEventData.address);
+				formData.append('new_event_type', this.newEventData.type);
+				formData.append('new_event_notes', this.newEventData.notes);
+
+				axios.interceptors.request.use(function (config) {
+				    // Do something before request is sent
+				    currentObj.formRequestProcess = true;
+				    return config;
+				}, function (error) {
+				    // Do something with request error
+				    return Promise.reject(error);
+				});
+
+				let url = '/calendar-new-event'
+
+				axios.post(url, formData)
+				.then(function(response) {
+
+					if (response.data.code == 1) {
+						currentObj.requestSuccess = response.data.data.message;
+						setTimeout(function() {
+							currentObj.requestSuccess = false;
+						}, 2000);
+					} else {
+						currentObj.requestDanger = 'Request Error';
+					}
+				})
+				.catch(function (error) {
+
+					if (error.response && error.response.status == 422) {
+						currentObj.requestDanger = error.response.data.message;
+						form.classList.add('was-validated');
+					} else {
+						currentObj.requestDanger = 'Request Error';
+					}
+
+				})
+				.then(function() {
+					currentObj.formRequestProcess = false;
+				});
+
+				*/
+			},
 		}
 
 	}

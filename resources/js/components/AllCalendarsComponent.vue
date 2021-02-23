@@ -1,19 +1,34 @@
 <template>
 
-
-
     <div class="content-wrapper">
 
         <div class="page-head">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <h1>Calendars</h1>
-                        <p class="">You have {{ calendars.length }} calendars</p>
+            <div class="row align-items-center">
+                <div class="col-lg-2">
+                    <h1>Calendars</h1>
+                    <p class="">You have {{ calendars.length }} calendars</p>
+                </div>
+
+                <div class="col-lg-8">
+                    <div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> {{ requestDanger }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col-lg-6 text-lg-right">
-                        <button type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
+
+                    <div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Success!</strong> {{ requestSuccess }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
+
+                <div class="col-lg-2 text-lg-right">
+                    <button type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
+                </div>
+            </div>
         </div>
 
         <div class="filter-links">
@@ -21,152 +36,72 @@
         </div>
 
         <div class="filter-content">
+            <div v-for="typeFilter in calendarsTypesFilters" class="item" :class="{ 'active': typeFilter.active }" :data-id="typeFilter.val">
 
-
-
-            
-
-                    <div v-for="typeFilter in calendarsTypesFilters" class="item" :class="{ 'active': typeFilter.active }" :data-id="typeFilter.val">
-
-                        <div class="calendarsDataSorting">
-                            <div class="row">
-                                <div class="col-3">
-                                    <a class="sort-link" href="#">
-                                        Name <i class="fas fa-sort-amount-down-alt float-right"></i>
-                                        <!-- <i class="fas fa-sort-amount-down"></i> -->
-                                        <!-- <i class="fas fa-sort-amount-up-alt"></i> -->
-                                        <!-- <i class="fas fa-sort-amount-up"></i> -->
-                                    </a>
-                                </div>
-                                <div class="col-1">
-                                    <a class="sort-link" href="#">
-                                        Events <i class="fas fa-sort-amount-down-alt float-right"></i>
-                                    </a>
-                                </div>
-                                <div class="col-2">
-                                    <a class="sort-link" href="#">
-                                        Owner <i class="fas fa-sort-amount-down-alt float-right"></i>
-                                    </a>
-                                </div>
-                                <div class="col-2">
-                                    <a class="sort-link" href="#">
-                                        Updated <i class="fas fa-sort-amount-down-alt float-right"></i>
-                                    </a>
-                                </div>
-                                <div class="col-4">
-
-                                </div>
-                            </div>
+                <div class="calendarsDataSorting">
+                    <div class="row">
+                        <div class="col-3">
+                            <a class="sort-link" href="#">
+                                Name <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                <!-- <i class="fas fa-sort-amount-down"></i> -->
+                                <!-- <i class="fas fa-sort-amount-up-alt"></i> -->
+                                <!-- <i class="fas fa-sort-amount-up"></i> -->
+                            </a>
                         </div>
-
-                        <div class="calendars-list">
-                            
-                            <div v-for="calendar in calendars">
-
-                               
-
-                                <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
-
-                                <!--
-                                <div class="card-heading">
-                                    <div class="row align-items-center">
-                                        <div class="col-3">
-                                            {{calendar.summary}}
-                                        </div>
-                                        <div class="col-1">
-                                            {{ calendar.events.length }}
-                                        </div>
-                                        <div class="col-2">
-                                            <span v-if="calendar.accessRole == 'owner'">
-                                                me
-                                            </span>
-                                            <span v-else>
-                                                other
-                                            </span>
-                                        </div>
-                                        <div class="col-2">
-                                            
-                                            {{ calendar.lastUpdated }}
-                                        </div>
-                                        <div class="col-4 text-right actions">
-
-                                            <button type="button" class="btn btn-primary btn-sm" name="button">
-                                                <i class="fas fa-user-friends"></i> Share
-                                            </button>
-
-                                            <button type="button" class="btn btn-outline-primary btn-sm" name="button">
-                                                <i class="far fa-bell"></i> Subscribe ???
-                                            </button>
-
-                                            <button type="button" class="btn btn-outline-secondary btn-sm" name="button">
-                                                <i class="far fa-bell"></i> Unsubscribe ???
-                                            </button>
-
-                                            <button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDataForm(this)">
-                                                <i class="fas fa-angle-down"></i>
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                
-                                <div class="card-body">
-
-                                    <div class="row align-items-center">
-                                        <div class="col-lg-6">
-                                            1-5 of 12 <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>
-                                        </div>
-                                        <div class="col-lg-6 text-right">
-                                            <button type="button"class="btn btn-primary pull-right" name="button"><i class="fa fa-plus"></i> Add event</button>
-                                        </div>
-                                    </div>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <a href="#">Date</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Time</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Address</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Event</a>
-                                                </th>
-                                                <th>
-                                                    <a href="#">Notes</a>
-                                                </th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>12/04/21</td>
-                                                <td>5:20 PM - 7:20 PM</td>
-                                                <td>290 N. Hilldale</td>
-                                                <td>Game</td>
-                                                <td>Take snacks for afterparty</td>
-                                                <td class="text-right">
-                                                    <a href="#" class="btn btn-light"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-light"><i class="fa fa-ellipsis-v "></i></a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                -->
-                            </div>
+                        <div class="col-1">
+                            <a class="sort-link" href="#">
+                                Events <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a class="sort-link" href="#">
+                                Owner <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a class="sort-link" href="#">
+                                Updated <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            </a>
+                        </div>
+                        <div class="col-4">
 
                         </div>
-
-
                     </div>
+                </div>
 
-                
-            
+                <div class="calendars-list">
+                    <div v-for="calendar in calendars">
+                        <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmCalendarDelete" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmCalendarDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-danger">
+                        <h5 class="modal-title" id="confirmCalendarDeleteLabel">Delete calendar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>You are about to delete calendar, this procedure is irreversible.</p>
+                        <p>Do you want to proceed?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" :disabled="requestProcess">Cancel</button>
+                        
+                        <button v-if="!requestProcess" type="button" class="btn btn-danger" @click="deleteCalendar(delete_calendar_id)">Delete</button>
+
+                        <button v-else class="btn btn-danger" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -174,11 +109,6 @@
 </template>
 
 <script>
-
-   
-
-
-
     export default {
 
         props:['data', 'new_event_form_action', 'csrf_token'],
@@ -191,8 +121,19 @@
                     { title: 'All calendars', val: 'all', active: true }, 
                     { title: 'Owned by me', val: 'owned', active: false},
                     { title: 'Shared with me', val: 'shared', active: false}
-                ]
+                ],
+
+                requestDanger: false,
+                requestSuccess: false,
+
+                requestProcess: false,
+
+                delete_calendar_id: ''
             }
+        },
+
+        created() {
+            this.$root.$refs.allCalendars = this;
         },
 
         methods: {
@@ -206,11 +147,45 @@
             },
 
             showAddCalendarModal: function() {
-                //jQuery('#addCalendarModal').modal('show');
-
                 this.$root.$refs.addEditCalendarModal.showAddCalendarModal();
+            },
 
-               
+            showConfirmCalendarDelete: function(id) {
+                this.delete_calendar_id = id;
+                jQuery('#confirmCalendarDelete').modal('show');
+            },
+
+            deleteCalendar: function(id) {
+
+                let currentObj = this;
+
+                axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    currentObj.requestProcess = true;
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+
+                axios.post('/calendar-delete', { calendar_id: id })
+                .then(function (response) {
+                    if (response.data.code == 1) {
+                        currentObj.requestSuccess = response.data.data.message;
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        currentObj.requestDanger = 'Error Request';
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    currentObj.requestDanger = 'Error Request';
+                })
+                .then(function() {
+                    jQuery('#confirmCalendarDelete').modal('hide');
+                });
             }
         },
 

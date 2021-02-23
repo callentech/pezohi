@@ -72,7 +72,7 @@ class HomeController extends Controller
 
             $eventsData = $service->events->listEvents($calendar->id);
 
-            $calendar->events= $eventsData->getItems();
+            $calendar->events = $eventsData->getItems();
 
 
             
@@ -188,17 +188,21 @@ class HomeController extends Controller
         $createdCalendar = $service->calendars->insert($calendar);
 
         return json_encode([
-            'code' => 1
+            'code' => 1,
+            'data' => [
+                'createdCalendar' => $createdCalendar,
+                'message' => 'Calendar created successfully'
+            ]
         ], JSON_UNESCAPED_UNICODE);
 
     }
 
     public function addNewCalendarEventAction(Request $request)
     {
-        /*
-        var_dump($request->all());
-        exit;
-
+       
+        // var_dump($request->all());
+        // exit;
+/*
         array(6) {
           ["_token"]=>              string(40) "WVqtwRasXCAXTMcZeLiGxg6fb9ZM48juq7zn0cL1"
           ["calendar_id"]=>         string(52) "dvu11sq4uvbi9k9inpc5ggt9t8@group.calendar.google.com"
@@ -285,16 +289,14 @@ class HomeController extends Controller
         return json_encode([
             'code' => 1,
             'data' => [
-                'event' => $event
+                'event' => $event,
+                'message' => 'Event create success'
             ]
         ], JSON_UNESCAPED_UNICODE);
     }
 
     public function editCalendarAction(Request $request) 
     {
-        // var_dump($request->all());
-        // exit;
-
         session_start();
         if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
             return json_encode([
@@ -306,8 +308,6 @@ class HomeController extends Controller
             'calendar_id' => 'required',
             'calendar_name' => 'required'
         ]);
-
-        
 
         $this->googleClientToken = $_SESSION['googleClientToken'];
         $this->client->setAccessToken(json_encode($this->googleClientToken));
@@ -325,8 +325,6 @@ class HomeController extends Controller
                 'message' => 'Data updated successfully'
             ]
         ], JSON_UNESCAPED_UNICODE);
-
-
     }
 
 
@@ -349,12 +347,66 @@ class HomeController extends Controller
 
         $calendarData = $service->calendars->get($request->calendar_id);
         $calendarEvents = $service->events->listEvents($request->calendar_id);
+        
+        // foreach ($calendarEvents->items as $event) {
+        //     if ($event->location) {
+        //         $location = substr($event->location, 0, 30);
+        //         $location = rtrim($location, "!,.-");
+        //         $location = substr($location, 0, strrpos($location, ' '));
+        //         $location .= '...';
+        //         $event->location = $location;
+        //     }
+
+        //     if ($event->description) {
+        //         $description = substr($event->description, 0, 30);
+        //         $description = rtrim($description, "!,.-");
+        //         $description = substr($description, 0, strrpos($description, ' '));
+        //         $description .= '...';
+        //         $event->description = $description;
+        //     }
+        // }
        
         return json_encode([
             'code' => 1,
             'data' => [
                 'calendarData' => $calendarData,
                 'calendarEvents' => $calendarEvents
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function deleteCalendarAction(Request $request)
+    {
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $calendarId = $request->calendar_id;
+        if (!$calendarId || $calendarId == '') {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        try {
+            $service->calendars->delete($calendarId);
+        } catch (\Exception $ex) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'message' => 'Calendar deleted successfully'
             ]
         ], JSON_UNESCAPED_UNICODE);
     }

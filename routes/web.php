@@ -29,6 +29,8 @@ Route::post('/calendar-new-event', [App\Http\Controllers\HomeController::class, 
 
 Route::post('/calendar-edit', [App\Http\Controllers\HomeController::class, 'editCalendarAction'])->name('editCalendar');
 
+Route::post('/calendar-delete', [App\Http\Controllers\HomeController::class, 'deleteCalendarAction'])->name('deleteCalendar');
+
 
 
 

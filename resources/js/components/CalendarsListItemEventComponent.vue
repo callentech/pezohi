@@ -235,7 +235,8 @@
   			formatDate: function(value) {
   				let date = new Date(value);
   				let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
-  				return date.getDate()+'.'+month+'.'+date.getFullYear();
+          let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+  				return day+'.'+month+'.'+date.getFullYear();
   			}
   
 		},

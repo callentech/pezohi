@@ -2399,10 +2399,10 @@ __webpack_require__.r(__webpack_exports__);
       requestDanger: false,
       showNewEventDataForm: false,
       newEventData: {
-        dateTime: '21.02.2020',
-        address: 'Address Post',
-        type: 'game',
-        notes: 'Notes'
+        dateTime: '',
+        address: '',
+        type: '',
+        notes: ''
       },
       //date: new Date(),
       dateOptions: {
@@ -2466,6 +2466,7 @@ __webpack_require__.r(__webpack_exports__);
     addCalendarResetForm: function addCalendarResetForm() {
       this.owner_email_address = '';
       this.calendar_name = '';
+      this.calendar_events = [];
     },
     editCalendarSubmit: function editCalendarSubmit(event) {
       event.preventDefault();
@@ -2539,6 +2540,7 @@ __webpack_require__.r(__webpack_exports__);
             setTimeout(function () {
               currentObj.requestSuccess = false;
               jQuery('#addCalendarModal').modal('hide');
+              currentObj.addCalendarResetForm();
               location.reload();
             }, 2000);
           } else {
@@ -3067,8 +3069,19 @@ __webpack_require__.r(__webpack_exports__);
       requestProcess: false,
       requestDanger: false,
       requestSuccess: false,
-      newEventData: {}
+      newEventData: {
+        dateTime: '',
+        address: '',
+        type: '',
+        notes: ''
+      },
+      calendar_id: null
     };
+  },
+  computed: {
+    newEventDataValid: function newEventDataValid() {
+      return !(this.newEventData.address == '' || this.newEventData.dateTime == '' || this.newEventData.type == 'none' || this.newEventData.notes == '');
+    }
   },
   methods: {
     toggleCalendarDataForm: function toggleCalendarDataForm() {
@@ -3102,7 +3115,8 @@ __webpack_require__.r(__webpack_exports__);
       this.showCalendarDropdownActions = false;
       this.$root.$refs.addEditCalendarModal.showEditCalendarModal(id);
     },
-    showAddEventForm: function showAddEventForm() {
+    showAddEventForm: function showAddEventForm(calendar_id) {
+      this.calendar_id = calendar_id;
       this.showNewEventDataForm = true;
     },
     showConfirmCalendarDelete: function showConfirmCalendarDelete(id) {
@@ -3113,63 +3127,78 @@ __webpack_require__.r(__webpack_exports__);
     addEventSubmit: function addEventSubmit(event) {
       event.preventDefault();
       event.stopPropagation();
-      /*
-      	let currentObj = this;
-      	let dateArray = this.newEventData.dateTime.split('.');
-      let dateTime = new Date(dateArray[2], dateArray[1]-1, dateArray[0]);
-      	let newEvent = {
-      	id: 'new',
-      	start:  {
-      		dateTime: dateTime
-      	},
-      	location: this.newEventData.address,
-      	extendedProperties: {
-      		private: {
-      			type: this.newEventData.type
-      		}
-      	},
-      	description: this.newEventData.notes
-      };
-      	this.calendar_events.items.push(newEvent);
-      
-      let formData = new FormData();
+      var currentObj = this;
+      var dateArray = currentObj.newEventData.dateTime.split('.');
+      var dateTime = new Date(dateArray[2], dateArray[1] - 1, dateArray[0]);
+      var newEvent = {
+        id: 'new',
+        start: {
+          dateTime: dateTime
+        },
+        location: currentObj.newEventData.address,
+        extendedProperties: {
+          "private": {
+            type: currentObj.newEventData.type
+          }
+        },
+        description: currentObj.newEventData.notes
+      }; //currentObj.calendar_events.items.push(newEvent);
+
+      var formData = new FormData();
       formData.append('calendar_id', currentObj.calendar_id);
-      formData.append('new_event_datetime', this.newEventData.dateTime);
-      formData.append('new_event_address', this.newEventData.address);
-      formData.append('new_event_type', this.newEventData.type);
-      formData.append('new_event_notes', this.newEventData.notes);
-      	axios.interceptors.request.use(function (config) {
-          // Do something before request is sent
-          currentObj.formRequestProcess = true;
-          return config;
+      formData.append('new_event_datetime', currentObj.newEventData.dateTime);
+      formData.append('new_event_address', currentObj.newEventData.address);
+      formData.append('new_event_type', currentObj.newEventData.type);
+      formData.append('new_event_notes', currentObj.newEventData.notes);
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.formRequestProcess = true;
+        return config;
       }, function (error) {
-          // Do something with request error
-          return Promise.reject(error);
+        // Do something with request error
+        return Promise.reject(error);
       });
-      	let url = '/calendar-new-event'
-      	axios.post(url, formData)
-      .then(function(response) {
-      		if (response.data.code == 1) {
-      		currentObj.requestSuccess = response.data.data.message;
-      		setTimeout(function() {
-      			currentObj.requestSuccess = false;
-      		}, 2000);
-      	} else {
-      		currentObj.requestDanger = 'Request Error';
-      	}
-      })
-      .catch(function (error) {
-      		if (error.response && error.response.status == 422) {
-      		currentObj.requestDanger = error.response.data.message;
-      		form.classList.add('was-validated');
-      	} else {
-      		currentObj.requestDanger = 'Request Error';
-      	}
-      	})
-      .then(function() {
-      	currentObj.formRequestProcess = false;
+      var url = '/calendar-new-event';
+      axios.post(url, formData).then(function (response) {
+        console.log(currentObj.calendar.events);
+
+        if (response.data.code == 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          currentObj.calendar.events.push(response.data.data.event); // Reset New event form
+
+          currentObj.newEventData.dateTime = '';
+          currentObj.newEventData.address = '';
+          currentObj.newEventData.type = '';
+          currentObj.newEventData.notes = '';
+          setTimeout(function () {
+            currentObj.requestSuccess = false;
+          }, 2000);
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (error) {
+        if (error.response && error.response.status == 422) {
+          currentObj.requestDanger = error.response.data.message;
+          form.classList.add('was-validated');
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      }).then(function () {
+        currentObj.formRequestProcess = false;
       });
-      	*/
+    }
+  },
+  filters: {
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    formatDate: function formatDate(value) {
+      var date = new Date(value);
+      var month = parseInt(date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+      var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+      return day + '.' + month + '.' + date.getFullYear();
     }
   }
 });
@@ -3411,7 +3440,8 @@ jQuery.extend(true, jQuery.fn.datetimepicker.defaults, {
     formatDate: function formatDate(value) {
       var date = new Date(value);
       var month = parseInt(date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
-      return date.getDate() + '.' + month + '.' + date.getFullYear();
+      var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+      return day + '.' + month + '.' + date.getFullYear();
     }
   },
   methods: {
@@ -66547,7 +66577,11 @@ var render = function() {
                     {
                       staticClass: "btn btn-outline-primary btn-sm pull-right",
                       attrs: { type: "button" },
-                      on: { click: _vm.showAddEventForm }
+                      on: {
+                        click: function($event) {
+                          return _vm.showAddEventForm(_vm.calendar.id)
+                        }
+                      }
                     },
                     [
                       _c("i", { staticClass: "fa fa-plus" }),
@@ -66770,12 +66804,33 @@ var render = function() {
                             _vm._v(" "),
                             _c("div", { staticClass: "col-md-2" }, [
                               _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newEventData.address,
+                                    expression: "newEventData.address"
+                                  }
+                                ],
                                 staticClass: "form-control form-control-sm",
                                 attrs: {
                                   type: "text",
                                   name: "new_event_address",
                                   placeholder: "Address",
                                   required: ""
+                                },
+                                domProps: { value: _vm.newEventData.address },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newEventData,
+                                      "address",
+                                      $event.target.value
+                                    )
+                                  }
                                 }
                               }),
                               _vm._v(" "),
@@ -66788,10 +66843,40 @@ var render = function() {
                               _c(
                                 "select",
                                 {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newEventData.type,
+                                      expression: "newEventData.type"
+                                    }
+                                  ],
                                   staticClass: "form-control form-control-sm",
                                   attrs: {
                                     name: "new_event_type",
                                     required: ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.newEventData,
+                                        "type",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
                                   }
                                 },
                                 [
@@ -66826,12 +66911,33 @@ var render = function() {
                             _vm._v(" "),
                             _c("div", { staticClass: "col-md-2" }, [
                               _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newEventData.notes,
+                                    expression: "newEventData.notes"
+                                  }
+                                ],
                                 staticClass: "form-control form-control-sm",
                                 attrs: {
                                   type: "text",
                                   name: "new_event_notes",
                                   placeholder: "e.g. Instructions",
                                   required: ""
+                                },
+                                domProps: { value: _vm.newEventData.notes },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newEventData,
+                                      "notes",
+                                      $event.target.value
+                                    )
+                                  }
                                 }
                               }),
                               _vm._v(" "),
@@ -66847,7 +66953,10 @@ var render = function() {
                                   staticClass: "btn btn-primary btn-sm",
                                   attrs: {
                                     type: "submit",
-                                    form: "addCalendarEventForm"
+                                    form: "addCalendarEventForm",
+                                    disabled:
+                                      !_vm.newEventDataValid ||
+                                      _vm.requestProcess
                                   }
                                 },
                                 [_c("i", { staticClass: "fas fa-check" })]

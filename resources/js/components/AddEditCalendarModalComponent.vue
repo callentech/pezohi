@@ -550,9 +550,6 @@
 				calendar_events: [],
 				form_action: '',
 
-
-				
-
 				formRequestProcess: false,
 
 				requestSuccess: false,
@@ -560,15 +557,12 @@
 
 				showNewEventDataForm: false,
 
-
 				newEventData: {
-					dateTime: '21.02.2020',
-					address: 'Address Post',
-					type: 'game',
-					notes: 'Notes'
+					dateTime: '',
+					address: '',
+					type: '',
+					notes: ''
 				},
-
-				
 
 				//date: new Date(),
 				dateOptions: {
@@ -649,6 +643,7 @@
 			addCalendarResetForm: function() {
 				this.owner_email_address = '';
 				this.calendar_name = '';
+				this.calendar_events = [];
 			},
 
 			editCalendarSubmit: function(event) {
@@ -741,9 +736,11 @@
 					.then(function(response) {
 						if (response.data.code == 1) {
 							currentObj.requestSuccess = response.data.data.message;
+
 							setTimeout(function() {
 								currentObj.requestSuccess = false;
 								jQuery('#addCalendarModal').modal('hide');
+								currentObj.addCalendarResetForm();
 								location.reload();
 							}, 2000);
 						} else {

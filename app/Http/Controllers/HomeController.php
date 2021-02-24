@@ -149,12 +149,78 @@ class HomeController extends Controller
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
     }
 
-   
+    public function addCalendarEventAction(Request $request)
+    {
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $request->validate([
+            'calendar_id' => 'required',
+            'new_event_datetime' => 'required',
+            'new_event_address' => 'required',
+            'new_event_type' => 'required',
+            'new_event_notes' => 'required'
+        ]);
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        $date = new \DateTime($request->new_event_datetime);
+
+        $adminEmails = \DB::table('users')->where('role', 'admin')->pluck('email');
+        $attendees = [];
+        foreach ($adminEmails as $email) {
+            $attendees[] = ['email' => $email];
+        }
+
+        $event = new \Google_Service_Calendar_Event([
+            'summary' => 'Event',
+            'location' => $request->new_event_address,
+            'description' => $request->new_event_notes,
+            'start' => [
+                'dateTime' => date_format($date, 'c'),
+                'timeZone' => date_format($date, 'e'),
+            ],
+            'end' => [
+                'dateTime' => date_format($date, 'c'),
+                'timeZone' => date_format($date, 'e'),
+            ],
+            'extendedProperties' => [
+                'private' => [
+                    'type' => $request->new_event_type
+                ]
+            ],
+            'attendees' => $attendees,
+            'reminders' => [
+                'useDefault' => FALSE,
+                'overrides' => [
+                    array('method' => 'email', 'minutes' => 24 * 60),
+                    array('method' => 'popup', 'minutes' => 10),
+                ],
+            ],
+        ]);
+
+        $calendarId = $request->calendar_id;
+        $event = $service->events->insert($calendarId, $event);
+
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'event' => $event,
+                'message' => 'Event created successfully'
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+
+        
+    }
 
     public function addNewCalendarAction(Request $request)
     {
-
-        
         session_start();
         if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
             return json_encode([
@@ -233,7 +299,6 @@ class HomeController extends Controller
                 'message' => 'Calendar created successfully'
             ]
         ], JSON_UNESCAPED_UNICODE);
-
     }
 
     public function editCalendarAction(Request $request) 
@@ -312,7 +377,6 @@ class HomeController extends Controller
             ]
         ], JSON_UNESCAPED_UNICODE);
     }
-
 
     public function getCalendarDataAction(Request $request)
     {

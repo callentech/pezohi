@@ -76,7 +76,7 @@
 	                </div>
 
 	                <div class="col-lg-6 text-right">
-	                    <button type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm"><i class="fa fa-plus"></i> Add event</button>
+	                    <button type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
 	                </div>
 	            </div>
 
@@ -155,12 +155,12 @@
 									</div>
 
 					    			<div class="col-md-2">
-					    				<input type="text" name="new_event_address" class="form-control form-control-sm" placeholder="Address" required>
+					    				<input type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Address" required>
 					    				<div class="invalid-feedback">Please provide a valid address.</div>
 					    			</div>
 
 					    			<div class="col-md-2">
-					    				<select name="new_event_type" class="form-control form-control-sm" required>
+					    				<select v-model="newEventData.type" name="new_event_type" class="form-control form-control-sm" required>
 					    					<option value="" disabled selected>Select type</option>
 										    <option value="game">Game</option>
 										    <option value="practice">Practice</option>
@@ -169,12 +169,12 @@
 						    		</div>
 
 					    			<div class="col-md-2">
-					    				<input type="text" name="new_event_notes" class="form-control form-control-sm" placeholder="e.g. Instructions" required>
+					    				<input type="text" v-model="newEventData.notes" name="new_event_notes" class="form-control form-control-sm" placeholder="e.g. Instructions" required>
 					    				<div class="invalid-feedback">Please provide a valid notes.</div>
 					    			</div>
 
 					    			<div class="col-md-2 text-right">
-					    				<button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+					    				<button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm" :disabled="!newEventDataValid || requestProcess"><i class="fas fa-check"></i></button>
 					    				<!-- <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>  -->
 					    				<button type="button" class="btn btn-outline-secondary btn-sm"><i class="fas fa-times"></i></button>
 					    			</div>
@@ -230,7 +230,23 @@
 				requestDanger: false,
 				requestSuccess: false,
 
-				newEventData: {}
+				newEventData: {
+					dateTime: '',
+					address: '',
+					type: '',
+					notes: ''
+				},
+
+				calendar_id: null
+			}
+		},
+
+		computed:  {
+			newEventDataValid() {
+				return !(
+					this.newEventData.address == '' || this.newEventData.dateTime == '' 
+					|| this.newEventData.type == 'none' || this.newEventData.notes == ''
+					);
 			}
 		},
 
@@ -270,8 +286,10 @@
 				this.$root.$refs.addEditCalendarModal.showEditCalendarModal(id);
 			},
 
-			showAddEventForm: function() {
+			showAddEventForm: function(calendar_id) {
+				this.calendar_id = calendar_id;
 				this.showNewEventDataForm = true;
+
 			},
 
 			showConfirmCalendarDelete: function(id) {
@@ -284,11 +302,11 @@
 				event.preventDefault();
 				event.stopPropagation();
 
-				/*
+				
 
 				let currentObj = this;
 
-				let dateArray = this.newEventData.dateTime.split('.');
+				let dateArray = currentObj.newEventData.dateTime.split('.');
 				let dateTime = new Date(dateArray[2], dateArray[1]-1, dateArray[0]);
 
 				let newEvent = {
@@ -296,23 +314,23 @@
 					start:  {
 						dateTime: dateTime
 					},
-					location: this.newEventData.address,
+					location: currentObj.newEventData.address,
 					extendedProperties: {
 						private: {
-							type: this.newEventData.type
+							type: currentObj.newEventData.type
 						}
 					},
-					description: this.newEventData.notes
+					description: currentObj.newEventData.notes
 				};
 
-				this.calendar_events.items.push(newEvent);
+				//currentObj.calendar_events.items.push(newEvent);
 				
 				let formData = new FormData();
 				formData.append('calendar_id', currentObj.calendar_id);
-				formData.append('new_event_datetime', this.newEventData.dateTime);
-				formData.append('new_event_address', this.newEventData.address);
-				formData.append('new_event_type', this.newEventData.type);
-				formData.append('new_event_notes', this.newEventData.notes);
+				formData.append('new_event_datetime', currentObj.newEventData.dateTime);
+				formData.append('new_event_address', currentObj.newEventData.address);
+				formData.append('new_event_type', currentObj.newEventData.type);
+				formData.append('new_event_notes', currentObj.newEventData.notes);
 
 				axios.interceptors.request.use(function (config) {
 				    // Do something before request is sent
@@ -328,8 +346,18 @@
 				axios.post(url, formData)
 				.then(function(response) {
 
+					console.log(currentObj.calendar.events);
+
 					if (response.data.code == 1) {
 						currentObj.requestSuccess = response.data.data.message;
+						currentObj.calendar.events.push(response.data.data.event);
+						
+						// Reset New event form
+						currentObj.newEventData.dateTime = '';
+						currentObj.newEventData.address = '';
+						currentObj.newEventData.type = '';
+						currentObj.newEventData.notes = '';
+					
 						setTimeout(function() {
 							currentObj.requestSuccess = false;
 						}, 2000);
@@ -351,8 +379,26 @@
 					currentObj.formRequestProcess = false;
 				});
 
-				*/
+				
 			},
+		},
+
+
+		filters: {
+			capitalize: function (value) {
+				if (!value) return ''
+					value = value.toString()
+				return value.charAt(0).toUpperCase() + value.slice(1)
+			},
+
+			formatDate: function(value) {
+				let date = new Date(value);
+				let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
+
+				let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+				return day+'.'+month+'.'+date.getFullYear();
+			}
+
 		}
 
 	}

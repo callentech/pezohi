@@ -68,16 +68,8 @@ class HomeController extends Controller
                 continue;
             }
 
-           
-
             $eventsData = $service->events->listEvents($calendar->id);
-
             $calendar->events = $eventsData->getItems();
-
-
-            
-
-
             $calendars[] = $calendar;
         }
 
@@ -161,6 +153,8 @@ class HomeController extends Controller
 
     public function addNewCalendarAction(Request $request)
     {
+
+        
         session_start();
         if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
             return json_encode([
@@ -187,6 +181,51 @@ class HomeController extends Controller
 
         $createdCalendar = $service->calendars->insert($calendar);
 
+        // Add new events
+        $events = json_decode($request->events, TRUE);
+        foreach ($events as $event) {
+            if ($event['id'] == 'new') {
+
+                $date = new \DateTime($event['start']['dateTime']);
+
+                $adminEmails = \DB::table('users')->where('role', 'admin')->pluck('email');
+                $attendees = [];
+                foreach ($adminEmails as $email) {
+                    $attendees[] = ['email' => $email];
+                }
+
+                $event = new \Google_Service_Calendar_Event([
+                    'summary' => 'Event',
+                    'location' => $event['location'],
+                    'description' => $event['description'],
+                    'start' => [
+                        'dateTime' => date_format($date, 'c'),
+                        'timeZone' => date_format($date, 'e'),
+                    ],
+                    'end' => [
+                        'dateTime' => date_format($date, 'c'),
+                        'timeZone' => date_format($date, 'e'),
+                    ],
+                    'extendedProperties' => [
+                        'private' => [
+                            'type' => $event['extendedProperties']['private']['type']
+                        ]
+                    ],
+                    'attendees' => $attendees,
+                    'reminders' => [
+                        'useDefault' => FALSE,
+                        'overrides' => [
+                            array('method' => 'email', 'minutes' => 24 * 60),
+                            array('method' => 'popup', 'minutes' => 10),
+                        ],
+                    ],
+                ]);
+
+                $calendarId = $createdCalendar->id;
+                $event = $service->events->insert($calendarId, $event);
+            }
+        }
+
         return json_encode([
             'code' => 1,
             'data' => [
@@ -197,7 +236,200 @@ class HomeController extends Controller
 
     }
 
-    public function addNewCalendarEventAction(Request $request)
+    public function editCalendarAction(Request $request) 
+    {
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $request->validate([
+            'calendar_id' => 'required',
+            'calendar_name' => 'required'
+        ]);
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        $calendar = $service->calendars->get($request->calendar_id);
+        $calendar->setSummary($request->calendar_name);
+
+        $updatedCalendar = $service->calendars->update($request->calendar_id, $calendar);
+
+        // Add new events
+        $events = json_decode($request->events, TRUE);
+        foreach ($events as $event) {
+            if ($event['id'] == 'new') {
+
+                $date = new \DateTime($event['start']['dateTime']);
+
+                $adminEmails = \DB::table('users')->where('role', 'admin')->pluck('email');
+                $attendees = [];
+                foreach ($adminEmails as $email) {
+                    $attendees[] = ['email' => $email];
+                }
+
+                $event = new \Google_Service_Calendar_Event([
+                    'summary' => 'Event',
+                    'location' => $event['location'],
+                    'description' => $event['description'],
+                    'start' => [
+                        'dateTime' => date_format($date, 'c'),
+                        'timeZone' => date_format($date, 'e'),
+                    ],
+                    'end' => [
+                        'dateTime' => date_format($date, 'c'),
+                        'timeZone' => date_format($date, 'e'),
+                    ],
+                    'extendedProperties' => [
+                        'private' => [
+                            'type' => $event['extendedProperties']['private']['type']
+                        ]
+                    ],
+                    'attendees' => $attendees,
+                    'reminders' => [
+                        'useDefault' => FALSE,
+                        'overrides' => [
+                            array('method' => 'email', 'minutes' => 24 * 60),
+                            array('method' => 'popup', 'minutes' => 10),
+                        ],
+                    ],
+                ]);
+
+                $calendarId = $request->calendar_id;
+                $event = $service->events->insert($calendarId, $event);
+            }
+        }
+
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'updatedCalendar' => $updatedCalendar,
+                'message' => 'Data updated successfully'
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
+
+    public function getCalendarDataAction(Request $request)
+    {
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $request->validate([
+            'calendar_id' => 'required'
+        ]);
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        $calendarData = $service->calendars->get($request->calendar_id);
+        $calendarEvents = $service->events->listEvents($request->calendar_id);
+        
+        // foreach ($calendarEvents->items as $event) {
+        //     if ($event->location) {
+        //         $location = substr($event->location, 0, 30);
+        //         $location = rtrim($location, "!,.-");
+        //         $location = substr($location, 0, strrpos($location, ' '));
+        //         $location .= '...';
+        //         $event->location = $location;
+        //     }
+
+        //     if ($event->description) {
+        //         $description = substr($event->description, 0, 30);
+        //         $description = rtrim($description, "!,.-");
+        //         $description = substr($description, 0, strrpos($description, ' '));
+        //         $description .= '...';
+        //         $event->description = $description;
+        //     }
+        // }
+       
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'calendarData' => $calendarData,
+                'calendarEvents' => $calendarEvents
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
+    public function deleteCalendarAction(Request $request)
+    {
+        session_start();
+        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $calendarId = $request->calendar_id;
+        if (!$calendarId || $calendarId == '') {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->googleClientToken = $_SESSION['googleClientToken'];
+        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        $service = new Google_Service_Calendar($this->client);
+
+        try {
+            $service->calendars->delete($calendarId);
+        } catch (\Exception $ex) {
+            return json_encode([
+                'code' => 0
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        return json_encode([
+            'code' => 1,
+            'data' => [
+                'message' => 'Calendar deleted successfully'
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     public function addNewCalendarEventAction(Request $request)
     {
        
         // var_dump($request->all());
@@ -295,120 +527,5 @@ class HomeController extends Controller
         ], JSON_UNESCAPED_UNICODE);
     }
 
-    public function editCalendarAction(Request $request) 
-    {
-        session_start();
-        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
-            return json_encode([
-                'code' => 0
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        $request->validate([
-            'calendar_id' => 'required',
-            'calendar_name' => 'required'
-        ]);
-
-        $this->googleClientToken = $_SESSION['googleClientToken'];
-        $this->client->setAccessToken(json_encode($this->googleClientToken));
-        $service = new Google_Service_Calendar($this->client);
-
-        $calendar = $service->calendars->get($request->calendar_id);
-        $calendar->setSummary($request->calendar_name);
-
-        $updatedCalendar = $service->calendars->update($request->calendar_id, $calendar);
-
-        return json_encode([
-            'code' => 1,
-            'data' => [
-                'updatedCalendar' => $updatedCalendar,
-                'message' => 'Data updated successfully'
-            ]
-        ], JSON_UNESCAPED_UNICODE);
-    }
-
-
-    public function getCalendarDataAction(Request $request)
-    {
-        session_start();
-        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
-            return json_encode([
-                'code' => 0
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        $request->validate([
-            'calendar_id' => 'required'
-        ]);
-
-        $this->googleClientToken = $_SESSION['googleClientToken'];
-        $this->client->setAccessToken(json_encode($this->googleClientToken));
-        $service = new Google_Service_Calendar($this->client);
-
-        $calendarData = $service->calendars->get($request->calendar_id);
-        $calendarEvents = $service->events->listEvents($request->calendar_id);
-        
-        // foreach ($calendarEvents->items as $event) {
-        //     if ($event->location) {
-        //         $location = substr($event->location, 0, 30);
-        //         $location = rtrim($location, "!,.-");
-        //         $location = substr($location, 0, strrpos($location, ' '));
-        //         $location .= '...';
-        //         $event->location = $location;
-        //     }
-
-        //     if ($event->description) {
-        //         $description = substr($event->description, 0, 30);
-        //         $description = rtrim($description, "!,.-");
-        //         $description = substr($description, 0, strrpos($description, ' '));
-        //         $description .= '...';
-        //         $event->description = $description;
-        //     }
-        // }
-       
-        return json_encode([
-            'code' => 1,
-            'data' => [
-                'calendarData' => $calendarData,
-                'calendarEvents' => $calendarEvents
-            ]
-        ], JSON_UNESCAPED_UNICODE);
-    }
-
-    public function deleteCalendarAction(Request $request)
-    {
-        session_start();
-        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
-            return json_encode([
-                'code' => 0
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        $calendarId = $request->calendar_id;
-        if (!$calendarId || $calendarId == '') {
-            return json_encode([
-                'code' => 0
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        $this->googleClientToken = $_SESSION['googleClientToken'];
-        $this->client->setAccessToken(json_encode($this->googleClientToken));
-        $service = new Google_Service_Calendar($this->client);
-
-        try {
-            $service->calendars->delete($calendarId);
-        } catch (\Exception $ex) {
-            return json_encode([
-                'code' => 0
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        return json_encode([
-            'code' => 1,
-            'data' => [
-                'message' => 'Calendar deleted successfully'
-            ]
-        ], JSON_UNESCAPED_UNICODE);
-    }
 
 }

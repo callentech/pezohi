@@ -6,11 +6,11 @@
 
 			<div class="row align-items-center">
 
-				<div class="col-3">
+				<div class="col-2">
 		            {{calendar.summary}}
 		        </div>
 
-		        <div class="col-1">
+		        <div class="col-2">
 		            {{ calendar.events.length }}
 		        </div>
 		        
@@ -20,7 +20,9 @@
 	            </div>
 
 	            <div class="col-2">
-	                calendar.lastUpdated
+	                <span v-if="calendar.last_updated">
+	                	{{ calendar.last_updated | formatDate('MMMM D, YYYY') }}
+	                </span>
 	            </div>
 
 	            <div class="col-4 text-right actions">
@@ -29,12 +31,12 @@
 	                    <i class="fas fa-user-friends"></i> Share
 	                </button>
 
-	                <button type="button" class="btn btn-outline-primary btn-sm" name="button">
+	                <!-- <button type="button" class="btn btn-outline-primary btn-sm" name="button">
 	                    <i class="far fa-bell"></i> Subscribe ???
-	                </button>
+	                </button> -->
 
 	                <button type="button" class="btn btn-outline-secondary btn-sm" name="button">
-	                    <i class="far fa-bell"></i> Unsubscribe ???
+	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
 
 					<div class="dropdown-calendar-actions">
@@ -52,9 +54,12 @@
 						
 					</div>
 
-					<button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDataForm()">
-						<i class="fas fa-angle-down" v-if="showBody"></i>
-	                    <i class="fas fa-angle-right" v-else></i>
+					<button type="button" v-if="showBody" class="btn btn-light btn-sm pull-right btn-opened" @click="toggleCalendarDataForm()">
+						<i class="fas fa-angle-down"></i>
+	                    
+	                </button>
+	                <button type="button" v-else class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDataForm()">
+	                    <i class="fas fa-angle-right"></i>
 	                </button>
 	            	
 	            </div>
@@ -141,7 +146,9 @@
 					    		<div class="row">
 
 				    				<div class="input-group input-group-sm mb-3 col-md-2">
+										
 										<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="requestProcess" placeholder="dd.mm.YYYY" required></date-picker>
+
 										<div class="input-group-append">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
@@ -237,7 +244,10 @@
 					notes: ''
 				},
 
-				calendar_id: null
+				calendar_id: null,
+
+				datePicker: null,
+				input: null
 			}
 		},
 
@@ -249,6 +259,8 @@
 					);
 			}
 		},
+
+		
 
 		methods: {
 

@@ -216,7 +216,10 @@
 							</div>
 
 							<div class="form-row">
-								<label>Events <span>(0)</span></label>
+								<label>Events 
+									<span v-if="calendar_events.items">({{ calendar_events.items.length }})</span>
+									<span v-else>(0)</span>
+								</label>
 
 								<div id="calendarData" class="card col-md-12">
 
@@ -386,7 +389,11 @@
 							</div>
 
 							<div class="form-row">
-								<label>Events <span>(0)</span></label>
+								<label>
+									Events 
+									<span v-if="calendar_events.items">({{ calendar_events.items.length }})</span>
+									<span v-else>(0)</span>
+								</label>
 
 								<div id="calendarData" class="card col-md-12">
 
@@ -596,6 +603,7 @@
 				this.modal_title = 'Add Calendar';
 				this.form_action = '/calendar-new';
 				this.calendar_name = '';
+				this.calendar_events = [];
 				jQuery('#addCalendarModal').modal('show');
 			},
 

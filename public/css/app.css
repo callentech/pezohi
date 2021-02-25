@@ -16180,7 +16180,7 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   font-weight: 700;
 }
 .filter-content .calendarsDataSorting a.sort-link .fas {
-  line-height: 1.6em;
+  line-height: 1.7em;
   font-size: 14px;
 }
 .filter-content .calendars-list .card {
@@ -16223,6 +16223,20 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   color: #131b26;
 }
 
+.calendars-list .actions .btn-open {
+  color: #3490dc;
+  padding: 3px 5px 3px 8px;
+}
+
+.calendars-list .actions .btn-opened {
+  color: #3490dc;
+  padding: 3px 3px 3px 8px;
+}
+
+.calendars-list .actions .btn-share, .calendars-list .actions .btn-delete {
+  color: #949fae;
+}
+
 /*
 #addCalendarModal .modal-body {
 	padding-left: 3rem;
@@ -16263,15 +16277,6 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 
 #newEventDataForm td {
   padding-top: 0.8rem;
-}
-
-.calendars-list .actions .btn-open {
-  color: #3490dc;
-  padding: 3px 3px 3px 8px;
-}
-
-.calendars-list .actions .btn-share, .calendars-list .actions .btn-delete {
-  color: #949fae;
 }
 
 .fade-enter-active, .fade-leave-active {

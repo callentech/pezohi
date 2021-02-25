@@ -40,7 +40,7 @@
 
                 <div class="calendarsDataSorting">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-2">
                             <a class="sort-link" href="#">
                                 Name <i class="fas fa-sort-amount-down-alt float-right"></i>
                                 <!-- <i class="fas fa-sort-amount-down"></i> -->
@@ -48,7 +48,7 @@
                                 <!-- <i class="fas fa-sort-amount-up"></i> -->
                             </a>
                         </div>
-                        <div class="col-1">
+                        <div class="col-2">
                             <a class="sort-link" href="#">
                                 Events <i class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
@@ -59,8 +59,10 @@
                             </a>
                         </div>
                         <div class="col-2">
-                            <a class="sort-link" href="#">
-                                Updated <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByUpdated">
+                                Updated 
+                                <i v-if="sortByUpdatedDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-4">
@@ -70,7 +72,8 @@
                 </div>
 
                 <div class="calendars-list">
-                    <div v-for="calendar in calendars">
+
+                    <div v-for="calendar in sortedCalendars">
                         <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
                     </div>
                 </div>
@@ -117,6 +120,7 @@
             return {
 
                 calendars: this.data,
+                sortedCalendars: [],
                 calendarsTypesFilters: [
                     { title: 'All calendars', val: 'all', active: true }, 
                     { title: 'Owned by me', val: 'owned', active: false},
@@ -128,7 +132,9 @@
 
                 requestProcess: false,
 
-                delete_calendar_id: ''
+                delete_calendar_id: '',
+
+                sortByUpdatedDirection: 'asc'
             }
         },
 
@@ -186,11 +192,22 @@
                 .then(function() {
                     jQuery('#confirmCalendarDelete').modal('hide');
                 });
+            },
+
+            sortArray: function(array, field, direction) {
+                return _.orderBy(array, field, direction);
+            },
+
+            // Sort calendar list methods
+            sortCalendarsListByUpdated: function() {
+                let direction = this.sortByUpdatedDirection == 'desc' ? 'asc' : 'desc';
+                this.sortedCalendars = this.sortArray(this.calendars, 'last_updated', direction);
+                this.sortByUpdatedDirection = direction;
             }
         },
 
         mounted() {
-
+            this.sortCalendarsListByUpdated();
         }
     }
 </script>

@@ -2377,6 +2377,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 //import 'bootstrap/dist/css/bootstrap.css';
 
 
@@ -2428,6 +2435,7 @@ __webpack_require__.r(__webpack_exports__);
       this.modal_title = 'Add Calendar';
       this.form_action = '/calendar-new';
       this.calendar_name = '';
+      this.calendar_events = [];
       jQuery('#addCalendarModal').modal('show');
     },
     showEditCalendarModal: function showEditCalendarModal(id) {
@@ -2756,11 +2764,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'new_event_form_action', 'csrf_token'],
   data: function data() {
     return {
       calendars: this.data,
+      sortedCalendars: [],
       calendarsTypesFilters: [{
         title: 'All calendars',
         val: 'all',
@@ -2777,7 +2789,8 @@ __webpack_require__.r(__webpack_exports__);
       requestDanger: false,
       requestSuccess: false,
       requestProcess: false,
-      delete_calendar_id: ''
+      delete_calendar_id: '',
+      sortByUpdatedDirection: 'asc'
     };
   },
   created: function created() {
@@ -2824,9 +2837,20 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function () {
         jQuery('#confirmCalendarDelete').modal('hide');
       });
+    },
+    sortArray: function sortArray(array, field, direction) {
+      return _.orderBy(array, field, direction);
+    },
+    // Sort calendar list methods
+    sortCalendarsListByUpdated: function sortCalendarsListByUpdated() {
+      var direction = this.sortByUpdatedDirection == 'desc' ? 'asc' : 'desc';
+      this.sortedCalendars = this.sortArray(this.calendars, 'last_updated', direction);
+      this.sortByUpdatedDirection = direction;
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.sortCalendarsListByUpdated();
+  }
 });
 
 /***/ }),
@@ -2848,6 +2872,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3075,7 +3106,9 @@ __webpack_require__.r(__webpack_exports__);
         type: '',
         notes: ''
       },
-      calendar_id: null
+      calendar_id: null,
+      datePicker: null,
+      input: null
     };
   },
   computed: {
@@ -64680,7 +64713,18 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-row" }, [
-                      _vm._m(2),
+                      _c("label", [
+                        _vm._v("Events \n\t\t\t\t\t\t\t\t"),
+                        _vm.calendar_events.items
+                          ? _c("span", [
+                              _vm._v(
+                                "(" +
+                                  _vm._s(_vm.calendar_events.items.length) +
+                                  ")"
+                              )
+                            ])
+                          : _c("span", [_vm._v("(0)")])
+                      ]),
                       _vm._v(" "),
                       _c(
                         "div",
@@ -64697,7 +64741,7 @@ var render = function() {
                                 attrs: { id: "calendarDataTable" }
                               },
                               [
-                                _vm._m(3),
+                                _vm._m(2),
                                 _vm._v(" "),
                                 _c(
                                   "tbody",
@@ -64802,7 +64846,7 @@ var render = function() {
                                               ]
                                             ),
                                             _vm._v(" "),
-                                            _vm._m(4, true),
+                                            _vm._m(3, true),
                                             _vm._v(" "),
                                             _c(
                                               "button",
@@ -65250,7 +65294,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-dialog-centered modal-xl" },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -65345,12 +65389,23 @@ var render = function() {
                           _vm._v("Please provide a valid Email Address.")
                         ]),
                         _vm._v(" "),
-                        _vm._m(6)
+                        _vm._m(5)
                       ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-row" }, [
-                      _vm._m(7),
+                      _c("label", [
+                        _vm._v("\n\t\t\t\t\t\t\t\tEvents \n\t\t\t\t\t\t\t\t"),
+                        _vm.calendar_events.items
+                          ? _c("span", [
+                              _vm._v(
+                                "(" +
+                                  _vm._s(_vm.calendar_events.items.length) +
+                                  ")"
+                              )
+                            ])
+                          : _c("span", [_vm._v("(0)")])
+                      ]),
                       _vm._v(" "),
                       _c(
                         "div",
@@ -65367,7 +65422,7 @@ var render = function() {
                                 attrs: { id: "calendarDataTable" }
                               },
                               [
-                                _vm._m(8),
+                                _vm._m(6),
                                 _vm._v(" "),
                                 _c(
                                   "tbody",
@@ -65472,7 +65527,7 @@ var render = function() {
                                               ]
                                             ),
                                             _vm._v(" "),
-                                            _vm._m(9, true),
+                                            _vm._m(7, true),
                                             _vm._v(" "),
                                             _c(
                                               "button",
@@ -65949,12 +66004,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("label", [_vm._v("Events "), _c("span", [_vm._v("(0)")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Date")]),
@@ -66026,12 +66075,6 @@ var staticRenderFns = [
         [_vm._v("Owned by me")]
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", [_vm._v("Events "), _c("span", [_vm._v("(0)")])])
   },
   function() {
     var _vm = this
@@ -66181,12 +66224,46 @@ var render = function() {
             attrs: { "data-id": typeFilter.val }
           },
           [
-            _vm._m(2, true),
+            _c("div", { staticClass: "calendarsDataSorting" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(2, true),
+                _vm._v(" "),
+                _vm._m(3, true),
+                _vm._v(" "),
+                _vm._m(4, true),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "sort-link",
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.sortCalendarsListByUpdated }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Updated \n                            "
+                      ),
+                      _vm.sortByUpdatedDirection == "desc"
+                        ? _c("i", {
+                            staticClass: "fas fa-sort-amount-up-alt float-right"
+                          })
+                        : _c("i", {
+                            staticClass:
+                              "fas fa-sort-amount-down-alt float-right"
+                          })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-4" })
+              ])
+            ]),
             _vm._v(" "),
             _c(
               "div",
               { staticClass: "calendars-list" },
-              _vm._l(_vm.calendars, function(calendar) {
+              _vm._l(_vm.sortedCalendars, function(calendar) {
                 return _c(
                   "div",
                   [
@@ -66227,9 +66304,9 @@ var render = function() {
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
-            _vm._m(3),
+            _vm._m(5),
             _vm._v(" "),
-            _vm._m(4),
+            _vm._m(6),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
               _c(
@@ -66321,37 +66398,32 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "calendarsDataSorting" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-3" }, [
-          _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
-            _vm._v("\n                            Name "),
-            _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-1" }, [
-          _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
-            _vm._v("\n                            Events "),
-            _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
-            _vm._v("\n                            Owner "),
-            _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
-            _vm._v("\n                            Updated "),
-            _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-4" })
+    return _c("div", { staticClass: "col-2" }, [
+      _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
+        _vm._v("\n                            Name "),
+        _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [
+      _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
+        _vm._v("\n                            Events "),
+        _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [
+      _c("a", { staticClass: "sort-link", attrs: { href: "#" } }, [
+        _vm._v("\n                            Owner "),
+        _c("i", { staticClass: "fas fa-sort-amount-down-alt float-right" })
       ])
     ])
   },
@@ -66426,7 +66498,7 @@ var render = function() {
     [
       _c("div", { staticClass: "card-heading" }, [
         _c("div", { staticClass: "row align-items-center" }, [
-          _c("div", { staticClass: "col-3" }, [
+          _c("div", { staticClass: "col-2" }, [
             _vm._v(
               "\n\t\t            " +
                 _vm._s(_vm.calendar.summary) +
@@ -66434,7 +66506,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-1" }, [
+          _c("div", { staticClass: "col-2" }, [
             _vm._v(
               "\n\t\t            " +
                 _vm._s(_vm.calendar.events.length) +
@@ -66449,15 +66521,26 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm._v("\n\t                calendar.lastUpdated\n\t            ")
+            _vm.calendar.last_updated
+              ? _c("span", [
+                  _vm._v(
+                    "\n\t                \t" +
+                      _vm._s(
+                        _vm._f("formatDate")(
+                          _vm.calendar.last_updated,
+                          "MMMM D, YYYY"
+                        )
+                      ) +
+                      "\n\t                "
+                  )
+                ])
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-4 text-right actions" }, [
             _vm._m(0),
             _vm._v(" "),
             _vm._m(1),
-            _vm._v(" "),
-            _vm._m(2),
             _vm._v(" "),
             _c(
               "div",
@@ -66527,23 +66610,33 @@ var render = function() {
               1
             ),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-light btn-sm pull-right btn-open",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    return _vm.toggleCalendarDataForm()
-                  }
-                }
-              },
-              [
-                _vm.showBody
-                  ? _c("i", { staticClass: "fas fa-angle-down" })
-                  : _c("i", { staticClass: "fas fa-angle-right" })
-              ]
-            )
+            _vm.showBody
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-sm pull-right btn-opened",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleCalendarDataForm()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-angle-down" })]
+                )
+              : _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-sm pull-right btn-open",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleCalendarDataForm()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-angle-right" })]
+                )
           ])
         ])
       ]),
@@ -67031,28 +67124,12 @@ var staticRenderFns = [
     return _c(
       "button",
       {
-        staticClass: "btn btn-outline-primary btn-sm",
-        attrs: { type: "button", name: "button" }
-      },
-      [
-        _c("i", { staticClass: "far fa-bell" }),
-        _vm._v(" Subscribe ???\n\t                ")
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
         staticClass: "btn btn-outline-secondary btn-sm",
         attrs: { type: "button", name: "button" }
       },
       [
         _c("i", { staticClass: "far fa-bell" }),
-        _vm._v(" Unsubscribe ???\n\t                ")
+        _vm._v(" Unsubscribe\n\t                ")
       ]
     )
   }

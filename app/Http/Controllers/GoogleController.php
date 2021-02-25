@@ -38,7 +38,11 @@ class GoogleController extends Controller
 
             //$user = Socialite::driver('google')->stateless()->user();
 
-            $user = Socialite::driver('google')->scopes(['openid', 'profile', 'email', \Google_Service_People::CONTACTS_READONLY])->user();
+            $user = Socialite::driver('google')
+            // ->scopes(['openid', 'profile', 'email', \Google_Service_People::CONTACTS_READONLY])
+            ->scopes(['openid', 'profile', 'email'])
+            ->with(["access_type" => "offline", "prompt" => "consent select_account"])
+            ->user();
 
             // Set token for the Google API PHP Client
             $_SESSION['googleClientToken'] = [

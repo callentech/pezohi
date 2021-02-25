@@ -70,11 +70,22 @@ class HomeController extends Controller
 
             $eventsData = $service->events->listEvents($calendar->id);
             $calendar->events = $eventsData->getItems();
+
+            $calendar->last_updated = '';
+            if (count($calendar->events) > 0) {
+                $calendar->last_updated = $calendar->events[0]->updated;
+
+                foreach ($calendar->events as $event) {
+                    if ($calendar->last_updated < $event->updated) {
+                        $calendar->last_updated = $event->updated;
+                    }
+                }
+            }
+
             $calendars[] = $calendar;
         }
 
-
-        
+       
         /*
       
 
@@ -145,6 +156,7 @@ class HomeController extends Controller
         }
 
         */
+
 
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
     }

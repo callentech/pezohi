@@ -33,6 +33,7 @@ class HomeController extends Controller
         $this->client = new Google_Client();
         $this->client->setApplicationName(config('app.name'));
         $this->client->setDeveloperKey(env('GOOGLE_API_KEY'));
+
         //$this->client->setAccessType('offline');
     }
 
@@ -51,14 +52,16 @@ class HomeController extends Controller
 
         $this->googleClientToken = $_SESSION['googleClientToken'];
 
-        $this->client->setAccessToken(json_encode($this->googleClientToken));
+        try {
+            $this->client->setAccessToken(json_encode($this->googleClientToken));
+            $service = new Google_Service_Calendar($this->client);
+            $calendarsData = $service->calendarList->listCalendarList();
+        } catch (\Exception $ex) {
+            Auth::logout();
+            return redirect()->route('home');
+        }
         
-        $service = new Google_Service_Calendar($this->client);
-
-        $calendarsData = $service->calendarList->listCalendarList();
-
         $calendarsItems = $calendarsData->getItems();
-
         $calendars = [];
 
         foreach ($calendarsItems as $calendar) {
@@ -70,11 +73,11 @@ class HomeController extends Controller
 
             $eventsData = $service->events->listEvents($calendar->id);
             $calendar->events = $eventsData->getItems();
+            $calendar->eventsCount = count($calendar->events);
 
-            $calendar->last_updated = '';
+            $calendar->last_updated = NULL;
             if (count($calendar->events) > 0) {
                 $calendar->last_updated = $calendar->events[0]->updated;
-
                 foreach ($calendar->events as $event) {
                     if ($calendar->last_updated < $event->updated) {
                         $calendar->last_updated = $event->updated;
@@ -82,81 +85,17 @@ class HomeController extends Controller
                 }
             }
 
+            $now = new \DateTime;
+            $ago = new \DateTime($calendar->last_updated);
+            $diff = $now->diff($ago);
+            if ($diff->y > 0 || $diff->m > 0 || $diff->d > 2 || $diff->h > 48) {
+                $calendar->last_updated = $calendar->last_updated ? date_format($ago, 'd.m.Y') : NULL;
+            } else {
+                $calendar->last_updated = $calendar->last_updated ? \Carbon\Carbon::createFromTimeStamp(strtotime($calendar->last_updated))->diffForHumans() : NULL;
+            }
+            
             $calendars[] = $calendar;
         }
-
-       
-        /*
-      
-
-
-        foreach ($calendars as &$calendar) {
-
-            // Exclude Birthdays && Holidays Calendars
-
-            if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com'])) {
-                
-                unset($calendar);
-
-                continue;
-            }
-            // var_dump($calendar->id);
-
-            // var_dump(Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']));
-
-            // if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->id, ['addressbook#contacts@group.v.calendar.google.com'])) {
-            //     continue;
-            // }
-            
-            $calendarData = $service->calendars->get($calendar->id);
-
-            $eventsData = $service->events->listEvents($calendar->id);
-
-            $calendar->events = $eventsData->getItems();
-
-            
-            
-            foreach ($calendar->events as $event) {
-
-                $dateTime = $event->start->date ? $event->start->date : $event->start->dateTime;
-                $startDateTime = new \DateTime($dateTime);
-
-                $dateTime = $event->end->date ? $event->end->date : $event->end->dateTime;
-                $endDateTime = new \DateTime($dateTime);
-
-                $event->startDate = date_format($startDateTime, 'd/m/Y');
-                $event->startTime = date_format($startDateTime, 'h:i A');
-
-                $event->endDate = date_format($endDateTime, 'd/m/Y');
-                $event->endTime = date_format($endDateTime, 'h:i A');
-            }
-
-
-
-           
-
-            $calendar->lastUpdated = count($calendar->events) > 0 ? $calendar->events[0]->updated : NULL;
-
-            foreach ($calendar->events as $event) {
-                if ($event->updated < $calendar->lastUpdated) {
-                    $calendar->lastUpdated = $event->updated;
-                }
-            }
-
-            $now = new \DateTime;
-            $ago = new \DateTime($calendar->lastUpdated);
-            $diff = $now->diff($ago);
-
-            if ($diff->y > 0 || $diff->m > 0 || $diff->d > 2 || $diff->h > 48) {
-                $calendar->lastUpdated = $calendar->lastUpdated ? date_format($ago, 'd.m.Y') : NULL;
-            } else {
-                $calendar->lastUpdated = $calendar->lastUpdated ? \Carbon\Carbon::createFromTimeStamp(strtotime($calendar->lastUpdated))->diffForHumans() : NULL;
-            }
-
-        }
-
-        */
-
 
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
     }
@@ -227,8 +166,6 @@ class HomeController extends Controller
                 'message' => 'Event created successfully'
             ]
         ], JSON_UNESCAPED_UNICODE);
-
-        
     }
 
     public function addNewCalendarAction(Request $request)
@@ -473,55 +410,8 @@ class HomeController extends Controller
         ], JSON_UNESCAPED_UNICODE);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     public function addNewCalendarEventAction(Request $request)
+    public function addNewCalendarEventAction(Request $request)
     {
-       
-        // var_dump($request->all());
-        // exit;
-/*
-        array(6) {
-          ["_token"]=>              string(40) "WVqtwRasXCAXTMcZeLiGxg6fb9ZM48juq7zn0cL1"
-          ["calendar_id"]=>         string(52) "dvu11sq4uvbi9k9inpc5ggt9t8@group.calendar.google.com"
-          ["new-event-datetime"]=>  string(10) "01.02.2021"
-          ["new-event-address"]=>   string(7) "Address"
-          ["new-event-type"]=>      string(4) "game"
-          ["new-event-notes"]=>     string(5) "Notes"
-        }
-
-        */
-
         session_start();
         if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
             return json_encode([
@@ -551,7 +441,6 @@ class HomeController extends Controller
         foreach ($adminEmails as $email) {
             $attendees[] = ['email' => $email];
         }
-
         
         $date = new \DateTime($request->new_event_datetime);
 
@@ -590,9 +479,6 @@ class HomeController extends Controller
 
         $calendarId = $request->calendar_id;
         $event = $service->events->insert($calendarId, $event);
-        // printf('Event created: %s\n', $event->htmlLink);
-
-
 
         return json_encode([
             'code' => 1,
@@ -602,6 +488,4 @@ class HomeController extends Controller
             ]
         ], JSON_UNESCAPED_UNICODE);
     }
-
-
 }

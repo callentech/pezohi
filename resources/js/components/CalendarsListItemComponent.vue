@@ -7,11 +7,11 @@
 			<div class="row align-items-center">
 
 				<div class="col-2">
-		            {{calendar.summary}}
+		            {{ calendar.summary }}
 		        </div>
 
 		        <div class="col-2">
-		            {{ calendar.events.length }}
+		            {{ calendar.eventsCount }}
 		        </div>
 		        
 		        <div class="col-2">
@@ -21,13 +21,14 @@
 
 	            <div class="col-2">
 	                <span v-if="calendar.last_updated">
-	                	{{ calendar.last_updated | formatDate('MMMM D, YYYY') }}
+	                	<!--{{ calendar.last_updated | formatDate('MMMM D, YYYY') }}-->
+	                	{{ calendar.last_updated }}
 	                </span>
 	            </div>
 
 	            <div class="col-4 text-right actions">
 
-	            	<button type="button" class="btn btn-primary btn-sm" name="button">
+	            	<button type="button" class="btn btn-primary btn-sm" @click="shareCalendar(calendar.id)">
 	                    <i class="fas fa-user-friends"></i> Share
 	                </button>
 
@@ -314,8 +315,6 @@
 				event.preventDefault();
 				event.stopPropagation();
 
-				
-
 				let currentObj = this;
 
 				let dateArray = currentObj.newEventData.dateTime.split('.');
@@ -390,9 +389,11 @@
 				.then(function() {
 					currentObj.formRequestProcess = false;
 				});
-
-				
 			},
+
+			shareCalendar: function(calendar_id) {
+				alert();
+			}
 		},
 
 

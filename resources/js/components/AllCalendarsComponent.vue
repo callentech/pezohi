@@ -41,21 +41,24 @@
                 <div class="calendarsDataSorting">
                     <div class="row">
                         <div class="col-2">
-                            <a class="sort-link" href="#">
-                                Name <i class="fas fa-sort-amount-down-alt float-right"></i>
-                                <!-- <i class="fas fa-sort-amount-down"></i> -->
-                                <!-- <i class="fas fa-sort-amount-up-alt"></i> -->
-                                <!-- <i class="fas fa-sort-amount-up"></i> -->
+                            <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListBySummary">
+                                Name
+                                <i v-if="sortBySummaryDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
-                            <a class="sort-link" href="#">
-                                Events <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByEvents">
+                                Events
+                                <i v-if="sortByEventsDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
-                            <a class="sort-link" href="#">
-                                Owner <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByOwner">
+                                Owner
+                                <i v-if="sortByOwnerDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
@@ -134,6 +137,9 @@
 
                 delete_calendar_id: '',
 
+                sortBySummaryDirection: 'asc',
+                sortByEventsDirection: 'asc',
+                sortByOwnerDirection: 'asc',
                 sortByUpdatedDirection: 'asc'
             }
         },
@@ -199,6 +205,24 @@
             },
 
             // Sort calendar list methods
+            sortCalendarsListBySummary: function() {
+                let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
+                this.sortedCalendars = this.sortArray(this.calendars, 'summary', direction);
+                this.sortBySummaryDirection = direction;
+            },
+
+            sortCalendarsListByEvents: function() {
+                let direction = this.sortByEventsDirection == 'desc' ? 'asc' : 'desc';
+                this.sortedCalendars = this.sortArray(this.calendars, 'eventsCount', direction);
+                this.sortByEventsDirection = direction;
+            },
+
+            sortCalendarsListByOwner: function() {
+                let direction = this.sortByOwnerDirection == 'desc' ? 'asc' : 'desc';
+                this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
+                this.sortByOwnerDirection = direction;
+            },
+
             sortCalendarsListByUpdated: function() {
                 let direction = this.sortByUpdatedDirection == 'desc' ? 'asc' : 'desc';
                 this.sortedCalendars = this.sortArray(this.calendars, 'last_updated', direction);

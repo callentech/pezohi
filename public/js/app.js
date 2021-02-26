@@ -2841,6 +2841,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
         currentObj.requestDanger = 'Error Request';
       }).then(function () {
+        currentObj.requestProcess = false;
         jQuery('#confirmCalendarDelete').modal('hide');
       });
     },
@@ -3100,15 +3101,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
+ //import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['calendar'],
   components: {
     datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
-    DateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default())
+    DateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default()) //VueGoogleAutocomplete
+
   },
   data: function data() {
     return {
@@ -3130,7 +3143,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       calendar_id: null,
       datePicker: null,
-      input: null
+      input: null,
+      address: ''
     };
   },
   computed: {
@@ -3173,6 +3187,10 @@ __webpack_require__.r(__webpack_exports__);
     showAddEventForm: function showAddEventForm(calendar_id) {
       this.calendar_id = calendar_id;
       this.showNewEventDataForm = true;
+    },
+    hideAddEventForm: function hideAddEventForm() {
+      this.calendar_id = null;
+      this.showNewEventDataForm = false;
     },
     showConfirmCalendarDelete: function showConfirmCalendarDelete(id) {
       this.showBody = false;
@@ -3245,6 +3263,16 @@ __webpack_require__.r(__webpack_exports__);
     shareCalendar: function shareCalendar(calendar_id) {
       alert();
     }
+    /**
+             * When the location found
+             * @param {Object} addressData Data of the found location
+             * @param {Object} placeResultData PlaceResult object
+             * @param {String} id Input container ID
+             */
+    // getAddressData: function (addressData, placeResultData, id) {
+    //     this.address = addressData;
+    // }
+
   },
   filters: {
     capitalize: function capitalize(value) {
@@ -3253,12 +3281,45 @@ __webpack_require__.r(__webpack_exports__);
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     formatDate: function formatDate(value) {
+      var today = new Date();
       var date = new Date(value);
-      var month = parseInt(date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
-      var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
-      return day + '.' + month + '.' + date.getFullYear();
+      var outputDate = '';
+      var fromDate = parseInt(date.getTime() / 1000);
+      var toDate = parseInt(today.getTime() / 1000);
+      var timeDiff = Math.ceil((toDate - fromDate) / 3600);
+      var dateHours = date.getHours();
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+      var dateMinutes = date.getMinutes();
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+
+      if (timeDiff <= 1) {
+        var fromDateMinutes = parseInt(date.getTime() / 1000 * 60);
+        var toDateMinutes = parseInt(today.getTime() / 1000 * 60);
+        var minutesDiff = Math.ceil((toDateMinutes - fromDateMinutes) / 3600);
+
+        if (minutesDiff <= 1) {
+          outputDate = minutesDiff + ' minute ago';
+        } else {
+          outputDate = minutesDiff + ' minutes ago';
+        }
+      } else if (timeDiff == 1) {
+        outputDate = timeDiff + ' hour ago';
+      } else if (timeDiff <= 24) {
+        outputDate = timeDiff + ' hours ago';
+      } else if (timeDiff < 48) {
+        outputDate = 'Yesterday, ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
+      } else if (timeDiff > 48) {
+        var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+        var month = parseInt(date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        outputDate = day + '.' + month + '.' + date.getFullYear();
+      }
+
+      return outputDate;
     }
-  }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -66583,7 +66644,7 @@ var render = function() {
               ? _c("span", [
                   _vm._v(
                     "\n\t                \t" +
-                      _vm._s(_vm.calendar.last_updated) +
+                      _vm._s(_vm._f("formatDate")(_vm.calendar.last_updated)) +
                       "\n\t                "
                   )
                 ])
@@ -66973,6 +67034,7 @@ var render = function() {
                                     expression: "newEventData.address"
                                   }
                                 ],
+                                ref: "newEventAddressAutocomplete",
                                 staticClass: "form-control form-control-sm",
                                 attrs: {
                                   type: "text",
@@ -67128,7 +67190,8 @@ var render = function() {
                                 {
                                   staticClass:
                                     "btn btn-outline-secondary btn-sm",
-                                  attrs: { type: "button" }
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.hideAddEventForm }
                                 },
                                 [_c("i", { staticClass: "fas fa-times" })]
                               )

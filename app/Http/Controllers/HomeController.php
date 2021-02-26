@@ -66,11 +66,12 @@ class HomeController extends Controller
 
         foreach ($calendarsItems as $calendar) {
 
-            // Exclude Birthdays && Holidays Calendars
-            if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->id, ['addressbook#contacts@group.v.calendar.google.com'])) {
+            // Exclude Primary, Birthdays && Holidays Calendars
+            if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->id, ['addressbook#contacts@group.v.calendar.google.com']) || $calendar->id == Auth::user()->email) {
                 continue;
             }
 
+           
             $eventsData = $service->events->listEvents($calendar->id);
             $calendar->events = $eventsData->getItems();
             $calendar->eventsCount = count($calendar->events);
@@ -85,19 +86,37 @@ class HomeController extends Controller
                 }
             }
 
-            $now = new \DateTime;
-            $ago = new \DateTime($calendar->last_updated);
-            $diff = $now->diff($ago);
-            if ($diff->y > 0 || $diff->m > 0 || $diff->d > 2 || $diff->h > 48) {
-                $calendar->last_updated = $calendar->last_updated ? date_format($ago, 'd.m.Y') : NULL;
-            } else {
-                $calendar->last_updated = $calendar->last_updated ? \Carbon\Carbon::createFromTimeStamp(strtotime($calendar->last_updated))->diffForHumans() : NULL;
-            }
-            
             $calendars[] = $calendar;
         }
 
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
+    }
+
+    private function cuteDate($date)
+    {
+        $today = date('d.m.Y', time());
+        $yesterday = date('d.m.Y', time() - 86400);
+        $dbDate = date('d.m.Y', strtotime($date));
+        $dbTime = date('H:i', strtotime($date));
+        $dbHours = date('H', strtotime($date));
+        $dbMeridiem = date('A', strtotime($date));
+
+        switch ($dbDate)
+        {
+          //case $today : $output = 'Today, '. $dbTime .' '. $dbMeridiem; break;
+          case $today : 
+            $output = $dbHours.' hours ago';
+            break;
+
+          case $yesterday : 
+            $output = 'Yesterday, '. $dbTime .' '. $dbMeridiem;
+            break;
+
+          default : $output = $dbDate;
+        }
+        return $output;
+
+        //Yesterday, HH:MM hours AM/PM 
     }
 
     public function addCalendarEventAction(Request $request)
@@ -198,48 +217,51 @@ class HomeController extends Controller
 
         // Add new events
         $events = json_decode($request->events, TRUE);
-        foreach ($events as $event) {
-            if ($event['id'] == 'new') {
+        if ($events && count($events) > 0) {
+            foreach ($events as $event) {
+                if ($event['id'] == 'new') {
 
-                $date = new \DateTime($event['start']['dateTime']);
+                    $date = new \DateTime($event['start']['dateTime']);
 
-                $adminEmails = \DB::table('users')->where('role', 'admin')->pluck('email');
-                $attendees = [];
-                foreach ($adminEmails as $email) {
-                    $attendees[] = ['email' => $email];
-                }
+                    $adminEmails = \DB::table('users')->where('role', 'admin')->pluck('email');
+                    $attendees = [];
+                    foreach ($adminEmails as $email) {
+                        $attendees[] = ['email' => $email];
+                    }
 
-                $event = new \Google_Service_Calendar_Event([
-                    'summary' => 'Event',
-                    'location' => $event['location'],
-                    'description' => $event['description'],
-                    'start' => [
-                        'dateTime' => date_format($date, 'c'),
-                        'timeZone' => date_format($date, 'e'),
-                    ],
-                    'end' => [
-                        'dateTime' => date_format($date, 'c'),
-                        'timeZone' => date_format($date, 'e'),
-                    ],
-                    'extendedProperties' => [
-                        'private' => [
-                            'type' => $event['extendedProperties']['private']['type']
-                        ]
-                    ],
-                    'attendees' => $attendees,
-                    'reminders' => [
-                        'useDefault' => FALSE,
-                        'overrides' => [
-                            array('method' => 'email', 'minutes' => 24 * 60),
-                            array('method' => 'popup', 'minutes' => 10),
+                    $event = new \Google_Service_Calendar_Event([
+                        'summary' => 'Event',
+                        'location' => $event['location'],
+                        'description' => $event['description'],
+                        'start' => [
+                            'dateTime' => date_format($date, 'c'),
+                            'timeZone' => date_format($date, 'e'),
                         ],
-                    ],
-                ]);
+                        'end' => [
+                            'dateTime' => date_format($date, 'c'),
+                            'timeZone' => date_format($date, 'e'),
+                        ],
+                        'extendedProperties' => [
+                            'private' => [
+                                'type' => $event['extendedProperties']['private']['type']
+                            ]
+                        ],
+                        'attendees' => $attendees,
+                        'reminders' => [
+                            'useDefault' => FALSE,
+                            'overrides' => [
+                                array('method' => 'email', 'minutes' => 24 * 60),
+                                array('method' => 'popup', 'minutes' => 10),
+                            ],
+                        ],
+                    ]);
 
-                $calendarId = $createdCalendar->id;
-                $event = $service->events->insert($calendarId, $event);
+                    $calendarId = $createdCalendar->id;
+                    $event = $service->events->insert($calendarId, $event);
+                }
             }
         }
+        
 
         return json_encode([
             'code' => 1,
@@ -379,14 +401,15 @@ class HomeController extends Controller
         session_start();
         if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
             return json_encode([
-                'code' => 0
+                'code' => 10
             ], JSON_UNESCAPED_UNICODE);
         }
 
         $calendarId = $request->calendar_id;
+
         if (!$calendarId || $calendarId == '') {
             return json_encode([
-                'code' => 0
+                'code' => 20
             ], JSON_UNESCAPED_UNICODE);
         }
 
@@ -394,11 +417,18 @@ class HomeController extends Controller
         $this->client->setAccessToken(json_encode($this->googleClientToken));
         $service = new Google_Service_Calendar($this->client);
 
+        // $calendarData = $service->calendars->get($request->calendar_id);
+        // var_dump($calendarData);
+        // exit;
+        // $calendarEvents = $service->events->listEvents($request->calendar_id);
+
+
         try {
             $service->calendars->delete($calendarId);
         } catch (\Exception $ex) {
             return json_encode([
-                'code' => 0
+                'code' => 30,
+                'message' => $ex->getMessage()
             ], JSON_UNESCAPED_UNICODE);
         }
 

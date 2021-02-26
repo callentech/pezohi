@@ -22,7 +22,7 @@
 	            <div class="col-2">
 	                <span v-if="calendar.last_updated">
 	                	<!--{{ calendar.last_updated | formatDate('MMMM D, YYYY') }}-->
-	                	{{ calendar.last_updated }}
+	                	{{ calendar.last_updated|formatDate() }}
 	                </span>
 	            </div>
 
@@ -163,7 +163,17 @@
 									</div>
 
 					    			<div class="col-md-2">
-					    				<input type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Address" required>
+					    				<input ref="newEventAddressAutocomplete" type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Address" required>
+
+					    				<!-- <vue-google-autocomplete
+            ref="address"
+            id="map"
+            classname="form-control"
+            placeholder="Please type your address"
+            v-on:placechanged="getAddressData"
+            country="sg"
+        >
+        </vue-google-autocomplete> -->
 					    				<div class="invalid-feedback">Please provide a valid address.</div>
 					    			</div>
 
@@ -184,7 +194,7 @@
 					    			<div class="col-md-2 text-right">
 					    				<button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm" :disabled="!newEventDataValid || requestProcess"><i class="fas fa-check"></i></button>
 					    				<!-- <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>  -->
-					    				<button type="button" class="btn btn-outline-secondary btn-sm"><i class="fas fa-times"></i></button>
+					    				<button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm"><i class="fas fa-times"></i></button>
 					    			</div>
 				    			</div>
 
@@ -213,6 +223,8 @@
 	import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 	import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
+	//import VueGoogleAutocomplete from 'vue-google-autocomplete'
+
 	export default {
 
 		props:['calendar'],
@@ -220,6 +232,7 @@
 		components: {
 			datePicker,
 			DateRangePicker
+			//VueGoogleAutocomplete
 		},
 
 		data() {
@@ -248,7 +261,10 @@
 				calendar_id: null,
 
 				datePicker: null,
-				input: null
+				input: null,
+
+
+				address: ''
 			}
 		},
 
@@ -302,7 +318,11 @@
 			showAddEventForm: function(calendar_id) {
 				this.calendar_id = calendar_id;
 				this.showNewEventDataForm = true;
+			},
 
+			hideAddEventForm: function() {
+				this.calendar_id = null;
+				this.showNewEventDataForm = false;
 			},
 
 			showConfirmCalendarDelete: function(id) {
@@ -393,7 +413,18 @@
 
 			shareCalendar: function(calendar_id) {
 				alert();
-			}
+			},
+
+			/**
+            * When the location found
+            * @param {Object} addressData Data of the found location
+            * @param {Object} placeResultData PlaceResult object
+            * @param {String} id Input container ID
+            */
+            // getAddressData: function (addressData, placeResultData, id) {
+            //     this.address = addressData;
+            // }
+
 		},
 
 
@@ -405,13 +436,50 @@
 			},
 
 			formatDate: function(value) {
+				
+				let today = new Date();
 				let date = new Date(value);
-				let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
 
-				let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
-				return day+'.'+month+'.'+date.getFullYear();
+				let outputDate = '';
+
+				let fromDate = parseInt(date.getTime()/1000);
+				let toDate = parseInt(today.getTime()/1000);
+				let timeDiff = Math.ceil((toDate - fromDate)/3600);
+
+				let dateHours = date.getHours();
+				dateHours = dateHours % 12;
+				dateHours = dateHours ? dateHours : 12;
+				let dateMinutes = date.getMinutes();
+				dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
+				let dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+
+				if (timeDiff <= 1) {
+					let fromDateMinutes = parseInt(date.getTime()/1000*60);
+					let toDateMinutes = parseInt(today.getTime()/1000*60);
+					let minutesDiff = Math.ceil((toDateMinutes - fromDateMinutes)/3600);
+					if (minutesDiff <= 1) {
+						outputDate = minutesDiff + ' minute ago';
+					} else {
+						outputDate = minutesDiff + ' minutes ago';
+					}
+				} else if (timeDiff == 1) {
+					outputDate = timeDiff + ' hour ago';
+				} else if (timeDiff <= 24) {
+					outputDate = timeDiff + ' hours ago';
+				} else if (timeDiff < 48) {
+					outputDate = 'Yesterday, ' + dateHours + ':' + dateMinutes + ' '+ dateAmpm;
+				} else if (timeDiff > 48) {
+					let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+					let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
+					outputDate = day + '.' + month + '.' + date.getFullYear();
+				}
+				return outputDate;
 			}
 
+		},
+
+		mounted() {
+			
 		}
 
 	}

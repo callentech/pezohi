@@ -196,6 +196,7 @@
                     currentObj.requestDanger = 'Error Request';
                 })
                 .then(function() {
+                    currentObj.requestProcess = false;
                     jQuery('#confirmCalendarDelete').modal('hide');
                 });
             },

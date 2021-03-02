@@ -86,7 +86,12 @@ class HomeController extends Controller
                 }
             }
 
+            $calendar->publicUrl = 'https://calendar.google.com/calendar/embed?src='.$calendar->id.'&ctz='.$calendar->timeZone;
+
             $calendars[] = $calendar;
+
+           
+
         }
 
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);

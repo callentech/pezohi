@@ -28,7 +28,7 @@
 
 	            <div class="col-4 text-right actions">
 
-	            	<button type="button" class="btn btn-primary btn-sm" @click="shareCalendar(calendar.id)">
+	            	<button type="button" class="btn btn-primary btn-sm" @click="shareCalendar(calendar.publicUrl)">
 	                    <i class="fas fa-user-friends"></i> Share
 	                </button>
 
@@ -210,6 +210,39 @@
 	            </div>
 			</div>
 		</transition>
+
+		<!-- Share Calendar Message modal -->
+		<div v-if="showIinfoModal">
+			<transition name="modal">
+				<div class="modal-mask">
+	        		<div class="modal-wrapper">
+	        			<div class="message-modal" tabindex="-1" role="dialog">
+				  			<div class="modal-dialog" role="document">
+				    			<div class="modal-content">
+				      				<div class="modal-header">
+				       	 				<h5 class="modal-title">Information</h5>
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="infoModalText='', showIinfoModal=false">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+								    </div>
+								    <div class="modal-body">
+								    	<p>{{ infoModaltext }}</p>
+								    </div>
+								    <div class="modal-footer">
+								    	<button type="button" class="btn btn-secondary" @click="infoModalText='', showIinfoModal=false">Close</button>
+								    </div>
+				    			</div>
+				  			</div>
+						</div>
+	        		</div>
+	      		</div>
+			</transition>
+		</div>
+		<!-- END Share Calendar Message modal -->
+
+
+
+
 		<!-- END Calendar details -->
 	</div>
 
@@ -262,9 +295,10 @@
 
 				datePicker: null,
 				input: null,
+				address: '',
 
-
-				address: ''
+				showIinfoModal: false,
+				infoModaltext: ''
 			}
 		},
 
@@ -276,8 +310,6 @@
 					);
 			}
 		},
-
-		
 
 		methods: {
 
@@ -411,8 +443,18 @@
 				});
 			},
 
-			shareCalendar: function(calendar_id) {
-				alert();
+			shareCalendar: function(url) {
+				
+				let input_temp = document.createElement('textarea');
+				input_temp.innerHTML = url;
+				document.body.appendChild(input_temp);
+				input_temp.select();
+				input_temp.setSelectionRange(0, 99999);
+				document.execCommand('copy');
+				document.body.removeChild(input_temp);
+
+				this.infoModaltext = 'Public link to calendar was copied to your clipboard';
+				this.showIinfoModal = true;
 			},
 
 			/**
@@ -426,7 +468,6 @@
             // }
 
 		},
-
 
 		filters: {
 			capitalize: function (value) {

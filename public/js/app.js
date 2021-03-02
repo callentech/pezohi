@@ -3111,6 +3111,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3144,7 +3177,9 @@ __webpack_require__.r(__webpack_exports__);
       calendar_id: null,
       datePicker: null,
       input: null,
-      address: ''
+      address: '',
+      showIinfoModal: false,
+      infoModaltext: ''
     };
   },
   computed: {
@@ -3260,8 +3295,16 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.formRequestProcess = false;
       });
     },
-    shareCalendar: function shareCalendar(calendar_id) {
-      alert();
+    shareCalendar: function shareCalendar(url) {
+      var input_temp = document.createElement('textarea');
+      input_temp.innerHTML = url;
+      document.body.appendChild(input_temp);
+      input_temp.select();
+      input_temp.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.body.removeChild(input_temp);
+      this.infoModaltext = 'Public link to calendar was copied to your clipboard';
+      this.showIinfoModal = true;
     }
     /**
              * When the location found
@@ -66659,7 +66702,7 @@ var render = function() {
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
-                    return _vm.shareCalendar(_vm.calendar.id)
+                    return _vm.shareCalendar(_vm.calendar.publicUrl)
                   }
                 }
               },
@@ -67226,7 +67269,93 @@ var render = function() {
               ])
             ])
           : _vm._e()
-      ])
+      ]),
+      _vm._v(" "),
+      _vm.showIinfoModal
+        ? _c(
+            "div",
+            [
+              _c("transition", { attrs: { name: "modal" } }, [
+                _c("div", { staticClass: "modal-mask" }, [
+                  _c("div", { staticClass: "modal-wrapper" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "message-modal",
+                        attrs: { tabindex: "-1", role: "dialog" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "modal-dialog",
+                            attrs: { role: "document" }
+                          },
+                          [
+                            _c("div", { staticClass: "modal-content" }, [
+                              _c("div", { staticClass: "modal-header" }, [
+                                _c("h5", { staticClass: "modal-title" }, [
+                                  _vm._v("Information")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "close",
+                                    attrs: {
+                                      type: "button",
+                                      "data-dismiss": "modal",
+                                      "aria-label": "Close"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        ;(_vm.infoModalText = ""),
+                                          (_vm.showIinfoModal = false)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "span",
+                                      { attrs: { "aria-hidden": "true" } },
+                                      [_vm._v("×")]
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "modal-body" }, [
+                                _c("p", [_vm._v(_vm._s(_vm.infoModaltext))])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "modal-footer" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-secondary",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        ;(_vm.infoModalText = ""),
+                                          (_vm.showIinfoModal = false)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Close")]
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )

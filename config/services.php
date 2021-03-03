@@ -30,10 +30,27 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // 'google' => [
+    //     'client_id'     => env('GOOGLE_ID'),
+    //     'client_secret' => env('GOOGLE_SECRET'),
+    //     'redirect'      => env('GOOGLE_URL'),
+    // ]
+
     'google' => [
-        'client_id'     => env('GOOGLE_ID'),
-        'client_secret' => env('GOOGLE_SECRET'),
-        'redirect'      => env('GOOGLE_URL'),
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect'  => env('GOOGLE_REDIRECT_URL'),
+        'webhook_uri' => env('GOOGLE_WEBHOOK_URI'),
+        'scopes' => [
+            \Google_Service_Oauth2::USERINFO_EMAIL,
+            \Google_Service_Calendar::CALENDAR
+        ],
+
+        // Enables automatic token refresh
+        'approval_prompt' => 'force',
+        'access_type' => 'offline',
+
+        'include_granted_scopes' => true
     ]
     
 ];

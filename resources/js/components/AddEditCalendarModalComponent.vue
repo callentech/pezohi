@@ -355,7 +355,7 @@
 				<div class="modal-content">
 
 					<div class="modal-header">
-						<h5 class="modal-title w-100 text-center">Add new calendar</h5>
+						<h5 class="modal-title w-100 text-center">{{ modal_title }}</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -631,6 +631,32 @@
 				});
 			},
 
+			showDuplicateCalendarModal: function(id) {
+
+				let currentObj = this;
+				axios.post('/calendar-get-data', { calendar_id: id })
+				.then(function (response) {
+					currentObj.modal_title = 'Duplicate Calendar';
+					
+					if (response.data.code == 1) {
+						currentObj.form_action = '/calendar-new';
+						currentObj.calendar_name = response.data.data.calendarData.summary;
+						currentObj.calendar_events = response.data.data.calendarEvents;
+					} else {
+						currentObj.requestDanger = 'Error Request';
+					}
+					jQuery('#addCalendarModal').modal('show');
+				})
+				.catch(function (error) {
+					currentObj.requestDanger = 'Error Request';
+				})
+				.then(function() {
+					
+				});
+
+			},
+
+
 			showAddEventForm: function(event) {
 				event.preventDefault();
 				this.showNewEventDataForm = true;
@@ -729,6 +755,9 @@
 					let url = event.target.action;
 
 					let formData = new FormData(form);
+
+					console.log(currentObj.calendar_events.items);
+					
 					formData.append('events', JSON.stringify(currentObj.calendar_events.items));
 
 					axios.interceptors.request.use(function (config) {

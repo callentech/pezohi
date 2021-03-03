@@ -2459,6 +2459,26 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.requestDanger = 'Error Request';
       }).then(function () {});
     },
+    showDuplicateCalendarModal: function showDuplicateCalendarModal(id) {
+      var currentObj = this;
+      axios.post('/calendar-get-data', {
+        calendar_id: id
+      }).then(function (response) {
+        currentObj.modal_title = 'Duplicate Calendar';
+
+        if (response.data.code == 1) {
+          currentObj.form_action = '/calendar-new';
+          currentObj.calendar_name = response.data.data.calendarData.summary;
+          currentObj.calendar_events = response.data.data.calendarEvents;
+        } else {
+          currentObj.requestDanger = 'Error Request';
+        }
+
+        jQuery('#addCalendarModal').modal('show');
+      })["catch"](function (error) {
+        currentObj.requestDanger = 'Error Request';
+      }).then(function () {});
+    },
     showAddEventForm: function showAddEventForm(event) {
       event.preventDefault();
       this.showNewEventDataForm = true;
@@ -2533,6 +2553,7 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         var url = event.target.action;
         var formData = new FormData(form);
+        console.log(currentObj.calendar_events.items);
         formData.append('events', JSON.stringify(currentObj.calendar_events.items));
         axios.interceptors.request.use(function (config) {
           // Do something before request is sent
@@ -3218,6 +3239,11 @@ __webpack_require__.r(__webpack_exports__);
       this.showBody = false;
       this.showCalendarDropdownActions = false;
       this.$root.$refs.addEditCalendarModal.showEditCalendarModal(id);
+    },
+    showDuplicateCalendarModal: function showDuplicateCalendarModal(id) {
+      this.showBody = false;
+      this.showCalendarDropdownActions = false;
+      this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModal(id);
     },
     showAddEventForm: function showAddEventForm(calendar_id) {
       this.calendar_id = calendar_id;
@@ -65423,7 +65449,13 @@ var render = function() {
           { staticClass: "modal-dialog modal-dialog-centered modal-xl" },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h5", { staticClass: "modal-title w-100 text-center" }, [
+                  _vm._v(_vm._s(_vm.modal_title))
+                ]),
+                _vm._v(" "),
+                _vm._m(4)
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -66161,24 +66193,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title w-100 text-center" }, [
-        _vm._v("Add new calendar")
-      ]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   },
   function() {
     var _vm = this
@@ -66753,10 +66779,23 @@ var render = function() {
                           ]
                         ),
                         _vm._v(" "),
-                        _c("a", { attrs: { href: "" } }, [
-                          _c("i", { staticClass: "far fa-clone" }),
-                          _vm._v(" Duplicate")
-                        ]),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showDuplicateCalendarModal(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-clone" }),
+                            _vm._v(" Duplicate")
+                          ]
+                        ),
                         _vm._v(" "),
                         _c(
                           "a",

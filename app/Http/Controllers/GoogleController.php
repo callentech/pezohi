@@ -38,7 +38,7 @@ class GoogleController extends Controller
 
             //$user = Socialite::driver('google')->stateless()->user();
 
-            $user = Socialite::driver('google')
+            $account = Socialite::driver('google')
             // ->scopes(['openid', 'profile', 'email', \Google_Service_People::CONTACTS_READONLY])
             ->scopes(['openid', 'profile', 'email'])
             ->with(["access_type" => "offline", "prompt" => "consent select_account"])
@@ -46,32 +46,44 @@ class GoogleController extends Controller
 
             // Set token for the Google API PHP Client
             $_SESSION['googleClientToken'] = [
-                'access_token' => $user->token,
-                'refresh_token' => $user->refreshToken,
-                'expires_in' => $user->expiresIn
+                'access_token' => $account->token,
+                'refresh_token' => $account->refreshToken,
+                'expires_in' => $account->expiresIn
             ];
 
-            $finduser = User::where('google_id', $user->id)->first();
-            if ($finduser) {
 
-                Auth::login($finduser);
-
-                return redirect()->intended('home');
-
-            } else {
-
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => 'owner',
-                    'google_id'=> $user->id,
+            $user = User::updateOrCreate(
+                [
+                    'google_id' => $account->id
+                ],
+                [
+                    'name' => $account->name,
+                    'email' => $account->email,
+                    'google_id'=> $account->id,
+                    'google_access_token' => $account->token,
                     'password' => encrypt('123456dummy')
-                ]);
+                ]
+            );
 
-                Auth::login($newUser);
+            Auth::login($user);
 
-                return redirect()->intended('home');
-            }
+
+
+            // $finduser = User::where('google_id', $user->id)->first();
+            // if ($finduser) {
+            //     Auth::login($finduser);
+            // } else {
+            //     $newUser = User::create([
+            //         'name' => $user->name,
+            //         'email' => $user->email,
+            //         'role' => 'owner',
+            //         'google_id'=> $user->id,
+            //         'password' => encrypt('123456dummy')
+            //     ]);
+            //     Auth::login($newUser);
+            // }
+
+            return redirect()->intended('home');
 
         } catch (Exception $e) {
             dd($e->getMessage());

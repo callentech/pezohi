@@ -48,7 +48,7 @@
 		                <transition name="fade">
 			                <div class="items" v-if="showCalendarDropdownActions">
 			                	<a href="javascript:void(0)" @click="showAddEditCalendarModal(calendar.id)"><i class="far fa-edit"></i> Edit</a>
-			                	<a href=""><i class="far fa-clone"></i> Duplicate</a>
+			                	<a href="javascript:void(0)" @click="showDuplicateCalendarModal(calendar.id)"><i class="far fa-clone"></i> Duplicate</a>
 			                	<a href="javascript:void(0)" @click="showConfirmCalendarDelete(calendar.id)"><i class="far fa-trash-alt"></i> Delete</a>
 			                </div>
 			            </transition>
@@ -345,6 +345,12 @@
 				this.showBody = false;
 				this.showCalendarDropdownActions = false;
 				this.$root.$refs.addEditCalendarModal.showEditCalendarModal(id);
+			},
+
+			showDuplicateCalendarModal: function(id) {
+				this.showBody = false;
+				this.showCalendarDropdownActions = false;
+				this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModal(id);
 			},
 
 			showAddEventForm: function(calendar_id) {

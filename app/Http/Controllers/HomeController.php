@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Services\Google;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -30,9 +32,9 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
 
-        $this->client = new Google_Client();
-        $this->client->setApplicationName(config('app.name'));
-        $this->client->setDeveloperKey(env('GOOGLE_API_KEY'));
+        // $this->client = new Google_Client();
+        // $this->client->setApplicationName(config('app.name'));
+        // $this->client->setDeveloperKey(env('GOOGLE_API_KEY'));
 
         //$this->client->setAccessType('offline');
     }
@@ -42,26 +44,40 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Google $google)
     {
-        session_start();
-        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
-            Auth::logout();
-            return redirect()->route('home');
-        }
-
-        $this->googleClientToken = $_SESSION['googleClientToken'];
-
-        try {
-            $this->client->setAccessToken(json_encode($this->googleClientToken));
-            $service = new Google_Service_Calendar($this->client);
-            $calendarsData = $service->calendarList->listCalendarList();
-        } catch (\Exception $ex) {
-            Auth::logout();
-            return redirect()->route('home');
-        }
-        
+        $google->connectUsing(Auth::user()->google_access_token);
+        $service = $google->service('Calendar');
+        $calendarsData = $service->calendarList->listCalendarList();
         $calendarsItems = $calendarsData->getItems();
+
+        foreach ($calendarsItems as $calendar) {
+            var_dump($calendar->accessRole);
+        }
+
+        exit;
+        
+
+
+
+        // session_start();
+        // if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
+        //     Auth::logout();
+        //     return redirect()->route('home');
+        // }
+
+        // $this->googleClientToken = $_SESSION['googleClientToken'];
+
+        // try {
+        //     $this->client->setAccessToken(json_encode($this->googleClientToken));
+        //     $service = new Google_Service_Calendar($this->client);
+        //     $calendarsData = $service->calendarList->listCalendarList();
+        // } catch (\Exception $ex) {
+        //     Auth::logout();
+        //     return redirect()->route('home');
+        // }
+        
+        
         $calendars = [];
 
         foreach ($calendarsItems as $calendar) {
@@ -206,6 +222,8 @@ class HomeController extends Controller
             'owner_email_address' => 'required'
         ]);
 
+        
+
         // Create New Calendar
         $this->googleClientToken = $_SESSION['googleClientToken'];
         $this->client->setAccessToken(json_encode($this->googleClientToken));
@@ -222,8 +240,14 @@ class HomeController extends Controller
 
         // Add new events
         $events = json_decode($request->events, TRUE);
+
+      
         if ($events && count($events) > 0) {
             foreach ($events as $event) {
+
+                var_dump($event['id']);
+                exit;
+                
                 if ($event['id'] == 'new') {
 
                     $date = new \DateTime($event['start']['dateTime']);

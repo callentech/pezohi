@@ -16,6 +16,8 @@ use Auth;
 use Google_Client;
 use Google_Service_Calendar;
 
+
+
 class HomeController extends Controller
 {
 
@@ -44,21 +46,54 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(Google $google)
+    
+
+    public function index()
+    {
+        //$events = Auth::user()->events()->orderBy('started_at', 'desc')->get();
+
+        // $events = Auth::user()->events()->get();
+
+        $calendars = Auth::user()->calendars()->get();
+
+        // $calendars = [];
+        // foreach ($userCalendars as $key => $calendar) {
+        //     if (Str::contains($calendar->id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->id, ['addressbook#contacts@group.v.calendar.google.com']) || $calendar->id == Auth::user()->email) {
+        //         continue;
+        //     }
+
+
+
+        //     $calendars[] = $calendar;
+        // }
+
+        foreach ($calendars as $key => $calendar) {
+
+            if (Str::contains($calendar->google_id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->google_id, ['addressbook#contacts@group.v.calendar.google.com']) || $calendar->google_id == Auth::user()->email) {
+                 unset($calendars[$key]);;
+            }
+
+           
+        }
+
+
+        
+
+        
+        
+
+        return view('events', compact('calendars'));
+    }
+
+    
+
+
+    public function _index(Google $google)
     {
         $google->connectUsing(Auth::user()->google_access_token);
         $service = $google->service('Calendar');
         $calendarsData = $service->calendarList->listCalendarList();
         $calendarsItems = $calendarsData->getItems();
-
-        foreach ($calendarsItems as $calendar) {
-            var_dump($calendar->accessRole);
-        }
-
-        exit;
-        
-
-
 
         // session_start();
         // if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
@@ -76,7 +111,6 @@ class HomeController extends Controller
         //     Auth::logout();
         //     return redirect()->route('home');
         // }
-        
         
         $calendars = [];
 
@@ -245,8 +279,7 @@ class HomeController extends Controller
         if ($events && count($events) > 0) {
             foreach ($events as $event) {
 
-                var_dump($event['id']);
-                exit;
+                
                 
                 if ($event['id'] == 'new') {
 

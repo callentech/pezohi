@@ -36,6 +36,10 @@ Route::post('/calendar-delete', [App\Http\Controllers\HomeController::class, 'de
 Route::post('/calendar-get-data', [App\Http\Controllers\HomeController::class, 'getCalendarDataAction']);
 
 
+Route::post('google/webhook', [App\Http\Controllers\GoogleWebhookController::class])->name('google.webhook');
+//Route::name('google.webhook')->post('google/webhook', 'GoogleWebhookController');
+
+
 
 
 // Route::get('/calendar', [App\Http\Controllers\GoogleController::class, 'calendar']);

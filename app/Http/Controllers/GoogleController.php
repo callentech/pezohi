@@ -45,11 +45,11 @@ class GoogleController extends Controller
             ->user();
 
             // Set token for the Google API PHP Client
-            $_SESSION['googleClientToken'] = [
-                'access_token' => $account->token,
-                'refresh_token' => $account->refreshToken,
-                'expires_in' => $account->expiresIn
-            ];
+            // $_SESSION['googleClientToken'] = [
+            //     'access_token' => $account->token,
+            //     'refresh_token' => $account->refreshToken,
+            //     'expires_in' => $account->expiresIn
+            // ];
 
 
             $user = User::updateOrCreate(
@@ -64,6 +64,12 @@ class GoogleController extends Controller
                     'password' => encrypt('123456dummy')
                 ]
             );
+
+//            \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+//            \DB::table('users')->truncate();
+//
+//            \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
 
             Auth::login($user);
 
@@ -90,6 +96,6 @@ class GoogleController extends Controller
         }
     }
 
-    
+
 
 }

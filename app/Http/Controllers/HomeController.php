@@ -48,7 +48,7 @@ class HomeController extends Controller
      */
     
 
-    public function index()
+    public function _index()
     {
         //$events = Auth::user()->events()->orderBy('started_at', 'desc')->get();
 
@@ -88,7 +88,7 @@ class HomeController extends Controller
     
 
 
-    public function _index(Google $google)
+    public function index(Google $google)
     {
         $google->connectUsing(Auth::user()->google_access_token);
         $service = $google->service('Calendar');

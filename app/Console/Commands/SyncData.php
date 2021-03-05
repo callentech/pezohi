@@ -40,12 +40,12 @@ class SyncData extends Command
      */
     public function handle()
     {
-        // echo "\nSTART\n";
-        // Synchronization::get()->each->ping();
-        // echo "\nEND\n";
+        echo "\nSTART\n";
+        Synchronization::get()->each->ping();
+        echo "\nEND\n";
 
-        $sync = new PeriodicSynchronizations();
-        var_dump($sync);
+        //$sync = new PeriodicSynchronizations();
+        
         // return 0;
     }
 }

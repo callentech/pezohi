@@ -2791,6 +2791,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'new_event_form_action', 'csrf_token'],
   data: function data() {
@@ -2872,7 +2874,7 @@ __webpack_require__.r(__webpack_exports__);
     // Sort calendar list methods
     sortCalendarsListBySummary: function sortCalendarsListBySummary() {
       var direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
-      this.sortedCalendars = this.sortArray(this.calendars, 'summary', direction);
+      this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
       this.sortBySummaryDirection = direction;
     },
     sortCalendarsListByEvents: function sortCalendarsListByEvents() {
@@ -2887,7 +2889,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     sortCalendarsListByUpdated: function sortCalendarsListByUpdated() {
       var direction = this.sortByUpdatedDirection == 'desc' ? 'asc' : 'desc';
-      this.sortedCalendars = this.sortArray(this.calendars, 'last_updated', direction);
+      this.sortedCalendars = this.sortArray(this.calendars, 'updated_at', direction);
       this.sortByUpdatedDirection = direction;
     }
   },
@@ -2915,9 +2917,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-//
-//
-//
 //
 //
 //
@@ -66689,7 +66688,7 @@ var render = function() {
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
               "\n\t\t            " +
-                _vm._s(_vm.calendar.summary) +
+                _vm._s(_vm.calendar.name) +
                 "\n\t\t        "
             )
           ]),
@@ -66703,21 +66702,21 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm.calendar.accessRole == "owner"
-              ? _c("span", [_vm._v("Me")])
-              : _c("span", [_vm._v("Other")])
+            _vm.calendar.access_role == "owner"
+              ? _c("span", [
+                  _vm._v("Me (" + _vm._s(_vm.calendar.access_role) + ")")
+                ])
+              : _c("span", [
+                  _vm._v("Other (" + _vm._s(_vm.calendar.access_role) + ")")
+                ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm.calendar.last_updated
-              ? _c("span", [
-                  _vm._v(
-                    "\n\t                \t" +
-                      _vm._s(_vm._f("formatDate")(_vm.calendar.last_updated)) +
-                      "\n\t                "
-                  )
-                ])
-              : _vm._e()
+            _vm._v(
+              "\n\t                " +
+                _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
+                "\n\t            "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-4 text-right actions" }, [

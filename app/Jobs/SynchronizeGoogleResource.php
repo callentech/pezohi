@@ -22,6 +22,8 @@ abstract class SynchronizeGoogleResource
         do {
             $tokens = compact('pageToken', 'syncToken');
 
+            $list = $this->getGoogleRequest($service, $tokens); 
+
             try {
                 $list = $this->getGoogleRequest($service, $tokens); 
             } catch (\Google_Service_Exception $e) {    
@@ -30,7 +32,7 @@ abstract class SynchronizeGoogleResource
                     $this->dropAllSyncedItems();    
                     return $this->handle(); 
                 }   
-                throw $e;   
+                throw $e;  
             }
 
             foreach ($list->getItems() as $item) {

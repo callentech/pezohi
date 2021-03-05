@@ -13,7 +13,7 @@ class Calendar extends Model
 {
 	use Synchronizable;
 
-    protected $fillable = ['google_id', 'name', 'color', 'timezone'];
+    protected $fillable = ['google_id', 'access_role', 'name', 'color', 'timezone'];
 
     public function googleAccount()
     {
@@ -32,6 +32,6 @@ class Calendar extends Model
 
     public function watch()
     {
-        WatchGoogleEvents::dispatch($this);
+        //WatchGoogleEvents::dispatch($this);
     }
 }

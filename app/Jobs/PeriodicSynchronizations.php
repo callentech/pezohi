@@ -32,6 +32,8 @@ class PeriodicSynchronizations implements ShouldQueue
      */
     public function handle()
     {
+        
         Synchronization::get()->each->ping();
+       
     }
 }

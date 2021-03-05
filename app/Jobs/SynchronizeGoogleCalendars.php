@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
+use Auth;
 
 
 class SynchronizeGoogleCalendars extends SynchronizeGoogleResource implements ShouldQueue
@@ -27,16 +29,24 @@ class SynchronizeGoogleCalendars extends SynchronizeGoogleResource implements Sh
                 ->get()->each->delete();
         }
 
-        $this->synchronizable->calendars()->updateOrCreate(
-            [
-                'google_id' => $googleCalendar->id,
-            ],
-            [
-                'name' => $googleCalendar->summary,
-                'color' => $googleCalendar->backgroundColor,
-                'timezone' => $googleCalendar->timeZone,
-            ]
-        );
+        // var_dump($googleCalendar);
+        // exit;
+
+        if (!Str::contains($googleCalendar->id, ['#holiday@group.v.calendar.google.com']) && !Str::contains($googleCalendar->id, ['addressbook#contacts@group.v.calendar.google.com'])) {
+
+            $this->synchronizable->calendars()->updateOrCreate(
+                [
+                    'google_id' => $googleCalendar->id,
+                ],
+                [
+                    'access_role' => $googleCalendar->accessRole,
+                    'name' => $googleCalendar->summary,
+                    'color' => $googleCalendar->backgroundColor,
+                    'timezone' => $googleCalendar->timeZone,
+                ]
+            );
+                 
+        }
     }
 
     public function dropAllSyncedItems()    

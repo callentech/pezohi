@@ -48,13 +48,19 @@ class HomeController extends Controller
      */
     
 
-    public function _index()
+    public function index()
     {
         //$events = Auth::user()->events()->orderBy('started_at', 'desc')->get();
 
         // $events = Auth::user()->events()->get();
 
-        $calendars = Auth::user()->calendars()->get();
+        $calendars = Auth::user()->calendars()->with('events')->get();
+        // foreach ($calendars as $calendar) {
+        //     $calendar->eventsCount = count($calendar->events);
+        // }
+
+
+        
 
         // $calendars = [];
         // foreach ($userCalendars as $key => $calendar) {
@@ -69,9 +75,12 @@ class HomeController extends Controller
 
         foreach ($calendars as $key => $calendar) {
 
-            if (Str::contains($calendar->google_id, ['#holiday@group.v.calendar.google.com']) || Str::contains($calendar->google_id, ['addressbook#contacts@group.v.calendar.google.com']) || $calendar->google_id == Auth::user()->email) {
+            if ($calendar->google_id == Auth::user()->email) {
                  unset($calendars[$key]);;
             }
+
+            $calendar->eventsCount = count($calendar->events);
+
 
            
         }
@@ -82,13 +91,13 @@ class HomeController extends Controller
         
         
 
-        return view('events', compact('calendars'));
+        return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
     }
 
     
 
 
-    public function index(Google $google)
+    public function _index(Google $google)
     {
         $google->connectUsing(Auth::user()->google_access_token);
         $service = $google->service('Calendar');

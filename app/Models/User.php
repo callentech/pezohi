@@ -66,9 +66,11 @@ class User extends Authenticatable
 
     public function getCalendars()
     {
-        return Calendar::whereHas('googleAccount', function ($accountQuery) {
-            $accountQuery->where('id', $this->id);
-        });
+        // return Calendar::whereHas('googleAccount', function ($accountQuery) {
+        //     $accountQuery->where('id', $this->id);
+        // });
+
+        return Calendar::with('Event')->get();
     }
 
     public function events()

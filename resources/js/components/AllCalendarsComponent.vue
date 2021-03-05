@@ -77,7 +77,9 @@
                 <div class="calendars-list">
 
                     <div v-for="calendar in sortedCalendars">
+                       
                         <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
+                        
                     </div>
                 </div>
             </div>
@@ -208,7 +210,7 @@
             // Sort calendar list methods
             sortCalendarsListBySummary: function() {
                 let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'summary', direction);
+                this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
                 this.sortBySummaryDirection = direction;
             },
 
@@ -226,7 +228,7 @@
 
             sortCalendarsListByUpdated: function() {
                 let direction = this.sortByUpdatedDirection == 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'last_updated', direction);
+                this.sortedCalendars = this.sortArray(this.calendars, 'updated_at', direction);
                 this.sortByUpdatedDirection = direction;
             }
         },

@@ -7,7 +7,7 @@
 			<div class="row align-items-center">
 
 				<div class="col-2">
-		            {{ calendar.summary }}
+		            {{ calendar.name }}
 		        </div>
 
 		        <div class="col-2">
@@ -15,15 +15,12 @@
 		        </div>
 		        
 		        <div class="col-2">
-	                <span v-if="calendar.accessRole == 'owner'">Me</span>
-	                <span v-else>Other</span>
+	                <span v-if="calendar.access_role == 'owner'">Me ({{ calendar.access_role }})</span>
+	                <span v-else>Other ({{ calendar.access_role }})</span>
 	            </div>
 
 	            <div class="col-2">
-	                <span v-if="calendar.last_updated">
-	                	<!--{{ calendar.last_updated | formatDate('MMMM D, YYYY') }}-->
-	                	{{ calendar.last_updated|formatDate() }}
-	                </span>
+	                {{ calendar.updated_at|formatDate() }}
 	            </div>
 
 	            <div class="col-4 text-right actions">

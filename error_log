@@ -1,0 +1,1 @@
+[05-Mar-2021 14:47:10 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/google/apiclient/src/Model.php on line 125

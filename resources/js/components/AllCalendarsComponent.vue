@@ -74,14 +74,19 @@
                     </div>
                 </div>
 
-                <div class="calendars-list">
+                
 
+                <div v-if="Object.keys(calendars).length > 0" class="calendars-list">
                     <div v-for="calendar in sortedCalendars">
-                       
                         <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
-                        
                     </div>
                 </div>
+                <div v-else class="calendars-list">
+                    <div class="alert alert-info" role="alert">
+                        Synchronization in process please wait and update page after one minute ...
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -235,6 +240,15 @@
 
         mounted() {
             this.sortCalendarsListByUpdated();
+
+            if (Object.keys(this.calendars).length <= 0) {
+                setTimeout (function() {
+                    location.reload();
+                }, 15000);
+            }
+
+
+            
         }
     }
 </script>

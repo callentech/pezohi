@@ -33,7 +33,18 @@ class PeriodicSynchronizations implements ShouldQueue
     public function handle()
     {
         
-        Synchronization::get()->each->ping();
+        //Synchronization::get()->each->ping();
+
+        echo "\n START sync \n";
+        $syncs = Synchronization::get();
+        foreach ($syncs as $sync) {
+            if ($sync->synchronizable_type == 'App\Models\User') {
+                $sync->synchronizable->synchronizeCalendars();
+            } else {
+                $sync->ping();
+            }
+        }
+        echo "\n END Sync \n";
        
     }
 }

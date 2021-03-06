@@ -11,6 +11,7 @@ use App\Jobs\SynchronizeGoogleCalendars;
 use App\Jobs\WatchGoogleCalendars;
 
 use DB;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -41,22 +42,27 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-        static::created(function ($googleAccount) {
-            SynchronizeGoogleCalendars::dispatch($googleAccount);
-        });
-    }
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     // static::created(function ($googleAccount) {
+    //     //     //SynchronizeGoogleCalendars::dispatch($googleAccount);
+    //     // });
+    // }
 
     public function synchronize()
+    {
+        //SynchronizeGoogleCalendars::dispatch($this);
+    }
+
+    public function synchronizeCalendars()
     {
         SynchronizeGoogleCalendars::dispatch($this);
     }
 
     public function watch()
     {
-        WatchGoogleCalendars::dispatch($this);
+        //WatchGoogleCalendars::dispatch($this);
     }
 
     public function calendars()
@@ -64,21 +70,6 @@ class User extends Authenticatable
         return $this->hasMany(Calendar::class);
     }
 
-    public function getCalendars()
-    {
-        // return Calendar::whereHas('googleAccount', function ($accountQuery) {
-        //     $accountQuery->where('id', $this->id);
-        // });
-
-        return Calendar::with('Event')->get();
-    }
-
-    public function events()
-    {
-        return Event::whereHas('calendar', function ($calendarQuery) {
-            $calendarQuery->whereHas('googleAccount', function ($userQuery) {
-                $userQuery->where('id', $this->id);
-            });
-        });
-    }
+    
+    
 }

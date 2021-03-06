@@ -2793,6 +2793,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'new_event_form_action', 'csrf_token'],
   data: function data() {
@@ -2895,6 +2900,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.sortCalendarsListByUpdated();
+
+    if (Object.keys(this.calendars).length <= 0) {
+      setTimeout(function () {
+        location.reload();
+      }, 15000);
+    }
   }
 });
 
@@ -66480,28 +66491,43 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "calendars-list" },
-              _vm._l(_vm.sortedCalendars, function(calendar) {
-                return _c(
+            Object.keys(_vm.calendars).length > 0
+              ? _c(
                   "div",
-                  [
-                    _c("calendars-list-item-component", {
-                      ref: "calendar",
-                      refInFor: true,
-                      attrs: {
-                        calendar: calendar,
-                        new_event_form_action: _vm.new_event_form_action,
-                        csrf_token: _vm.csrf_token
-                      }
-                    })
-                  ],
-                  1
+                  { staticClass: "calendars-list" },
+                  _vm._l(_vm.sortedCalendars, function(calendar) {
+                    return _c(
+                      "div",
+                      [
+                        _c("calendars-list-item-component", {
+                          ref: "calendar",
+                          refInFor: true,
+                          attrs: {
+                            calendar: calendar,
+                            new_event_form_action: _vm.new_event_form_action,
+                            csrf_token: _vm.csrf_token
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  }),
+                  0
                 )
-              }),
-              0
-            )
+              : _c("div", { staticClass: "calendars-list" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-info",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Synchronization in process please wait and update page after one minute ...\n                "
+                      )
+                    ]
+                  )
+                ])
           ]
         )
       }),

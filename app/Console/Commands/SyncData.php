@@ -40,9 +40,17 @@ class SyncData extends Command
      */
     public function handle()
     {
-        echo "\nSTART\n";
-        Synchronization::get()->each->ping();
-        echo "\nEND\n";
+        echo "\n START Sync \n";
+
+        $syncs = Synchronization::get();
+        foreach ($syncs as $sync) {
+            if ($sync->synchronizable_type == 'App\Models\User') {
+                $sync->synchronizable->synchronizeCalendars();
+            } else {
+                $sync->ping();
+            }
+        }
+        echo "\n END Sync \n";
 
         //$sync = new PeriodicSynchronizations();
         

@@ -15,12 +15,12 @@ class Calendar extends Model
 
     protected $fillable = ['google_id', 'access_role', 'name', 'color', 'timezone'];
 
-    public function googleAccount()
+    public function googleAccount(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function events()
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Event::class);
     }

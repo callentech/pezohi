@@ -14,3 +14,4 @@ yarn-error.log
 .htaccess
 .ftpquota
 error_log
+.idea

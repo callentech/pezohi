@@ -83,7 +83,7 @@
                 </div>
                 <div v-else class="calendars-list">
                     <div class="alert alert-info" role="alert">
-                        Synchronization in process please wait and update page after one minute ...
+                        Synchronization in process please wait or update page after one minute ...
                     </div>
                 </div>
 
@@ -166,7 +166,7 @@
             },
 
             showAddCalendarModal: function() {
-                this.$root.$refs.addEditCalendarModal.showAddCalendarModal();
+                this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction();
             },
 
             showConfirmCalendarDelete: function(id) {

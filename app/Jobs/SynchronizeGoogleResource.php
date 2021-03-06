@@ -22,17 +22,17 @@ abstract class SynchronizeGoogleResource
         do {
             $tokens = compact('pageToken', 'syncToken');
 
-            $list = $this->getGoogleRequest($service, $tokens); 
+            $list = $this->getGoogleRequest($service, $tokens);
 
             try {
-                $list = $this->getGoogleRequest($service, $tokens); 
-            } catch (\Google_Service_Exception $e) {    
+                $list = $this->getGoogleRequest($service, $tokens);
+            } catch (\Google_Service_Exception $e) {
                 if ($e->getCode() === 410) {
-                    $this->synchronization->update(['token' => null]);  
-                    $this->dropAllSyncedItems();    
-                    return $this->handle(); 
-                }   
-                throw $e;  
+                    $this->synchronization->update(['token' => null]);
+                    $this->dropAllSyncedItems();
+                    return $this->handle();
+                }
+                throw $e;
             }
 
             foreach ($list->getItems() as $item) {

@@ -22,17 +22,17 @@ class Google
         $this->client = $client;
     }
 
-    public function connectUsing($token)
+    public function connectUsing($token): Google
     {
         $this->client->setAccessToken($token);
 
         return $this;
     }
 
-    public function connectWithSynchronizable($synchronizable)
+    public function connectWithSynchronizable($synchronizable): Google
     {
         $token = $this->getTokenFromSynchronizable($synchronizable);
-        
+
         return $this->connectUsing($token);
     }
 
@@ -44,13 +44,13 @@ class Google
 
             case $synchronizable instanceof Calendar:
                 return $synchronizable->googleAccount->google_access_token;
-            
+
             default:
                 throw new \Exception("Invalid Synchronizable");
         }
     }
 
-    public function revokeToken($token = null)
+    public function revokeToken($token = null): bool
     {
         $token = $token ?? $this->client->getAccessToken();
 
@@ -64,7 +64,7 @@ class Google
         return new $classname($this->client);
     }
 
-    public function __call($method, $args)
+    public function __call($method, $args): bool
     {
         if (! method_exists($this->client, $method)) {
             throw new \Exception("Call to undefined method '{$method}'");

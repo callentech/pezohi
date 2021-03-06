@@ -16237,6 +16237,14 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   color: #949fae;
 }
 
+#addCalendarModal .modal-content .modal-header {
+  background-color: #3490dc;
+  color: #FFF;
+}
+#addCalendarModal .modal-content .modal-header .close {
+  color: #FFFFFF;
+}
+
 /*
 #addCalendarModal .modal-body {
 	padding-left: 3rem;
@@ -16302,4 +16310,8 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
+}
+
+.message-modal .modal-body input {
+  width: 100%;
 }

@@ -148,6 +148,15 @@ body #app nav.navbar .navbar-brand {
 
 
 // Add Calendar Modal 
+
+#addCalendarModal .modal-content .modal-header {
+	background-color: #3490dc;
+	color: #FFF;
+
+	.close {
+		color: #FFFFFF;
+	}
+}
 /*
 #addCalendarModal .modal-body {
 	padding-left: 3rem;
@@ -223,4 +232,8 @@ body #app nav.navbar .navbar-brand {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
+}
+
+.message-modal .modal-body input {
+	width: 100%;
 }

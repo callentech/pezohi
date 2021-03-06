@@ -33,7 +33,7 @@
 	                    <i class="far fa-bell"></i> Subscribe ???
 	                </button> -->
 
-	                <button type="button" class="btn btn-outline-secondary btn-sm" name="button">
+	                <button type="button" class="btn btn-outline-danger btn-sm" name="button">
 	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
 
@@ -222,8 +222,7 @@
 								          <span aria-hidden="true">&times;</span>
 								        </button>
 								    </div>
-								    <div class="modal-body">
-								    	<p>{{ infoModaltext }}</p>
+								    <div v-html="infoModalHtml" class="modal-body">
 								    </div>
 								    <div class="modal-footer">
 								    	<button type="button" class="btn btn-secondary" @click="infoModalText='', showIinfoModal=false">Close</button>
@@ -295,7 +294,7 @@
 				address: '',
 
 				showIinfoModal: false,
-				infoModaltext: ''
+				infoModalHtml: ''
 			}
 		},
 
@@ -338,11 +337,11 @@
 				}
 			},
 
-			showAddEditCalendarModal: function(id) {
-				this.showBody = false;
-				this.showCalendarDropdownActions = false;
-				this.$root.$refs.addEditCalendarModal.showEditCalendarModal(id);
-			},
+			// showAddEditCalendarModal: function(id) {
+			// 	this.showBody = false;
+			// 	this.showCalendarDropdownActions = false;
+			// 	this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction(id);
+			// },
 
 			showDuplicateCalendarModal: function(id) {
 				this.showBody = false;
@@ -447,7 +446,7 @@
 			},
 
 			shareCalendar: function(url) {
-				
+				console.log(url);
 				let input_temp = document.createElement('textarea');
 				input_temp.innerHTML = url;
 				document.body.appendChild(input_temp);
@@ -456,7 +455,7 @@
 				document.execCommand('copy');
 				document.body.removeChild(input_temp);
 
-				this.infoModaltext = 'Public link to calendar was copied to your clipboard';
+				this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
 				this.showIinfoModal = true;
 			},
 

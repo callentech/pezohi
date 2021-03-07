@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use App\Concerns\Synchronizable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-use App\Jobs\SynchronizeGoogleEvents;
-use App\Jobs\WatchGoogleEvents;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Calendar extends Model
 {
-	use Synchronizable;
-
     protected $fillable = ['google_id', 'access_role', 'name', 'color', 'timezone'];
 
-    public function googleAccount(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -23,15 +20,5 @@ class Calendar extends Model
     public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Event::class);
-    }
-
-   	public function synchronize()
-    {
-        SynchronizeGoogleEvents::dispatch($this);
-    }
-
-    public function watch()
-    {
-        //WatchGoogleEvents::dispatch($this);
     }
 }

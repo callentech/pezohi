@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SyncCalendars;
 use App\Models\Calendar;
 use App\Services\Google;
 use Google_Service_Calendar_Calendar;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -42,6 +44,14 @@ class CalendarsController extends Controller
                 'message' => 'Calendar created successfully'
             ]
         ]);
+    }
+
+    public static function jobsAction()
+    {
+        var_dump(Auth::user());
+
+        exit;
+        $result = dispatch(new SyncCalendars());
     }
 
 

@@ -2,22 +2,15 @@
 
 namespace App\Models;
 
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Concerns\Synchronizable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use App\Jobs\SynchronizeGoogleCalendars;
-use App\Jobs\WatchGoogleCalendars;
-
-use DB;
-use Auth;
 
 class User extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
-    use Synchronizable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,7 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'google_id',
-        'google_access_token'
+        'google_access_token',
+        'google_refresh_token'
     ];
 
     /**
@@ -42,34 +36,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     // static::created(function ($googleAccount) {
-    //     //     //SynchronizeGoogleCalendars::dispatch($googleAccount);
-    //     // });
-    // }
-
-    public function synchronize()
-    {
-        //SynchronizeGoogleCalendars::dispatch($this);
-    }
-
-    public function synchronizeCalendars()
-    {
-        SynchronizeGoogleCalendars::dispatch($this);
-    }
-
-    public function watch()
-    {
-        //WatchGoogleCalendars::dispatch($this);
-    }
-
+    /**
+     * @return HasMany
+     */
     public function calendars()
     {
         return $this->hasMany(Calendar::class);
     }
 
-    
-    
+
+
 }

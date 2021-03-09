@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="col-lg-2 text-lg-right">
-                    <button type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
+                    <button v-if="jobs_status === 'finished'" type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByUpdated">
-                                Updated 
+                                Updated
                                 <i v-if="sortByUpdatedDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
@@ -74,16 +74,14 @@
                     </div>
                 </div>
 
-                
-
                 <div v-if="Object.keys(calendars).length > 0" class="calendars-list">
                     <div v-for="calendar in sortedCalendars">
-                        <calendars-list-item-component :calendar="calendar" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
+                        <calendars-list-item-component :calendar="calendar" :jobs_status="jobs_status" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
                     </div>
                 </div>
                 <div v-else class="calendars-list">
                     <div class="alert alert-info" role="alert">
-                        Synchronization in process please wait or update page after one minute ...
+                        Calendars not found ...
                     </div>
                 </div>
 
@@ -105,7 +103,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" :disabled="requestProcess">Cancel</button>
-                        
+
                         <button v-if="!requestProcess" type="button" class="btn btn-danger" @click="deleteCalendar(delete_calendar_id)">Delete</button>
 
                         <button v-else class="btn btn-danger" type="button" disabled>
@@ -124,15 +122,16 @@
 <script>
     export default {
 
-        props:['data', 'new_event_form_action', 'csrf_token'],
+        props:['data', 'jobs_status', 'new_event_form_action', 'csrf_token'],
 
         data() {
             return {
 
                 calendars: this.data,
+
                 sortedCalendars: [],
                 calendarsTypesFilters: [
-                    { title: 'All calendars', val: 'all', active: true }, 
+                    { title: 'All calendars', val: 'all', active: true },
                     { title: 'Owned by me', val: 'owned', active: false},
                     { title: 'Shared with me', val: 'shared', active: false}
                 ],
@@ -241,14 +240,7 @@
         mounted() {
             this.sortCalendarsListByUpdated();
 
-            if (Object.keys(this.calendars).length <= 0) {
-                setTimeout (function() {
-                    location.reload();
-                }, 15000);
-            }
 
-
-            
         }
     }
 </script>

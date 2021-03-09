@@ -1,7 +1,7 @@
 <template>
 
 	<div class="card calendar-single">
-		
+
 		<div class="card-heading">
 
 			<div class="row align-items-center">
@@ -13,7 +13,7 @@
 		        <div class="col-2">
 		            {{ calendar.eventsCount }}
 		        </div>
-		        
+
 		        <div class="col-2">
 	                <span v-if="calendar.access_role == 'owner'">Me ({{ calendar.access_role }})</span>
 	                <span v-else>Other ({{ calendar.access_role }})</span>
@@ -38,7 +38,7 @@
 	                </button>
 
 					<div class="dropdown-calendar-actions">
-						<button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDropdownActions()">
+						<button v-if="jobs_status === 'finished'" type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDropdownActions()">
 							<i class="fas fa-ellipsis-v"></i>
 		                </button>
 
@@ -49,17 +49,17 @@
 			                	<a href="javascript:void(0)" @click="showConfirmCalendarDelete(calendar.id)"><i class="far fa-trash-alt"></i> Delete</a>
 			                </div>
 			            </transition>
-						
+
 					</div>
 
 					<button type="button" v-if="showBody" class="btn btn-light btn-sm pull-right btn-opened" @click="toggleCalendarDataForm()">
 						<i class="fas fa-angle-down"></i>
-	                    
+
 	                </button>
 	                <button type="button" v-else class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDataForm()">
 	                    <i class="fas fa-angle-right"></i>
 	                </button>
-	            	
+
 	            </div>
 
 		    </div>
@@ -79,7 +79,7 @@
 	                </div>
 
 	                <div class="col-lg-6 text-right">
-	                    <button type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
+	                    <button v-if="jobs_status === 'finished'" type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
 	                </div>
 	            </div>
 
@@ -87,7 +87,7 @@
 
 	            	<div class="eventsDataFilters">
 	            		<div class="row">
-	            			
+
 	            			<div class="col-2">
 	            				<a href="#" class="sort-link">
                                 	Date <i class="fas fa-sort-amount-down-alt float-right"></i>
@@ -129,22 +129,21 @@
 
 	            	<div class="events-list">
 						<div v-for="event in calendar.events">
-                           	<calendars-list-event-component :event="event" ref="event"></calendars-list-event-component>
+                            <calendars-list-event-component :event="event" ref="event"></calendars-list-event-component>
             			</div>
 	            	</div>
 
-	            	
 				  		<div class="card-footer" v-if="showNewEventDataForm">
 
 				  			<form id="addCalendarEventForm" class="needs-validation" action="/calendar-new-event" @submit="addEventSubmit" novalidate>
 
-				  				
+
 				  				<input type="hidden" name="calendar_id" :value="calendar.id">
 
 					    		<div class="row">
 
 				    				<div class="input-group input-group-sm mb-3 col-md-2">
-										
+
 										<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="requestProcess" placeholder="dd.mm.YYYY" required></date-picker>
 
 										<div class="input-group-append">
@@ -152,7 +151,7 @@
 										</div>
 										<div class="invalid-feedback">Please provide a valid date.</div>
 									</div>
-									
+
 
 					    			<div class="input-group input-group-sm mb-3 col-md-2">
 										<input type="text" class="form-control" placeholder="H:MM PM - H:MM PM" :disabled="requestProcess" required value="05:20 PM - 10:35 PM">
@@ -195,14 +194,14 @@
 					    			</div>
 				    			</div>
 
-				    			
+
 									<div v-if="requestSuccess" class="alert alert-success" role="alert">{{ requestSuccess }}</div>
 									<div v-if="requestDanger"class="alert alert-danger" role="alert">{{ requestDanger }}</div>
-								
+
 
 			    			</form>
 				  		</div>
-			  		
+
 
 	            </div>
 			</div>
@@ -256,7 +255,7 @@
 
 	export default {
 
-		props:['calendar'],
+		props:['calendar', 'jobs_status'],
 
 		components: {
 			datePicker,
@@ -301,7 +300,7 @@
 		computed:  {
 			newEventDataValid() {
 				return !(
-					this.newEventData.address == '' || this.newEventData.dateTime == '' 
+					this.newEventData.address == '' || this.newEventData.dateTime == ''
 					|| this.newEventData.type == 'none' || this.newEventData.notes == ''
 					);
 			}
@@ -389,7 +388,7 @@
 				};
 
 				//currentObj.calendar_events.items.push(newEvent);
-				
+
 				let formData = new FormData();
 				formData.append('calendar_id', currentObj.calendar_id);
 				formData.append('new_event_datetime', currentObj.newEventData.dateTime);
@@ -416,13 +415,13 @@
 					if (response.data.code == 1) {
 						currentObj.requestSuccess = response.data.data.message;
 						currentObj.calendar.events.push(response.data.data.event);
-						
+
 						// Reset New event form
 						currentObj.newEventData.dateTime = '';
 						currentObj.newEventData.address = '';
 						currentObj.newEventData.type = '';
 						currentObj.newEventData.notes = '';
-					
+
 						setTimeout(function() {
 							currentObj.requestSuccess = false;
 						}, 2000);
@@ -479,7 +478,7 @@
 			},
 
 			formatDate: function(value) {
-				
+
 				let today = new Date();
 				let date = new Date(value);
 
@@ -522,7 +521,7 @@
 		},
 
 		mounted() {
-			
+
 		}
 
 	}

@@ -24,3 +24,127 @@
 [09-Mar-2021 00:54:08 UTC] PHP Fatal error:  Out of memory (allocated 9543680) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 13640
 [09-Mar-2021 02:08:05 UTC] PHP Fatal error:  Out of memory (allocated 17932288) (tried to allocate 1310720 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
 [09-Mar-2021 04:34:04 UTC] PHP Fatal error:  Out of memory (allocated 13737984) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[09-Mar-2021 13:38:11 UTC] PHP Fatal error:  Out of memory (allocated 13737984) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Utils.php on line 195
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 13:43:26 UTC] PHP Fatal error:  Uncaught Error: Class 'Monolog\Utils' not found in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php:50
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(170): Monolog\Handler\StreamHandler->__construct('/home/stagingte...', 100)
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
+[09-Mar-2021 14:54:13 UTC] PHP Fatal error:  Out of memory (allocated 11640832) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 18437

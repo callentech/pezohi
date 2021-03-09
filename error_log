@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [05-Mar-2021 14:47:10 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/google/apiclient/src/Model.php on line 125
 [08-Mar-2021 02:27:03 UTC] PHP Fatal error:  Out of memory (allocated 7446528) (tried to allocate 135168 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 8772
 [08-Mar-2021 02:28:02 UTC] PHP Fatal error:  Out of memory (allocated 17932288) (tried to allocate 1310720 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
@@ -148,3 +149,5 @@ Stack trace:
 #4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
 #5 /home/stagingtec in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 50
 [09-Mar-2021 14:54:13 UTC] PHP Fatal error:  Out of memory (allocated 11640832) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 18437
+=======
+>>>>>>> 9b36193851012c1d93c58d2af0fe4eb065b804f9

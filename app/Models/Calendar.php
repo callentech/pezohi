@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Calendar extends Model
 {
-    protected $fillable = ['google_id', 'access_role', 'name', 'color', 'timezone'];
+    protected $fillable = ['google_id', 'access_role', 'name', 'description', 'color', 'timezone'];
 
     /**
      * @return BelongsTo

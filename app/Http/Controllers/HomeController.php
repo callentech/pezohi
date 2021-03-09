@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 use Carbon\Carbon;
@@ -36,12 +37,6 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-
-        // $this->client = new Google_Client();
-        // $this->client->setApplicationName(config('app.name'));
-        // $this->client->setDeveloperKey(env('GOOGLE_API_KEY'));
-
-        //$this->client->setAccessType('offline');
     }
 
     /**
@@ -58,11 +53,14 @@ class HomeController extends Controller
             $calendar->publicUrl = 'https://calendar.google.com/calendar/embed?src='.$calendar->google_id.'&ctz='.$calendar->timezone;
         }
 
-        return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE)]);
+        $jobsStatus = Auth::user()->jobs_status;
+        
+
+        return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE), 'jobs_status' => $jobsStatus]);
     }
 
 
-
+/*
 
     public function _index(Google $google)
     {
@@ -554,4 +552,6 @@ class HomeController extends Controller
             ]
         ], JSON_UNESCAPED_UNICODE);
     }
+
+*/
 }

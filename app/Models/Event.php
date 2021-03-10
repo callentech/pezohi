@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Event extends Model
 {
     protected $with = ['calendar'];
-    protected $fillable = ['google_id', 'name', 'description', 'location', 'allday', 'started_at', 'ended_at'];
+    protected $fillable = ['google_id', 'name', 'type', 'description', 'location', 'allday', 'started_at', 'ended_at'];
 
     /**
      * @return BelongsTo

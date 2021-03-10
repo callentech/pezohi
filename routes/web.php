@@ -27,17 +27,21 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 /* Calendars Actions */
-Route::post('/calendar-new', [App\Http\Controllers\CalendarsController::class, 'addNewCalendarAction'])->name('addNewCalendar');
+Route::post('/new-calendar', [App\Http\Controllers\CalendarsController::class, 'addCalendarAction'])->name('addCalendar');
+Route::get('/get-calendar-data', [App\Http\Controllers\CalendarsController::class, 'getCalendarDataAction'])->name('getCalendarData');
+Route::post('/edit-calendar', [App\Http\Controllers\CalendarsController::class, 'editCalendarAction'])->name('editCalendar');
 
-Route::post('/jobs', [App\Http\Controllers\CalendarsController::class, 'jobsAction'])->name('jobCalendar');
 
+/* Events Actions */
+Route::post('/new-event', [App\Http\Controllers\EventsController::class, 'addEventAction'])->name('addEvent');
 
+/*
 Route::post('/calendar-edit', [App\Http\Controllers\HomeController::class, 'editCalendarAction'])->name('editCalendar');
-Route::post('/calendar-new-event', [App\Http\Controllers\HomeController::class, 'addCalendarEventAction'])->name('addCalendarEvent');
+
 Route::post('/calendar-delete', [App\Http\Controllers\HomeController::class, 'deleteCalendarAction'])->name('deleteCalendar');
 Route::post('/calendar-get-data', [App\Http\Controllers\HomeController::class, 'getCalendarDataAction']);
 
-
+*/
 
 
 

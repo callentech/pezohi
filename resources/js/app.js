@@ -24,9 +24,6 @@ window.Vue = require('vue').default;
 Vue.component('all-calendars-component', require('./components/AllCalendarsComponent.vue').default);
 Vue.component('calendars-list-item-component', require('./components/CalendarsListItemComponent.vue').default);
 Vue.component('calendars-list-event-component', require('./components/CalendarsListItemEventComponent.vue').default);
-
-
-
 Vue.component('add-edit-calendar-modal-component', require('./components/AddEditCalendarModalComponent.vue').default);
 
 
@@ -44,11 +41,11 @@ const app = new Vue({
 
     data() {
     	return {
-    		
+
     	}
     },
 
     methods: {
-  
+
     }
 });

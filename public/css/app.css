@@ -16237,11 +16237,11 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   color: #949fae;
 }
 
-#addCalendarModal .modal-content .modal-header {
+#addCalendarModal .modal-content .modal-header, #editCalendarModal .modal-content .modal-header {
   background-color: #3490dc;
   color: #FFF;
 }
-#addCalendarModal .modal-content .modal-header .close {
+#addCalendarModal .modal-content .modal-header .close, #editCalendarModal .modal-content .modal-header .close {
   color: #FFFFFF;
 }
 

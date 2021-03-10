@@ -4,148 +4,239 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SyncCalendars;
 use App\Models\Calendar;
+use App\Models\Event;
 use App\Services\Google;
 use Google_Service_Calendar_Calendar;
+use Google_Service_Calendar_Event;
+use Google_Service_Calendar_EventExtendedProperties;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 
 class CalendarsController extends Controller
 {
-    public function addNewCalendarAction(Request $request): \Illuminate\Http\JsonResponse
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addCalendarAction(Request $request): JsonResponse
     {
         $request->validate([
-            'calendar_name' => 'required',
-            'owner_email_address' => 'required'
+            'calendar_name' => 'required'
         ]);
 
-        $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+        try {
 
-        $calendar = new Google_Service_Calendar_Calendar();
-        $calendar->setSummary(trim($request->calendar_name));
-        $calendar->setTimeZone(config('app.timezone'));
-        $createdGoogleCalendar = $service->calendars->insert($calendar);
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+            $calendar = new Google_Service_Calendar_Calendar();
+            $calendar->setSummary(trim($request->calendar_name));
+            $calendar->setDescription('#pezohi | PEZOHI');
+            $calendar->setTimeZone(config('app.timezone'));
+            $createdGoogleCalendar = $service->calendars->insert($calendar);
 
-        $createdCalendar = new Calendar([
-            'google_id' => $createdGoogleCalendar->id,
-            'access_role' => 'owner',
-            'name' => $createdGoogleCalendar->summary,
-            'color' => '#ac725e',
-            'timezone' => $createdGoogleCalendar->timeZone,
+            // Save calendar into DB
+            $createdCalendar = new Calendar([
+                'google_id' => $createdGoogleCalendar->id,
+                'access_role' => 'owner',
+                'name' => $createdGoogleCalendar->summary,
+                'description' => $createdGoogleCalendar->description,
+                'color' => '#FFFFFF',
+                'timezone' => $createdGoogleCalendar->timeZone
+            ]);
+            Auth::user()->calendars()->save($createdCalendar);
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'createdCalendar' => $createdCalendar,
+                    'message' => 'Calendar created successfully'
+                ]
+            ]);
+
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCalendarDataAction(Request $request): JsonResponse
+    {
+        $request->validate([
+            'calendar_id' => 'required'
         ]);
 
-        Auth::user()->calendars()->save($createdCalendar);
+        $calendar = Calendar::with('events')->find($request->calendar_id);
+        if (!$calendar) {
+            return response()->json([
+                'code' => 0
+            ]);
+        }
 
         return response()->json([
             'code' => 1,
             'data' => [
-                'createdCalendar' => $createdCalendar,
-                'message' => 'Calendar created successfully'
+                'calendarData' => $calendar
             ]
         ]);
     }
 
-    public static function jobsAction()
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editCalendarAction(Request $request): JsonResponse
     {
-        var_dump(Auth::user());
-
-        exit;
-        $result = dispatch(new SyncCalendars());
-    }
-
-
-    /*
-     public function addNewCalendarAction(Request $request)
-    {
-        session_start();
-        if (!isset($_SESSION['googleClientToken']) || !$_SESSION['googleClientToken']) {
-            return json_encode([
-                'code' => 0
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
         $request->validate([
-            'calendar_name' => 'required',
-            'owner_email_address' => 'required'
+            'calendar_id' => 'required',
+            'calendar_name' => 'required'
         ]);
 
+        $calendar = Calendar::with('events')->find($request->calendar_id);
+        if (!$calendar) {
+            return response()->json([
+                'code' => 0
+            ]);
+        }
 
+        try {
 
-        // Create New Calendar
-        $this->googleClientToken = $_SESSION['googleClientToken'];
-        $this->client->setAccessToken(json_encode($this->googleClientToken));
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+            $googleCalendar = $service->calendars->get($calendar->google_id);
+            $googleCalendar->setSummary($request->calendar_name);
+            $updatedGoogleCalendar = $service->calendars->update($calendar->google_id, $googleCalendar);
 
-        $service = new Google_Service_Calendar($this->client);
-        $calendar = new \Google_Service_Calendar_Calendar();
+            // Update calendar in DB
+            $calendar->name = $updatedGoogleCalendar->summary;
+            $calendar->save();
 
-        $calendarSummary = trim($request->calendar_name);
+            // Sync events Data
+            $editedEvents = json_decode($request->events, TRUE);
 
-        $calendar->setSummary($calendarSummary);
-        $calendar->setTimeZone(config('app.timezone'));
-
-        $createdCalendar = $service->calendars->insert($calendar);
-
-        // Add new events
-        $events = json_decode($request->events, TRUE);
-
-
-        if ($events && count($events) > 0) {
-            foreach ($events as $event) {
-
-
-
-                if ($event['id'] == 'new') {
-
-                    $date = new \DateTime($event['start']['dateTime']);
-
-                    $adminEmails = \DB::table('users')->where('role', 'admin')->pluck('email');
-                    $attendees = [];
-                    foreach ($adminEmails as $email) {
-                        $attendees[] = ['email' => $email];
+            // Delete deleted event
+            foreach ($calendar->events as $event) {
+                $deletedEvent = TRUE;
+                foreach ($editedEvents as $editedEvent) {
+                    if ($event->id == $editedEvent['id']) {
+                        $deletedEvent = FALSE;
                     }
-
-                    $event = new \Google_Service_Calendar_Event([
-                        'summary' => 'Event',
-                        'location' => $event['location'],
-                        'description' => $event['description'],
-                        'start' => [
-                            'dateTime' => date_format($date, 'c'),
-                            'timeZone' => date_format($date, 'e'),
-                        ],
-                        'end' => [
-                            'dateTime' => date_format($date, 'c'),
-                            'timeZone' => date_format($date, 'e'),
-                        ],
-                        'extendedProperties' => [
-                            'private' => [
-                                'type' => $event['extendedProperties']['private']['type']
-                            ]
-                        ],
-                        'attendees' => $attendees,
-                        'reminders' => [
-                            'useDefault' => FALSE,
-                            'overrides' => [
-                                array('method' => 'email', 'minutes' => 24 * 60),
-                                array('method' => 'popup', 'minutes' => 10),
-                            ],
-                        ],
-                    ]);
-
-                    $calendarId = $createdCalendar->id;
-                    $event = $service->events->insert($calendarId, $event);
+                }
+                if ($deletedEvent)  {
+                    $service->events->delete($updatedGoogleCalendar->id, $event->google_id);
+                    $event = Event::find($event->id);
+                    $event->delete();
                 }
             }
+
+            // Update or create events
+            foreach ($editedEvents as $event) {
+                if ($event['id'] == 'new') {
+
+                    // Save new event data to Google Calendar
+                    $started_at = date_create($event['started_at']);
+                    $ended_at = date_create($event['started_at']);
+
+                    $newGoogleEvent = new Google_Service_Calendar_Event(array(
+                        'summary' => 'Pezohi Event',
+                        'location' => trim($event['location']),
+                        'description' => trim($event['description']),
+                        'start' => array(
+                            'dateTime' => date_format($started_at, 'c'),
+                            'timeZone' => config('app.timezone')
+                        ),
+                        'end' => array(
+                            'dateTime' => date_format($ended_at, 'c'),
+                            'timeZone' => config('app.timezone')
+                        ),
+                    ));
+
+                    $extendedProperties = new Google_Service_Calendar_EventExtendedProperties();
+                    $extendedProperties->setPrivate(['type' => $event['type']]);
+                    $newGoogleEvent->setExtendedProperties($extendedProperties);
+                    $newGoogleEvent = $service->events->insert($updatedGoogleCalendar->id, $newGoogleEvent);
+
+                    // Save new event data to DB
+                    $newEvent = new Event([
+                        'google_id' => $newGoogleEvent->id,
+                        'name' => $newGoogleEvent->summary,
+                        'type' => $newGoogleEvent->extendedProperties->getPrivate()['type'],
+                        'description' => $newGoogleEvent->description,
+                        'location' => $newGoogleEvent->location,
+                        'allday' => 0,
+                        'started_at' => $this->parseDatetime($newGoogleEvent->start),
+                        'ended_at' => $this->parseDatetime($newGoogleEvent->end)
+                    ]);
+                    $calendar->events()->save($newEvent);
+
+                } else {
+
+                    // Update events data
+                    $started_at = date_create($event['started_at']);
+                    $ended_at = date_create($event['started_at']);
+
+                    $updatedEvent = $service->events->get($updatedGoogleCalendar->id, $event['google_id']);
+                    $updatedEvent->location = trim($event['location']);
+                    $updatedEvent->description = trim($event['description']);
+                    $updatedEvent->start = [
+                        'dateTime' => date_format($started_at, 'c'),
+                        'timeZone' => config('app.timezone')
+                    ];
+                    $updatedEvent->end = [
+                        'dateTime' => date_format($ended_at, 'c'),
+                        'timeZone' => config('app.timezone')
+                    ];
+                    $updatedEvent = $service->events->update($updatedGoogleCalendar->id, $updatedEvent->getId(), $updatedEvent);
+                }
+            }
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'updatedCalendar' => $updatedGoogleCalendar,
+                    'message' => 'Calendar updated successfully'
+                ]
+            ]);
+
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                ]);
+            }
         }
-
-
-        return json_encode([
-            'code' => 1,
-            'data' => [
-                'createdCalendar' => $createdCalendar,
-                'message' => 'Calendar created successfully'
-            ]
-        ], JSON_UNESCAPED_UNICODE);
     }
-     * */
+
+
+    protected function parseDatetime($dateTime): Carbon
+    {
+        $rawDatetime = $dateTime->dateTime ?: $dateTime->date;
+        return Carbon::parse($rawDatetime)->setTimezone(config('app.timezone'));
+    }
+
 }

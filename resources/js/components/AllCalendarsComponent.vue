@@ -76,7 +76,7 @@
 
                 <div v-if="Object.keys(calendars).length > 0" class="calendars-list">
                     <div v-for="calendar in sortedCalendars">
-                        <calendars-list-item-component :calendar="calendar" :jobs_status="jobs_status" :new_event_form_action = "new_event_form_action" :csrf_token="csrf_token" ref='calendar'></calendars-list-item-component>
+                        <calendars-list-item-component :calendar="calendar" :jobs_status="jobs_status" ref='calendar'></calendars-list-item-component>
                     </div>
                 </div>
                 <div v-else class="calendars-list">
@@ -121,14 +121,11 @@
 
 <script>
     export default {
-
-        props:['data', 'jobs_status', 'new_event_form_action', 'csrf_token'],
+        props:['data', 'jobs_status'],
 
         data() {
             return {
-
                 calendars: this.data,
-
                 sortedCalendars: [],
                 calendarsTypesFilters: [
                     { title: 'All calendars', val: 'all', active: true },
@@ -138,7 +135,6 @@
 
                 requestDanger: false,
                 requestSuccess: false,
-
                 requestProcess: false,
 
                 delete_calendar_id: '',

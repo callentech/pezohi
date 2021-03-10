@@ -29,8 +29,8 @@ class CreateEventsTable extends Migration
             $table->boolean('allday')->default(false);
 
             // Timestamps.
-            $table->datetime('started_at');
-            $table->datetime('ended_at');
+            $table->datetime('started_at')->nullable();
+            $table->datetime('ended_at')->nullable();
             $table->timestamps();
         });
     }

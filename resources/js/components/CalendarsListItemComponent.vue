@@ -44,7 +44,7 @@
 
 		                <transition name="fade">
 			                <div class="items" v-if="showCalendarDropdownActions">
-			                	<a href="javascript:void(0)" @click="showAddEditCalendarModal(calendar.id)"><i class="far fa-edit"></i> Edit</a>
+			                	<a href="javascript:void(0)" @click="showEditCalendarModalAction(calendar.id)"><i class="far fa-edit"></i> Edit</a>
 			                	<a href="javascript:void(0)" @click="showDuplicateCalendarModal(calendar.id)"><i class="far fa-clone"></i> Duplicate</a>
 			                	<a href="javascript:void(0)" @click="showConfirmCalendarDelete(calendar.id)"><i class="far fa-trash-alt"></i> Delete</a>
 			                </div>
@@ -137,7 +137,6 @@
 
 				  			<form id="addCalendarEventForm" class="needs-validation" action="/calendar-new-event" @submit="addEventSubmit" novalidate>
 
-
 				  				<input type="hidden" name="calendar_id" :value="calendar.id">
 
 					    		<div class="row">
@@ -159,7 +158,7 @@
 									</div>
 
 					    			<div class="col-md-2">
-					    				<input ref="newEventAddressAutocomplete" type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Address" required>
+					    				<input ref="newEventAddressAutocomplete" type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Location" required>
 
 					    				<!-- <vue-google-autocomplete
             ref="address"
@@ -335,6 +334,12 @@
 					this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
 				}
 			},
+
+            showEditCalendarModalAction: function(id) {
+                this.showBody = false;
+                this.showCalendarDropdownActions = false;
+                this.$root.$refs.addEditCalendarModal.showEditCalendarModalAction(id);
+            },
 
 			// showAddEditCalendarModal: function(id) {
 			// 	this.showBody = false;
@@ -512,8 +517,9 @@
 					outputDate = 'Yesterday, ' + dateHours + ':' + dateMinutes + ' '+ dateAmpm;
 				} else if (timeDiff > 48) {
 					let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
-					let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
-					outputDate = day + '.' + month + '.' + date.getFullYear();
+					//let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
+					//outputDate = day + '.' + month + '.' + date.getFullYear();
+					outputDate = (date.getMonth()+1)+'/'+day+'/'+date.getFullYear();
 				}
 				return outputDate;
 			}

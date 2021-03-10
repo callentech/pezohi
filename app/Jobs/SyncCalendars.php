@@ -6,6 +6,7 @@ use App\Models\Calendar;
 use App\Models\Event;
 use App\Models\User;
 use App\Services\Google;
+use Google_Service_Calendar_EventExtendedProperties;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -45,8 +46,27 @@ class SyncCalendars implements ShouldQueue
         $options = compact('pageToken');
         $service = app(Google::class)->connectUsing($tokens)->service('Calendar');
 
+
+
         do {
             $calendarsList = $service->calendarList->listCalendarList($options);
+
+            // Remove deleted calendar from DB
+            foreach ($this->user->calendars as $userCalendar) {
+                $deletedCalendar = TRUE;
+                foreach ($calendarsList as $googleCalendar) {
+                    if ($googleCalendar->id == $userCalendar->google_id) {
+                        $deletedCalendar = FALSE;
+                    }
+                }
+                if ($deletedCalendar)  {
+                    $deletedUserCalendar = Calendar::find($userCalendar->id);
+                    if (!$deletedUserCalendar) {
+                        continue;
+                    }
+                    $deletedUserCalendar->delete();
+                }
+            }
 
             // Sync calendars
             foreach ($calendarsList as $googleCalendar) {
@@ -78,6 +98,9 @@ class SyncCalendars implements ShouldQueue
 
                 // Sync Calendar Events
                 $calendar = Calendar::where('google_id', $googleCalendar->id)->first();
+                if (!$calendar) {
+                    continue;
+                }
                 $eventsPageToken = NULL;
                 do {
                     $optParams = ['pageToken' => $eventsPageToken];
@@ -90,8 +113,11 @@ class SyncCalendars implements ShouldQueue
                             continue;
                         }
 
-                        var_dump($googleEvent->location);
-                        echo "\n";
+                        // Delete Event
+                        if ($googleEvent->status === 'cancelled') {
+                            Event::where('google_id', $googleEvent->id)->delete();
+                            continue;
+                        }
 
                         $calendar->events()->updateOrCreate(
                             [
@@ -100,6 +126,7 @@ class SyncCalendars implements ShouldQueue
                             [
                                 'google_id' => $googleEvent->id,
                                 'name' => $googleEvent->summary,
+                                'type' => $googleEvent->extendedProperties->getPrivate()['type'],
                                 'description' => $googleEvent->description,
                                 'location' => $googleEvent->location,
                                 'allday' => 0,
@@ -109,7 +136,7 @@ class SyncCalendars implements ShouldQueue
                         );
                     }
                     $eventsPageToken = $eventsList->getNextPageToken();
-                } while ($eventsPageToken);
+                } while($eventsPageToken);
             }
             $this->pageToken = $calendarsList->getNextPageToken();
         } while($this->pageToken);

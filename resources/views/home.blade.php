@@ -4,13 +4,9 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-xl-11">
-
-            <all-calendars-component :data="{{ $calendars }}" jobs_status="{{ $jobs_status }}" new_event_form_action="{{ route('addCalendarEvent') }}" csrf_token="{{ csrf_token() }}"></all-calendars-component>
-
+            <all-calendars-component :data="{{ $calendars }}" jobs_status="{{ $jobs_status }}"></all-calendars-component>
         </div>
     </div>
 </div>
-
 <add-edit-calendar-modal-component></add-edit-calendar-modal-component>
-
 @endsection

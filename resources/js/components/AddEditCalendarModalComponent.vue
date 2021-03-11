@@ -1,6 +1,4 @@
 
-<!-- AddCalendarModalComponent -->
-
 <template>
 
 	<div class="component-wrapper">
@@ -62,20 +60,26 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr v-for="event in current_calendar.events" :data-id="event.id">
-                                                                    <td data-val="startDate">{{ event.started_at|formatDate }}</td>
-                                                                    <td data-val="startTime">5:30 PM - 6:30 PM</td>
+                                                                <tr v-for="(event, index) in current_calendar.events" :data-index="index">
+                                                                    <td data-val="startDate">
+                                                                        {{ event.started_at|formatDate }}
+                                                                    </td>
+                                                                    <td data-val="startTime">
+                                                                        5:30 PM - 6:30 PM
+                                                                    </td>
                                                                     <td data-val="location">
                                                                         <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
                                                                     </td>
-                                                                    <td data-val="type">{{ event.type|capitalize }}</td>
+                                                                    <td data-val="type">
+                                                                        {{ event.type|capitalize }}
+                                                                    </td>
                                                                     <td data-val="description">
                                                                         <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
                                                                     </td>
                                                                     <td class="text-right">
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'" title="Edit"><i class="fas fa-pencil-alt"></i></button>
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete"><i class="far fa-trash-alt"></i></button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'" title="More"><i class="fas fa-ellipsis-h"></i></button>
+                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
+                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More"><i class="fas fa-ellipsis-h"></i></button>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -110,7 +114,7 @@
                                                                     <input type="text" v-model="newEventData.description" class="form-control form-control-sm" placeholder="e.g. Instructions">
                                                                 </div>
                                                                 <div class="col-md-2 text-right">
-                                                                    <button class="btn btn-primary btn-sm" @click="addNewEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
+                                                                    <button class="btn btn-primary btn-sm" @click="saveEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
                                                                     <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm"><i class="fas fa-times"></i></button>
                                                                 </div>
                                                             </div>
@@ -120,7 +124,7 @@
 
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row modal-bottom">
                                                 <div class="col-md-4">
                                                     <button class="btn btn-outline-primary btn-sm" @click="showAddEventForm" :disabled="formRequestProcess">+ Add Event</button>
                                                 </div>
@@ -167,181 +171,6 @@
                 </div>
             </transition>
         </div>
-
-        <!--
-        <div class="modal fade" id="eeditCalendarModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="editCalendarModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-xl">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<h5 class="modal-title w-100 text-center">{{ modal_title }}</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-
-						<form id="editCalendarForm" class="needs-validation" :action="form_action" method="POST" @submit="editCalendarSubmit" novalidate>
-
-							<input type="hidden" name="_token" :value="csrf_token">
-							<input type="hidden" name="calendar_id" :value="calendar_id">
-
-							<div class="form-row">
-
-								<div class="form-group col-md-6">
-									<label for="calendar_name">Calendar Name</label>
-									<input type="text" name="calendar_name" class="form-control" id="calendar_name" v-model="calendar_name" required :disabled="formRequestProcess">
-									<div class="invalid-feedback">Please provide a valid Calendar Name.</div>
-								</div>
-
-								<div class="form-group col-md-6">
-									<label for="owner_email_address">Owner's Email Address</label>
-									<input type="email" name="owner_email_address" class="form-control" v-model="owner_email_address" readonly>
-									<div class="invalid-feedback">Please provide a valid Email Address.</div>
-
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" id="owned_by_me_checkbox" disabled checked>
-										<label class="form-check-label" for="owned_by_me_checkbox">Owned by me</label>
-									</div>
-								</div>
-
-							</div>
-
-							<div class="form-row">
-								<label>Events
-									<span v-if="calendar_events.items">({{ calendar_events.items.length }})</span>
-									<span v-else>(0)</span>
-								</label>
-
-								<div id="calendarData" class="card col-md-12">
-
-								<div class="card-body">
-
-									<table id="calendarDataTable" class="table table-sm">
-
-										<thead>
-											<tr>
-												<th scope="col">Date</th>
-												<th scope="col">Time</th>
-												<th scope="col">Address</th>
-												<th scope="col">Event type</th>
-												<th scope="col">Notes</th>
-												<th class="actions" scope="col"></th>
-											</tr>
-										</thead>
-
-										<tbody>
-
-											<tr v-for="event in calendar_events.items" :data-id="event.id">
-												<th scope="row" data-val="startDate">{{ event.start.dateTime|formatDate('MMMM D, YYYY') }}</th>
-												<td data-val="startTime">5:30 PM - 6:30 PM</td>
-												<td data-val="location">{{ event.location }}</td>
-												<td data-val="type">
-													<span  v-if="typeof event.extendedProperties !== 'undefined' && typeof event.extendedProperties.private.type !== 'undefined'">
-														{{event.extendedProperties.private.type | capitalize}}
-													</span>
-												</td>
-												<td data-val="description">
-													{{ event.description }}
-												</td>
-												<td class="text-right">
-													<button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'"><i class="fas fa-pencil-alt"></i></button>
-													<button class="btn btn-outline-secondary btn-sm"><i class="far fa-trash-alt"></i></button>
-													<button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'"><i class="fas fa-ellipsis-h"></i></button>
-												</td>
-											</tr>
-
-										</tbody>
-									</table>
-
-								</div>
-
-						  		<transition name="fade">
-							  		<div class="card-footer" v-if="showNewEventDataForm">
-							    		<div class="row">
-
-						    				<div class="input-group input-group-sm mb-3 col-md-2">
-
-												<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
-
-												<div class="input-group-append">
-													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-												</div>
-											</div>
-
-							    			<div class="input-group input-group-sm mb-3 col-md-2">
-												<input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">
-											</div>
-
-
-							    			<div class="col-md-2">
-							    				<input type="text" v-model="newEventData.address" name="new-event-address" class="form-control form-control-sm">
-							    			</div>
-							    			<div class="col-md-2">
-							    				<select v-model="newEventData.type" name="new-event-type" class="form-control form-control-sm">
-												    <option value="none" disabled selected>Select One</option>
-												    <option value="game">Game</option>
-												    <option value="practice">Practice</option>
-											    </select>
-								    		</div>
-							    			<div class="col-md-2">
-							    				<input type="text" v-model="newEventData.notes" class="form-control form-control-sm" placeholder="e.g. Instructions">
-							    			</div>
-							    			<div class="col-md-2 text-right">
-							    				<button class="btn btn-primary btn-sm" @click="addEditCalendarEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
-							    				<button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-times"></i></button>
-							    			</div>
-						    			</div>
-							  		</div>
-						  		</transition>
-
-							  </div>
-
-							</div>
-
-							<div class="row">
-								<div class="col-md-4">
-									<button class="btn btn-outline-primary btn-sm" @click="showAddEventForm" :disabled="formRequestProcess">+ Add Event</button>
-								</div>
-
-								<div class="col-md-8">
-									<transition name="fade">
-
-										<div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-											<strong>Success!</strong> {{ requestSuccess }}
-											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-
-										<div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
-											<strong>Error!</strong> {{ requestDanger }}
-											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-										    	<span aria-hidden="true">&times;</span>
-										    </button>
-										</div>
-
-									</transition>
-								</div>
-							</div>
-
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
-
-						<button v-if="!formRequestProcess" type="submit" form="editCalendarForm" class="btn btn-primary">Save</button>
-
-						<button v-else class="btn btn-primary" type="button" disabled>
-							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-							Loading...
-						</button>
-
-					</div>
-				</div>
-			</div>
-		</div>
-        -->
         <!-- END Edit Calendar modal -->
 
 		<!-- Add Calendar modal -->
@@ -369,7 +198,7 @@
 											<div class="form-row">
 												<div class="form-group col-md-6">
 													<label>Calendar Name</label>
-													<input type="text" name="calendar_name" class="form-control" v-model="calendar_name" required :disabled="formRequestProcess">
+													<input type="text" name="calendar_name" class="form-control" v-model="new_calendar.summary" required :disabled="formRequestProcess">
 													<div class="invalid-feedback">Please provide a valid Calendar Name.</div>
 												</div>
 												<div class="form-group col-md-6">
@@ -385,12 +214,7 @@
 											</div>
 
 											<div class="form-row">
-												<label>
-													Events
-													<span v-if="calendar_events.items">({{ calendar_events.items.length }})</span>
-													<span v-else>(0)</span>
-												</label>
-
+                                                <label>Events: {{ new_calendar.events.length }}</label>
 												<div class="card col-md-12">
                                                     <div class="card-body">
                                                         <table class="table table-sm">
@@ -405,26 +229,28 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-
-                                                                <tr v-for="event in calendar_events.items" :data-id="event.id">
-                                                                    <th scope="row" data-val="startDate">{{ event.start.dateTime|formatDate('MMMM D, YYYY') }}</th>
-                                                                    <td data-val="startTime">5:30 PM - 6:30 PM</td>
-                                                                    <td data-val="location">{{ event.location }}</td>
-                                                                    <td data-val="type">
-                                                                        <span  v-if="typeof event.extendedProperties !== 'undefined' && typeof event.extendedProperties.private.type !== 'undefined'">
-                                                                            {{event.extendedProperties.private.type | capitalize}}
-                                                                        </span>
-                                                                    </td>
-                                                                    <td data-val="description">
-                                                                        {{ event.description }}
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'"><i class="fas fa-pencil-alt"></i></button>
-                                                                        <button class="btn btn-outline-secondary btn-sm"><i class="far fa-trash-alt"></i></button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'"><i class="fas fa-ellipsis-h"></i></button>
-                                                                    </td>
-                                                                </tr>
-
+                                                            <tr v-for="(event, index) in new_calendar.events" :data-index="index">
+                                                                <td data-val="startDate">
+                                                                    {{ event.started_at|formatDate }}
+                                                                </td>
+                                                                <td data-val="startTime">
+                                                                    5:30 PM - 6:30 PM
+                                                                </td>
+                                                                <td data-val="location">
+                                                                    <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
+                                                                </td>
+                                                                <td data-val="type">
+                                                                    {{ event.type|capitalize }}
+                                                                </td>
+                                                                <td data-val="description">
+                                                                    <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+                                                                    <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
+                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More"><i class="fas fa-ellipsis-h"></i></button>
+                                                                </td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
 
@@ -447,7 +273,7 @@
 
 
                                                                 <div class="col-md-2">
-                                                                    <input type="text" v-model="newEventData.address" name="new-event-address" class="form-control form-control-sm">
+                                                                    <input type="text" v-model="newEventData.location" name="new-event-address" class="form-control form-control-sm">
                                                                 </div>
                                                                 <div class="col-md-2">
                                                                     <select v-model="newEventData.type" name="new-event-type" class="form-control form-control-sm">
@@ -457,11 +283,11 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <input type="text" v-model="newEventData.notes" class="form-control form-control-sm" placeholder="e.g. Instructions">
+                                                                    <input type="text" v-model="newEventData.description" class="form-control form-control-sm" placeholder="e.g. Instructions">
                                                                 </div>
                                                                 <div class="col-md-2 text-right">
-                                                                    <button class="btn btn-primary btn-sm" @click="addNewCalendarEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
-                                                                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-times"></i></button>
+                                                                    <button class="btn btn-primary btn-sm" @click="saveNewCalendarEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
+                                                                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm" :disabled="formRequestProcess"><i class="fas fa-times"></i></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -471,7 +297,7 @@
 
 											</div>
 
-											<div class="row">
+											<div class="row modal-bottom">
 												<div class="col-md-4">
 													<button class="btn btn-outline-primary btn-sm" @click="showAddEventForm" :disabled="formRequestProcess">+ Add Event</button>
 												</div>
@@ -515,182 +341,6 @@
 	      		</div>
 			</transition>
 		</div>
-
-		<!--
-		<div class="modal fade" id="addCalendarModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="addCalendarModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-xl">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<h5 class="modal-title w-100 text-center">{{ modal_title }}</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-
-						<form id="addNewCalendarForm" class="needs-validation" :action="form_action" method="POST" @submit="addNewCalendarSubmit" novalidate>
-
-							<input type="hidden" name="_token" :value="csrf_token">
-
-
-							<div class="form-row">
-
-								<div class="form-group col-md-6">
-									<label for="calendar_name">Calendar Name</label>
-									<input type="text" name="calendar_name" class="form-control" id="calendar_name" v-model="calendar_name" required :disabled="formRequestProcess">
-									<div class="invalid-feedback">Please provide a valid Calendar Name.</div>
-								</div>
-
-								<div class="form-group col-md-6">
-									<label for="owner_email_address">Owner's Email Address</label>
-									<input type="email" name="owner_email_address" class="form-control" v-model="owner_email_address" readonly>
-									<div class="invalid-feedback">Please provide a valid Email Address.</div>
-
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" id="owned_by_me_checkbox" disabled checked>
-										<label class="form-check-label" for="owned_by_me_checkbox">Owned by me</label>
-									</div>
-								</div>
-
-							</div>
-
-							<div class="form-row">
-								<label>
-									Events
-									<span v-if="calendar_events.items">({{ calendar_events.items.length }})</span>
-									<span v-else>(0)</span>
-								</label>
-
-								<div id="calendarData" class="card col-md-12">
-
-								<div class="card-body">
-
-									<table id="calendarDataTable" class="table table-sm">
-
-										<thead>
-											<tr>
-												<th scope="col">Date</th>
-												<th scope="col">Time</th>
-												<th scope="col">Address</th>
-												<th scope="col">Event type</th>
-												<th scope="col">Notes</th>
-												<th class="actions" scope="col"></th>
-											</tr>
-										</thead>
-
-										<tbody>
-
-											<tr v-for="event in calendar_events.items" :data-id="event.id">
-												<th scope="row" data-val="startDate">{{ event.start.dateTime|formatDate('MMMM D, YYYY') }}</th>
-												<td data-val="startTime">5:30 PM - 6:30 PM</td>
-												<td data-val="location">{{ event.location }}</td>
-												<td data-val="type">
-													<span  v-if="typeof event.extendedProperties !== 'undefined' && typeof event.extendedProperties.private.type !== 'undefined'">
-														{{event.extendedProperties.private.type | capitalize}}
-													</span>
-												</td>
-												<td data-val="description">
-													{{ event.description }}
-												</td>
-												<td class="text-right">
-													<button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'"><i class="fas fa-pencil-alt"></i></button>
-													<button class="btn btn-outline-secondary btn-sm"><i class="far fa-trash-alt"></i></button>
-													<button class="btn btn-outline-secondary btn-sm" :disabled="event.id == 'new'"><i class="fas fa-ellipsis-h"></i></button>
-												</td>
-											</tr>
-
-										</tbody>
-									</table>
-
-								</div>
-
-						  		<transition name="fade">
-							  		<div class="card-footer" v-if="showNewEventDataForm">
-							    		<div class="row">
-
-						    				<div class="input-group input-group-sm mb-3 col-md-2">
-
-												<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
-
-												<div class="input-group-append">
-													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-												</div>
-											</div>
-
-							    			<div class="input-group input-group-sm mb-3 col-md-2">
-												<input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">
-											</div>
-
-
-							    			<div class="col-md-2">
-							    				<input type="text" v-model="newEventData.address" name="new-event-address" class="form-control form-control-sm">
-							    			</div>
-							    			<div class="col-md-2">
-							    				<select v-model="newEventData.type" name="new-event-type" class="form-control form-control-sm">
-												    <option value="none" disabled selected>Select One</option>
-												    <option value="game">Game</option>
-												    <option value="practice">Practice</option>
-											    </select>
-								    		</div>
-							    			<div class="col-md-2">
-							    				<input type="text" v-model="newEventData.notes" class="form-control form-control-sm" placeholder="e.g. Instructions">
-							    			</div>
-							    			<div class="col-md-2 text-right">
-							    				<button class="btn btn-primary btn-sm" @click="addNewCalendarEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
-							    				<button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-times"></i></button>
-							    			</div>
-						    			</div>
-							  		</div>
-						  		</transition>
-
-							  </div>
-
-							</div>
-
-							<div class="row">
-								<div class="col-md-4">
-									<button class="btn btn-outline-primary btn-sm" @click="showAddEventForm" :disabled="formRequestProcess">+ Add Event</button>
-								</div>
-
-								<div class="col-md-8">
-									<transition name="fade">
-
-										<div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
-											<strong>Success!</strong> {{ requestSuccess }}
-											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-
-										<div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
-											<strong>Error!</strong> {{ requestDanger }}
-											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-										    	<span aria-hidden="true">&times;</span>
-										    </button>
-										</div>
-
-									</transition>
-								</div>
-							</div>
-
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
-
-						<button v-if="!formRequestProcess" type="submit" form="addNewCalendarForm" class="btn btn-primary">Save</button>
-
-						<button v-else class="btn btn-primary" type="button" disabled>
-							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-							Loading...
-						</button>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	-->
 		<!-- END Add Calendar modal -->
 
 	</div>
@@ -699,8 +349,6 @@
 
 <script>
 
-	// import 'bootstrap/dist/css/bootstrap.css';
-
 	import datePicker from 'vue-bootstrap-datetimepicker';
 	import dateRangePicker from 'vue2-daterange-picker'
 
@@ -708,9 +356,6 @@
 	import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
 	export default {
-
-		//props:['form_action', 'csrf_token', 'modal_title'],
-		//props:['modal_data'],
 
 		data() {
 			return {
@@ -724,44 +369,24 @@
                 csrf_token: null,
                 edit_calendar_id: null,
                 current_calendar: null,
+                new_calendar: {
+                    summary: '',
+                    events: []
+                },
 
                 dateOptions: {
                     format: 'M/DD/YYYY',
                     useCurrent: true
                 },
                 newEventData: {
+                    index: '',
                     dateTime: '2/10/2020',
                     location: 'Location',
                     type: 'game',
                     description: 'Description'
                 },
 
-                /*
-				modal_title: '',
-				csrf_token: '',
-				owner_email_address: '',
-				calendar_name: '',
-				calendar_id: '',
-				calendar_events: [],
-				form_action: '',
 
-
-
-
-
-
-
-
-
-				//date: new Date(),
-				dateOptions: {
-					format: 'DD.MM.YYYY',
-					useCurrent: true
-				},
-
-				showAddCalendarModal: false
-
-                 */
 			}
 		},
 
@@ -819,6 +444,7 @@
                 });
 
                 let formData = new FormData(form);
+                formData.append('events', JSON.stringify(currentObj.new_calendar.events));
                 axios.post('/new-calendar', formData)
                 .then(function(response) {
                     if (response.data.code === 401) {
@@ -874,8 +500,6 @@
                 this.calendar_events = [];
                 this.showEditCalendarModal = false;
             },
-
-
             editCalendarSubmit: function(event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -933,27 +557,87 @@
                 event.preventDefault();
                 this.showNewEventDataForm = true;
             },
-            addNewEvent: function(event) {
+            hideAddEventForm: function(event) {
                 event.preventDefault();
-                let currentObj = this;
-                //let dateTime = new Date(currentObj.newEventData.dateTime);
 
-
-                let newEvent = {
-                    id: 'new',
-                    //started_at: dateTime,
-                    started_at: currentObj.newEventData.dateTime,
-                    location: currentObj.newEventData.location,
-                    type: currentObj.newEventData.type,
-                    description: currentObj.newEventData.description
-                };
-                currentObj.current_calendar.events.push(newEvent);
-                currentObj.newEventData =  {
+                this.newEventData =  {
+                    index: '',
                     dateTime: '',
                     location: '',
                     type: '',
                     description: ''
                 };
+                this.showNewEventDataForm = false;
+            },
+            saveEvent: function(event) {
+                event.preventDefault();
+                let currentObj = this;
+
+                if (currentObj.newEventData.index === '') {
+                    // Add new Event
+                    let newEvent = {
+                        id: 'new',
+                        started_at: currentObj.newEventData.dateTime,
+                        location: currentObj.newEventData.location,
+                        type: currentObj.newEventData.type,
+                        description: currentObj.newEventData.description
+                    };
+                    currentObj.current_calendar.events.push(newEvent);
+                } else {
+                    // Update current event
+                    currentObj.current_calendar.events[currentObj.newEventData.index].started_at = currentObj.newEventData.dateTime;
+                    currentObj.current_calendar.events[currentObj.newEventData.index].location = currentObj.newEventData.location;
+                    currentObj.current_calendar.events[currentObj.newEventData.index].type = currentObj.newEventData.type;
+                    currentObj.current_calendar.events[currentObj.newEventData.index].description = currentObj.newEventData.description;
+                }
+
+                currentObj.newEventData =  {
+                    index: '',
+                    dateTime: '',
+                    location: '',
+                    type: '',
+                    description: ''
+                };
+                this.showNewEventDataForm = false;
+            },
+            removeEvent: function(index, event) {
+                event.preventDefault();
+                this.current_calendar.events.splice(index, 1);
+            },
+
+            saveNewCalendarEvent: function(event) {
+			    event.preventDefault();
+                let currentObj = this;
+                let newEvent = {
+                    id: 'new',
+                    started_at: currentObj.newEventData.dateTime,
+                    location: currentObj.newEventData.location,
+                    type: currentObj.newEventData.type,
+                    description: currentObj.newEventData.description
+                };
+                currentObj.new_calendar.events.push(newEvent);
+                currentObj.newEventData =  {
+                    index: '',
+                    dateTime: '',
+                    location: '',
+                    type: '',
+                    description: ''
+                };
+                this.showNewEventDataForm = false;
+            },
+
+
+            editEvent: function(index, event) {
+			    event.preventDefault();
+                let currentEvent = this.current_calendar.events[index];
+                this.newEventData =  {
+                    index: index,
+                    dateTime: this.$options.filters.formatDate(currentEvent.started_at),
+                    location: currentEvent.location,
+                    type: currentEvent.type,
+                    description: currentEvent.description
+                };
+                this.showNewEventDataForm = true;
             },
 
 
@@ -965,43 +649,36 @@
 
 
 
+            //
+            //
+			// showDuplicateCalendarModal: function(id) {
+            //
+			// 	// let currentObj = this;
+			// 	// axios.post('/calendar-get-data', { calendar_id: id })
+			// 	// .then(function (response) {
+			// 	// 	currentObj.modal_title = 'Duplicate Calendar';
+            //     //
+			// 	// 	if (response.data.code == 1) {
+			// 	// 		currentObj.form_action = '/calendar-new';
+			// 	// 		currentObj.calendar_name = response.data.data.calendarData.summary;
+			// 	// 		currentObj.calendar_events = response.data.data.calendarEvents;
+			// 	// 	} else {
+			// 	// 		currentObj.requestDanger = 'Error Request';
+			// 	// 	}
+			// 	// 	jQuery('#addCalendarModal').modal('show');
+			// 	// })
+			// 	// .catch(function (error) {
+			// 	// 	currentObj.requestDanger = 'Error Request';
+			// 	// })
+			// 	// .then(function() {
+            //     //
+			// 	// });
+            //
+			// },
 
-			showDuplicateCalendarModal: function(id) {
 
-				// let currentObj = this;
-				// axios.post('/calendar-get-data', { calendar_id: id })
-				// .then(function (response) {
-				// 	currentObj.modal_title = 'Duplicate Calendar';
-                //
-				// 	if (response.data.code == 1) {
-				// 		currentObj.form_action = '/calendar-new';
-				// 		currentObj.calendar_name = response.data.data.calendarData.summary;
-				// 		currentObj.calendar_events = response.data.data.calendarEvents;
-				// 	} else {
-				// 		currentObj.requestDanger = 'Error Request';
-				// 	}
-				// 	jQuery('#addCalendarModal').modal('show');
-				// })
-				// .catch(function (error) {
-				// 	currentObj.requestDanger = 'Error Request';
-				// })
-				// .then(function() {
-                //
-				// });
+            //
 
-			},
-
-
-
-			hideAddEventForm: function(event) {
-				event.preventDefault();
-
-				this.newEventData.dateTime = null;
-				this.newEventData.address = null;
-				this.newEventData.type = 'none';
-				this.newEventData.notes = null;
-				this.showNewEventDataForm = false;
-			},
 
 			// addCalendarResetForm: function() {
 			// 	this.owner_email_address = '';

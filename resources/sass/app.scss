@@ -157,6 +157,10 @@ body #app nav.navbar .navbar-brand {
 	}
 }
 
+#addCalendarModal .modal-bottom, #editCalendarModal .modal-bottom {
+    margin-top: 15px;
+}
+
 //
 /*
 #addCalendarModal .modal-body {

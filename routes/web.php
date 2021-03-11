@@ -33,7 +33,8 @@ Route::post('/edit-calendar', [App\Http\Controllers\CalendarsController::class, 
 
 
 /* Events Actions */
-Route::post('/new-event', [App\Http\Controllers\EventsController::class, 'addEventAction'])->name('addEvent');
+//Route::post('/new-event', [App\Http\Controllers\EventsController::class, 'addEventAction'])->name('addEvent');
+Route::post('/new-single-event', [App\Http\Controllers\EventsController::class, 'addSingleEventAction'])->name('addSingleEvent');
 
 /*
 Route::post('/calendar-edit', [App\Http\Controllers\HomeController::class, 'editCalendarAction'])->name('editCalendar');

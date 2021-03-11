@@ -38,7 +38,7 @@
 	                </button>
 
 					<div class="dropdown-calendar-actions">
-						<button v-if="jobs_status === 'finished'" type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDropdownActions()">
+						<button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDropdownActions()">
 							<i class="fas fa-ellipsis-v"></i>
 		                </button>
 
@@ -79,7 +79,7 @@
 	                </div>
 
 	                <div class="col-lg-6 text-right">
-	                    <button v-if="jobs_status === 'finished'" type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
+	                    <button type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
 	                </div>
 	            </div>
 
@@ -135,7 +135,7 @@
 
 				  		<div class="card-footer" v-if="showNewEventDataForm">
 
-				  			<form id="addCalendarEventForm" class="needs-validation" action="/calendar-new-event" @submit="addEventSubmit" novalidate>
+				  			<form id="addCalendarEventForm" class="needs-validation" @submit="addEventSubmit" novalidate>
 
 				  				<input type="hidden" name="calendar_id" :value="calendar.id">
 
@@ -299,8 +299,8 @@
 		computed:  {
 			newEventDataValid() {
 				return !(
-					this.newEventData.address == '' || this.newEventData.dateTime == ''
-					|| this.newEventData.type == 'none' || this.newEventData.notes == ''
+					this.newEventData.address === '' || this.newEventData.dateTime === ''
+					|| this.newEventData.type === 'none' || this.newEventData.notes === ''
 					);
 			}
 		},
@@ -403,21 +403,22 @@
 
 				axios.interceptors.request.use(function (config) {
 				    // Do something before request is sent
-				    currentObj.formRequestProcess = true;
+				    currentObj.requestProcess = true;
 				    return config;
 				}, function (error) {
 				    // Do something with request error
 				    return Promise.reject(error);
 				});
 
-				let url = '/calendar-new-event'
+				let url = '/new-single-event'
 
 				axios.post(url, formData)
 				.then(function(response) {
-
-					console.log(currentObj.calendar.events);
-
-					if (response.data.code == 1) {
+                    if (response.data.code === 401) {
+                        document.location.href="/";
+                    } else if (response.data.code === 404) {
+                        currentObj.requestDanger = response.data.data.message;
+                    } else if (response.data.code === 1) {
 						currentObj.requestSuccess = response.data.data.message;
 						currentObj.calendar.events.push(response.data.data.event);
 
@@ -429,6 +430,7 @@
 
 						setTimeout(function() {
 							currentObj.requestSuccess = false;
+							location.reload();
 						}, 2000);
 					} else {
 						currentObj.requestDanger = 'Request Error';
@@ -436,7 +438,7 @@
 				})
 				.catch(function (error) {
 
-					if (error.response && error.response.status == 422) {
+					if (error.response && error.response.status === 422) {
 						currentObj.requestDanger = error.response.data.message;
 						form.classList.add('was-validated');
 					} else {
@@ -445,7 +447,7 @@
 
 				})
 				.then(function() {
-					currentObj.formRequestProcess = false;
+					currentObj.requestProcess = false;
 				});
 			},
 
@@ -527,7 +529,7 @@
 		},
 
 		mounted() {
-
+            this.formRequestProcess = true;
 		}
 
 	}

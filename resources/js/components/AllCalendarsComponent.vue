@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="col-lg-2 text-lg-right">
-                    <button v-if="jobs_status === 'finished'" type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
+                    <button type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
                 </div>
             </div>
         </div>

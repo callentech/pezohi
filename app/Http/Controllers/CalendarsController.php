@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CalendarsController extends Controller
 {
-
     /**
      * @param Request $request
      * @return JsonResponse
@@ -48,6 +47,47 @@ class CalendarsController extends Controller
                 'timezone' => $createdGoogleCalendar->timeZone
             ]);
             Auth::user()->calendars()->save($createdCalendar);
+
+            // Create events
+            $newEvents = json_decode($request->events, TRUE);
+            foreach ($newEvents as $event) {
+
+                // Save new event data to Google Calendar
+                $started_at = date_create($event['started_at']);
+                $ended_at = date_create($event['started_at']);
+                $newGoogleEvent = new Google_Service_Calendar_Event(array(
+                    'summary' => 'Pezohi Event',
+                    'location' => trim($event['location']),
+                    'description' => trim($event['description']),
+                    'start' => array(
+                        'dateTime' => date_format($started_at, 'c'),
+                        'timeZone' => config('app.timezone')
+                    ),
+                    'end' => array(
+                        'dateTime' => date_format($ended_at, 'c'),
+                        'timeZone' => config('app.timezone')
+                    ),
+                ));
+
+                $extendedProperties = new Google_Service_Calendar_EventExtendedProperties();
+                $extendedProperties->setPrivate(['type' => $event['type']]);
+                $newGoogleEvent->setExtendedProperties($extendedProperties);
+                $newGoogleEvent = $service->events->insert($createdGoogleCalendar->id, $newGoogleEvent);
+
+                // Save new event data to DB
+                $newEvent = new Event([
+                    'google_id' => $newGoogleEvent->id,
+                    'name' => $newGoogleEvent->summary,
+                    'type' => $newGoogleEvent->extendedProperties->getPrivate()['type'],
+                    'description' => $newGoogleEvent->description,
+                    'location' => $newGoogleEvent->location,
+                    'allday' => 0,
+                    'started_at' => $this->parseDatetime($newGoogleEvent->start),
+                    'ended_at' => $this->parseDatetime($newGoogleEvent->end)
+                ]);
+                $createdCalendar->events()->save($newEvent);
+            }
+
             return response()->json([
                 'code' => 1,
                 'data' => [

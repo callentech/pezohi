@@ -2200,364 +2200,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// import 'bootstrap/dist/css/bootstrap.css';
 
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  //props:['form_action', 'csrf_token', 'modal_title'],
-  //props:['modal_data'],
   data: function data() {
     return {
       owner_email_address: '',
@@ -2570,32 +2217,21 @@ __webpack_require__.r(__webpack_exports__);
       csrf_token: null,
       edit_calendar_id: null,
       current_calendar: null,
+      new_calendar: {
+        summary: '',
+        events: []
+      },
       dateOptions: {
         format: 'M/DD/YYYY',
         useCurrent: true
       },
       newEventData: {
+        index: '',
         dateTime: '2/10/2020',
         location: 'Location',
         type: 'game',
         description: 'Description'
       }
-      /*
-      modal_title: '',
-      csrf_token: '',
-      owner_email_address: '',
-      calendar_name: '',
-      calendar_id: '',
-      calendar_events: [],
-      form_action: '',
-      //date: new Date(),
-      dateOptions: {
-      format: 'DD.MM.YYYY',
-      useCurrent: true
-      },
-      showAddCalendarModal: false
-        */
-
     };
   },
   created: function created() {
@@ -2644,6 +2280,7 @@ __webpack_require__.r(__webpack_exports__);
         return Promise.reject(error);
       });
       var formData = new FormData(form);
+      formData.append('events', JSON.stringify(currentObj.new_calendar.events));
       axios.post('/new-calendar', formData).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
@@ -2738,55 +2375,111 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault();
       this.showNewEventDataForm = true;
     },
-    addNewEvent: function addNewEvent(event) {
+    hideAddEventForm: function hideAddEventForm(event) {
       event.preventDefault();
-      var currentObj = this; //let dateTime = new Date(currentObj.newEventData.dateTime);
-
-      var newEvent = {
-        id: 'new',
-        //started_at: dateTime,
-        started_at: currentObj.newEventData.dateTime,
-        location: currentObj.newEventData.location,
-        type: currentObj.newEventData.type,
-        description: currentObj.newEventData.description
-      };
-      currentObj.current_calendar.events.push(newEvent);
-      currentObj.newEventData = {
+      this.newEventData = {
+        index: '',
         dateTime: '',
         location: '',
         type: '',
         description: ''
       };
-    },
-    showDuplicateCalendarModal: function showDuplicateCalendarModal(id) {// let currentObj = this;
-      // axios.post('/calendar-get-data', { calendar_id: id })
-      // .then(function (response) {
-      // 	currentObj.modal_title = 'Duplicate Calendar';
-      //
-      // 	if (response.data.code == 1) {
-      // 		currentObj.form_action = '/calendar-new';
-      // 		currentObj.calendar_name = response.data.data.calendarData.summary;
-      // 		currentObj.calendar_events = response.data.data.calendarEvents;
-      // 	} else {
-      // 		currentObj.requestDanger = 'Error Request';
-      // 	}
-      // 	jQuery('#addCalendarModal').modal('show');
-      // })
-      // .catch(function (error) {
-      // 	currentObj.requestDanger = 'Error Request';
-      // })
-      // .then(function() {
-      //
-      // });
-    },
-    hideAddEventForm: function hideAddEventForm(event) {
-      event.preventDefault();
-      this.newEventData.dateTime = null;
-      this.newEventData.address = null;
-      this.newEventData.type = 'none';
-      this.newEventData.notes = null;
       this.showNewEventDataForm = false;
     },
+    saveEvent: function saveEvent(event) {
+      event.preventDefault();
+      var currentObj = this;
+
+      if (currentObj.newEventData.index === '') {
+        // Add new Event
+        var newEvent = {
+          id: 'new',
+          started_at: currentObj.newEventData.dateTime,
+          location: currentObj.newEventData.location,
+          type: currentObj.newEventData.type,
+          description: currentObj.newEventData.description
+        };
+        currentObj.current_calendar.events.push(newEvent);
+      } else {
+        // Update current event
+        currentObj.current_calendar.events[currentObj.newEventData.index].started_at = currentObj.newEventData.dateTime;
+        currentObj.current_calendar.events[currentObj.newEventData.index].location = currentObj.newEventData.location;
+        currentObj.current_calendar.events[currentObj.newEventData.index].type = currentObj.newEventData.type;
+        currentObj.current_calendar.events[currentObj.newEventData.index].description = currentObj.newEventData.description;
+      }
+
+      currentObj.newEventData = {
+        index: '',
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      };
+      this.showNewEventDataForm = false;
+    },
+    removeEvent: function removeEvent(index, event) {
+      event.preventDefault();
+      this.current_calendar.events.splice(index, 1);
+    },
+    saveNewCalendarEvent: function saveNewCalendarEvent(event) {
+      event.preventDefault();
+      var currentObj = this;
+      var newEvent = {
+        id: 'new',
+        started_at: currentObj.newEventData.dateTime,
+        location: currentObj.newEventData.location,
+        type: currentObj.newEventData.type,
+        description: currentObj.newEventData.description
+      };
+      currentObj.new_calendar.events.push(newEvent);
+      currentObj.newEventData = {
+        index: '',
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      };
+      this.showNewEventDataForm = false;
+    },
+    editEvent: function editEvent(index, event) {
+      event.preventDefault();
+      var currentEvent = this.current_calendar.events[index];
+      this.newEventData = {
+        index: index,
+        dateTime: this.$options.filters.formatDate(currentEvent.started_at),
+        location: currentEvent.location,
+        type: currentEvent.type,
+        description: currentEvent.description
+      };
+      this.showNewEventDataForm = true;
+    },
+    //
+    //
+    // showDuplicateCalendarModal: function(id) {
+    //
+    // 	// let currentObj = this;
+    // 	// axios.post('/calendar-get-data', { calendar_id: id })
+    // 	// .then(function (response) {
+    // 	// 	currentObj.modal_title = 'Duplicate Calendar';
+    //     //
+    // 	// 	if (response.data.code == 1) {
+    // 	// 		currentObj.form_action = '/calendar-new';
+    // 	// 		currentObj.calendar_name = response.data.data.calendarData.summary;
+    // 	// 		currentObj.calendar_events = response.data.data.calendarEvents;
+    // 	// 	} else {
+    // 	// 		currentObj.requestDanger = 'Error Request';
+    // 	// 	}
+    // 	// 	jQuery('#addCalendarModal').modal('show');
+    // 	// })
+    // 	// .catch(function (error) {
+    // 	// 	currentObj.requestDanger = 'Error Request';
+    // 	// })
+    // 	// .then(function() {
+    //     //
+    // 	// });
+    //
+    // },
+    //
     // addCalendarResetForm: function() {
     // 	this.owner_email_address = '';
     // 	this.calendar_name = '';
@@ -3550,7 +3243,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     newEventDataValid: function newEventDataValid() {
-      return !(this.newEventData.address == '' || this.newEventData.dateTime == '' || this.newEventData.type == 'none' || this.newEventData.notes == '');
+      return !(this.newEventData.address === '' || this.newEventData.dateTime === '' || this.newEventData.type === 'none' || this.newEventData.notes === '');
     }
   },
   methods: {
@@ -3636,17 +3329,19 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('new_event_notes', currentObj.newEventData.notes);
       axios.interceptors.request.use(function (config) {
         // Do something before request is sent
-        currentObj.formRequestProcess = true;
+        currentObj.requestProcess = true;
         return config;
       }, function (error) {
         // Do something with request error
         return Promise.reject(error);
       });
-      var url = '/calendar-new-event';
+      var url = '/new-single-event';
       axios.post(url, formData).then(function (response) {
-        console.log(currentObj.calendar.events);
-
-        if (response.data.code == 1) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message;
           currentObj.calendar.events.push(response.data.data.event); // Reset New event form
 
@@ -3656,19 +3351,20 @@ __webpack_require__.r(__webpack_exports__);
           currentObj.newEventData.notes = '';
           setTimeout(function () {
             currentObj.requestSuccess = false;
+            location.reload();
           }, 2000);
         } else {
           currentObj.requestDanger = 'Request Error';
         }
       })["catch"](function (error) {
-        if (error.response && error.response.status == 422) {
+        if (error.response && error.response.status === 422) {
           currentObj.requestDanger = error.response.data.message;
           form.classList.add('was-validated');
         } else {
           currentObj.requestDanger = 'Request Error';
         }
       }).then(function () {
-        currentObj.formRequestProcess = false;
+        currentObj.requestProcess = false;
       });
     },
     shareCalendar: function shareCalendar(url) {
@@ -3740,7 +3436,9 @@ __webpack_require__.r(__webpack_exports__);
       return outputDate;
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.formRequestProcess = true;
+  }
 });
 
 /***/ }),
@@ -64795,12 +64493,12 @@ var render = function() {
                                                   "tbody",
                                                   _vm._l(
                                                     _vm.current_calendar.events,
-                                                    function(event) {
+                                                    function(event, index) {
                                                       return _c(
                                                         "tr",
                                                         {
                                                           attrs: {
-                                                            "data-id": event.id
+                                                            "data-index": index
                                                           }
                                                         },
                                                         [
@@ -64814,13 +64512,15 @@ var render = function() {
                                                             },
                                                             [
                                                               _vm._v(
-                                                                _vm._s(
-                                                                  _vm._f(
-                                                                    "formatDate"
-                                                                  )(
-                                                                    event.started_at
-                                                                  )
-                                                                )
+                                                                "\n                                                                        " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                    "
                                                               )
                                                             ]
                                                           ),
@@ -64835,7 +64535,7 @@ var render = function() {
                                                             },
                                                             [
                                                               _vm._v(
-                                                                "5:30 PM - 6:30 PM"
+                                                                "\n                                                                        5:30 PM - 6:30 PM\n                                                                    "
                                                               )
                                                             ]
                                                           ),
@@ -64884,11 +64584,15 @@ var render = function() {
                                                             },
                                                             [
                                                               _vm._v(
-                                                                _vm._s(
-                                                                  _vm._f(
-                                                                    "capitalize"
-                                                                  )(event.type)
-                                                                )
+                                                                "\n                                                                        " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "capitalize"
+                                                                    )(
+                                                                      event.type
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                    "
                                                               )
                                                             ]
                                                           ),
@@ -64941,10 +64645,20 @@ var render = function() {
                                                                     "btn btn-outline-secondary btn-sm",
                                                                   attrs: {
                                                                     disabled:
-                                                                      event.id ==
+                                                                      event.id ===
                                                                       "new",
                                                                     title:
                                                                       "Edit"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.editEvent(
+                                                                        index,
+                                                                        $event
+                                                                      )
+                                                                    }
                                                                   }
                                                                 },
                                                                 [
@@ -64963,6 +64677,16 @@ var render = function() {
                                                                   attrs: {
                                                                     title:
                                                                       "Delete"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.removeEvent(
+                                                                        index,
+                                                                        $event
+                                                                      )
+                                                                    }
                                                                   }
                                                                 },
                                                                 [
@@ -64980,7 +64704,7 @@ var render = function() {
                                                                     "btn btn-outline-secondary btn-sm",
                                                                   attrs: {
                                                                     disabled:
-                                                                      event.id ==
+                                                                      event.id ===
                                                                       "new",
                                                                     title:
                                                                       "More"
@@ -65360,7 +65084,7 @@ var render = function() {
                                                                 },
                                                                 on: {
                                                                   click:
-                                                                    _vm.addNewEvent
+                                                                    _vm.saveEvent
                                                                 }
                                                               },
                                                               [
@@ -65405,129 +65129,135 @@ var render = function() {
                                     )
                                   ]),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "row" }, [
-                                    _c("div", { staticClass: "col-md-4" }, [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "btn btn-outline-primary btn-sm",
-                                          attrs: {
-                                            disabled: _vm.formRequestProcess
-                                          },
-                                          on: { click: _vm.showAddEventForm }
-                                        },
-                                        [_vm._v("+ Add Event")]
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "col-md-8" },
-                                      [
+                                  _c(
+                                    "div",
+                                    { staticClass: "row modal-bottom" },
+                                    [
+                                      _c("div", { staticClass: "col-md-4" }, [
                                         _c(
-                                          "transition",
-                                          { attrs: { name: "fade" } },
-                                          [
-                                            _vm.requestSuccess
-                                              ? _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "alert alert-success alert-dismissible fade show",
-                                                    attrs: { role: "alert" }
-                                                  },
-                                                  [
-                                                    _c("strong", [
-                                                      _vm._v("Success!")
-                                                    ]),
-                                                    _vm._v(
-                                                      " " +
-                                                        _vm._s(
-                                                          _vm.requestSuccess
-                                                        ) +
-                                                        "\n                                                            "
-                                                    ),
-                                                    _c(
-                                                      "button",
-                                                      {
-                                                        staticClass: "close",
-                                                        attrs: {
-                                                          type: "button",
-                                                          "data-dismiss":
-                                                            "alert",
-                                                          "aria-label": "Close"
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "span",
-                                                          {
-                                                            attrs: {
-                                                              "aria-hidden":
-                                                                "true"
-                                                            }
-                                                          },
-                                                          [_vm._v("×")]
-                                                        )
-                                                      ]
-                                                    )
-                                                  ]
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.requestDanger
-                                              ? _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "alert alert-danger alert-dismissible fade show",
-                                                    attrs: { role: "alert" }
-                                                  },
-                                                  [
-                                                    _c("strong", [
-                                                      _vm._v("Error!")
-                                                    ]),
-                                                    _vm._v(
-                                                      " " +
-                                                        _vm._s(
-                                                          _vm.requestDanger
-                                                        ) +
-                                                        "\n                                                            "
-                                                    ),
-                                                    _c(
-                                                      "button",
-                                                      {
-                                                        staticClass: "close",
-                                                        attrs: {
-                                                          type: "button",
-                                                          "data-dismiss":
-                                                            "alert",
-                                                          "aria-label": "Close"
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "span",
-                                                          {
-                                                            attrs: {
-                                                              "aria-hidden":
-                                                                "true"
-                                                            }
-                                                          },
-                                                          [_vm._v("×")]
-                                                        )
-                                                      ]
-                                                    )
-                                                  ]
-                                                )
-                                              : _vm._e()
-                                          ]
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "btn btn-outline-primary btn-sm",
+                                            attrs: {
+                                              disabled: _vm.formRequestProcess
+                                            },
+                                            on: { click: _vm.showAddEventForm }
+                                          },
+                                          [_vm._v("+ Add Event")]
                                         )
-                                      ],
-                                      1
-                                    )
-                                  ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "col-md-8" },
+                                        [
+                                          _c(
+                                            "transition",
+                                            { attrs: { name: "fade" } },
+                                            [
+                                              _vm.requestSuccess
+                                                ? _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "alert alert-success alert-dismissible fade show",
+                                                      attrs: { role: "alert" }
+                                                    },
+                                                    [
+                                                      _c("strong", [
+                                                        _vm._v("Success!")
+                                                      ]),
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            _vm.requestSuccess
+                                                          ) +
+                                                          "\n                                                            "
+                                                      ),
+                                                      _c(
+                                                        "button",
+                                                        {
+                                                          staticClass: "close",
+                                                          attrs: {
+                                                            type: "button",
+                                                            "data-dismiss":
+                                                              "alert",
+                                                            "aria-label":
+                                                              "Close"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              attrs: {
+                                                                "aria-hidden":
+                                                                  "true"
+                                                              }
+                                                            },
+                                                            [_vm._v("×")]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e(),
+                                              _vm._v(" "),
+                                              _vm.requestDanger
+                                                ? _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "alert alert-danger alert-dismissible fade show",
+                                                      attrs: { role: "alert" }
+                                                    },
+                                                    [
+                                                      _c("strong", [
+                                                        _vm._v("Error!")
+                                                      ]),
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            _vm.requestDanger
+                                                          ) +
+                                                          "\n                                                            "
+                                                      ),
+                                                      _c(
+                                                        "button",
+                                                        {
+                                                          staticClass: "close",
+                                                          attrs: {
+                                                            type: "button",
+                                                            "data-dismiss":
+                                                              "alert",
+                                                            "aria-label":
+                                                              "Close"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              attrs: {
+                                                                "aria-hidden":
+                                                                  "true"
+                                                              }
+                                                            },
+                                                            [_vm._v("×")]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e()
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
                                 ]
                               )
                             ]),
@@ -65676,8 +65406,8 @@ var render = function() {
                                             {
                                               name: "model",
                                               rawName: "v-model",
-                                              value: _vm.calendar_name,
-                                              expression: "calendar_name"
+                                              value: _vm.new_calendar.summary,
+                                              expression: "new_calendar.summary"
                                             }
                                           ],
                                           staticClass: "form-control",
@@ -65688,15 +65418,18 @@ var render = function() {
                                             disabled: _vm.formRequestProcess
                                           },
                                           domProps: {
-                                            value: _vm.calendar_name
+                                            value: _vm.new_calendar.summary
                                           },
                                           on: {
                                             input: function($event) {
                                               if ($event.target.composing) {
                                                 return
                                               }
-                                              _vm.calendar_name =
+                                              _vm.$set(
+                                                _vm.new_calendar,
+                                                "summary",
                                                 $event.target.value
+                                              )
                                             }
                                           }
                                         }),
@@ -65792,20 +65525,9 @@ var render = function() {
                                   _c("div", { staticClass: "form-row" }, [
                                     _c("label", [
                                       _vm._v(
-                                        "\n\t\t\t\t\t\t\t\t\t\t\t\t\tEvents\n\t\t\t\t\t\t\t\t\t\t\t\t\t"
-                                      ),
-                                      _vm.calendar_events.items
-                                        ? _c("span", [
-                                            _vm._v(
-                                              "(" +
-                                                _vm._s(
-                                                  _vm.calendar_events.items
-                                                    .length
-                                                ) +
-                                                ")"
-                                            )
-                                          ])
-                                        : _c("span", [_vm._v("(0)")])
+                                        "Events: " +
+                                          _vm._s(_vm.new_calendar.events.length)
+                                      )
                                     ]),
                                     _vm._v(" "),
                                     _c(
@@ -65872,36 +65594,35 @@ var render = function() {
                                                 _c(
                                                   "tbody",
                                                   _vm._l(
-                                                    _vm.calendar_events.items,
-                                                    function(event) {
+                                                    _vm.new_calendar.events,
+                                                    function(event, index) {
                                                       return _c(
                                                         "tr",
                                                         {
                                                           attrs: {
-                                                            "data-id": event.id
+                                                            "data-index": index
                                                           }
                                                         },
                                                         [
                                                           _c(
-                                                            "th",
+                                                            "td",
                                                             {
                                                               attrs: {
-                                                                scope: "row",
                                                                 "data-val":
                                                                   "startDate"
                                                               }
                                                             },
                                                             [
                                                               _vm._v(
-                                                                _vm._s(
-                                                                  _vm._f(
-                                                                    "formatDate"
-                                                                  )(
-                                                                    event.start
-                                                                      .dateTime,
-                                                                    "MMMM D, YYYY"
-                                                                  )
-                                                                )
+                                                                "\n                                                                    " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                "
                                                               )
                                                             ]
                                                           ),
@@ -65916,7 +65637,7 @@ var render = function() {
                                                             },
                                                             [
                                                               _vm._v(
-                                                                "5:30 PM - 6:30 PM"
+                                                                "\n                                                                    5:30 PM - 6:30 PM\n                                                                "
                                                               )
                                                             ]
                                                           ),
@@ -65930,10 +65651,27 @@ var render = function() {
                                                               }
                                                             },
                                                             [
-                                                              _vm._v(
-                                                                _vm._s(
-                                                                  event.location
-                                                                )
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.location
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm._f(
+                                                                        "sliceString"
+                                                                      )(
+                                                                        event.location
+                                                                      )
+                                                                    )
+                                                                  )
+                                                                ]
                                                               )
                                                             ]
                                                           ),
@@ -65947,30 +65685,17 @@ var render = function() {
                                                               }
                                                             },
                                                             [
-                                                              typeof event.extendedProperties !==
-                                                                "undefined" &&
-                                                              typeof event
-                                                                .extendedProperties
-                                                                .private
-                                                                .type !==
-                                                                "undefined"
-                                                                ? _c("span", [
-                                                                    _vm._v(
-                                                                      "\n                                                                            " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "capitalize"
-                                                                          )(
-                                                                            event
-                                                                              .extendedProperties
-                                                                              .private
-                                                                              .type
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                        "
+                                                              _vm._v(
+                                                                "\n                                                                    " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "capitalize"
+                                                                    )(
+                                                                      event.type
                                                                     )
-                                                                  ])
-                                                                : _vm._e()
+                                                                  ) +
+                                                                  "\n                                                                "
+                                                              )
                                                             ]
                                                           ),
                                                           _vm._v(" "),
@@ -65983,12 +65708,27 @@ var render = function() {
                                                               }
                                                             },
                                                             [
-                                                              _vm._v(
-                                                                "\n                                                                        " +
-                                                                  _vm._s(
-                                                                    event.description
-                                                                  ) +
-                                                                  "\n                                                                    "
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.description
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm._f(
+                                                                        "sliceString"
+                                                                      )(
+                                                                        event.description
+                                                                      )
+                                                                    )
+                                                                  )
+                                                                ]
                                                               )
                                                             ]
                                                           ),
@@ -66007,8 +65747,20 @@ var render = function() {
                                                                     "btn btn-outline-secondary btn-sm",
                                                                   attrs: {
                                                                     disabled:
-                                                                      event.id ==
-                                                                      "new"
+                                                                      event.id ===
+                                                                      "new",
+                                                                    title:
+                                                                      "Edit"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.editEvent(
+                                                                        index,
+                                                                        $event
+                                                                      )
+                                                                    }
                                                                   }
                                                                 },
                                                                 [
@@ -66023,7 +65775,21 @@ var render = function() {
                                                                 "button",
                                                                 {
                                                                   staticClass:
-                                                                    "btn btn-outline-secondary btn-sm"
+                                                                    "btn btn-outline-danger btn-sm",
+                                                                  attrs: {
+                                                                    title:
+                                                                      "Delete"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.removeEvent(
+                                                                        index,
+                                                                        $event
+                                                                      )
+                                                                    }
+                                                                  }
                                                                 },
                                                                 [
                                                                   _c("i", {
@@ -66040,8 +65806,10 @@ var render = function() {
                                                                     "btn btn-outline-secondary btn-sm",
                                                                   attrs: {
                                                                     disabled:
-                                                                      event.id ==
-                                                                      "new"
+                                                                      event.id ===
+                                                                      "new",
+                                                                    title:
+                                                                      "More"
                                                                   }
                                                                 },
                                                                 [
@@ -66173,9 +65941,9 @@ var render = function() {
                                                                   value:
                                                                     _vm
                                                                       .newEventData
-                                                                      .address,
+                                                                      .location,
                                                                   expression:
-                                                                    "newEventData.address"
+                                                                    "newEventData.location"
                                                                 }
                                                               ],
                                                               staticClass:
@@ -66189,7 +65957,7 @@ var render = function() {
                                                                 value:
                                                                   _vm
                                                                     .newEventData
-                                                                    .address
+                                                                    .location
                                                               },
                                                               on: {
                                                                 input: function(
@@ -66204,7 +65972,7 @@ var render = function() {
                                                                   }
                                                                   _vm.$set(
                                                                     _vm.newEventData,
-                                                                    "address",
+                                                                    "location",
                                                                     $event
                                                                       .target
                                                                       .value
@@ -66354,9 +66122,9 @@ var render = function() {
                                                                   value:
                                                                     _vm
                                                                       .newEventData
-                                                                      .notes,
+                                                                      .description,
                                                                   expression:
-                                                                    "newEventData.notes"
+                                                                    "newEventData.description"
                                                                 }
                                                               ],
                                                               staticClass:
@@ -66370,7 +66138,7 @@ var render = function() {
                                                                 value:
                                                                   _vm
                                                                     .newEventData
-                                                                    .notes
+                                                                    .description
                                                               },
                                                               on: {
                                                                 input: function(
@@ -66385,7 +66153,7 @@ var render = function() {
                                                                   }
                                                                   _vm.$set(
                                                                     _vm.newEventData,
-                                                                    "notes",
+                                                                    "description",
                                                                     $event
                                                                       .target
                                                                       .value
@@ -66415,7 +66183,7 @@ var render = function() {
                                                                 },
                                                                 on: {
                                                                   click:
-                                                                    _vm.addNewCalendarEvent
+                                                                    _vm.saveNewCalendarEvent
                                                                 }
                                                               },
                                                               [
@@ -66435,7 +66203,6 @@ var render = function() {
                                                                   type:
                                                                     "button",
                                                                   disabled:
-                                                                    !_vm.newEventDataValid ||
                                                                     _vm.formRequestProcess
                                                                 },
                                                                 on: {
@@ -66464,129 +66231,135 @@ var render = function() {
                                     )
                                   ]),
                                   _vm._v(" "),
-                                  _c("div", { staticClass: "row" }, [
-                                    _c("div", { staticClass: "col-md-4" }, [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "btn btn-outline-primary btn-sm",
-                                          attrs: {
-                                            disabled: _vm.formRequestProcess
-                                          },
-                                          on: { click: _vm.showAddEventForm }
-                                        },
-                                        [_vm._v("+ Add Event")]
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "col-md-8" },
-                                      [
+                                  _c(
+                                    "div",
+                                    { staticClass: "row modal-bottom" },
+                                    [
+                                      _c("div", { staticClass: "col-md-4" }, [
                                         _c(
-                                          "transition",
-                                          { attrs: { name: "fade" } },
-                                          [
-                                            _vm.requestSuccess
-                                              ? _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "alert alert-success alert-dismissible fade show",
-                                                    attrs: { role: "alert" }
-                                                  },
-                                                  [
-                                                    _c("strong", [
-                                                      _vm._v("Success!")
-                                                    ]),
-                                                    _vm._v(
-                                                      " " +
-                                                        _vm._s(
-                                                          _vm.requestSuccess
-                                                        ) +
-                                                        "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
-                                                    ),
-                                                    _c(
-                                                      "button",
-                                                      {
-                                                        staticClass: "close",
-                                                        attrs: {
-                                                          type: "button",
-                                                          "data-dismiss":
-                                                            "alert",
-                                                          "aria-label": "Close"
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "span",
-                                                          {
-                                                            attrs: {
-                                                              "aria-hidden":
-                                                                "true"
-                                                            }
-                                                          },
-                                                          [_vm._v("×")]
-                                                        )
-                                                      ]
-                                                    )
-                                                  ]
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.requestDanger
-                                              ? _c(
-                                                  "div",
-                                                  {
-                                                    staticClass:
-                                                      "alert alert-danger alert-dismissible fade show",
-                                                    attrs: { role: "alert" }
-                                                  },
-                                                  [
-                                                    _c("strong", [
-                                                      _vm._v("Error!")
-                                                    ]),
-                                                    _vm._v(
-                                                      " " +
-                                                        _vm._s(
-                                                          _vm.requestDanger
-                                                        ) +
-                                                        "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
-                                                    ),
-                                                    _c(
-                                                      "button",
-                                                      {
-                                                        staticClass: "close",
-                                                        attrs: {
-                                                          type: "button",
-                                                          "data-dismiss":
-                                                            "alert",
-                                                          "aria-label": "Close"
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "span",
-                                                          {
-                                                            attrs: {
-                                                              "aria-hidden":
-                                                                "true"
-                                                            }
-                                                          },
-                                                          [_vm._v("×")]
-                                                        )
-                                                      ]
-                                                    )
-                                                  ]
-                                                )
-                                              : _vm._e()
-                                          ]
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "btn btn-outline-primary btn-sm",
+                                            attrs: {
+                                              disabled: _vm.formRequestProcess
+                                            },
+                                            on: { click: _vm.showAddEventForm }
+                                          },
+                                          [_vm._v("+ Add Event")]
                                         )
-                                      ],
-                                      1
-                                    )
-                                  ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "col-md-8" },
+                                        [
+                                          _c(
+                                            "transition",
+                                            { attrs: { name: "fade" } },
+                                            [
+                                              _vm.requestSuccess
+                                                ? _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "alert alert-success alert-dismissible fade show",
+                                                      attrs: { role: "alert" }
+                                                    },
+                                                    [
+                                                      _c("strong", [
+                                                        _vm._v("Success!")
+                                                      ]),
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            _vm.requestSuccess
+                                                          ) +
+                                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                      ),
+                                                      _c(
+                                                        "button",
+                                                        {
+                                                          staticClass: "close",
+                                                          attrs: {
+                                                            type: "button",
+                                                            "data-dismiss":
+                                                              "alert",
+                                                            "aria-label":
+                                                              "Close"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              attrs: {
+                                                                "aria-hidden":
+                                                                  "true"
+                                                              }
+                                                            },
+                                                            [_vm._v("×")]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e(),
+                                              _vm._v(" "),
+                                              _vm.requestDanger
+                                                ? _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "alert alert-danger alert-dismissible fade show",
+                                                      attrs: { role: "alert" }
+                                                    },
+                                                    [
+                                                      _c("strong", [
+                                                        _vm._v("Error!")
+                                                      ]),
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            _vm.requestDanger
+                                                          ) +
+                                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                      ),
+                                                      _c(
+                                                        "button",
+                                                        {
+                                                          staticClass: "close",
+                                                          attrs: {
+                                                            type: "button",
+                                                            "data-dismiss":
+                                                              "alert",
+                                                            "aria-label":
+                                                              "Close"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              attrs: {
+                                                                "aria-hidden":
+                                                                  "true"
+                                                              }
+                                                            },
+                                                            [_vm._v("×")]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e()
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
                                 ]
                               )
                             ]),
@@ -66721,17 +66494,15 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-lg-2 text-lg-right" }, [
-          _vm.jobs_status === "finished"
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: { type: "button" },
-                  on: { click: _vm.showAddCalendarModal }
-                },
-                [_c("i", { staticClass: "fa fa-plus" }), _vm._v("Add Calendar")]
-              )
-            : _vm._e()
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "button" },
+              on: { click: _vm.showAddCalendarModal }
+            },
+            [_c("i", { staticClass: "fa fa-plus" }), _vm._v("Add Calendar")]
+          )
         ])
       ])
     ]),
@@ -67150,21 +66921,19 @@ var render = function() {
               "div",
               { staticClass: "dropdown-calendar-actions" },
               [
-                _vm.jobs_status === "finished"
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-light btn-sm pull-right btn-open",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.toggleCalendarDropdownActions()
-                          }
-                        }
-                      },
-                      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
-                    )
-                  : _vm._e(),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-sm pull-right btn-open",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleCalendarDropdownActions()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                ),
                 _vm._v(" "),
                 _c("transition", { attrs: { name: "fade" } }, [
                   _vm.showCalendarDropdownActions
@@ -67284,25 +67053,22 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-lg-6 text-right" }, [
-                  _vm.jobs_status === "finished"
-                    ? _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn btn-outline-primary btn-sm pull-right",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.showAddEventForm(_vm.calendar.id)
-                            }
-                          }
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-plus" }),
-                          _vm._v(" Add event")
-                        ]
-                      )
-                    : _vm._e()
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary btn-sm pull-right",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.showAddEventForm(_vm.calendar.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-plus" }),
+                      _vm._v(" Add event")
+                    ]
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -67428,11 +67194,7 @@ var render = function() {
                         "form",
                         {
                           staticClass: "needs-validation",
-                          attrs: {
-                            id: "addCalendarEventForm",
-                            action: "/calendar-new-event",
-                            novalidate: ""
-                          },
+                          attrs: { id: "addCalendarEventForm", novalidate: "" },
                           on: { submit: _vm.addEventSubmit }
                         },
                         [

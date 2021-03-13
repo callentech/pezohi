@@ -178,6 +178,12 @@
                     } else if (response.data.code === 1) {
                         currentObj.requestSuccess = response.data.data.message;
 
+                        // Update table event data
+                        currentObj.event.started_at = currentObj.editedEventData.dateTime;
+                        currentObj.event.location = currentObj.editedEventData.location;
+                        currentObj.event.type = currentObj.editedEventData.type;
+                        currentObj.event.description = currentObj.editedEventData.description;
+
                         // Hide edit event form
                         setTimeout(function() {
                             currentObj.requestSuccess = false;

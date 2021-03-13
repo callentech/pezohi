@@ -3621,7 +3621,12 @@ __webpack_require__.r(__webpack_exports__);
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
-          currentObj.requestSuccess = response.data.data.message; // Hide edit event form
+          currentObj.requestSuccess = response.data.data.message; // Update table event data
+
+          currentObj.event.started_at = currentObj.editedEventData.dateTime;
+          currentObj.event.location = currentObj.editedEventData.location;
+          currentObj.event.type = currentObj.editedEventData.type;
+          currentObj.event.description = currentObj.editedEventData.description; // Hide edit event form
 
           setTimeout(function () {
             currentObj.requestSuccess = false;

@@ -37,7 +37,6 @@ class EventsController extends Controller
             $started_at = date_create($request->new_event_datetime);
             $ended_at = date_create($request->new_event_datetime);
 
-
             $newGoogleEvent = new Google_Service_Calendar_Event(array(
                 'summary' => 'Pezohi Event',
                 'location' => $request->new_event_address,
@@ -96,9 +95,101 @@ class EventsController extends Controller
                 ]);
             }
         }
+    }
+
+    public function editSingleEventAction(Request $request)
+    {
+        /**
+         * array(5) {
+         * ["id"]=> int(5)
+         * ["dateTime"]=> string(9) "3/11/2021"
+         * ["location"]=> string(10) "Location 2"
+         * ["type"]=> string(4) "game"
+         * ["description"]=> string(13) "Description 2" }
+         */
+
+        $request->validate([
+            'id' => 'required',
+            'dateTime' => 'required',
+            'location' => 'required',
+            'type' => 'required',
+            'description' => 'required'
+        ]);
+
+        $event = Event::find($request->id);
+        if (!$event) {
+            return response()->json([
+                'code' => 404,
+                'data' => [
+                    'message' => 'Event not found'
+                ]
+            ]);
+        }
+
+        $started_at = date_create($request->dateTime);
+        $ended_at = date_create($request->dateTime);
+
+        try {
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+            $updatedEvent = $service->events->get($event->calendar->google_id, $event->google_id);
 
 
+            $updatedEvent->start = [
+                'dateTime' => date_format($started_at, 'c'),
+                'timeZone' => config('app.timezone')
+            ];
+            $updatedEvent->end = [
+                'dateTime' => date_format($ended_at, 'c'),
+                'timeZone' => config('app.timezone')
+            ];
 
+            $updatedEvent->location = trim($request->location);
+            $updatedEvent->description = trim($request->description);
+
+            $extendedProperties = new Google_Service_Calendar_EventExtendedProperties();
+            $extendedProperties->setPrivate(['type' => $request->type]);
+            $updatedEvent->setExtendedProperties($extendedProperties);
+
+            $updatedEvent = $service->events->update($event->calendar->google_id, $updatedEvent->getId(), $updatedEvent);
+
+            // Update event data in DB
+            $event->name = $updatedEvent->summary;
+            $event->type = $updatedEvent->extendedProperties->getPrivate()['type'];
+            $event->description =$updatedEvent->description;
+            $event->location = $updatedEvent->location;
+            $event->started_at = $this->parseDatetime($updatedEvent->start);
+            $event->ended_at = $this->parseDatetime($updatedEvent->end);
+            $event->save();
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'updatedEvent' => $updatedEvent,
+                    'message' => 'Event updated successfully'
+                ]
+            ]);
+
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                ]);
+            }
+        }
+
+        exit;
     }
 
     protected function parseDatetime($dateTime): Carbon

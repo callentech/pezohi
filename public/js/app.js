@@ -3454,6 +3454,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
+/* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
+/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
 //
 //
 //
@@ -3486,8 +3492,161 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['event'],
+  components: {
+    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
+    dateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default())
+  },
+  data: function data() {
+    return {
+      showEditSingleEventForm: false,
+      editedEventData: {
+        id: null,
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      },
+      requestProcess: false,
+      requestSuccess: false,
+      requestDanger: false,
+      dateOptions: {
+        format: 'M/DD/YYYY',
+        useCurrent: true
+      }
+    };
+  },
+  computed: {
+    editedEventDataValid: function editedEventDataValid() {
+      return !(this.editedEventData.location === '' || this.editedEventData.dateTime === '' || this.editedEventData.type === 'none' || this.editedEventData.description === '');
+    }
+  },
+  methods: {
+    showEditSingleEvent: function showEditSingleEvent() {
+      this.$parent.$refs.event.forEach(function (element) {
+        element.showEditSingleEventForm = false;
+      });
+      this.showEditSingleEventForm = true;
+    },
+    hideEditSingleEvent: function hideEditSingleEvent() {
+      this.showEditSingleEventForm = false;
+    },
+    submitEditSingleEvent: function submitEditSingleEvent(event_id, event) {
+      event.preventDefault();
+      this.requestProcess = true;
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/edit-single-event', currentObj.editedEventData).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message; // Hide edit event form
+
+          setTimeout(function () {
+            currentObj.requestSuccess = false;
+            currentObj.hideEditSingleEvent();
+          }, 2000);
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (response) {
+        currentObj.requestDanger = 'Request Error';
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.event.dateTime = this.$options.filters.formatDate(this.event.started_at);
+    this.editedEventData = {
+      id: this.event.id,
+      dateTime: this.event.dateTime,
+      location: this.event.location,
+      type: this.event.type,
+      description: this.event.description
+    };
+  },
   filters: {
     formatDate: function formatDate(value) {
       var date = new Date(value);
@@ -3514,6 +3673,11 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return sliced;
+    },
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
     }
   }
 });
@@ -3547,7 +3711,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 
 Vue.component('all-calendars-component', __webpack_require__(/*! ./components/AllCalendarsComponent.vue */ "./resources/js/components/AllCalendarsComponent.vue").default);
 Vue.component('calendars-list-item-component', __webpack_require__(/*! ./components/CalendarsListItemComponent.vue */ "./resources/js/components/CalendarsListItemComponent.vue").default);
-Vue.component('calendars-list-event-component', __webpack_require__(/*! ./components/CalendarsListItemEventComponent.vue */ "./resources/js/components/CalendarsListItemEventComponent.vue").default);
+Vue.component('calendars-list-item-event-component', __webpack_require__(/*! ./components/CalendarsListItemEventComponent.vue */ "./resources/js/components/CalendarsListItemEventComponent.vue").default);
 Vue.component('add-edit-calendar-modal-component', __webpack_require__(/*! ./components/AddEditCalendarModalComponent.vue */ "./resources/js/components/AddEditCalendarModalComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -67176,7 +67340,7 @@ var render = function() {
                     return _c(
                       "div",
                       [
-                        _c("calendars-list-event-component", {
+                        _c("calendars-list-item-event-component", {
                           ref: "event",
                           refInFor: true,
                           attrs: { event: event }
@@ -67616,67 +67780,327 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card calendar-single" }, [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-2" }, [
-        _c("div", { staticClass: "data" }, [
-          _vm._v(
-            "\n                " +
-              _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
-              "\n            "
-          )
+    !_vm.showEditSingleEventForm
+      ? _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
+                  "\n            "
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
+                  " - " +
+                  _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
+                  "\n            "
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c(
+                "a",
+                {
+                  attrs: {
+                    href: "javascript:void(0)",
+                    title: _vm.event.location
+                  }
+                },
+                [_vm._v(_vm._s(_vm._f("sliceString")(_vm.event.location)))]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm._f("capitalize")(_vm.event.type)) +
+                  "\n            "
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c(
+                "a",
+                {
+                  attrs: {
+                    href: "javascript:void(0)",
+                    title: _vm.event.description
+                  }
+                },
+                [_vm._v(_vm._s(_vm._f("sliceString")(_vm.event.description)))]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data text-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "btn btn-outline-primary btn-sm pull-right btn-open",
+                  attrs: { type: "button", title: "Edit" },
+                  on: {
+                    click: function($event) {
+                      return _vm.showEditSingleEvent(_vm.event.id)
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "far fa-edit" })]
+              ),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          ])
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-2" }, [
-        _c("div", { staticClass: "data" }, [
-          _vm._v(
-            "\n                " +
-              _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
-              " - " +
-              _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
-              "\n            "
-          )
+      : _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c(
+                "div",
+                { staticClass: "input-group input-group-sm mb-3" },
+                [
+                  _c("date-picker", {
+                    attrs: {
+                      config: _vm.dateOptions,
+                      name: "new-event-datetime"
+                    },
+                    model: {
+                      value: _vm.editedEventData.dateTime,
+                      callback: function($$v) {
+                        _vm.$set(_vm.editedEventData, "dateTime", $$v)
+                      },
+                      expression: "editedEventData.dateTime"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(1)
+                ],
+                1
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.editedEventData.location,
+                    expression: "editedEventData.location"
+                  }
+                ],
+                staticClass: "form-control form-control-sm",
+                attrs: { type: "text" },
+                domProps: { value: _vm.editedEventData.location },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.editedEventData,
+                      "location",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.editedEventData.type,
+                      expression: "editedEventData.type"
+                    }
+                  ],
+                  staticClass: "form-control form-control-sm",
+                  attrs: { name: "new-event-type", required: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.editedEventData,
+                        "type",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "", disabled: "" } }, [
+                    _vm._v("Select type")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "game" } }, [_vm._v("Game")]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "practice" } }, [
+                    _vm._v("Practice")
+                  ])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.editedEventData.description,
+                    expression: "editedEventData.description"
+                  }
+                ],
+                staticClass: "form-control form-control-sm",
+                attrs: { type: "text" },
+                domProps: { value: _vm.editedEventData.description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.editedEventData,
+                      "description",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data text-right" }, [
+              _vm.requestSuccess
+                ? _c("span", { staticClass: "text-success request-success" }, [
+                    _vm._v(_vm._s(_vm.requestSuccess))
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.requestDanger
+                ? _c("span", { staticClass: "text-danger request-danger" }, [
+                    _vm._v(_vm._s(_vm.requestDanger))
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "btn btn-outline-success btn-sm pull-right btn-open",
+                  attrs: {
+                    type: "submit",
+                    title: "Save",
+                    disabled: !_vm.editedEventDataValid || _vm.requestProcess
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.submitEditSingleEvent(_vm.event.id, $event)
+                    }
+                  }
+                },
+                [_c("i", { staticClass: "far fa-save" })]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "btn btn-outline-danger btn-sm pull-right btn-open",
+                  attrs: {
+                    type: "button",
+                    title: "Cancel",
+                    disabled: _vm.requestProcess
+                  },
+                  on: { click: _vm.hideEditSingleEvent }
+                },
+                [_c("i", { staticClass: "far fa-times-circle" })]
+              )
+            ])
+          ])
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-2" }, [
-        _c("div", { staticClass: "data" }, [
-          _c(
-            "a",
-            {
-              attrs: { href: "javascript:void(0)", title: _vm.event.location }
-            },
-            [_vm._v(_vm._s(_vm._f("sliceString")(_vm.event.location)))]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-2" }, [
-        _c("div", { staticClass: "data" }, [
-          _vm._v(
-            "\n                " + _vm._s(_vm.event.name) + "\n            "
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-2" }, [
-        _c("div", { staticClass: "data" }, [
-          _c(
-            "a",
-            {
-              attrs: {
-                href: "javascript:void(0)",
-                title: _vm.event.description
-              }
-            },
-            [_vm._v(_vm._s(_vm._f("sliceString")(_vm.event.description)))]
-          )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-outline-primary btn-sm pull-right btn-open",
+        attrs: { type: "button", title: "More" }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-append" }, [
+      _c("span", { staticClass: "input-group-text" }, [
+        _c("i", { staticClass: "far fa-calendar-alt" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [
+      _c("div", { staticClass: "data" }, [
+        _c("div", { staticClass: "input-group input-group-sm mb-3" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              placeholder: "5:30 PM - 6:30 PM",
+              value: "5:30 PM - 6:30 PM"
+            }
+          })
         ])
       ])
     ])
-  ])
-}
-var staticRenderFns = []
+  }
+]
 render._withStripped = true
 
 

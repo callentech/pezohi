@@ -239,7 +239,21 @@ class CalendarsController extends Controller
                         'dateTime' => date_format($ended_at, 'c'),
                         'timeZone' => config('app.timezone')
                     ];
+
+                    $extendedProperties = new Google_Service_Calendar_EventExtendedProperties();
+                    $extendedProperties->setPrivate(['type' => $event['type']]);
+                    $updatedEvent->setExtendedProperties($extendedProperties);
                     $updatedEvent = $service->events->update($updatedGoogleCalendar->id, $updatedEvent->getId(), $updatedEvent);
+
+                    // Update event data in DB
+                    $updatedLocalEvent = Event::find($event['id']);
+                    $updatedLocalEvent->name = $updatedEvent->summary;
+                    $updatedLocalEvent->type = $updatedEvent->extendedProperties->getPrivate()['type'];
+                    $updatedLocalEvent->description =$updatedEvent->description;
+                    $updatedLocalEvent->location = $updatedEvent->location;
+                    $updatedLocalEvent->started_at = $this->parseDatetime($updatedEvent->start);
+                    $updatedLocalEvent->ended_at = $this->parseDatetime($updatedEvent->end);
+                    $updatedLocalEvent->save();
                 }
             }
 

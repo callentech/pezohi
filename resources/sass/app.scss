@@ -84,6 +84,26 @@ body #app nav.navbar .navbar-brand {
 	.calendars-list .card {
 		padding: 5px 5px 5px 10px;
 		margin-top: 10px;
+
+        .request-success {
+            float: left;
+            width: 92px;
+            text-align: center;
+            font-size: 12px;
+            border: 1px solid #5fd95f;
+            border-radius: 2px;
+            background: #e0f2e0;
+        }
+
+        .request-danger {
+            float: left;
+            width: 92px;
+            text-align: center;
+            font-size: 12px;
+            border: 1px solid #d9765f;
+            border-radius: 2px;
+            background: #f2e0e0;
+        }
 	}
 
 	.calendars-list .dropdown-calendar-actions {

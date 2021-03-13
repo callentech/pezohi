@@ -1,6 +1,6 @@
 <template>
     <div class="card calendar-single">
-        <div class="row">
+        <div v-if="!showEditSingleEventForm" class="row">
             <div class="col-2">
                 <div class="data">
                     {{ event.started_at|formatDate }}
@@ -18,7 +18,7 @@
             </div>
             <div class="col-2">
                 <div class="data">
-                    {{ event.name }}
+                    {{ event.type|capitalize }}
                 </div>
             </div>
             <div class="col-2">
@@ -26,13 +26,185 @@
                     <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
                 </div>
             </div>
+            <div class="col-2">
+                <div class="data text-right">
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+
+            </div>
         </div>
+        <div v-else class="row">
+
+            <div class="col-2">
+                <div class="data">
+                    <div class="input-group input-group-sm mb-3">
+                        <date-picker v-model="editedEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="data">
+                    <div class="input-group input-group-sm mb-3">
+                        <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM" value="5:30 PM - 6:30 PM">
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="data">
+                    <input type="text" v-model="editedEventData.location" class="form-control form-control-sm">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="data">
+                    <select v-model="editedEventData.type" name="new-event-type" class="form-control form-control-sm" required>
+                        <option value="" disabled>Select type</option>
+                        <option value="game">Game</option>
+                        <option value="practice">Practice</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="data">
+                    <input type="text" v-model="editedEventData.description" class="form-control form-control-sm">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="data text-right">
+
+                    <span v-if="requestSuccess" class="text-success request-success">{{ requestSuccess }}</span>
+                    <span v-if="requestDanger"class="text-danger request-danger">{{ requestDanger }}</span>
+
+                    <button type="submit" class="btn btn-outline-success btn-sm pull-right btn-open" title="Save"
+                            @click="submitEditSingleEvent(event.id, $event)"
+                            :disabled="!editedEventDataValid || requestProcess">
+                        <i class="far fa-save"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm pull-right btn-open" title="Cancel"
+                            @click="hideEditSingleEvent"
+                            :disabled="requestProcess">
+                        <i class="far fa-times-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </template>
 
 <script>
+
+    import datePicker from 'vue-bootstrap-datetimepicker';
+    import dateRangePicker from 'vue2-daterange-picker'
+
+    import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+    import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+
     export default {
+
         props:['event'],
+
+        components: {
+            datePicker,
+            dateRangePicker
+        },
+
+        data() {
+            return {
+                showEditSingleEventForm: false,
+
+                editedEventData: {
+                    id: null,
+                    dateTime: '',
+                    location: '',
+                    type: '',
+                    description: ''
+                },
+
+                requestProcess: false,
+                requestSuccess: false,
+                requestDanger: false,
+
+                dateOptions: {
+                    format: 'M/DD/YYYY',
+                    useCurrent: true
+                }
+            }
+        },
+
+        computed:  {
+            editedEventDataValid() {
+                return !(
+                    this.editedEventData.location === '' || this.editedEventData.dateTime === ''
+                    || this.editedEventData.type === 'none' || this.editedEventData.description === ''
+                );
+            }
+        },
+        methods: {
+            showEditSingleEvent: function() {
+                this.$parent.$refs.event.forEach((element) => {
+                    element.showEditSingleEventForm = false;
+                });
+                this.showEditSingleEventForm = true;
+            },
+            hideEditSingleEvent: function() {
+                this.showEditSingleEventForm = false;
+            },
+            submitEditSingleEvent: function(event_id, event) {
+                event.preventDefault();
+                this.requestProcess = true;
+
+                let currentObj = this;
+                // Send request
+                axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    currentObj.requestProcess = true;
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+
+                axios.post('/edit-single-event', currentObj.editedEventData)
+                .then(function(response) {
+                    if (response.data.code === 401) {
+                        document.location.href="/";
+                    } else if (response.data.code === 404) {
+                        currentObj.requestDanger = response.data.data.message;
+                    } else if (response.data.code === 1) {
+                        currentObj.requestSuccess = response.data.data.message;
+
+                        // Hide edit event form
+                        setTimeout(function() {
+                            currentObj.requestSuccess = false;
+                            currentObj.hideEditSingleEvent();
+                        }, 2000);
+                    } else {
+                        currentObj.requestDanger = 'Request Error';
+                    }
+                })
+                .catch(function(response) {
+                    currentObj.requestDanger = 'Request Error';
+                })
+                .then(function(){
+                    currentObj.requestProcess = false;
+                });
+            }
+        },
+        mounted() {
+            this.event.dateTime = this.$options.filters.formatDate(this.event.started_at);
+            this.editedEventData = {
+                id: this.event.id,
+                dateTime: this.event.dateTime,
+                location: this.event.location,
+                type: this.event.type,
+                description: this.event.description
+            };
+        },
         filters: {
             formatDate: function(value) {
                 let date = new Date(value);
@@ -59,6 +231,12 @@
                     sliced += '...';
                 }
                 return sliced;
+            },
+
+            capitalize: function (value) {
+                if (!value) return ''
+                value = value.toString()
+                return value.charAt(0).toUpperCase() + value.slice(1)
             }
         }
     }

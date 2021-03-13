@@ -129,7 +129,7 @@
 
 	            	<div class="events-list">
 						<div v-for="event in calendar.events">
-                            <calendars-list-event-component :event="event" ref="event"></calendars-list-event-component>
+                            <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
             			</div>
 	            	</div>
 

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/calendar/{google_id}', [App\Http\Controllers\CalendarController::class, 'indexAction'])->name('calendar');
+
 
 Route::get('/terms', function () { return view('welcome'); });
 
@@ -28,14 +30,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 /* Calendars Actions */
 Route::post('/new-calendar', [App\Http\Controllers\CalendarsController::class, 'addCalendarAction'])->name('addCalendar');
-Route::get('/get-calendar-data', [App\Http\Controllers\CalendarsController::class, 'getCalendarDataAction'])->name('getCalendarData');
 Route::post('/edit-calendar', [App\Http\Controllers\CalendarsController::class, 'editCalendarAction'])->name('editCalendar');
+Route::get('/get-calendar-data', [App\Http\Controllers\CalendarsController::class, 'getCalendarDataAction'])->name('getCalendarData');
+Route::post('/delete-calendar', [App\Http\Controllers\CalendarsController::class, 'deleteCalendarAction'])->name('deleteCalendar');
 
 
 /* Events Actions */
 //Route::post('/new-event', [App\Http\Controllers\EventsController::class, 'addEventAction'])->name('addEvent');
 Route::post('/new-single-event', [App\Http\Controllers\EventsController::class, 'addSingleEventAction'])->name('addSingleEvent');
 Route::post('/edit-single-event', [App\Http\Controllers\EventsController::class, 'editSingleEventAction'])->name('editSingleEvent');
+
+/* Admin */
+Route::get('/admin-home', [App\Http\Controllers\AdminController::class, 'indexAction'])->name('adminHome');
+//Route::get('/admin-users', [App\Http\Controllers\AdminController::class, 'usersAction'])->name('adminUsers');
 
 /*
 Route::post('/calendar-edit', [App\Http\Controllers\HomeController::class, 'editCalendarAction'])->name('editCalendar');

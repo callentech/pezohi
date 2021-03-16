@@ -14,7 +14,6 @@ $fa-font-path:        "../webfonts";
 @import '~@fortawesome/fontawesome-free/scss/brands';
 @import '~@fortawesome/fontawesome-free/scss/regular';
 
-
 body #app nav.navbar .navbar-brand {
 	text-transform: lowercase;
 	font-weight: 700;
@@ -49,12 +48,8 @@ body #app nav.navbar .navbar-brand {
 	.btn.active, .btn:hover {
 		background: #e4ebf4;
 		border: 1px solid #e2e9f3;
-
-		// background: #e4ebf4;
-		// border: 1px solid red;
 	}
 }
-
 
 .filter-content {
 
@@ -109,7 +104,6 @@ body #app nav.navbar .navbar-brand {
 	.calendars-list .dropdown-calendar-actions {
 		display: inline;
 		position: relative;
-
 		.items {
 			display: flex;
 		    flex-direction: column;
@@ -125,7 +119,6 @@ body #app nav.navbar .navbar-brand {
 			box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
 			border-radius: 3px;
 			width: 120px;
-
 			a {
 				text-align: left;
 				text-decoration: none;
@@ -166,9 +159,9 @@ body #app nav.navbar .navbar-brand {
     color: #949fae;
 }
 
-
 // Calendar Modal
-#addCalendarModal .modal-content .modal-header, #editCalendarModal .modal-content .modal-header {
+#addCalendarModal .modal-content .modal-header,
+#editCalendarModal .modal-content .modal-header {
 	background-color: #3490dc;
 	color: #FFF;
 
@@ -177,33 +170,19 @@ body #app nav.navbar .navbar-brand {
 	}
 }
 
+#confirmDeleteCalendarModal .modal-content .modal-header {
+    .close {
+        color: #FFFFFF;
+    }
+}
+
 #addCalendarModal .modal-bottom, #editCalendarModal .modal-bottom {
     margin-top: 15px;
 }
 
-//
-/*
-#addCalendarModal .modal-body {
-	padding-left: 3rem;
-	padding-right: 3rem;
-}
-
-#addCalendarForm input[name="event-date"] {
-	padding-left: 5px;
-	padding-right: 5px;
-}
-
-#addCalendarForm .alert {
-	width: 70%;
-	float: right;
-	margin-top: 10px;
-	text-align: center;
-}
-*/
 #addCalendarEventForm .alert {
 	text-align: center;
 }
-
 
 #addEditCalendarForm .alert {
 	margin-top: 10px;
@@ -216,10 +195,8 @@ body #app nav.navbar .navbar-brand {
 
 }
 
-
 #calendarDataTable {
 	font-size: 13px;
-
 	thead tr th.actions {
 		width: 15%;
 	}
@@ -229,9 +206,6 @@ body #app nav.navbar .navbar-brand {
 	padding-top: 0.8rem;
 }
 
-
-
-
 // Vue js transitions
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
@@ -239,8 +213,6 @@ body #app nav.navbar .navbar-brand {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
-
 
 .modal-mask {
   position: fixed;
@@ -253,7 +225,6 @@ body #app nav.navbar .navbar-brand {
   display: table;
   transition: opacity .3s ease;
 }
-
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
@@ -261,4 +232,74 @@ body #app nav.navbar .navbar-brand {
 
 .message-modal .modal-body input {
 	width: 100%;
+}
+
+/* Frontend styles */
+.frontend-main-content {
+
+    .container {
+        max-width: 100%;
+    }
+
+
+    #top-nav {
+        .btn {
+            margin-right: 10px;
+        }
+    }
+
+    .header {
+        background: rgb(70,140,228);
+        background: linear-gradient(90deg, rgba(70,140,228,1) 0%, rgba(10,70,178,1) 100%);
+        color: #FFFFFF;
+        font-size: 18px;
+        font-weight: 700;
+
+
+
+
+        .title {
+
+            img {
+                width: 25px;
+            }
+
+            .text {
+                margin-left: 10px;
+            }
+
+        }
+
+        .description {
+
+            font-size: 13px;
+            margin-top: 10px;
+
+            .fa-circle {
+                font-size: 5px;
+                vertical-align: middle;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+        }
+
+        .actions {
+            //margin-top: 10px;
+        }
+
+    }
+
+    .content {
+
+        .calendar-events-table {
+
+            .sort-link {
+
+                i {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
 }

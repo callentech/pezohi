@@ -89,38 +89,46 @@
 	            		<div class="row">
 
 	            			<div class="col-2">
-	            				<a href="#" class="sort-link">
-                                	Date <i class="fas fa-sort-amount-down-alt float-right"></i>
+	            				<a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDate">
+                                	Date
+                                    <i v-if="sortByDateDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </div>
 
                             <div class="col-2">
-                            	<a href="#" class="sort-link">
-                                	Time <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            	<a href="javascript:void(0)" class="sort-link">
+                                	Time
                                 </a>
                             </div>
 
                             <div class="col-2">
-                            	<a href="#" class="sort-link">
-	                                Address <i class="fas fa-sort-amount-down-alt float-right"></i>
+                            	<a href="javascript:void(0)" class="sort-link" @click="sortEventsListByLocation">
+	                                Address
+                                    <i v-if="sortByLocationDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
 	                            </a>
 	                        </div>
 
 	                        <div class="col-2">
-	                        	<a href="#" class="sort-link">
-                                    Event <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                <a href="javascript:void(0)" class="sort-link" @click="sortEventsListByType">
+                                    Event
+                                    <i v-if="sortByTypeDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </div>
 
                             <div class="col-2">
-	                        	<a href="#" class="sort-link">
-                                    Notes <i class="fas fa-sort-amount-down-alt float-right"></i>
+                                <a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDescription">
+                                    Notes
+                                    <i v-if="sortByDescriptionDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </div>
 
                             <div class="col-2">
-	                        	<a href="#" class="sort-link">
-                                    Actions <i class="fas fa-sort-amount-down-alt float-right"></i>
+	                        	<a href="javascript:void(0)" class="sort-link">
+                                    Actions
                                 </a>
                             </div>
 
@@ -128,9 +136,13 @@
 	            	</div>
 
 	            	<div class="events-list">
-						<div v-for="event in calendar.events">
+<!--						<div v-for="event in calendar.events">-->
+<!--                            <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>-->
+<!--            			</div>-->
+                        <div v-for="event in sortedEvents">
                             <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
-            			</div>
+                        </div>
+
 	            	</div>
 
 				  		<div class="card-footer" v-if="showNewEventDataForm">
@@ -207,7 +219,7 @@
 		</transition>
 
 		<!-- Share Calendar Message modal -->
-		<div v-if="showIinfoModal">
+		<div v-if="showInfoModal">
 			<transition name="modal">
 				<div class="modal-mask">
 	        		<div class="modal-wrapper">
@@ -216,14 +228,14 @@
 				    			<div class="modal-content">
 				      				<div class="modal-header">
 				       	 				<h5 class="modal-title">Information</h5>
-								        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="infoModalText='', showIinfoModal=false">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="infoModalText='', showInfoModal=false">
 								          <span aria-hidden="true">&times;</span>
 								        </button>
 								    </div>
 								    <div v-html="infoModalHtml" class="modal-body">
 								    </div>
 								    <div class="modal-footer">
-								    	<button type="button" class="btn btn-secondary" @click="infoModalText='', showIinfoModal=false">Close</button>
+								    	<button type="button" class="btn btn-secondary" @click="infoModalText='', showInfoModal=false">Close</button>
 								    </div>
 				    			</div>
 				  			</div>
@@ -244,13 +256,13 @@
 
 <script>
 
-	import datePicker from 'vue-bootstrap-datetimepicker';
-	import DateRangePicker from 'vue2-daterange-picker'
+import datePicker from 'vue-bootstrap-datetimepicker';
+import DateRangePicker from 'vue2-daterange-picker'
 
-	import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-	import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
-	//import VueGoogleAutocomplete from 'vue-google-autocomplete'
+//import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 	export default {
 
@@ -291,8 +303,15 @@
 				input: null,
 				address: '',
 
-				showIinfoModal: false,
-				infoModalHtml: ''
+                showInfoModal: false,
+				infoModalHtml: '',
+
+                sortByDateDirection: 'desc',
+                sortByLocationDirection: 'desc',
+                sortByTypeDirection: 'desc',
+                sortByDescriptionDirection: 'desc',
+
+                sortedEvents: []
 			}
 		},
 
@@ -341,16 +360,10 @@
                 this.$root.$refs.addEditCalendarModal.showEditCalendarModalAction(id);
             },
 
-			// showAddEditCalendarModal: function(id) {
-			// 	this.showBody = false;
-			// 	this.showCalendarDropdownActions = false;
-			// 	this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction(id);
-			// },
-
 			showDuplicateCalendarModal: function(id) {
 				this.showBody = false;
 				this.showCalendarDropdownActions = false;
-				this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModal(id);
+				this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModalAction(id);
 			},
 
 			showAddEventForm: function(calendar_id) {
@@ -366,7 +379,7 @@
 			showConfirmCalendarDelete: function(id) {
 				this.showBody = false;
 				this.showCalendarDropdownActions = false;
-				this.$root.$refs.allCalendars.showConfirmCalendarDelete(id);
+				this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
             },
 
             addEventSubmit: function(event) {
@@ -462,7 +475,7 @@
 				document.body.removeChild(input_temp);
 
 				this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
-				this.showIinfoModal = true;
+				this.showInfoModal = true;
 			},
 
 			/**
@@ -474,6 +487,34 @@
             // getAddressData: function (addressData, placeResultData, id) {
             //     this.address = addressData;
             // }
+
+            // Sort events list methods
+            // sortCalendarsListBySummary: function() {
+            //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
+            //     this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
+            //     this.sortBySummaryDirection = direction;
+            // },
+            sortEventsListByDate: function() {
+                this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
+                this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
+            },
+            sortEventsListByLocation: function() {
+                this.sortByLocationDirection = this.sortByLocationDirection === 'desc' ? 'asc' : 'desc';
+                this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByLocationDirection);
+            },
+            sortEventsListByType: function() {
+                this.sortByTypeDirection = this.sortByTypeDirection === 'desc' ? 'asc' : 'desc';
+                this.sortedEvents = this.sortArray(this.calendar.events, 'type', this.sortByTypeDirection);
+            },
+            sortEventsListByDescription: function() {
+                this.sortByDescriptionDirection = this.sortByDescriptionDirection === 'desc' ? 'asc' : 'desc';
+                this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByDescriptionDirection);
+            },
+
+            sortArray: function(array, field, direction) {
+                return _.orderBy(array, field, direction);
+            },
+
 
 		},
 
@@ -529,7 +570,7 @@
 		},
 
 		mounted() {
-            this.formRequestProcess = true;
+            this.sortEventsListByDate();
 		}
 
 	}

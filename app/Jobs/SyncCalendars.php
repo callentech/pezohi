@@ -129,6 +129,7 @@ class SyncCalendars implements ShouldQueue
                                 'type' => $googleEvent->extendedProperties->getPrivate()['type'],
                                 'description' => $googleEvent->description,
                                 'location' => $googleEvent->location,
+                                'status' => $googleEvent->status,
                                 'allday' => 0,
                                 'started_at' => $this->parseDatetime($googleEvent->start),
                                 'ended_at' => $this->parseDatetime($googleEvent->end)

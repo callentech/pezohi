@@ -2200,6 +2200,176 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2210,6 +2380,7 @@ __webpack_require__.r(__webpack_exports__);
       owner_email_address: '',
       showAddCalendarModal: false,
       showEditCalendarModal: false,
+      showDuplicateCalendarModal: false,
       formRequestProcess: false,
       showNewEventDataForm: false,
       requestSuccess: false,
@@ -2453,224 +2624,73 @@ __webpack_require__.r(__webpack_exports__);
       };
       this.showNewEventDataForm = true;
     },
-    //
-    //
-    // showDuplicateCalendarModal: function(id) {
-    //
-    // 	// let currentObj = this;
-    // 	// axios.post('/calendar-get-data', { calendar_id: id })
-    // 	// .then(function (response) {
-    // 	// 	currentObj.modal_title = 'Duplicate Calendar';
-    //     //
-    // 	// 	if (response.data.code == 1) {
-    // 	// 		currentObj.form_action = '/calendar-new';
-    // 	// 		currentObj.calendar_name = response.data.data.calendarData.summary;
-    // 	// 		currentObj.calendar_events = response.data.data.calendarEvents;
-    // 	// 	} else {
-    // 	// 		currentObj.requestDanger = 'Error Request';
-    // 	// 	}
-    // 	// 	jQuery('#addCalendarModal').modal('show');
-    // 	// })
-    // 	// .catch(function (error) {
-    // 	// 	currentObj.requestDanger = 'Error Request';
-    // 	// })
-    // 	// .then(function() {
-    //     //
-    // 	// });
-    //
-    // },
-    //
-    // addCalendarResetForm: function() {
-    // 	this.owner_email_address = '';
-    // 	this.calendar_name = '';
-    // 	this.calendar_events = [];
-    // },
+    showDuplicateCalendarModalAction: function showDuplicateCalendarModalAction(id) {
+      var currentObj = this;
+      axios.get('/get-calendar-data?calendar_id=' + id).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 1) {
+          currentObj.current_calendar = response.data.data.calendarData;
+          currentObj.showDuplicateCalendarModal = true;
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (response) {
+        currentObj.requestDanger = 'Request Error';
+      }).then(function () {});
+    },
+    hideDuplicateCalendarModalAction: function hideDuplicateCalendarModalAction() {
+      this.requestDanger = false;
+      this.requestSuccess = false;
+      this.calendar_name = '';
+      this.calendar_events = [];
+      this.showDuplicateCalendarModal = false;
+    },
+    duplicateCalendarSubmit: function duplicateCalendarSubmit(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var currentObj = this;
+      var form = document.getElementById('duplicateCalendarForm');
 
-    /*
-    			editCalendarSubmit: function(event) {
-    
-    				// event.preventDefault();
-    				// event.stopPropagation();
-                    //
-    				// this.requestSuccess = false;
-    				// this.requestDanger = false;
-                    //
-    				// let currentObj = this;
-    				// let form = event.target;
-                    //
-    				// if (form.checkValidity() === false) {
-    				// 	form.classList.add('was-validated');
-    				// } else {
-                    //
-    				// 	let url = event.target.action;
-                    //
-    				// 	let formData = new FormData(form);
-    				// 	formData.append('events', JSON.stringify(currentObj.calendar_events.items));
-                    //
-    				// 	axios.interceptors.request.use(function (config) {
-    				// 	    // Do something before request is sent
-    				// 	    currentObj.formRequestProcess = true;
-    				// 	    return config;
-    				// 	}, function (error) {
-    				// 	    // Do something with request error
-    				// 	    return Promise.reject(error);
-    				// 	});
-                    //
-    				// 	axios.post(url, formData)
-    				// 	.then(function(response) {
-    				// 		if (response.data.code == 1) {
-    				// 			currentObj.requestSuccess = response.data.data.message;
-    				// 			setTimeout(function() {
-    				// 				currentObj.requestSuccess = false;
-    				// 				jQuery('#addEditCalendarModal').modal('hide');
-    				// 				location.reload();
-    				// 			}, 2000);
-    				// 		} else {
-    				// 			currentObj.requestDanger = 'Request Error';
-    				// 		}
-    				// 	})
-    				// 	.catch(function (error) {
-                    //
-    				// 		if (error.response && error.response.status == 422) {
-    				// 			currentObj.requestDanger = error.response.data.message;
-    				// 			form.classList.add('was-validated');
-    				// 		} else {
-    				// 			currentObj.requestDanger = 'Request Error';
-    				// 		}
-                    //
-    				// 	})
-    				// 	.then(function() {
-    				// 		currentObj.formRequestProcess = false;
-    				// 	});
-                    //
-    				// }
-    
-    			},
-    */
-    addNewCalendarSubmit: function addNewCalendarSubmit(event) {// event.preventDefault();
-      // event.stopPropagation();
-      // console.log('addNewCalendarSubmit');
-      //
-      // let currentObj = this;
-      // let form = event.target;
-      //
-      // if (form.checkValidity() === false) {
-      // 	form.classList.add('was-validated');
-      // } else {
-      //
-      // 	let url = event.target.action;
-      //
-      // 	let formData = new FormData(form);
-      //
-      // 	console.log(currentObj.calendar_events.items);
-      //
-      // 	formData.append('events', JSON.stringify(currentObj.calendar_events.items));
-      //
-      // 	axios.interceptors.request.use(function (config) {
-      // 	    // Do something before request is sent
-      // 	    currentObj.formRequestProcess = true;
-      // 	    return config;
-      // 	}, function (error) {
-      // 	    // Do something with request error
-      // 	    return Promise.reject(error);
-      // 	});
-      //
-      // 	axios.post(url, formData)
-      // 	.then(function(response) {
-      // 		if (response.data.code == 1) {
-      // 			currentObj.requestSuccess = response.data.data.message;
-      //
-      // 			setTimeout(function() {
-      // 				currentObj.requestSuccess = false;
-      // 				jQuery('#addCalendarModal').modal('hide');
-      // 				currentObj.addCalendarResetForm();
-      // 				location.reload();
-      // 			}, 2000);
-      // 		} else {
-      // 			currentObj.requestDanger = 'Request Error';
-      // 		}
-      // 	})
-      // 	.catch(function (error) {
-      //
-      // 		if (error.response && error.response.status == 422) {
-      // 			currentObj.requestDanger = error.response.data.message;
-      // 			form.classList.add('was-validated');
-      // 		} else {
-      // 			currentObj.requestDanger = 'Request Error';
-      // 		}
-      //
-      // 	})
-      // 	.then(function() {
-      // 		currentObj.formRequestProcess = false;
-      // 	});
-    } //
-    // addEditCalendarEvent: function(event) {
-    // 	// event.preventDefault();
-    // 	// event.stopPropagation();
-    //     //
-    // 	// let currentObj = this;
-    //     //
-    // 	// let dateArray = currentObj.newEventData.dateTime.split('.');
-    // 	// let dateTime = new Date(dateArray[2], dateArray[1]-1, dateArray[0]);
-    //     //
-    // 	// let newEvent = {
-    // 	// 	id: 'new',
-    // 	// 	start:  {
-    // 	// 		dateTime: dateTime
-    // 	// 	},
-    // 	// 	location: currentObj.newEventData.address,
-    // 	// 	extendedProperties: {
-    // 	// 		private: {
-    // 	// 			type: currentObj.newEventData.type
-    // 	// 		}
-    // 	// 	},
-    // 	// 	description: currentObj.newEventData.notes
-    // 	// };
-    //     //
-    // 	// currentObj.calendar_events.items.push(newEvent);
-    //     //
-    // 	// // Reset add event form
-    // 	// currentObj.newEventData.dateTime = '';
-    // 	// currentObj.newEventData.address = '';
-    // 	// currentObj.newEventData.type = '';
-    // 	// currentObj.newEventData.notes = '';
-    // },
-    //
-    // addNewCalendarEvent: function(event) {
-    // 	// event.preventDefault();
-    // 	// event.stopPropagation();
-    // 	// console.log('addNewCalendarEvent');
-    //     //
-    // 	// let currentObj = this;
-    //     //
-    // 	// let dateArray = currentObj.newEventData.dateTime.split('.');
-    // 	// let dateTime = new Date(dateArray[2], dateArray[1]-1, dateArray[0]);
-    //     //
-    // 	// let newEvent = {
-    // 	// 	id: 'new',
-    // 	// 	start:  {
-    // 	// 		dateTime: dateTime
-    // 	// 	},
-    // 	// 	location: currentObj.newEventData.address,
-    // 	// 	extendedProperties: {
-    // 	// 		private: {
-    // 	// 			type: currentObj.newEventData.type
-    // 	// 		}
-    // 	// 	},
-    // 	// 	description: currentObj.newEventData.notes
-    // 	// };
-    //     //
-    // 	// let items = currentObj.calendar_events.items ? currentObj.calendar_events.items : [];
-    // 	// currentObj.calendar_events.items = items;
-    // 	// currentObj.calendar_events.items.push(newEvent);
-    //     //
-    // 	// // Reset add event form
-    // 	// currentObj.newEventData.dateTime = '';
-    // 	// currentObj.newEventData.address = '';
-    // 	// currentObj.newEventData.type = '';
-    // 	// currentObj.newEventData.notes = '';
-    // }
+      if (form.checkValidity() === false) {
+        form.classList.add('was-validated');
+        return false;
+      } // Send request
 
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.formRequestProcess = true;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      var formData = new FormData(form); // formData.append('events', JSON.stringify(currentObj.new_calendar.events));
+
+      formData.append('events', JSON.stringify(currentObj.current_calendar.events));
+      axios.post('/new-calendar', formData).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          setTimeout(function () {
+            currentObj.requestSuccess = false;
+            currentObj.showAddCalendarModal = false;
+            currentObj.owner_email_address = '';
+            currentObj.calendar_name = '';
+            currentObj.calendar_events = [];
+            location.reload();
+          }, 2000);
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (response) {
+        currentObj.requestDanger = 'Request Error';
+      }).then(function () {
+        currentObj.formRequestProcess = false;
+      });
+    }
   },
   mounted: function mounted() {
     this.csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -2835,6 +2855,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'jobs_status'],
   data: function data() {
@@ -2861,7 +2924,8 @@ __webpack_require__.r(__webpack_exports__);
       sortBySummaryDirection: 'asc',
       sortByEventsDirection: 'asc',
       sortByOwnerDirection: 'asc',
-      sortByUpdatedDirection: 'asc'
+      sortByUpdatedDirection: 'asc',
+      showConfirmDeleteCalendarModal: false
     };
   },
   created: function created() {
@@ -2877,9 +2941,13 @@ __webpack_require__.r(__webpack_exports__);
     showAddCalendarModal: function showAddCalendarModal() {
       this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction();
     },
-    showConfirmCalendarDelete: function showConfirmCalendarDelete(id) {
-      this.delete_calendar_id = id;
-      jQuery('#confirmCalendarDelete').modal('show');
+    showConfirmCalendarDeleteModal: function showConfirmCalendarDeleteModal(id) {
+      this.delete_calendar_id = id; // jQuery('#confirmCalendarDelete').modal('show');
+
+      this.showConfirmDeleteCalendarModal = true;
+    },
+    hideConfirmCalendarDeleteModal: function hideConfirmCalendarDeleteModal() {
+      this.showConfirmDeleteCalendarModal = false;
     },
     deleteCalendar: function deleteCalendar(id) {
       var currentObj = this;
@@ -2891,23 +2959,33 @@ __webpack_require__.r(__webpack_exports__);
         // Do something with request error
         return Promise.reject(error);
       });
-      axios.post('/calendar-delete', {
+      axios.post('/delete-calendar', {
         calendar_id: id
       }).then(function (response) {
-        if (response.data.code == 1) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message;
-          setTimeout(function () {
-            location.reload();
-          }, 1000);
+          currentObj.requestSuccess = false;
+          currentObj.delete_calendar_id = ''; // Remove calendar from list
+
+          currentObj.calendars.map(function (item, key) {
+            if (item.id === id) {
+              currentObj.calendars.splice(key, 1);
+              currentObj.sortByUpdatedDirection = 'asc';
+              currentObj.sortCalendarsListByUpdated();
+            }
+          });
         } else {
-          currentObj.requestDanger = 'Error Request';
+          currentObj.requestDanger = 'Request Error';
         }
       })["catch"](function (error) {
-        console.log(error);
         currentObj.requestDanger = 'Error Request';
       }).then(function () {
         currentObj.requestProcess = false;
-        jQuery('#confirmCalendarDelete').modal('hide');
+        currentObj.showConfirmDeleteCalendarModal = false;
       });
     },
     sortArray: function sortArray(array, field, direction) {
@@ -2915,22 +2993,22 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Sort calendar list methods
     sortCalendarsListBySummary: function sortCalendarsListBySummary() {
-      var direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
+      var direction = this.sortBySummaryDirection === 'desc' ? 'asc' : 'desc';
       this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
       this.sortBySummaryDirection = direction;
     },
     sortCalendarsListByEvents: function sortCalendarsListByEvents() {
-      var direction = this.sortByEventsDirection == 'desc' ? 'asc' : 'desc';
+      var direction = this.sortByEventsDirection === 'desc' ? 'asc' : 'desc';
       this.sortedCalendars = this.sortArray(this.calendars, 'eventsCount', direction);
       this.sortByEventsDirection = direction;
     },
     sortCalendarsListByOwner: function sortCalendarsListByOwner() {
-      var direction = this.sortByOwnerDirection == 'desc' ? 'asc' : 'desc';
+      var direction = this.sortByOwnerDirection === 'desc' ? 'asc' : 'desc';
       this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
       this.sortByOwnerDirection = direction;
     },
     sortCalendarsListByUpdated: function sortCalendarsListByUpdated() {
-      var direction = this.sortByUpdatedDirection == 'desc' ? 'asc' : 'desc';
+      var direction = this.sortByUpdatedDirection === 'desc' ? 'asc' : 'desc';
       this.sortedCalendars = this.sortArray(this.calendars, 'updated_at', direction);
       this.sortByUpdatedDirection = direction;
     }
@@ -2959,6 +3037,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3237,8 +3327,13 @@ __webpack_require__.r(__webpack_exports__);
       datePicker: null,
       input: null,
       address: '',
-      showIinfoModal: false,
-      infoModalHtml: ''
+      showInfoModal: false,
+      infoModalHtml: '',
+      sortByDateDirection: 'desc',
+      sortByLocationDirection: 'desc',
+      sortByTypeDirection: 'desc',
+      sortByDescriptionDirection: 'desc',
+      sortedEvents: []
     };
   },
   computed: {
@@ -3278,15 +3373,10 @@ __webpack_require__.r(__webpack_exports__);
       this.showCalendarDropdownActions = false;
       this.$root.$refs.addEditCalendarModal.showEditCalendarModalAction(id);
     },
-    // showAddEditCalendarModal: function(id) {
-    // 	this.showBody = false;
-    // 	this.showCalendarDropdownActions = false;
-    // 	this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction(id);
-    // },
     showDuplicateCalendarModal: function showDuplicateCalendarModal(id) {
       this.showBody = false;
       this.showCalendarDropdownActions = false;
-      this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModal(id);
+      this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModalAction(id);
     },
     showAddEventForm: function showAddEventForm(calendar_id) {
       this.calendar_id = calendar_id;
@@ -3299,7 +3389,7 @@ __webpack_require__.r(__webpack_exports__);
     showConfirmCalendarDelete: function showConfirmCalendarDelete(id) {
       this.showBody = false;
       this.showCalendarDropdownActions = false;
-      this.$root.$refs.allCalendars.showConfirmCalendarDelete(id);
+      this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
     },
     addEventSubmit: function addEventSubmit(event) {
       event.preventDefault();
@@ -3377,8 +3467,9 @@ __webpack_require__.r(__webpack_exports__);
       document.execCommand('copy');
       document.body.removeChild(input_temp);
       this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="' + url + '" readonly>';
-      this.showIinfoModal = true;
-    }
+      this.showInfoModal = true;
+    },
+
     /**
              * When the location found
              * @param {Object} addressData Data of the found location
@@ -3388,7 +3479,31 @@ __webpack_require__.r(__webpack_exports__);
     // getAddressData: function (addressData, placeResultData, id) {
     //     this.address = addressData;
     // }
-
+    // Sort events list methods
+    // sortCalendarsListBySummary: function() {
+    //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
+    //     this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
+    //     this.sortBySummaryDirection = direction;
+    // },
+    sortEventsListByDate: function sortEventsListByDate() {
+      this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
+    },
+    sortEventsListByLocation: function sortEventsListByLocation() {
+      this.sortByLocationDirection = this.sortByLocationDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByLocationDirection);
+    },
+    sortEventsListByType: function sortEventsListByType() {
+      this.sortByTypeDirection = this.sortByTypeDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'type', this.sortByTypeDirection);
+    },
+    sortEventsListByDescription: function sortEventsListByDescription() {
+      this.sortByDescriptionDirection = this.sortByDescriptionDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByDescriptionDirection);
+    },
+    sortArray: function sortArray(array, field, direction) {
+      return _.orderBy(array, field, direction);
+    }
   },
   filters: {
     capitalize: function capitalize(value) {
@@ -3437,7 +3552,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.formRequestProcess = true;
+    this.sortEventsListByDate();
   }
 });
 
@@ -3689,6 +3804,1211 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['data', 'jobs_status'],
+  data: function data() {
+    return {
+      calendars: this.data,
+      sortedCalendars: [],
+      calendarsTypesFilters: [{
+        title: 'All calendars',
+        val: 'all',
+        active: true
+      }, {
+        title: 'Owned by me',
+        val: 'owned',
+        active: false
+      }, {
+        title: 'Shared with me',
+        val: 'shared',
+        active: false
+      }],
+      requestDanger: false,
+      requestSuccess: false,
+      requestProcess: false,
+      delete_calendar_id: '',
+      sortBySummaryDirection: 'asc',
+      sortByEventsDirection: 'asc',
+      sortByOwnerDirection: 'asc',
+      sortByUpdatedDirection: 'asc',
+      showConfirmDeleteCalendarModal: false
+    };
+  },
+  created: function created() {
+    this.$root.$refs.allCalendars = this;
+  },
+  methods: {
+    applyCalendarsTypeFilter: function applyCalendarsTypeFilter(typeFilter) {
+      this.calendarsTypesFilters.forEach(function (typeFilter) {
+        typeFilter.active = false;
+      });
+      typeFilter.active = true;
+    },
+    showAddCalendarModal: function showAddCalendarModal() {
+      this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction();
+    },
+    showConfirmCalendarDeleteModal: function showConfirmCalendarDeleteModal(id) {
+      this.delete_calendar_id = id; // jQuery('#confirmCalendarDelete').modal('show');
+
+      this.showConfirmDeleteCalendarModal = true;
+    },
+    hideConfirmCalendarDeleteModal: function hideConfirmCalendarDeleteModal() {
+      this.showConfirmDeleteCalendarModal = false;
+    },
+    deleteCalendar: function deleteCalendar(id) {
+      var currentObj = this;
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/delete-calendar', {
+        calendar_id: id
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          currentObj.requestSuccess = false;
+          currentObj.delete_calendar_id = ''; // Remove calendar from list
+
+          currentObj.calendars.map(function (item, key) {
+            if (item.id === id) {
+              currentObj.calendars.splice(key, 1);
+              currentObj.sortByUpdatedDirection = 'asc';
+              currentObj.sortCalendarsListByUpdated();
+            }
+          });
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (error) {
+        currentObj.requestDanger = 'Error Request';
+      }).then(function () {
+        currentObj.requestProcess = false;
+        currentObj.showConfirmDeleteCalendarModal = false;
+      });
+    },
+    sortArray: function sortArray(array, field, direction) {
+      return _.orderBy(array, field, direction);
+    },
+    // Sort calendar list methods
+    sortCalendarsListBySummary: function sortCalendarsListBySummary() {
+      var direction = this.sortBySummaryDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
+      this.sortBySummaryDirection = direction;
+    },
+    sortCalendarsListByEvents: function sortCalendarsListByEvents() {
+      var direction = this.sortByEventsDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedCalendars = this.sortArray(this.calendars, 'eventsCount', direction);
+      this.sortByEventsDirection = direction;
+    },
+    sortCalendarsListByOwner: function sortCalendarsListByOwner() {
+      var direction = this.sortByOwnerDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
+      this.sortByOwnerDirection = direction;
+    },
+    sortCalendarsListByUpdated: function sortCalendarsListByUpdated() {
+      var direction = this.sortByUpdatedDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedCalendars = this.sortArray(this.calendars, 'updated_at', direction);
+      this.sortByUpdatedDirection = direction;
+    }
+  },
+  mounted: function mounted() {
+    this.sortCalendarsListByUpdated();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
+/* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
+/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+ //import VueGoogleAutocomplete from 'vue-google-autocomplete'
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['calendar', 'jobs_status'],
+  components: {
+    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
+    DateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default()) //VueGoogleAutocomplete
+
+  },
+  data: function data() {
+    return {
+      showBody: false,
+      showCalendarDropdownActions: false,
+      showNewEventDataForm: false,
+      dateOptions: {
+        format: 'DD.MM.YYYY',
+        useCurrent: true
+      },
+      requestProcess: false,
+      requestDanger: false,
+      requestSuccess: false,
+      newEventData: {
+        dateTime: '',
+        address: '',
+        type: '',
+        notes: ''
+      },
+      calendar_id: null,
+      datePicker: null,
+      input: null,
+      address: '',
+      showInfoModal: false,
+      infoModalHtml: '',
+      sortByDateDirection: 'desc',
+      sortByLocationDirection: 'desc',
+      sortByTypeDirection: 'desc',
+      sortByDescriptionDirection: 'desc',
+      sortedEvents: []
+    };
+  },
+  computed: {
+    newEventDataValid: function newEventDataValid() {
+      return !(this.newEventData.address === '' || this.newEventData.dateTime === '' || this.newEventData.type === 'none' || this.newEventData.notes === '');
+    }
+  },
+  methods: {
+    toggleCalendarDataForm: function toggleCalendarDataForm() {
+      if (this.showBody) {
+        this.showBody = !this.showBody;
+      } else {
+        this.$parent.$refs.calendar.forEach(function (element) {
+          element.showBody = false;
+          element.showNewEventDataForm = false;
+          element.showCalendarDropdownActions = false;
+        });
+        this.showBody = !this.showBody;
+      }
+    },
+    toggleCalendarDropdownActions: function toggleCalendarDropdownActions() {
+      if (this.showCalendarDropdownActions) {
+        this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
+        this.showBody = false;
+        this.showNewEventDataForm = false;
+      } else {
+        this.$parent.$refs.calendar.forEach(function (element) {
+          element.showCalendarDropdownActions = false;
+          element.showBody = false;
+          element.showNewEventDataForm = false;
+        });
+        this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
+      }
+    },
+    showEditCalendarModalAction: function showEditCalendarModalAction(id) {
+      this.showBody = false;
+      this.showCalendarDropdownActions = false;
+      this.$root.$refs.addEditCalendarModal.showEditCalendarModalAction(id);
+    },
+    showDuplicateCalendarModal: function showDuplicateCalendarModal(id) {
+      this.showBody = false;
+      this.showCalendarDropdownActions = false;
+      this.$root.$refs.addEditCalendarModal.showDuplicateCalendarModalAction(id);
+    },
+    showAddEventForm: function showAddEventForm(calendar_id) {
+      this.calendar_id = calendar_id;
+      this.showNewEventDataForm = true;
+    },
+    hideAddEventForm: function hideAddEventForm() {
+      this.calendar_id = null;
+      this.showNewEventDataForm = false;
+    },
+    showConfirmCalendarDelete: function showConfirmCalendarDelete(id) {
+      this.showBody = false;
+      this.showCalendarDropdownActions = false;
+      this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
+    },
+    addEventSubmit: function addEventSubmit(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var currentObj = this;
+      var dateArray = currentObj.newEventData.dateTime.split('.');
+      var dateTime = new Date(dateArray[2], dateArray[1] - 1, dateArray[0]);
+      var newEvent = {
+        id: 'new',
+        start: {
+          dateTime: dateTime
+        },
+        location: currentObj.newEventData.address,
+        extendedProperties: {
+          "private": {
+            type: currentObj.newEventData.type
+          }
+        },
+        description: currentObj.newEventData.notes
+      }; //currentObj.calendar_events.items.push(newEvent);
+
+      var formData = new FormData();
+      formData.append('calendar_id', currentObj.calendar_id);
+      formData.append('new_event_datetime', currentObj.newEventData.dateTime);
+      formData.append('new_event_address', currentObj.newEventData.address);
+      formData.append('new_event_type', currentObj.newEventData.type);
+      formData.append('new_event_notes', currentObj.newEventData.notes);
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      var url = '/new-single-event';
+      axios.post(url, formData).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          currentObj.calendar.events.push(response.data.data.event); // Reset New event form
+
+          currentObj.newEventData.dateTime = '';
+          currentObj.newEventData.address = '';
+          currentObj.newEventData.type = '';
+          currentObj.newEventData.notes = '';
+          setTimeout(function () {
+            currentObj.requestSuccess = false;
+            location.reload();
+          }, 2000);
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (error) {
+        if (error.response && error.response.status === 422) {
+          currentObj.requestDanger = error.response.data.message;
+          form.classList.add('was-validated');
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
+    shareCalendar: function shareCalendar(url) {
+      console.log(url);
+      var input_temp = document.createElement('textarea');
+      input_temp.innerHTML = url;
+      document.body.appendChild(input_temp);
+      input_temp.select();
+      input_temp.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.body.removeChild(input_temp);
+      this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="' + url + '" readonly>';
+      this.showInfoModal = true;
+    },
+
+    /**
+     * When the location found
+     * @param {Object} addressData Data of the found location
+     * @param {Object} placeResultData PlaceResult object
+     * @param {String} id Input container ID
+     */
+    // getAddressData: function (addressData, placeResultData, id) {
+    //     this.address = addressData;
+    // }
+    // Sort events list methods
+    // sortCalendarsListBySummary: function() {
+    //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
+    //     this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
+    //     this.sortBySummaryDirection = direction;
+    // },
+    sortEventsListByDate: function sortEventsListByDate() {
+      this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
+    },
+    sortEventsListByLocation: function sortEventsListByLocation() {
+      this.sortByLocationDirection = this.sortByLocationDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByLocationDirection);
+    },
+    sortEventsListByType: function sortEventsListByType() {
+      this.sortByTypeDirection = this.sortByTypeDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'type', this.sortByTypeDirection);
+    },
+    sortEventsListByDescription: function sortEventsListByDescription() {
+      this.sortByDescriptionDirection = this.sortByDescriptionDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByDescriptionDirection);
+    },
+    sortArray: function sortArray(array, field, direction) {
+      return _.orderBy(array, field, direction);
+    }
+  },
+  filters: {
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    formatDate: function formatDate(value) {
+      var today = new Date();
+      var date = new Date(value);
+      var outputDate = '';
+      var fromDate = parseInt(date.getTime() / 1000);
+      var toDate = parseInt(today.getTime() / 1000);
+      var timeDiff = Math.ceil((toDate - fromDate) / 3600);
+      var dateHours = date.getHours();
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+      var dateMinutes = date.getMinutes();
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+
+      if (timeDiff <= 1) {
+        var fromDateMinutes = parseInt(date.getTime() / 1000 * 60);
+        var toDateMinutes = parseInt(today.getTime() / 1000 * 60);
+        var minutesDiff = Math.ceil((toDateMinutes - fromDateMinutes) / 3600);
+
+        if (minutesDiff <= 1) {
+          outputDate = minutesDiff + ' minute ago';
+        } else {
+          outputDate = minutesDiff + ' minutes ago';
+        }
+      } else if (timeDiff == 1) {
+        outputDate = timeDiff + ' hour ago';
+      } else if (timeDiff <= 24) {
+        outputDate = timeDiff + ' hours ago';
+      } else if (timeDiff < 48) {
+        outputDate = 'Yesterday, ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
+      } else if (timeDiff > 48) {
+        var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate(); //let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
+        //outputDate = day + '.' + month + '.' + date.getFullYear();
+
+        outputDate = date.getMonth() + 1 + '/' + day + '/' + date.getFullYear();
+      }
+
+      return outputDate;
+    }
+  },
+  mounted: function mounted() {
+    this.sortEventsListByDate();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['data'],
+  data: function data() {
+    return {
+      users: this.data,
+      requestDanger: '',
+      requestSuccess: '',
+      sortByNameDirection: 'desc'
+    };
+  },
+  created: function created() {},
+  methods: {
+    sortUsersListByName: function sortUsersListByName() {}
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['data'],
+  data: function data() {
+    return {
+      calendar: this.data,
+      sortByDateDirection: 'desc',
+      sortByLocationDirection: 'desc',
+      sortByTypeDirection: 'desc',
+      sortByDescriptionDirection: 'desc',
+      sortByStatusDirection: 'desc',
+      sortedEvents: []
+    };
+  },
+  methods: {
+    sortEventsListByDate: function sortEventsListByDate() {
+      this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
+    },
+    sortEventsListByLocation: function sortEventsListByLocation() {
+      this.sortByLocationDirection = this.sortByLocationDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByLocationDirection);
+    },
+    sortEventsListByType: function sortEventsListByType() {
+      this.sortByTypeDirection = this.sortByTypeDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'type', this.sortByTypeDirection);
+    },
+    sortEventsListByDescription: function sortEventsListByDescription() {
+      this.sortByDescriptionDirection = this.sortByDescriptionDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'location', this.sortByDescriptionDirection);
+    },
+    sortEventsListByStatus: function sortEventsListByStatus() {
+      this.sortByStatusDirection = this.sortByStatusDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedEvents = this.sortArray(this.calendar.events, 'status', this.sortByStatusDirection);
+    },
+    sortArray: function sortArray(array, field, direction) {
+      return _.orderBy(array, field, direction);
+    }
+  },
+  mounted: function mounted() {
+    this.sortEventsListByDate();
+  },
+  filters: {
+    formatDate: function formatDate(value) {
+      var today = new Date();
+      var date = new Date(value);
+      var outputDate = '';
+      var fromDate = parseInt(date.getTime() / 1000);
+      var toDate = parseInt(today.getTime() / 1000);
+      var timeDiff = Math.ceil((toDate - fromDate) / 3600);
+      var dateHours = date.getHours();
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+      var dateMinutes = date.getMinutes();
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+
+      if (timeDiff <= 1) {
+        var fromDateMinutes = parseInt(date.getTime() / 1000 * 60);
+        var toDateMinutes = parseInt(today.getTime() / 1000 * 60);
+        var minutesDiff = Math.ceil((toDateMinutes - fromDateMinutes) / 3600);
+
+        if (minutesDiff <= 1) {
+          outputDate = minutesDiff + ' minute ago';
+        } else {
+          outputDate = minutesDiff + ' minutes ago';
+        }
+      } else if (timeDiff == 1) {
+        outputDate = timeDiff + ' hour ago';
+      } else if (timeDiff <= 24) {
+        outputDate = timeDiff + ' hours ago';
+      } else if (timeDiff < 48) {
+        outputDate = 'Yesterday, ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
+      } else if (timeDiff > 48) {
+        var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate(); //let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
+        //outputDate = day + '.' + month + '.' + date.getFullYear();
+
+        outputDate = date.getMonth() + 1 + '/' + day + '/' + date.getFullYear();
+      }
+
+      return outputDate;
+    },
+    formatEventDate: function formatEventDate(value) {
+      var date = new Date(value);
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var year = date.getFullYear();
+      return month + '/' + day + '/' + year;
+    },
+    formatEventTime: function formatEventTime(value) {
+      var date = new Date(value);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return hours + ':' + minutes + ' ' + ampm;
+    },
+    sliceString: function sliceString(value) {
+      var sliced = value.slice(0, 20);
+
+      if (sliced.length < value.length) {
+        sliced += '...';
+      }
+
+      return sliced;
+    },
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -3713,11 +5033,18 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js"
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Backend Components
 
 Vue.component('all-calendars-component', __webpack_require__(/*! ./components/AllCalendarsComponent.vue */ "./resources/js/components/AllCalendarsComponent.vue").default);
 Vue.component('calendars-list-item-component', __webpack_require__(/*! ./components/CalendarsListItemComponent.vue */ "./resources/js/components/CalendarsListItemComponent.vue").default);
 Vue.component('calendars-list-item-event-component', __webpack_require__(/*! ./components/CalendarsListItemEventComponent.vue */ "./resources/js/components/CalendarsListItemEventComponent.vue").default);
-Vue.component('add-edit-calendar-modal-component', __webpack_require__(/*! ./components/AddEditCalendarModalComponent.vue */ "./resources/js/components/AddEditCalendarModalComponent.vue").default);
+Vue.component('add-edit-calendar-modal-component', __webpack_require__(/*! ./components/AddEditCalendarModalComponent.vue */ "./resources/js/components/AddEditCalendarModalComponent.vue").default); // Frontend Components
+
+Vue.component('frontend-calendar-data-component', __webpack_require__(/*! ./components/frontend/CalendarDataComponent.vue */ "./resources/js/components/frontend/CalendarDataComponent.vue").default); // Admin components
+
+Vue.component('admin-calendars-component', __webpack_require__(/*! ./components/admin/AdminCalendarsComponent.vue */ "./resources/js/components/admin/AdminCalendarsComponent.vue").default);
+Vue.component('admin-users-component', __webpack_require__(/*! ./components/admin/AdminUsersComponent.vue */ "./resources/js/components/admin/AdminUsersComponent.vue").default);
+Vue.component('admin-calendars-list-item-component', __webpack_require__(/*! ./components/admin/AdminCalendarsListItemComponent.vue */ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -3727,9 +5054,21 @@ Vue.component('add-edit-calendar-modal-component', __webpack_require__(/*! ./com
 var app = new Vue({
   el: '#app',
   data: function data() {
-    return {};
+    return {
+      showAdminUsers: true,
+      showAdminCalendars: false
+    };
   },
-  methods: {}
+  methods: {
+    showAdminUsersAction: function showAdminUsersAction() {
+      this.showAdminUsers = true;
+      this.showAdminCalendars = false;
+    },
+    showAdminCalendarsAction: function showAdminCalendarsAction() {
+      this.showAdminUsers = false;
+      this.showAdminCalendars = true;
+    }
+  }
 });
 
 /***/ }),
@@ -64227,6 +65566,162 @@ component.options.__file = "resources/js/components/CalendarsListItemEventCompon
 
 /***/ }),
 
+/***/ "./resources/js/components/admin/AdminCalendarsComponent.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsComponent.vue ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AdminCalendarsComponent_vue_vue_type_template_id_740f16c8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdminCalendarsComponent.vue?vue&type=template&id=740f16c8& */ "./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=template&id=740f16c8&");
+/* harmony import */ var _AdminCalendarsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdminCalendarsComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AdminCalendarsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AdminCalendarsComponent_vue_vue_type_template_id_740f16c8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AdminCalendarsComponent_vue_vue_type_template_id_740f16c8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/AdminCalendarsComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsListItemComponent.vue ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b& */ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b&");
+/* harmony import */ var _AdminCalendarsListItemComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdminCalendarsListItemComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AdminCalendarsListItemComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/AdminCalendarsListItemComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminUsersComponent.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/admin/AdminUsersComponent.vue ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AdminUsersComponent_vue_vue_type_template_id_579a8869___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdminUsersComponent.vue?vue&type=template&id=579a8869& */ "./resources/js/components/admin/AdminUsersComponent.vue?vue&type=template&id=579a8869&");
+/* harmony import */ var _AdminUsersComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdminUsersComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AdminUsersComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AdminUsersComponent_vue_vue_type_template_id_579a8869___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AdminUsersComponent_vue_vue_type_template_id_579a8869___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/AdminUsersComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/frontend/CalendarDataComponent.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/frontend/CalendarDataComponent.vue ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _CalendarDataComponent_vue_vue_type_template_id_f3d6eafa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalendarDataComponent.vue?vue&type=template&id=f3d6eafa& */ "./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=template&id=f3d6eafa&");
+/* harmony import */ var _CalendarDataComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CalendarDataComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _CalendarDataComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _CalendarDataComponent_vue_vue_type_template_id_f3d6eafa___WEBPACK_IMPORTED_MODULE_0__.render,
+  _CalendarDataComponent_vue_vue_type_template_id_f3d6eafa___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/frontend/CalendarDataComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/AddEditCalendarModalComponent.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************!*\
   !*** ./resources/js/components/AddEditCalendarModalComponent.vue?vue&type=script&lang=js& ***!
@@ -64288,6 +65783,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarsListItemEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalendarsListItemEventComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CalendarsListItemEventComponent.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarsListItemEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsListItemComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminUsersComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminUsersComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminUsersComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarDataComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalendarDataComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarDataComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -64355,6 +65914,74 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarsListItemEventComponent_vue_vue_type_template_id_c123a824___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarsListItemEventComponent_vue_vue_type_template_id_c123a824___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalendarsListItemEventComponent.vue?vue&type=template&id=c123a824& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CalendarsListItemEventComponent.vue?vue&type=template&id=c123a824&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=template&id=740f16c8&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=template&id=740f16c8& ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsComponent_vue_vue_type_template_id_740f16c8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsComponent_vue_vue_type_template_id_740f16c8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsComponent_vue_vue_type_template_id_740f16c8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsComponent.vue?vue&type=template&id=740f16c8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=template&id=740f16c8&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b& ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminUsersComponent.vue?vue&type=template&id=579a8869&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminUsersComponent.vue?vue&type=template&id=579a8869& ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminUsersComponent_vue_vue_type_template_id_579a8869___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminUsersComponent_vue_vue_type_template_id_579a8869___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminUsersComponent_vue_vue_type_template_id_579a8869___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminUsersComponent.vue?vue&type=template&id=579a8869& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminUsersComponent.vue?vue&type=template&id=579a8869&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=template&id=f3d6eafa&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=template&id=f3d6eafa& ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarDataComponent_vue_vue_type_template_id_f3d6eafa___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarDataComponent_vue_vue_type_template_id_f3d6eafa___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalendarDataComponent_vue_vue_type_template_id_f3d6eafa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalendarDataComponent.vue?vue&type=template&id=f3d6eafa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=template&id=f3d6eafa&");
 
 
 /***/ }),
@@ -65471,6 +67098,1114 @@ var render = function() {
                                   staticClass: "btn btn-secondary",
                                   attrs: { type: "button" },
                                   on: { click: _vm.hideEditCalendarModalAction }
+                                },
+                                [_vm._v("Close")]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.showDuplicateCalendarModal
+      ? _c(
+          "div",
+          [
+            _c("transition", { attrs: { name: "modal" } }, [
+              _c("div", { staticClass: "modal-mask" }, [
+                _c("div", { staticClass: "modal-wrapper" }, [
+                  _c(
+                    "div",
+                    {
+                      attrs: {
+                        id: "duplicateCalendarModal",
+                        tabindex: "-1",
+                        role: "dialog"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "modal-dialog modal-dialog-centered modal-xl",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _c("div", { staticClass: "modal-header" }, [
+                              _c(
+                                "h5",
+                                {
+                                  staticClass: "modal-title w-100 text-center"
+                                },
+                                [_vm._v("Duplicate Calendar Data")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "close",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal",
+                                    "aria-label": "Close"
+                                  },
+                                  on: {
+                                    click: _vm.hideDuplicateCalendarModalAction
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { attrs: { "aria-hidden": "true" } },
+                                    [_vm._v("×")]
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c(
+                                "form",
+                                {
+                                  staticClass: "needs-validation",
+                                  attrs: {
+                                    id: "duplicateCalendarForm",
+                                    method: "POST",
+                                    novalidate: ""
+                                  },
+                                  on: { submit: _vm.duplicateCalendarSubmit }
+                                },
+                                [
+                                  _c("input", {
+                                    attrs: { type: "hidden", name: "_token" },
+                                    domProps: { value: _vm.csrf_token }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "form-row" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "form-group col-md-6" },
+                                      [
+                                        _c("label", [_vm._v("Calendar Name")]),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.current_calendar.name,
+                                              expression:
+                                                "current_calendar.name"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_name",
+                                            required: "",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.name
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "name",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "invalid-feedback" },
+                                          [
+                                            _vm._v(
+                                              "Please provide a valid Calendar Name."
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "form-group col-md-6" },
+                                      [
+                                        _c("label", [
+                                          _vm._v("Owner's Email Address")
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.owner_email_address,
+                                              expression: "owner_email_address"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "email",
+                                            name: "owner_email_address",
+                                            readonly: ""
+                                          },
+                                          domProps: {
+                                            value: _vm.owner_email_address
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.owner_email_address =
+                                                $event.target.value
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "invalid-feedback" },
+                                          [
+                                            _vm._v(
+                                              "Please provide a valid Email Address."
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "form-check form-check-inline"
+                                          },
+                                          [
+                                            _c("input", {
+                                              staticClass: "form-check-input",
+                                              attrs: {
+                                                type: "checkbox",
+                                                disabled: "",
+                                                checked: ""
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass: "form-check-label"
+                                              },
+                                              [_vm._v("Owned by me")]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "form-row" }, [
+                                    _c("label", [
+                                      _vm._v(
+                                        "Events: " +
+                                          _vm._s(
+                                            _vm.current_calendar.events.length
+                                          )
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "card col-md-12" },
+                                      [
+                                        _c(
+                                          "div",
+                                          { staticClass: "card-body" },
+                                          [
+                                            _c(
+                                              "table",
+                                              { staticClass: "table table-sm" },
+                                              [
+                                                _c("thead", [
+                                                  _c("tr", [
+                                                    _c(
+                                                      "th",
+                                                      {
+                                                        attrs: { scope: "col" }
+                                                      },
+                                                      [_vm._v("Date")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "th",
+                                                      {
+                                                        attrs: { scope: "col" }
+                                                      },
+                                                      [_vm._v("Time")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "th",
+                                                      {
+                                                        attrs: { scope: "col" }
+                                                      },
+                                                      [_vm._v("Address")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "th",
+                                                      {
+                                                        attrs: { scope: "col" }
+                                                      },
+                                                      [_vm._v("Event type")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "th",
+                                                      {
+                                                        attrs: { scope: "col" }
+                                                      },
+                                                      [_vm._v("Notes")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("th", {
+                                                      staticClass: "actions",
+                                                      attrs: { scope: "col" }
+                                                    })
+                                                  ])
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "tbody",
+                                                  _vm._l(
+                                                    _vm.current_calendar.events,
+                                                    function(event, index) {
+                                                      return _c(
+                                                        "tr",
+                                                        {
+                                                          attrs: {
+                                                            "data-index": index
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              attrs: {
+                                                                "data-val":
+                                                                  "startDate"
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                    " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              attrs: {
+                                                                "data-val":
+                                                                  "startTime"
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                    5:30 PM - 6:30 PM\n                                                                "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              attrs: {
+                                                                "data-val":
+                                                                  "location"
+                                                              }
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.location
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm._f(
+                                                                        "sliceString"
+                                                                      )(
+                                                                        event.location
+                                                                      )
+                                                                    )
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              attrs: {
+                                                                "data-val":
+                                                                  "type"
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                    " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "capitalize"
+                                                                    )(
+                                                                      event.type
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              attrs: {
+                                                                "data-val":
+                                                                  "description"
+                                                              }
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.description
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm._f(
+                                                                        "sliceString"
+                                                                      )(
+                                                                        event.description
+                                                                      )
+                                                                    )
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              staticClass:
+                                                                "text-right"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "button",
+                                                                {
+                                                                  staticClass:
+                                                                    "btn btn-outline-secondary btn-sm",
+                                                                  attrs: {
+                                                                    disabled:
+                                                                      event.id ===
+                                                                      "new",
+                                                                    title:
+                                                                      "Edit"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.editEvent(
+                                                                        index,
+                                                                        $event
+                                                                      )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("i", {
+                                                                    staticClass:
+                                                                      "fas fa-pencil-alt"
+                                                                  })
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "button",
+                                                                {
+                                                                  staticClass:
+                                                                    "btn btn-outline-danger btn-sm",
+                                                                  attrs: {
+                                                                    title:
+                                                                      "Delete"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.removeEvent(
+                                                                        index,
+                                                                        $event
+                                                                      )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("i", {
+                                                                    staticClass:
+                                                                      "far fa-trash-alt"
+                                                                  })
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "button",
+                                                                {
+                                                                  staticClass:
+                                                                    "btn btn-outline-secondary btn-sm",
+                                                                  attrs: {
+                                                                    disabled:
+                                                                      event.id ===
+                                                                      "new",
+                                                                    title:
+                                                                      "More"
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("i", {
+                                                                    staticClass:
+                                                                      "fas fa-ellipsis-h"
+                                                                  })
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    }
+                                                  ),
+                                                  0
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "transition",
+                                          { attrs: { name: "fade" } },
+                                          [
+                                            _vm.showNewEventDataForm
+                                              ? _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "card-footer"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "div",
+                                                      { staticClass: "row" },
+                                                      [
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "input-group input-group-sm mb-3 col-md-2"
+                                                          },
+                                                          [
+                                                            _c("date-picker", {
+                                                              attrs: {
+                                                                config:
+                                                                  _vm.dateOptions,
+                                                                name:
+                                                                  "new-event-datetime"
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm
+                                                                    .newEventData
+                                                                    .dateTime,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.newEventData,
+                                                                    "dateTime",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "newEventData.dateTime"
+                                                              }
+                                                            }),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "div",
+                                                              {
+                                                                staticClass:
+                                                                  "input-group-append"
+                                                              },
+                                                              [
+                                                                _c(
+                                                                  "span",
+                                                                  {
+                                                                    staticClass:
+                                                                      "input-group-text"
+                                                                  },
+                                                                  [
+                                                                    _c("i", {
+                                                                      staticClass:
+                                                                        "far fa-calendar-alt"
+                                                                    })
+                                                                  ]
+                                                                )
+                                                              ]
+                                                            )
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "input-group input-group-sm mb-3 col-md-2"
+                                                          },
+                                                          [
+                                                            _c("input", {
+                                                              staticClass:
+                                                                "form-control",
+                                                              attrs: {
+                                                                type: "text",
+                                                                placeholder:
+                                                                  "5:30 PM - 6:30 PM"
+                                                              }
+                                                            })
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "col-md-2"
+                                                          },
+                                                          [
+                                                            _c("input", {
+                                                              directives: [
+                                                                {
+                                                                  name: "model",
+                                                                  rawName:
+                                                                    "v-model",
+                                                                  value:
+                                                                    _vm
+                                                                      .newEventData
+                                                                      .location,
+                                                                  expression:
+                                                                    "newEventData.location"
+                                                                }
+                                                              ],
+                                                              staticClass:
+                                                                "form-control form-control-sm",
+                                                              attrs: {
+                                                                type: "text",
+                                                                name:
+                                                                  "new-event-address",
+                                                                placeholder:
+                                                                  "Location",
+                                                                required: ""
+                                                              },
+                                                              domProps: {
+                                                                value:
+                                                                  _vm
+                                                                    .newEventData
+                                                                    .location
+                                                              },
+                                                              on: {
+                                                                input: function(
+                                                                  $event
+                                                                ) {
+                                                                  if (
+                                                                    $event
+                                                                      .target
+                                                                      .composing
+                                                                  ) {
+                                                                    return
+                                                                  }
+                                                                  _vm.$set(
+                                                                    _vm.newEventData,
+                                                                    "location",
+                                                                    $event
+                                                                      .target
+                                                                      .value
+                                                                  )
+                                                                }
+                                                              }
+                                                            })
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "col-md-2"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "select",
+                                                              {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      _vm
+                                                                        .newEventData
+                                                                        .type,
+                                                                    expression:
+                                                                      "newEventData.type"
+                                                                  }
+                                                                ],
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  name:
+                                                                    "new-event-type",
+                                                                  required: ""
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    var $$selectedVal = Array.prototype.filter
+                                                                      .call(
+                                                                        $event
+                                                                          .target
+                                                                          .options,
+                                                                        function(
+                                                                          o
+                                                                        ) {
+                                                                          return o.selected
+                                                                        }
+                                                                      )
+                                                                      .map(
+                                                                        function(
+                                                                          o
+                                                                        ) {
+                                                                          var val =
+                                                                            "_value" in
+                                                                            o
+                                                                              ? o._value
+                                                                              : o.value
+                                                                          return val
+                                                                        }
+                                                                      )
+                                                                    _vm.$set(
+                                                                      _vm.newEventData,
+                                                                      "type",
+                                                                      $event
+                                                                        .target
+                                                                        .multiple
+                                                                        ? $$selectedVal
+                                                                        : $$selectedVal[0]
+                                                                    )
+                                                                  }
+                                                                }
+                                                              },
+                                                              [
+                                                                _c(
+                                                                  "option",
+                                                                  {
+                                                                    attrs: {
+                                                                      value: "",
+                                                                      disabled:
+                                                                        "",
+                                                                      selected:
+                                                                        ""
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "Select type"
+                                                                    )
+                                                                  ]
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "option",
+                                                                  {
+                                                                    attrs: {
+                                                                      value:
+                                                                        "game"
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "Game"
+                                                                    )
+                                                                  ]
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "option",
+                                                                  {
+                                                                    attrs: {
+                                                                      value:
+                                                                        "practice"
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "Practice"
+                                                                    )
+                                                                  ]
+                                                                )
+                                                              ]
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "col-md-2"
+                                                          },
+                                                          [
+                                                            _c("input", {
+                                                              directives: [
+                                                                {
+                                                                  name: "model",
+                                                                  rawName:
+                                                                    "v-model",
+                                                                  value:
+                                                                    _vm
+                                                                      .newEventData
+                                                                      .description,
+                                                                  expression:
+                                                                    "newEventData.description"
+                                                                }
+                                                              ],
+                                                              staticClass:
+                                                                "form-control form-control-sm",
+                                                              attrs: {
+                                                                type: "text",
+                                                                placeholder:
+                                                                  "e.g. Instructions"
+                                                              },
+                                                              domProps: {
+                                                                value:
+                                                                  _vm
+                                                                    .newEventData
+                                                                    .description
+                                                              },
+                                                              on: {
+                                                                input: function(
+                                                                  $event
+                                                                ) {
+                                                                  if (
+                                                                    $event
+                                                                      .target
+                                                                      .composing
+                                                                  ) {
+                                                                    return
+                                                                  }
+                                                                  _vm.$set(
+                                                                    _vm.newEventData,
+                                                                    "description",
+                                                                    $event
+                                                                      .target
+                                                                      .value
+                                                                  )
+                                                                }
+                                                              }
+                                                            })
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "col-md-2 text-right"
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "button",
+                                                              {
+                                                                staticClass:
+                                                                  "btn btn-primary btn-sm",
+                                                                attrs: {
+                                                                  disabled:
+                                                                    !_vm.newEventDataValid ||
+                                                                    _vm.formRequestProcess
+                                                                },
+                                                                on: {
+                                                                  click:
+                                                                    _vm.saveEvent
+                                                                }
+                                                              },
+                                                              [
+                                                                _c("i", {
+                                                                  staticClass:
+                                                                    "fas fa-check"
+                                                                })
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "button",
+                                                              {
+                                                                staticClass:
+                                                                  "btn btn-outline-secondary btn-sm",
+                                                                attrs: {
+                                                                  type: "button"
+                                                                },
+                                                                on: {
+                                                                  click:
+                                                                    _vm.hideAddEventForm
+                                                                }
+                                                              },
+                                                              [
+                                                                _c("i", {
+                                                                  staticClass:
+                                                                    "fas fa-times"
+                                                                })
+                                                              ]
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    )
+                                                  ]
+                                                )
+                                              : _vm._e()
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "row modal-bottom" },
+                                    [
+                                      _c("div", { staticClass: "col-md-4" }, [
+                                        _c(
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "btn btn-outline-primary btn-sm",
+                                            attrs: {
+                                              disabled: _vm.formRequestProcess
+                                            },
+                                            on: { click: _vm.showAddEventForm }
+                                          },
+                                          [_vm._v("+ Add Event")]
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "col-md-8" },
+                                        [
+                                          _c(
+                                            "transition",
+                                            { attrs: { name: "fade" } },
+                                            [
+                                              _vm.requestSuccess
+                                                ? _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "alert alert-success alert-dismissible fade show",
+                                                      attrs: { role: "alert" }
+                                                    },
+                                                    [
+                                                      _c("strong", [
+                                                        _vm._v("Success!")
+                                                      ]),
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            _vm.requestSuccess
+                                                          ) +
+                                                          "\n                                                            "
+                                                      ),
+                                                      _c(
+                                                        "button",
+                                                        {
+                                                          staticClass: "close",
+                                                          attrs: {
+                                                            type: "button",
+                                                            "data-dismiss":
+                                                              "alert",
+                                                            "aria-label":
+                                                              "Close"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              attrs: {
+                                                                "aria-hidden":
+                                                                  "true"
+                                                              }
+                                                            },
+                                                            [_vm._v("×")]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e(),
+                                              _vm._v(" "),
+                                              _vm.requestDanger
+                                                ? _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "alert alert-danger alert-dismissible fade show",
+                                                      attrs: { role: "alert" }
+                                                    },
+                                                    [
+                                                      _c("strong", [
+                                                        _vm._v("Error!")
+                                                      ]),
+                                                      _vm._v(
+                                                        " " +
+                                                          _vm._s(
+                                                            _vm.requestDanger
+                                                          ) +
+                                                          "\n                                                            "
+                                                      ),
+                                                      _c(
+                                                        "button",
+                                                        {
+                                                          staticClass: "close",
+                                                          attrs: {
+                                                            type: "button",
+                                                            "data-dismiss":
+                                                              "alert",
+                                                            "aria-label":
+                                                              "Close"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "span",
+                                                            {
+                                                              attrs: {
+                                                                "aria-hidden":
+                                                                  "true"
+                                                              }
+                                                            },
+                                                            [_vm._v("×")]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e()
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              !_vm.formRequestProcess
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary",
+                                      attrs: {
+                                        type: "submit",
+                                        form: "duplicateCalendarForm"
+                                      }
+                                    },
+                                    [_vm._v("Save")]
+                                  )
+                                : _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary",
+                                      attrs: { type: "button", disabled: "" }
+                                    },
+                                    [
+                                      _c("span", {
+                                        staticClass:
+                                          "spinner-border spinner-border-sm",
+                                        attrs: {
+                                          role: "status",
+                                          "aria-hidden": "true"
+                                        }
+                                      }),
+                                      _vm._v(
+                                        "\n                                            Loading...\n                                        "
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: _vm.hideDuplicateCalendarModalAction
+                                  }
                                 },
                                 [_vm._v("Close")]
                               )
@@ -66855,75 +69590,130 @@ var render = function() {
       0
     ),
     _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "confirmCalendarDelete",
-          "data-backdrop": "static",
-          "data-keyboard": "false",
-          tabindex: "-1",
-          "aria-labelledby": "confirmCalendarDeleteLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _vm._m(2),
-            _vm._v(" "),
-            _vm._m(3),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary",
-                  attrs: {
-                    type: "button",
-                    "data-dismiss": "modal",
-                    disabled: _vm.requestProcess
-                  }
-                },
-                [_vm._v("Cancel")]
-              ),
-              _vm._v(" "),
-              !_vm.requestProcess
-                ? _c(
-                    "button",
+    _vm.showConfirmDeleteCalendarModal
+      ? _c(
+          "div",
+          [
+            _c("transition", { attrs: { name: "modal" } }, [
+              _c("div", { staticClass: "modal-mask" }, [
+                _c("div", { staticClass: "modal-wrapper" }, [
+                  _c(
+                    "div",
                     {
-                      staticClass: "btn btn-danger",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteCalendar(_vm.delete_calendar_id)
-                        }
+                      attrs: {
+                        id: "confirmDeleteCalendarModal",
+                        tabindex: "-1",
+                        role: "dialog"
                       }
                     },
-                    [_vm._v("Delete")]
-                  )
-                : _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      attrs: { type: "button", disabled: "" }
-                    },
                     [
-                      _c("span", {
-                        staticClass: "spinner-border spinner-border-sm",
-                        attrs: { role: "status", "aria-hidden": "true" }
-                      }),
-                      _vm._v(
-                        "\n                        Loading...\n                    "
-                      )
+                      _c("div", { staticClass: "modal-dialog" }, [
+                        _c("div", { staticClass: "modal-content" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "modal-header text-white bg-danger"
+                            },
+                            [
+                              _c(
+                                "h5",
+                                {
+                                  staticClass: "modal-title w-100 text-center"
+                                },
+                                [_vm._v("Confirm delete calendar")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "close",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: _vm.hideConfirmCalendarDeleteModal
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { attrs: { "aria-hidden": "true" } },
+                                    [_vm._v("×")]
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-body" }, [
+                            _c("p", [
+                              _vm._v(
+                                "You are about to delete calendar, this procedure is irreversible."
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [_vm._v("Do you want to proceed?")])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-footer" }, [
+                            !_vm.requestProcess
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-danger",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteCalendar(
+                                          _vm.delete_calendar_id
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Delete")]
+                                )
+                              : _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary",
+                                    attrs: { type: "button", disabled: "" }
+                                  },
+                                  [
+                                    _c("span", {
+                                      staticClass:
+                                        "spinner-border spinner-border-sm",
+                                      attrs: {
+                                        role: "status",
+                                        "aria-hidden": "true"
+                                      }
+                                    }),
+                                    _vm._v(
+                                      "\n                                        Loading...\n                                    "
+                                    )
+                                  ]
+                                ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: _vm.hideConfirmCalendarDeleteModal
+                                }
+                              },
+                              [_vm._v("Close")]
+                            )
+                          ])
+                        ])
+                      ])
                     ]
                   )
+                ])
+              ])
             ])
-          ])
-        ])
-      ]
-    )
+          ],
+          1
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -66960,48 +69750,6 @@ var staticRenderFns = [
       },
       [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header text-white bg-danger" }, [
-      _c(
-        "h5",
-        {
-          staticClass: "modal-title",
-          attrs: { id: "confirmCalendarDeleteLabel" }
-        },
-        [_vm._v("Delete calendar")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-body" }, [
-      _c("p", [
-        _vm._v(
-          "You are about to delete calendar, this procedure is irreversible."
-        )
-      ]),
-      _vm._v(" "),
-      _c("p", [_vm._v("Do you want to proceed?")])
-    ])
   }
 ]
 render._withStripped = true
@@ -67247,43 +69995,24 @@ var render = function() {
                     _c("div", { staticClass: "col-2" }, [
                       _c(
                         "a",
-                        { staticClass: "sort-link", attrs: { href: "#" } },
-                        [
-                          _vm._v("\n                                \tDate "),
-                          _c("i", {
-                            staticClass:
-                              "fas fa-sort-amount-down-alt float-right"
-                          })
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "a",
-                        { staticClass: "sort-link", attrs: { href: "#" } },
-                        [
-                          _vm._v("\n                                \tTime "),
-                          _c("i", {
-                            staticClass:
-                              "fas fa-sort-amount-down-alt float-right"
-                          })
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "a",
-                        { staticClass: "sort-link", attrs: { href: "#" } },
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByDate }
+                        },
                         [
                           _vm._v(
-                            "\n\t                                Address "
+                            "\n                                \tDate\n                                    "
                           ),
-                          _c("i", {
-                            staticClass:
-                              "fas fa-sort-amount-down-alt float-right"
-                          })
+                          _vm.sortByDateDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
                         ]
                       )
                     ]),
@@ -67291,15 +70020,14 @@ var render = function() {
                     _c("div", { staticClass: "col-2" }, [
                       _c(
                         "a",
-                        { staticClass: "sort-link", attrs: { href: "#" } },
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" }
+                        },
                         [
                           _vm._v(
-                            "\n                                    Event "
-                          ),
-                          _c("i", {
-                            staticClass:
-                              "fas fa-sort-amount-down-alt float-right"
-                          })
+                            "\n                                \tTime\n                                "
+                          )
                         ]
                       )
                     ]),
@@ -67307,15 +70035,24 @@ var render = function() {
                     _c("div", { staticClass: "col-2" }, [
                       _c(
                         "a",
-                        { staticClass: "sort-link", attrs: { href: "#" } },
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByLocation }
+                        },
                         [
                           _vm._v(
-                            "\n                                    Notes "
+                            "\n\t                                Address\n                                    "
                           ),
-                          _c("i", {
-                            staticClass:
-                              "fas fa-sort-amount-down-alt float-right"
-                          })
+                          _vm.sortByLocationDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
                         ]
                       )
                     ]),
@@ -67323,15 +70060,64 @@ var render = function() {
                     _c("div", { staticClass: "col-2" }, [
                       _c(
                         "a",
-                        { staticClass: "sort-link", attrs: { href: "#" } },
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByType }
+                        },
                         [
                           _vm._v(
-                            "\n                                    Actions "
+                            "\n                                    Event\n                                    "
                           ),
-                          _c("i", {
-                            staticClass:
-                              "fas fa-sort-amount-down-alt float-right"
-                          })
+                          _vm.sortByTypeDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByDescription }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Notes\n                                    "
+                          ),
+                          _vm.sortByDescriptionDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Actions\n                                "
+                          )
                         ]
                       )
                     ])
@@ -67341,7 +70127,7 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "events-list" },
-                  _vm._l(_vm.calendar.events, function(event) {
+                  _vm._l(_vm.sortedEvents, function(event) {
                     return _c(
                       "div",
                       [
@@ -67652,7 +70438,7 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _vm.showIinfoModal
+      _vm.showInfoModal
         ? _c(
             "div",
             [
@@ -67691,7 +70477,7 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         ;(_vm.infoModalText = ""),
-                                          (_vm.showIinfoModal = false)
+                                          (_vm.showInfoModal = false)
                                       }
                                     }
                                   },
@@ -67721,7 +70507,7 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         ;(_vm.infoModalText = ""),
-                                          (_vm.showIinfoModal = false)
+                                          (_vm.showInfoModal = false)
                                       }
                                     }
                                   },
@@ -68102,6 +70888,1839 @@ var staticRenderFns = [
             }
           })
         ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=template&id=740f16c8&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsComponent.vue?vue&type=template&id=740f16c8& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "content-wrapper" }, [
+    _c("div", { staticClass: "page-head" }, [
+      _c("div", { staticClass: "row align-items-center" }, [
+        _c("div", { staticClass: "col-lg-2" }, [
+          _c("h1", [_vm._v("Calendars")]),
+          _vm._v(" "),
+          _c("p", {}, [_vm._v(_vm._s(_vm.calendars.length) + " calendars")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-8" }, [
+          _vm.requestDanger
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger alert-dismissible fade show",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error!")]),
+                  _vm._v(
+                    " " + _vm._s(_vm.requestDanger) + "\n                    "
+                  ),
+                  _vm._m(0)
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.requestSuccess
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "alert alert-success alert-dismissible fade show",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Success!")]),
+                  _vm._v(
+                    " " + _vm._s(_vm.requestSuccess) + "\n                    "
+                  ),
+                  _vm._m(1)
+                ]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-2 text-lg-right" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "button" },
+              on: { click: _vm.showAddCalendarModal }
+            },
+            [_c("i", { staticClass: "fa fa-plus" }), _vm._v("Add Calendar")]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "filter-links" },
+      _vm._l(_vm.calendarsTypesFilters, function(typeFilter) {
+        return _c(
+          "button",
+          {
+            key: typeFilter.title,
+            staticClass: "btn btn-sm",
+            class: { active: typeFilter.active },
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.applyCalendarsTypeFilter(typeFilter)
+              }
+            }
+          },
+          [_vm._v(_vm._s(typeFilter.title))]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "filter-content" },
+      _vm._l(_vm.calendarsTypesFilters, function(typeFilter) {
+        return _c(
+          "div",
+          {
+            staticClass: "item",
+            class: { active: typeFilter.active },
+            attrs: { "data-id": typeFilter.val }
+          },
+          [
+            _c("div", { staticClass: "calendarsDataSorting" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-2" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "sort-link",
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.sortCalendarsListBySummary }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Name\n                            "
+                      ),
+                      _vm.sortBySummaryDirection == "desc"
+                        ? _c("i", {
+                            staticClass: "fas fa-sort-amount-up-alt float-right"
+                          })
+                        : _c("i", {
+                            staticClass:
+                              "fas fa-sort-amount-down-alt float-right"
+                          })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "sort-link",
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.sortCalendarsListByEvents }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Events\n                            "
+                      ),
+                      _vm.sortByEventsDirection == "desc"
+                        ? _c("i", {
+                            staticClass: "fas fa-sort-amount-up-alt float-right"
+                          })
+                        : _c("i", {
+                            staticClass:
+                              "fas fa-sort-amount-down-alt float-right"
+                          })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "sort-link",
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.sortCalendarsListByOwner }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Owner\n                            "
+                      ),
+                      _vm.sortByOwnerDirection == "desc"
+                        ? _c("i", {
+                            staticClass: "fas fa-sort-amount-up-alt float-right"
+                          })
+                        : _c("i", {
+                            staticClass:
+                              "fas fa-sort-amount-down-alt float-right"
+                          })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "sort-link",
+                      attrs: { href: "javascript:void(0)" },
+                      on: { click: _vm.sortCalendarsListByUpdated }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Updated\n                            "
+                      ),
+                      _vm.sortByUpdatedDirection == "desc"
+                        ? _c("i", {
+                            staticClass: "fas fa-sort-amount-up-alt float-right"
+                          })
+                        : _c("i", {
+                            staticClass:
+                              "fas fa-sort-amount-down-alt float-right"
+                          })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-4" })
+              ])
+            ]),
+            _vm._v(" "),
+            Object.keys(_vm.calendars).length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "calendars-list" },
+                  _vm._l(_vm.sortedCalendars, function(calendar) {
+                    return _c(
+                      "div",
+                      [
+                        _c("admin-calendars-list-item-component", {
+                          ref: "calendar",
+                          refInFor: true,
+                          attrs: {
+                            calendar: calendar,
+                            jobs_status: _vm.jobs_status
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  }),
+                  0
+                )
+              : _c("div", { staticClass: "calendars-list" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-info",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Calendars not found ...\n                "
+                      )
+                    ]
+                  )
+                ])
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _vm.showConfirmDeleteCalendarModal
+      ? _c(
+          "div",
+          [
+            _c("transition", { attrs: { name: "modal" } }, [
+              _c("div", { staticClass: "modal-mask" }, [
+                _c("div", { staticClass: "modal-wrapper" }, [
+                  _c(
+                    "div",
+                    {
+                      attrs: {
+                        id: "confirmDeleteCalendarModal",
+                        tabindex: "-1",
+                        role: "dialog"
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "modal-dialog" }, [
+                        _c("div", { staticClass: "modal-content" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "modal-header text-white bg-danger"
+                            },
+                            [
+                              _c(
+                                "h5",
+                                {
+                                  staticClass: "modal-title w-100 text-center"
+                                },
+                                [_vm._v("Confirm delete calendar")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "close",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: _vm.hideConfirmCalendarDeleteModal
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { attrs: { "aria-hidden": "true" } },
+                                    [_vm._v("×")]
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-body" }, [
+                            _c("p", [
+                              _vm._v(
+                                "You are about to delete calendar, this procedure is irreversible."
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [_vm._v("Do you want to proceed?")])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-footer" }, [
+                            !_vm.requestProcess
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-danger",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.deleteCalendar(
+                                          _vm.delete_calendar_id
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Delete")]
+                                )
+                              : _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-primary",
+                                    attrs: { type: "button", disabled: "" }
+                                  },
+                                  [
+                                    _c("span", {
+                                      staticClass:
+                                        "spinner-border spinner-border-sm",
+                                      attrs: {
+                                        role: "status",
+                                        "aria-hidden": "true"
+                                      }
+                                    }),
+                                    _vm._v(
+                                      "\n                                        Loading...\n                                    "
+                                    )
+                                  ]
+                                ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: _vm.hideConfirmCalendarDeleteModal
+                                }
+                              },
+                              [_vm._v("Close")]
+                            )
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ],
+          1
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b&":
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b& ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "card calendar-single" },
+    [
+      _c("div", { staticClass: "card-heading" }, [
+        _c("div", { staticClass: "row align-items-center" }, [
+          _c("div", { staticClass: "col-2" }, [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.calendar.name) +
+                "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.calendar.eventsCount) +
+                "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _vm.calendar.access_role == "owner"
+              ? _c("span", [
+                  _vm._v("Me (" + _vm._s(_vm.calendar.access_role) + ")")
+                ])
+              : _c("span", [
+                  _vm._v("Other (" + _vm._s(_vm.calendar.access_role) + ")")
+                ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2" }, [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
+                "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-4 text-right actions" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary btn-sm",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.shareCalendar(_vm.calendar.publicUrl)
+                  }
+                }
+              },
+              [
+                _c("i", { staticClass: "fas fa-user-friends" }),
+                _vm._v(" Share\n                ")
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "dropdown-calendar-actions" },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-sm pull-right btn-open",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleCalendarDropdownActions()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+                ),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.showCalendarDropdownActions
+                    ? _c("div", { staticClass: "items" }, [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showEditCalendarModalAction(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-edit" }),
+                            _vm._v(" Edit")
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showDuplicateCalendarModal(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-clone" }),
+                            _vm._v(" Duplicate")
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showConfirmCalendarDelete(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-trash-alt" }),
+                            _vm._v(" Delete")
+                          ]
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm.showBody
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-sm pull-right btn-opened",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleCalendarDataForm()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-angle-down" })]
+                )
+              : _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-sm pull-right btn-open",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.toggleCalendarDataForm()
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-angle-right" })]
+                )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.showBody
+          ? _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "row align-items-center" }, [
+                _c("div", { staticClass: "col-lg-6" }, [
+                  _vm.calendar.events.length > 5
+                    ? _c("div", [
+                        _vm._v(
+                          "\n                        1-5 of " +
+                            _vm._s(_vm.calendar.events.length) +
+                            " "
+                        ),
+                        _c("i", { staticClass: "fa fa-angle-right" }),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { staticClass: "btn btn-link", attrs: { href: "#" } },
+                          [_vm._v("View all")]
+                        )
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-lg-6 text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary btn-sm pull-right",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.showAddEventForm(_vm.calendar.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-plus" }),
+                      _vm._v(" Add event")
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card calendar-events" }, [
+                _c("div", { staticClass: "eventsDataFilters" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByDate }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Date\n                                "
+                          ),
+                          _vm.sortByDateDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Time\n                            "
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByLocation }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Address\n                                "
+                          ),
+                          _vm.sortByLocationDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByType }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Event\n                                "
+                          ),
+                          _vm.sortByTypeDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortEventsListByDescription }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Notes\n                                "
+                          ),
+                          _vm.sortByDescriptionDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Actions\n                            "
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "events-list" },
+                  _vm._l(_vm.sortedEvents, function(event) {
+                    return _c(
+                      "div",
+                      [
+                        _c("calendars-list-item-event-component", {
+                          ref: "event",
+                          refInFor: true,
+                          attrs: { event: event }
+                        })
+                      ],
+                      1
+                    )
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _vm.showNewEventDataForm
+                  ? _c("div", { staticClass: "card-footer" }, [
+                      _c(
+                        "form",
+                        {
+                          staticClass: "needs-validation",
+                          attrs: { id: "addCalendarEventForm", novalidate: "" },
+                          on: { submit: _vm.addEventSubmit }
+                        },
+                        [
+                          _c("input", {
+                            attrs: { type: "hidden", name: "calendar_id" },
+                            domProps: { value: _vm.calendar.id }
+                          }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "row" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "input-group input-group-sm mb-3 col-md-2"
+                              },
+                              [
+                                _c("date-picker", {
+                                  attrs: {
+                                    config: _vm.dateOptions,
+                                    name: "new_event_datetime",
+                                    disabled: _vm.requestProcess,
+                                    placeholder: "dd.mm.YYYY",
+                                    required: ""
+                                  },
+                                  model: {
+                                    value: _vm.newEventData.dateTime,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.newEventData,
+                                        "dateTime",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "newEventData.dateTime"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "input-group-append" },
+                                  [
+                                    _c(
+                                      "span",
+                                      { staticClass: "input-group-text" },
+                                      [
+                                        _c("i", {
+                                          staticClass: "far fa-calendar-alt"
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "invalid-feedback" }, [
+                                  _vm._v("Please provide a valid date.")
+                                ])
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "input-group input-group-sm mb-3 col-md-2"
+                              },
+                              [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "text",
+                                    placeholder: "H:MM PM - H:MM PM",
+                                    disabled: _vm.requestProcess,
+                                    required: "",
+                                    value: "05:20 PM - 10:35 PM"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "invalid-feedback" }, [
+                                  _vm._v("Please provide a valid times.")
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-2" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newEventData.address,
+                                    expression: "newEventData.address"
+                                  }
+                                ],
+                                ref: "newEventAddressAutocomplete",
+                                staticClass: "form-control form-control-sm",
+                                attrs: {
+                                  type: "text",
+                                  name: "new_event_address",
+                                  placeholder: "Location",
+                                  required: ""
+                                },
+                                domProps: { value: _vm.newEventData.address },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newEventData,
+                                      "address",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "invalid-feedback" }, [
+                                _vm._v("Please provide a valid address.")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-2" }, [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.newEventData.type,
+                                      expression: "newEventData.type"
+                                    }
+                                  ],
+                                  staticClass: "form-control form-control-sm",
+                                  attrs: {
+                                    name: "new_event_type",
+                                    required: ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.newEventData,
+                                        "type",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        value: "",
+                                        disabled: "",
+                                        selected: ""
+                                      }
+                                    },
+                                    [_vm._v("Select type")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "game" } }, [
+                                    _vm._v("Game")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "practice" } },
+                                    [_vm._v("Practice")]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "invalid-feedback" }, [
+                                _vm._v("Please provide a valid type.")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-2" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.newEventData.notes,
+                                    expression: "newEventData.notes"
+                                  }
+                                ],
+                                staticClass: "form-control form-control-sm",
+                                attrs: {
+                                  type: "text",
+                                  name: "new_event_notes",
+                                  placeholder: "e.g. Instructions",
+                                  required: ""
+                                },
+                                domProps: { value: _vm.newEventData.notes },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.newEventData,
+                                      "notes",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "invalid-feedback" }, [
+                                _vm._v("Please provide a valid notes.")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-2 text-right" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary btn-sm",
+                                  attrs: {
+                                    type: "submit",
+                                    form: "addCalendarEventForm",
+                                    disabled:
+                                      !_vm.newEventDataValid ||
+                                      _vm.requestProcess
+                                  }
+                                },
+                                [_c("i", { staticClass: "fas fa-check" })]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-outline-secondary btn-sm",
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.hideAddEventForm }
+                                },
+                                [_c("i", { staticClass: "fas fa-times" })]
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _vm.requestSuccess
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "alert alert-success",
+                                  attrs: { role: "alert" }
+                                },
+                                [_vm._v(_vm._s(_vm.requestSuccess))]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.requestDanger
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "alert alert-danger",
+                                  attrs: { role: "alert" }
+                                },
+                                [_vm._v(_vm._s(_vm.requestDanger))]
+                              )
+                            : _vm._e()
+                        ]
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.showInfoModal
+        ? _c(
+            "div",
+            [
+              _c("transition", { attrs: { name: "modal" } }, [
+                _c("div", { staticClass: "modal-mask" }, [
+                  _c("div", { staticClass: "modal-wrapper" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "message-modal",
+                        attrs: { tabindex: "-1", role: "dialog" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "modal-dialog",
+                            attrs: { role: "document" }
+                          },
+                          [
+                            _c("div", { staticClass: "modal-content" }, [
+                              _c("div", { staticClass: "modal-header" }, [
+                                _c("h5", { staticClass: "modal-title" }, [
+                                  _vm._v("Information")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "close",
+                                    attrs: {
+                                      type: "button",
+                                      "data-dismiss": "modal",
+                                      "aria-label": "Close"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        ;(_vm.infoModalText = ""),
+                                          (_vm.showInfoModal = false)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "span",
+                                      { attrs: { "aria-hidden": "true" } },
+                                      [_vm._v("×")]
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", {
+                                staticClass: "modal-body",
+                                domProps: {
+                                  innerHTML: _vm._s(_vm.infoModalHtml)
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "modal-footer" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-secondary",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        ;(_vm.infoModalText = ""),
+                                          (_vm.showInfoModal = false)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Close")]
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ],
+            1
+          )
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-outline-danger btn-sm",
+        attrs: { type: "button", name: "button" }
+      },
+      [
+        _c("i", { staticClass: "far fa-bell" }),
+        _vm._v(" Unsubscribe\n                ")
+      ]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminUsersComponent.vue?vue&type=template&id=579a8869&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminUsersComponent.vue?vue&type=template&id=579a8869& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "content-wrapper" }, [
+    _c("div", { staticClass: "page-head" }, [
+      _c("div", { staticClass: "row align-items-center" }, [
+        _c("div", { staticClass: "col-lg-2" }, [
+          _c("h1", [_vm._v("Users")]),
+          _vm._v(" "),
+          _c("p", {}, [_vm._v(_vm._s(_vm.users.length) + " users")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-8" }, [
+          _vm.requestDanger
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger alert-dismissible fade show",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Error!")]),
+                  _vm._v(
+                    " " +
+                      _vm._s(_vm.requestDanger) +
+                      "\n                        "
+                  ),
+                  _vm._m(0)
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.requestSuccess
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "alert alert-success alert-dismissible fade show",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _c("strong", [_vm._v("Success!")]),
+                  _vm._v(
+                    " " +
+                      _vm._s(_vm.requestSuccess) +
+                      "\n                        "
+                  ),
+                  _vm._m(1)
+                ]
+              )
+            : _vm._e()
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      Object.keys(_vm.users).length > 0
+        ? _c("div", { staticClass: "users-list" }, [
+            _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [
+              _c(
+                "table",
+                { staticClass: "table table-bordered calendar-events-table" },
+                [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortUsersListByName }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Name\n                                    "
+                            ),
+                            _vm.sortByNameDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortUsersListByName }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    E-mail\n                                    "
+                            ),
+                            _vm.sortByNameDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _vm._v(
+                          "\n                                Is Admin\n                            "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortUsersListByName }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Own calendars\n                                    "
+                            ),
+                            _vm.sortByNameDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortUsersListByName }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Public calendars\n                                    "
+                            ),
+                            _vm.sortByNameDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortUsersListByName }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Role\n                                    "
+                            ),
+                            _vm.sortByNameDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.users, function(user) {
+                      return _c("tr", [
+                        _c("td", [_vm._v(_vm._s(user.name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" " + _vm._s(user.email))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("div", { staticClass: "form-group form-check" }, [
+                            _c("input", {
+                              staticClass: "form-check-input",
+                              attrs: { type: "checkbox" },
+                              domProps: { checked: user.role === "admin" }
+                            }),
+                            _vm._v(" "),
+                            _c("label", { staticClass: "form-check-label" }, [
+                              _vm._v("Admin")
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.calendars.length))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.calendars.length))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.role))])
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              )
+            ])
+          ])
+        : _c("div", { staticClass: "calendars-list" }, [
+            _c(
+              "div",
+              { staticClass: "alert alert-info", attrs: { role: "alert" } },
+              [
+                _vm._v(
+                  "\n                    Users not found ...\n                "
+                )
+              ]
+            )
+          ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=template&id=f3d6eafa&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/frontend/CalendarDataComponent.vue?vue&type=template&id=f3d6eafa& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "content-wrapper" }, [
+    _c("div", { staticClass: "header" }, [
+      _c("div", { staticClass: "container" }, [
+        _vm.calendar === 404
+          ? _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [_vm._m(0)])
+          : _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "title" }, [
+                  _c("img", {
+                    attrs: { src: "/img/soccer_ball.png", alt: "" }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "text" }, [
+                    _vm._v(_vm._s(_vm.calendar.name))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "description" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.calendar.events.length) +
+                      " events "
+                  ),
+                  _c("i", { staticClass: "fas fa-circle" }),
+                  _vm._v(
+                    "\n                        Owned by " +
+                      _vm._s(_vm.calendar.user.name) +
+                      " "
+                  ),
+                  _c("i", { staticClass: "fas fa-circle" }),
+                  _vm._v(
+                    "\n                        Last updated " +
+                      _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
+                      "\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.calendar !== 404
+      ? _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [
+              _c(
+                "table",
+                { staticClass: "table table-bordered calendar-events-table" },
+                [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortEventsListByDate }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Date\n                                    "
+                            ),
+                            _vm.sortByDateDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortEventsListByLocation }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Address\n                                    "
+                            ),
+                            _vm.sortByLocationDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortEventsListByType }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Event type\n                                    "
+                            ),
+                            _vm.sortByTypeDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortEventsListByDescription }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Notes\n                                    "
+                            ),
+                            _vm.sortByDescriptionDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.sortEventsListByStatus }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Status\n                                    "
+                            ),
+                            _vm.sortByStatusDirection === "desc"
+                              ? _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-up-alt float-right"
+                                })
+                              : _c("i", {
+                                  staticClass:
+                                    "fas fa-sort-amount-down-alt float-right"
+                                })
+                          ]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.sortedEvents, function(event) {
+                      return _c("tr", [
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(_vm._f("formatEventDate")(event.started_at))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm._f("formatEventTime")(event.started_at)
+                              ) +
+                              " - " +
+                              _vm._s(_vm._f("formatEventTime")(event.ended_at))
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                href: "javascript:void(0)",
+                                title: event.location
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm._f("sliceString")(event.location))
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm._f("capitalize")(event.type)))
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                href: "javascript:void(0)",
+                                title: event.description
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm._f("sliceString")(event.description))
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(_vm._s(_vm._f("capitalize")(event.status)))
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              )
+            ])
+          ])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-6" }, [
+      _c("div", { staticClass: "title" }, [
+        _c("span", { staticClass: "text" }, [
+          _vm._v("404 Calendar not found ...")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6 text-right" }, [
+      _c("div", { staticClass: "actions mt-2" }, [
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "button" } },
+          [_c("i", { staticClass: "fas fa-bell" }), _vm._v(" Subscribe")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "button" } },
+          [_c("i", { staticClass: "fas fa-user-plus" }), _vm._v(" Share")]
+        )
       ])
     ])
   }

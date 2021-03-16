@@ -16255,11 +16255,17 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   color: #949fae;
 }
 
-#addCalendarModal .modal-content .modal-header, #editCalendarModal .modal-content .modal-header {
+#addCalendarModal .modal-content .modal-header,
+#editCalendarModal .modal-content .modal-header {
   background-color: #3490dc;
   color: #FFF;
 }
-#addCalendarModal .modal-content .modal-header .close, #editCalendarModal .modal-content .modal-header .close {
+#addCalendarModal .modal-content .modal-header .close,
+#editCalendarModal .modal-content .modal-header .close {
+  color: #FFFFFF;
+}
+
+#confirmDeleteCalendarModal .modal-content .modal-header .close {
   color: #FFFFFF;
 }
 
@@ -16267,24 +16273,6 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   margin-top: 15px;
 }
 
-/*
-#addCalendarModal .modal-body {
-	padding-left: 3rem;
-	padding-right: 3rem;
-}
-
-#addCalendarForm input[name="event-date"] {
-	padding-left: 5px;
-	padding-right: 5px;
-}
-
-#addCalendarForm .alert {
-	width: 70%;
-	float: right;
-	margin-top: 10px;
-	text-align: center;
-}
-*/
 #addCalendarEventForm .alert {
   text-align: center;
 }
@@ -16336,4 +16324,38 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 
 .message-modal .modal-body input {
   width: 100%;
+}
+
+/* Frontend styles */
+.frontend-main-content .container {
+  max-width: 100%;
+}
+.frontend-main-content #top-nav .btn {
+  margin-right: 10px;
+}
+.frontend-main-content .header {
+  background: #468ce4;
+  background: linear-gradient(90deg, #468ce4 0%, #0a46b2 100%);
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
+}
+.frontend-main-content .header .title img {
+  width: 25px;
+}
+.frontend-main-content .header .title .text {
+  margin-left: 10px;
+}
+.frontend-main-content .header .description {
+  font-size: 13px;
+  margin-top: 10px;
+}
+.frontend-main-content .header .description .fa-circle {
+  font-size: 5px;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.frontend-main-content .content .calendar-events-table .sort-link i {
+  margin-top: 5px;
 }

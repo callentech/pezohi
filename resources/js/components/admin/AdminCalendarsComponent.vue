@@ -6,7 +6,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-2">
                     <h1>Calendars</h1>
-                    <p class="">You have {{ calendars.length }} calendars</p>
+                    <p class="">{{ calendars.length }} calendars</p>
                 </div>
 
                 <div class="col-lg-8">
@@ -76,7 +76,7 @@
 
                 <div v-if="Object.keys(calendars).length > 0" class="calendars-list">
                     <div v-for="calendar in sortedCalendars">
-                        <calendars-list-item-component :calendar="calendar" :jobs_status="jobs_status" ref='calendar'></calendars-list-item-component>
+                        <admin-calendars-list-item-component :calendar="calendar" :jobs_status="jobs_status" ref='calendar'></admin-calendars-list-item-component>
                     </div>
                 </div>
                 <div v-else class="calendars-list">
@@ -163,76 +163,76 @@
 </template>
 
 <script>
-    export default {
-        props:['data', 'jobs_status'],
+export default {
+    props:['data', 'jobs_status'],
 
-        data() {
-            return {
-                calendars: this.data,
-                sortedCalendars: [],
-                calendarsTypesFilters: [
-                    { title: 'All calendars', val: 'all', active: true },
-                    { title: 'Owned by me', val: 'owned', active: false},
-                    { title: 'Shared with me', val: 'shared', active: false}
-                ],
+    data() {
+        return {
+            calendars: this.data,
+            sortedCalendars: [],
+            calendarsTypesFilters: [
+                { title: 'All calendars', val: 'all', active: true },
+                { title: 'Owned by me', val: 'owned', active: false},
+                { title: 'Shared with me', val: 'shared', active: false}
+            ],
 
-                requestDanger: false,
-                requestSuccess: false,
-                requestProcess: false,
+            requestDanger: false,
+            requestSuccess: false,
+            requestProcess: false,
 
-                delete_calendar_id: '',
+            delete_calendar_id: '',
 
-                sortBySummaryDirection: 'asc',
-                sortByEventsDirection: 'asc',
-                sortByOwnerDirection: 'asc',
-                sortByUpdatedDirection: 'asc',
+            sortBySummaryDirection: 'asc',
+            sortByEventsDirection: 'asc',
+            sortByOwnerDirection: 'asc',
+            sortByUpdatedDirection: 'asc',
 
-                showConfirmDeleteCalendarModal: false
-            }
+            showConfirmDeleteCalendarModal: false
+        }
+    },
+
+    created() {
+        this.$root.$refs.allCalendars = this;
+    },
+
+    methods: {
+        applyCalendarsTypeFilter: function(typeFilter) {
+
+            this.calendarsTypesFilters.forEach(typeFilter => {
+                typeFilter.active = false;
+            });
+
+            typeFilter.active = true;
         },
 
-        created() {
-            this.$root.$refs.allCalendars = this;
+        showAddCalendarModal: function() {
+            this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction();
         },
 
-        methods: {
-            applyCalendarsTypeFilter: function(typeFilter) {
+        showConfirmCalendarDeleteModal: function(id) {
+            this.delete_calendar_id = id;
+            // jQuery('#confirmCalendarDelete').modal('show');
 
-                this.calendarsTypesFilters.forEach(typeFilter => {
-                    typeFilter.active = false;
-                });
-
-                typeFilter.active = true;
-            },
-
-            showAddCalendarModal: function() {
-                this.$root.$refs.addEditCalendarModal.showAddCalendarModalAction();
-            },
-
-            showConfirmCalendarDeleteModal: function(id) {
-                this.delete_calendar_id = id;
-                // jQuery('#confirmCalendarDelete').modal('show');
-
-                this.showConfirmDeleteCalendarModal = true;
-            },
-            hideConfirmCalendarDeleteModal: function() {
-                this.showConfirmDeleteCalendarModal = false;
-            },
+            this.showConfirmDeleteCalendarModal = true;
+        },
+        hideConfirmCalendarDeleteModal: function() {
+            this.showConfirmDeleteCalendarModal = false;
+        },
 
 
-            deleteCalendar: function(id) {
+        deleteCalendar: function(id) {
 
-                let currentObj = this;
-                axios.interceptors.request.use(function (config) {
-                    // Do something before request is sent
-                    currentObj.requestProcess = true;
-                    return config;
-                }, function (error) {
-                    // Do something with request error
-                    return Promise.reject(error);
-                });
+            let currentObj = this;
+            axios.interceptors.request.use(function (config) {
+                // Do something before request is sent
+                currentObj.requestProcess = true;
+                return config;
+            }, function (error) {
+                // Do something with request error
+                return Promise.reject(error);
+            });
 
-                axios.post('/delete-calendar', { calendar_id: id })
+            axios.post('/delete-calendar', { calendar_id: id })
                 .then(function (response) {
                     if (response.data.code === 401) {
                         document.location.href="/";
@@ -261,42 +261,42 @@
                     currentObj.requestProcess = false;
                     currentObj.showConfirmDeleteCalendarModal = false;
                 });
-            },
-
-            sortArray: function(array, field, direction) {
-                return _.orderBy(array, field, direction);
-            },
-
-            // Sort calendar list methods
-            sortCalendarsListBySummary: function() {
-                let direction = this.sortBySummaryDirection === 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
-                this.sortBySummaryDirection = direction;
-            },
-
-            sortCalendarsListByEvents: function() {
-                let direction = this.sortByEventsDirection === 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'eventsCount', direction);
-                this.sortByEventsDirection = direction;
-            },
-
-            sortCalendarsListByOwner: function() {
-                let direction = this.sortByOwnerDirection === 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
-                this.sortByOwnerDirection = direction;
-            },
-
-            sortCalendarsListByUpdated: function() {
-                let direction = this.sortByUpdatedDirection === 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'updated_at', direction);
-                this.sortByUpdatedDirection = direction;
-            }
         },
 
-        mounted() {
-            this.sortCalendarsListByUpdated();
+        sortArray: function(array, field, direction) {
+            return _.orderBy(array, field, direction);
+        },
 
+        // Sort calendar list methods
+        sortCalendarsListBySummary: function() {
+            let direction = this.sortBySummaryDirection === 'desc' ? 'asc' : 'desc';
+            this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
+            this.sortBySummaryDirection = direction;
+        },
 
+        sortCalendarsListByEvents: function() {
+            let direction = this.sortByEventsDirection === 'desc' ? 'asc' : 'desc';
+            this.sortedCalendars = this.sortArray(this.calendars, 'eventsCount', direction);
+            this.sortByEventsDirection = direction;
+        },
+
+        sortCalendarsListByOwner: function() {
+            let direction = this.sortByOwnerDirection === 'desc' ? 'asc' : 'desc';
+            this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
+            this.sortByOwnerDirection = direction;
+        },
+
+        sortCalendarsListByUpdated: function() {
+            let direction = this.sortByUpdatedDirection === 'desc' ? 'asc' : 'desc';
+            this.sortedCalendars = this.sortArray(this.calendars, 'updated_at', direction);
+            this.sortByUpdatedDirection = direction;
         }
+    },
+
+    mounted() {
+        this.sortCalendarsListByUpdated();
+
+
     }
+}
 </script>

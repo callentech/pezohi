@@ -21,10 +21,19 @@ window.Vue = require('vue').default;
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+// Backend Components
 Vue.component('all-calendars-component', require('./components/AllCalendarsComponent.vue').default);
 Vue.component('calendars-list-item-component', require('./components/CalendarsListItemComponent.vue').default);
 Vue.component('calendars-list-item-event-component', require('./components/CalendarsListItemEventComponent.vue').default);
 Vue.component('add-edit-calendar-modal-component', require('./components/AddEditCalendarModalComponent.vue').default);
+
+// Frontend Components
+Vue.component('frontend-calendar-data-component', require('./components/frontend/CalendarDataComponent.vue').default);
+
+// Admin components
+Vue.component('admin-calendars-component', require('./components/admin/AdminCalendarsComponent.vue').default);
+Vue.component('admin-users-component', require('./components/admin/AdminUsersComponent.vue').default);
+Vue.component('admin-calendars-list-item-component', require('./components/admin/AdminCalendarsListItemComponent.vue').default);
 
 
 
@@ -42,10 +51,22 @@ const app = new Vue({
     data() {
     	return {
 
+            showAdminUsers: true,
+            showAdminCalendars: false
+
     	}
     },
 
     methods: {
+        showAdminUsersAction: function() {
+            this.showAdminUsers = true;
+            this.showAdminCalendars = false;
+        },
+
+        showAdminCalendarsAction: function() {
+            this.showAdminUsers = false;
+            this.showAdminCalendars = true;
+        }
 
     }
 });

@@ -36,6 +36,26 @@ body #app nav.navbar .navbar-brand {
 	}
 }
 
+.table {
+    .sort-link {
+        i {
+            margin-top: 5px;
+        }
+    }
+
+    .form-group.form-check {
+        margin-bottom: 0;
+        input, label {
+            cursor: pointer;
+        }
+
+        label {
+            margin-left: 10px;
+        }
+
+    }
+}
+
 // Calendars page
 
 .filter-links {
@@ -292,14 +312,6 @@ body #app nav.navbar .navbar-brand {
 
     .content {
 
-        .calendar-events-table {
 
-            .sort-link {
-
-                i {
-                    margin-top: 5px;
-                }
-            }
-        }
     }
 }

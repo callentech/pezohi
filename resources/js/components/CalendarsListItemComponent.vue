@@ -73,9 +73,13 @@
 
 				<div class="row align-items-center">
 	                <div class="col-lg-6" >
-	                	<div v-if="calendar.events.length > 5">
-	                		1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>
-	                	</div>
+<!--	                	<div v-if="calendar.events.length > 5">-->
+<!--	                		1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>-->
+<!--	                	</div>-->
+
+                        <div>
+                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#">View all</a>
+                        </div>
 	                </div>
 
 	                <div class="col-lg-6 text-right">
@@ -217,6 +221,7 @@
 	            </div>
 			</div>
 		</transition>
+        <!-- END Calendar details -->
 
 		<!-- Share Calendar Message modal -->
 		<div v-if="showInfoModal">
@@ -249,7 +254,7 @@
 
 
 
-		<!-- END Calendar details -->
+
 	</div>
 
 </template>

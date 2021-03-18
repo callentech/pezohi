@@ -26,9 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role == 'admin') {
-            return redirect()->route('adminHome');
-        } else {
+//        if (Auth::user()->role == 'admin') {
+////            return redirect()->route('adminHome');
+//        } else {
             $calendars = Auth::user()->calendars()->with('events')->get();
             foreach ($calendars as $key => $calendar) {
                 if ($calendar->google_id == Auth::user()->email) {
@@ -39,6 +39,6 @@ class HomeController extends Controller
             }
             $jobsStatus = Auth::user()->jobs_status;
             return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE), 'jobs_status' => $jobsStatus]);
-        }
+        //}
     }
 }

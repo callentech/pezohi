@@ -22,43 +22,44 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
-    
+
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-light bg-white shadow-sm">
 
-          <a class="navbar-brand" href="{{ url('/') }}">
-              <span class="badge brand-logo">P</span>{{ config('app.name', 'Laravel') }}
-          </a>
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <span class="badge brand-logo">P</span>{{ config('app.name', 'Laravel') }}
+            </a>
 
-          <ul class="navbar-nav">
-            <li>
-              <a href="#" class="active">
-                <i class="fa fa-calendar"></i>
-                Calendars
-              </a>
-            </li>
-          </ul>
-          <ul class="user-menu">
-            <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ Auth::user()->email }}
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
+            <ul class="navbar-nav">
+                <li>
+                    <a href="#" class="active">
+                        <i class="fa fa-calendar"></i>
+                        Calendars
+                    </a>
+                </li>
+            </ul>
+            <ul class="user-menu">
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" v-pre>
+                        {{ Auth::user()->email }}
                     </a>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </div>
-            </li>
-          </ul>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </nav>
 
         <main class="main-content">

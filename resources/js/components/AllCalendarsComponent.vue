@@ -4,12 +4,17 @@
 
         <div class="page-head">
             <div class="row align-items-center">
-                <div class="col-lg-2">
+                <div class="col-lg-4">
                     <h1>Calendars</h1>
-                    <p class="">You have {{ calendars.length }} calendars</p>
+                    <p class="">
+                        You have {{ calendars.length }} calendars
+                        <span v-if="user_role === 'admin'">
+                            | <a  href="/admin-home">Admin Dashboard</a>
+                        </span>
+                    </p>
                 </div>
 
-                <div class="col-lg-8">
+                <div class="col-lg-6">
                     <div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Error!</strong> {{ requestDanger }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -164,7 +169,7 @@
 
 <script>
     export default {
-        props:['data', 'jobs_status'],
+        props:['data', 'jobs_status', 'user_role'],
 
         data() {
             return {

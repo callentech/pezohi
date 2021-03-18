@@ -41,7 +41,8 @@ Route::post('/new-single-event', [App\Http\Controllers\EventsController::class, 
 Route::post('/edit-single-event', [App\Http\Controllers\EventsController::class, 'editSingleEventAction'])->name('editSingleEvent');
 
 /* Admin */
-Route::get('/admin-home', [App\Http\Controllers\AdminController::class, 'indexAction'])->name('adminHome');
+Route::get('/admin-home', [App\Http\Controllers\AdminController::class, 'indexAction'])->name('adminHome')->middleware('admin');
+Route::post('/admin-set-user-role', [App\Http\Controllers\AdminController::class, 'setUserRoleAction'])->name('adminSetUserRole')->middleware('admin');
 //Route::get('/admin-users', [App\Http\Controllers\AdminController::class, 'usersAction'])->name('adminUsers');
 
 /*

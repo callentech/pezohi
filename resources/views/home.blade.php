@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-xl-11">
-            <all-calendars-component :data="{{ $calendars }}" jobs_status="{{ $jobs_status }}"></all-calendars-component>
+            <all-calendars-component :data="{{ $calendars }}" jobs_status="{{ $jobs_status }}" user_role="{{ Auth::user()->role }}"></all-calendars-component>
         </div>
     </div>
 </div>

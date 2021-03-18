@@ -36,7 +36,14 @@
             <li>
                 <a href="javascript:void(0)" v-bind:class="{ active: showAdminCalendars }" @click="showAdminCalendarsAction">
                     <i class="fa fa-calendar"></i>
-                    Calendars
+                    All Users Calendars
+                </a>
+            </li>
+
+            <li>
+                <a href="/">
+                    <i class="fa fa-calendar"></i>
+                    My Calendars
                 </a>
             </li>
 

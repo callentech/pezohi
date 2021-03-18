@@ -16154,6 +16154,19 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   border-radius: 10px;
 }
 
+.table .sort-link i {
+  margin-top: 5px;
+}
+.table .form-group.form-check {
+  margin-bottom: 0;
+}
+.table .form-group.form-check input, .table .form-group.form-check label {
+  cursor: pointer;
+}
+.table .form-group.form-check label {
+  margin-left: 10px;
+}
+
 .filter-links {
   margin-bottom: 20px;
 }
@@ -16355,7 +16368,4 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   vertical-align: middle;
   margin-left: 10px;
   margin-right: 10px;
-}
-.frontend-main-content .content .calendar-events-table .sort-link i {
-  margin-top: 5px;
 }

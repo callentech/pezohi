@@ -3673,6 +3673,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3684,6 +3697,9 @@ __webpack_require__.r(__webpack_exports__);
     dateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default())
   },
   data: function data() {
+    var startDate = new Date();
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate() + 6);
     return {
       showEditSingleEventForm: false,
       editedEventData: {
@@ -3699,6 +3715,10 @@ __webpack_require__.r(__webpack_exports__);
       dateOptions: {
         format: 'M/DD/YYYY',
         useCurrent: true
+      },
+      dateRange: {
+        startDate: startDate,
+        endDate: endDate
       }
     };
   },
@@ -3798,6 +3818,9 @@ __webpack_require__.r(__webpack_exports__);
       if (!value) return '';
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    date: function date(val) {
+      return val ? val.toLocaleString() : '';
     }
   }
 });
@@ -70576,9 +70599,9 @@ var render = function() {
           _c("div", { staticClass: "col-2" }, [
             _c("div", { staticClass: "data" }, [
               _vm._v(
-                "\n                " +
+                "\n                    " +
                   _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
-                  "\n            "
+                  "\n                "
               )
             ])
           ]),
@@ -70586,11 +70609,11 @@ var render = function() {
           _c("div", { staticClass: "col-2" }, [
             _c("div", { staticClass: "data" }, [
               _vm._v(
-                "\n                " +
+                "\n                    " +
                   _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
                   " - " +
                   _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
-                  "\n            "
+                  "\n                "
               )
             ])
           ]),
@@ -70613,9 +70636,9 @@ var render = function() {
           _c("div", { staticClass: "col-2" }, [
             _c("div", { staticClass: "data" }, [
               _vm._v(
-                "\n                " +
+                "\n                    " +
                   _vm._s(_vm._f("capitalize")(_vm.event.type)) +
-                  "\n            "
+                  "\n                "
               )
             ])
           ]),
@@ -70684,7 +70707,50 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm._m(2),
+          _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "data" }, [
+              _c(
+                "div",
+                { staticClass: "input-group input-group-sm mb-3" },
+                [
+                  _vm._v("\nDateRangePicker\n                        "),
+                  _c("date-range-picker", {
+                    ref: "picker",
+                    attrs: {
+                      "locale-data": {
+                        firstDay: 1,
+                        format: "DD-MM-YYYY HH:mm:ss"
+                      }
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "input",
+                        fn: function(picker) {
+                          return [
+                            _vm._v(
+                              "\n            " +
+                                _vm._s(_vm._f("date")(picker.startDate)) +
+                                " - " +
+                                _vm._s(_vm._f("date")(picker.endDate)) +
+                                "\n        "
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dateRange,
+                      callback: function($$v) {
+                        _vm.dateRange = $$v
+                      },
+                      expression: "dateRange"
+                    }
+                  })
+                ],
+                1
+              )
+            ])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _c("div", { staticClass: "data" }, [
@@ -70869,25 +70935,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "input-group-append" }, [
       _c("span", { staticClass: "input-group-text" }, [
         _c("i", { staticClass: "far fa-calendar-alt" })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-2" }, [
-      _c("div", { staticClass: "data" }, [
-        _c("div", { staticClass: "input-group input-group-sm mb-3" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              type: "text",
-              placeholder: "5:30 PM - 6:30 PM",
-              value: "5:30 PM - 6:30 PM"
-            }
-          })
-        ])
       ])
     ])
   }

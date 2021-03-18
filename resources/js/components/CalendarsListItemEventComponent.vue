@@ -49,7 +49,20 @@
             <div class="col-2">
                 <div class="data">
                     <div class="input-group input-group-sm mb-3">
-                        <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM" value="5:30 PM - 6:30 PM">
+                        <!-- <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM" value="5:30 PM - 6:30 PM"> -->
+DateRangePicker
+                        <date-range-picker
+            ref="picker"
+            
+            :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
+
+            v-model="dateRange"
+            
+    >
+        <template v-slot:input="picker" style="min-width: 350px;">
+            {{ picker.startDate | date }} - {{ picker.endDate | date }}
+        </template>
+    </date-range-picker>
                     </div>
                 </div>
             </div>
@@ -114,6 +127,13 @@
         },
 
         data() {
+
+            let startDate = new Date();
+          let endDate = new Date();
+          endDate.setDate(endDate.getDate() + 6);
+      
+
+
             return {
                 showEditSingleEventForm: false,
 
@@ -132,7 +152,9 @@
                 dateOptions: {
                     format: 'M/DD/YYYY',
                     useCurrent: true
-                }
+                },
+
+                dateRange: {startDate, endDate}
             }
         },
 
@@ -243,7 +265,11 @@
                 if (!value) return ''
                 value = value.toString()
                 return value.charAt(0).toUpperCase() + value.slice(1)
-            }
+            },
+
+            date(val) {
+        return val ? val.toLocaleString() : ''
+      }
         }
     }
 </script>

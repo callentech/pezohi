@@ -2898,8 +2898,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['data', 'jobs_status'],
+  props: ['data', 'jobs_status', 'user_role'],
   data: function data() {
     return {
       calendars: this.data,
@@ -3037,6 +3042,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4766,19 +4776,110 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data'],
   data: function data() {
     return {
       users: this.data,
+      sortedUsers: [],
       requestDanger: '',
       requestSuccess: '',
-      sortByNameDirection: 'desc'
+      requestProcess: false,
+      searchUserByEmailKeyword: '',
+      sortByIdDirection: 'desc',
+      sortByNameDirection: 'desc',
+      sortByEmailDirection: 'desc',
+      sortByOwnCalendarsDirection: 'desc',
+      sortByPublicCalendarsDirection: 'desc',
+      sortByRoleDirection: 'desc'
     };
   },
   created: function created() {},
+  mounted: function mounted() {
+    this.sortUsersListById();
+  },
   methods: {
-    sortUsersListByName: function sortUsersListByName() {}
+    setUserRole: function setUserRole(userId, event) {
+      var currentObj = this;
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      var role = event.target.checked ? 'admin' : 'user';
+      axios.post('/admin-set-user-role', {
+        user_id: userId,
+        role: role
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          setTimeout(function () {
+            currentObj.requestSuccess = false;
+          }, 2000);
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (error) {
+        if (error.response && error.response.status === 422) {
+          currentObj.requestDanger = error.response.data.message;
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
+    searchUserByEmail: function searchUserByEmail(event) {
+      var keyword = event.target.value;
+      var searchResultArray = [];
+      this.users.forEach(function (item, i, arr) {
+        if (item.email.includes(keyword)) {
+          searchResultArray.push(item);
+        }
+      });
+      this.sortedUsers = searchResultArray;
+    },
+    sortUsersListById: function sortUsersListById() {
+      this.sortByIdDirection = this.sortByIdDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedUsers = this.sortArray(this.users, 'id', this.sortByIdDirection);
+    },
+    sortUsersListByName: function sortUsersListByName() {
+      this.sortByNameDirection = this.sortByNameDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedUsers = this.sortArray(this.users, 'name', this.sortByNameDirection);
+    },
+    sortUsersListByEmail: function sortUsersListByEmail() {
+      this.sortByEmailDirection = this.sortByEmailDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedUsers = this.sortArray(this.users, 'email', this.sortByEmailDirection);
+    },
+    sortUsersListByOwnCalendars: function sortUsersListByOwnCalendars() {
+      this.sortByOwnCalendarsDirection = this.sortByOwnCalendarsDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedUsers = this.sortArray(this.users, 'ownCalendarsCount', this.sortByOwnCalendarsDirection);
+    },
+    sortUsersListByPublicCalendars: function sortUsersListByPublicCalendars() {
+      this.sortByPublicCalendarsDirection = this.sortByPublicCalendarsDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedUsers = this.sortArray(this.users, 'publicCalendarsCount', this.sortByPublicCalendarsDirection);
+    },
+    sortUsersListByRole: function sortUsersListByRole() {
+      this.sortByRoleDirection = this.sortByRoleDirection === 'desc' ? 'asc' : 'desc';
+      this.sortedUsers = this.sortArray(this.users, 'role', this.sortByRoleDirection);
+    },
+    sortArray: function sortArray(array, field, direction) {
+      return _.orderBy(array, field, direction);
+    }
   }
 });
 
@@ -69352,15 +69453,27 @@ var render = function() {
   return _c("div", { staticClass: "content-wrapper" }, [
     _c("div", { staticClass: "page-head" }, [
       _c("div", { staticClass: "row align-items-center" }, [
-        _c("div", { staticClass: "col-lg-2" }, [
+        _c("div", { staticClass: "col-lg-4" }, [
           _c("h1", [_vm._v("Calendars")]),
           _vm._v(" "),
           _c("p", {}, [
-            _vm._v("You have " + _vm._s(_vm.calendars.length) + " calendars")
+            _vm._v(
+              "\n                    You have " +
+                _vm._s(_vm.calendars.length) +
+                " calendars\n                    "
+            ),
+            _vm.user_role === "admin"
+              ? _c("span", [
+                  _vm._v("\n                        | "),
+                  _c("a", { attrs: { href: "/admin-home" } }, [
+                    _vm._v("Admin Dashboard")
+                  ])
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-lg-8" }, [
+        _c("div", { staticClass: "col-lg-6" }, [
           _vm.requestDanger
             ? _c(
                 "div",
@@ -69951,22 +70064,16 @@ var render = function() {
           ? _c("div", { staticClass: "card-body" }, [
               _c("div", { staticClass: "row align-items-center" }, [
                 _c("div", { staticClass: "col-lg-6" }, [
-                  _vm.calendar.events.length > 5
-                    ? _c("div", [
-                        _vm._v(
-                          "\n\t                \t\t1-5 of " +
-                            _vm._s(_vm.calendar.events.length) +
-                            " "
-                        ),
-                        _c("i", { staticClass: "fa fa-angle-right" }),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          { staticClass: "btn btn-link", attrs: { href: "#" } },
-                          [_vm._v("View all")]
-                        )
-                      ])
-                    : _vm._e()
+                  _c("div", [
+                    _vm._v(
+                      "\n                            1-5 of " +
+                        _vm._s(_vm.calendar.events.length) +
+                        " "
+                    ),
+                    _c("i", { staticClass: "fa fa-angle-right" }),
+                    _vm._v(" "),
+                    _c("a", { attrs: { href: "#" } }, [_vm._v("View all")])
+                  ])
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-lg-6 text-right" }, [
@@ -72181,6 +72288,19 @@ var render = function() {
                 ]
               )
             : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-2 text-lg-right" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Find user by e-mail" },
+            on: {
+              keyup: function($event) {
+                return _vm.searchUserByEmail($event)
+              },
+              "": function($event) {}
+            }
+          })
         ])
       ])
     ]),
@@ -72189,178 +72309,215 @@ var render = function() {
       Object.keys(_vm.users).length > 0
         ? _c("div", { staticClass: "users-list" }, [
             _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [
-              _c(
-                "table",
-                { staticClass: "table table-bordered calendar-events-table" },
-                [
-                  _c("thead", [
-                    _c("tr", [
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "sort-link",
-                            attrs: { href: "javascript:void(0)" },
-                            on: { click: _vm.sortUsersListByName }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    Name\n                                    "
-                            ),
-                            _vm.sortByNameDirection === "desc"
-                              ? _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-up-alt float-right"
-                                })
-                              : _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-down-alt float-right"
-                                })
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "sort-link",
-                            attrs: { href: "javascript:void(0)" },
-                            on: { click: _vm.sortUsersListByName }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    E-mail\n                                    "
-                            ),
-                            _vm.sortByNameDirection === "desc"
-                              ? _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-up-alt float-right"
-                                })
-                              : _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-down-alt float-right"
-                                })
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _vm._v(
-                          "\n                                Is Admin\n                            "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "sort-link",
-                            attrs: { href: "javascript:void(0)" },
-                            on: { click: _vm.sortUsersListByName }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    Own calendars\n                                    "
-                            ),
-                            _vm.sortByNameDirection === "desc"
-                              ? _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-up-alt float-right"
-                                })
-                              : _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-down-alt float-right"
-                                })
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "sort-link",
-                            attrs: { href: "javascript:void(0)" },
-                            on: { click: _vm.sortUsersListByName }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    Public calendars\n                                    "
-                            ),
-                            _vm.sortByNameDirection === "desc"
-                              ? _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-up-alt float-right"
-                                })
-                              : _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-down-alt float-right"
-                                })
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "sort-link",
-                            attrs: { href: "javascript:void(0)" },
-                            on: { click: _vm.sortUsersListByName }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    Role\n                                    "
-                            ),
-                            _vm.sortByNameDirection === "desc"
-                              ? _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-up-alt float-right"
-                                })
-                              : _c("i", {
-                                  staticClass:
-                                    "fas fa-sort-amount-down-alt float-right"
-                                })
-                          ]
-                        )
-                      ])
+              _c("table", { staticClass: "table table-bordered table-sm" }, [
+                _c("thead", [
+                  _c("tr", [
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortUsersListById }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    ID\n                                    "
+                          ),
+                          _vm.sortByIdDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortUsersListByName }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Name\n                                    "
+                          ),
+                          _vm.sortByNameDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortUsersListByEmail }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    E-mail\n                                    "
+                          ),
+                          _vm.sortByEmailDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _vm._v(
+                        "\n                                Is Admin\n                            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortUsersListByOwnCalendars }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Own calendars\n                                    "
+                          ),
+                          _vm.sortByOwnCalendarsDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortUsersListByPublicCalendars }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Public calendars\n                                    "
+                          ),
+                          _vm.sortByPublicCalendarsDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { attrs: { scope: "col" } }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "sort-link",
+                          attrs: { href: "javascript:void(0)" },
+                          on: { click: _vm.sortUsersListByRole }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    Role\n                                    "
+                          ),
+                          _vm.sortByRoleDirection === "desc"
+                            ? _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-up-alt float-right"
+                              })
+                            : _c("i", {
+                                staticClass:
+                                  "fas fa-sort-amount-down-alt float-right"
+                              })
+                        ]
+                      )
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    _vm._l(_vm.users, function(user) {
-                      return _c("tr", [
-                        _c("td", [_vm._v(_vm._s(user.name))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(" " + _vm._s(user.email))]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _c("div", { staticClass: "form-group form-check" }, [
-                            _c("input", {
-                              staticClass: "form-check-input",
-                              attrs: { type: "checkbox" },
-                              domProps: { checked: user.role === "admin" }
-                            }),
-                            _vm._v(" "),
-                            _c("label", { staticClass: "form-check-label" }, [
-                              _vm._v("Admin")
-                            ])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(user.calendars.length))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(user.calendars.length))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(user.role))])
-                      ])
-                    }),
-                    0
-                  )
-                ]
-              )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.sortedUsers, function(user) {
+                    return _c("tr", [
+                      _c("td", [_vm._v(_vm._s(user.id))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.email))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("div", { staticClass: "form-group form-check" }, [
+                          _c("input", {
+                            staticClass: "form-check-input",
+                            attrs: {
+                              id: "user_" + user.id + "_role",
+                              type: "checkbox",
+                              disabled: _vm.requestProcess
+                            },
+                            domProps: { checked: user.role === "admin" },
+                            on: {
+                              change: function($event) {
+                                return _vm.setUserRole(user.id, $event)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "label",
+                            {
+                              staticClass: "form-check-label",
+                              attrs: { for: "user_" + user.id + "_role" }
+                            },
+                            [_vm._v("Admin")]
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.ownCalendarsCount))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.publicCalendarsCount))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.role))])
+                    ])
+                  }),
+                  0
+                )
+              ])
             ])
           ])
         : _c("div", { staticClass: "calendars-list" }, [

@@ -3398,6 +3398,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3411,7 +3441,21 @@ __webpack_require__.r(__webpack_exports__);
 
   },
   data: function data() {
+    var startDate = new Date();
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate() + 6);
     return {
+      dateRange: {
+        startDate: startDate,
+        endDate: endDate
+      },
+      timePicker: true,
+      dateFormat: 'M/DD/YYYY',
+      showWeekNumbers: false,
+      singleDatePicker: false,
+      showDropdowns: false,
+      ranges: false,
+      showCalendar: true,
       showBody: false,
       showCalendarDropdownActions: false,
       showNewEventDataForm: false,
@@ -3654,6 +3698,20 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return outputDate;
+    },
+    date: function date(_date) {
+      var day = _date.getDate() >= 10 ? _date.getDate() : '0' + _date.getDate();
+
+      var dateHours = _date.getHours();
+
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+
+      var dateMinutes = _date.getMinutes();
+
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      return _date.getMonth() + 1 + '/' + day + '/' + _date.getFullYear() + ' ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
     }
   },
   mounted: function mounted() {
@@ -3888,6 +3946,7 @@ __webpack_require__.r(__webpack_exports__);
           currentObj.requestSuccess = response.data.data.message; // Update table event data
 
           currentObj.event.started_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.startDate);
+          currentObj.event.ended_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.endDate);
           currentObj.event.location = currentObj.editedEventData.location;
           currentObj.event.type = currentObj.editedEventData.type;
           currentObj.event.description = currentObj.editedEventData.description; // Hide edit event form
@@ -70675,75 +70734,114 @@ var render = function() {
                               "div",
                               {
                                 staticClass:
-                                  "input-group input-group-sm mb-3 col-md-2"
+                                  "input-group input-group-sm mb-3 col-md-4"
                               },
                               [
-                                _c("date-picker", {
+                                _c("date-range-picker", {
                                   attrs: {
-                                    config: _vm.dateOptions,
-                                    name: "new_event_datetime",
-                                    disabled: _vm.requestProcess,
-                                    placeholder: "dd.mm.YYYY",
-                                    required: ""
+                                    ",": "",
+                                    "time-picker": _vm.timePicker,
+                                    showWeekNumbers: _vm.showWeekNumbers,
+                                    singleDatePicker: _vm.singleDatePicker,
+                                    showDropdowns: _vm.showDropdowns,
+                                    ranges: _vm.ranges,
+                                    "always-show-calendars": _vm.showCalendar,
+                                    valueType: "format"
                                   },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "header",
+                                        fn: function(header) {
+                                          return _c(
+                                            "div",
+                                            { staticClass: "slot" },
+                                            [
+                                              _c("h3", [
+                                                _vm._v(
+                                                  "Select Event date & time"
+                                                )
+                                              ])
+                                            ]
+                                          )
+                                        }
+                                      },
+                                      {
+                                        key: "input",
+                                        fn: function(picker) {
+                                          return [
+                                            _vm._v(
+                                              "\n                                " +
+                                                _vm._s(
+                                                  _vm._f("date")(
+                                                    picker.startDate
+                                                  )
+                                                ) +
+                                                " - " +
+                                                _vm._s(
+                                                  _vm._f("date")(picker.endDate)
+                                                ) +
+                                                "\n                            "
+                                            )
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        key: "footer",
+                                        fn: function(data) {
+                                          return _c(
+                                            "div",
+                                            { staticClass: "slot" },
+                                            [
+                                              _vm._v(
+                                                "\n                                    Selected range : " +
+                                                  _vm._s(data.rangeText) +
+                                                  "\n                                "
+                                              ),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticStyle: {
+                                                    "margin-left": "auto"
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "a",
+                                                    {
+                                                      staticClass:
+                                                        "btn btn-primary btn-sm",
+                                                      on: {
+                                                        click: data.clickApply
+                                                      }
+                                                    },
+                                                    [_vm._v("Set range")]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    false,
+                                    1463127886
+                                  ),
                                   model: {
-                                    value: _vm.newEventData.dateTime,
+                                    value: _vm.dateRange,
                                     callback: function($$v) {
-                                      _vm.$set(
-                                        _vm.newEventData,
-                                        "dateTime",
-                                        $$v
-                                      )
+                                      _vm.dateRange = $$v
                                     },
-                                    expression: "newEventData.dateTime"
+                                    expression: "dateRange"
                                   }
                                 }),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "input-group-append" },
-                                  [
-                                    _c(
-                                      "span",
-                                      { staticClass: "input-group-text" },
-                                      [
-                                        _c("i", {
-                                          staticClass: "far fa-calendar-alt"
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                ),
                                 _vm._v(" "),
                                 _c("div", { staticClass: "invalid-feedback" }, [
                                   _vm._v("Please provide a valid date.")
                                 ])
                               ],
                               1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "input-group input-group-sm mb-3 col-md-2"
-                              },
-                              [
-                                _c("input", {
-                                  staticClass: "form-control",
-                                  attrs: {
-                                    type: "text",
-                                    placeholder: "H:MM PM - H:MM PM",
-                                    disabled: _vm.requestProcess,
-                                    required: "",
-                                    value: "05:20 PM - 10:35 PM"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "invalid-feedback" }, [
-                                  _vm._v("Please provide a valid times.")
-                                ])
-                              ]
                             ),
                             _vm._v(" "),
                             _c("div", { staticClass: "col-md-2" }, [

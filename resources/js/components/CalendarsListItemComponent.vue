@@ -151,21 +151,51 @@
 
 					    		<div class="row">
 
-				    				<div class="input-group input-group-sm mb-3 col-md-2">
+				    				<div class="input-group input-group-sm mb-3 col-md-4">
 
-										<date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="requestProcess" placeholder="dd.mm.YYYY" required></date-picker>
+										<!-- <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="requestProcess" placeholder="dd.mm.YYYY" required></date-picker>
 
 										<div class="input-group-append">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-										</div>
+										</div> -->
+
+										<date-range-picker
+                            v-model="dateRange",
+                            :time-picker="timePicker"
+                            :showWeekNumbers="showWeekNumbers"
+                            :singleDatePicker="singleDatePicker"
+                            :showDropdowns="showDropdowns"
+                            :ranges="ranges"
+                            :always-show-calendars="showCalendar"
+                            valueType="format"
+                        >
+                            <!--    header slot-->
+                            <div slot="header" slot-scope="header" class="slot">
+                                <h3>Select Event date & time</h3>
+                            </div>
+
+                            <!--    input slot (new slot syntax)-->
+                            <template #input="picker" name="event-date-range">
+                                {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                            </template>
+
+                            <!--    footer slot-->
+                            <div slot="footer" slot-scope="data" class="slot">
+                                    Selected range : {{data.rangeText}}
+                                <div style="margin-left: auto">
+                                    <a @click="data.clickApply" class="btn btn-primary btn-sm">Set range</a>
+                                </div>
+                            </div>
+                        </date-range-picker>
+
 										<div class="invalid-feedback">Please provide a valid date.</div>
 									</div>
 
 
-					    			<div class="input-group input-group-sm mb-3 col-md-2">
+					    			<!-- <div class="input-group input-group-sm mb-3 col-md-2">
 										<input type="text" class="form-control" placeholder="H:MM PM - H:MM PM" :disabled="requestProcess" required value="05:20 PM - 10:35 PM">
 										<div class="invalid-feedback">Please provide a valid times.</div>
-									</div>
+									</div> -->
 
 					    			<div class="col-md-2">
 					    				<input ref="newEventAddressAutocomplete" type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Location" required>
@@ -274,7 +304,23 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 		},
 
 		data() {
-			return {
+			let startDate = new Date();
+            let endDate = new Date();
+            endDate.setDate(endDate.getDate() + 6);
+
+            return {
+
+                dateRange: { startDate, endDate },
+                timePicker: true,
+                dateFormat: 'M/DD/YYYY',
+                showWeekNumbers: false,
+                singleDatePicker: false,
+                showDropdowns: false,
+                ranges: false,
+                showCalendar: true,
+
+
+
 				showBody: false,
 				showCalendarDropdownActions: false,
 				showNewEventDataForm: false,
@@ -564,7 +610,18 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 					outputDate = (date.getMonth()+1)+'/'+day+'/'+date.getFullYear();
 				}
 				return outputDate;
-			}
+			},
+
+			date: function(date) {
+                let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+                let dateHours = date.getHours();
+                let dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+                dateHours = dateHours % 12;
+                dateHours = dateHours ? dateHours : 12;
+                let dateMinutes = date.getMinutes();
+                dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
+                return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear()+' '+dateHours+':'+dateMinutes+' '+dateAmpm;
+            }
 
 		},
 

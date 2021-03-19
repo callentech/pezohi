@@ -161,6 +161,7 @@ class CalendarsController extends Controller
 
             // Update calendar in DB
             $calendar->name = $updatedGoogleCalendar->summary;
+            $calendar->updated_at = \Carbon\Carbon::now();
             $calendar->save();
 
             // Sync events Data
@@ -217,7 +218,7 @@ class CalendarsController extends Controller
                         'location' => $newGoogleEvent->location,
                         'allday' => 0,
                         'started_at' => $this->parseDatetime($newGoogleEvent->start),
-                        'ended_at' => $this->parseDatetime($newGoogleEvent->end)
+                        'ended_at' => $this->parseDatetime($newGoogleEvent->end),
                     ]);
                     $calendar->events()->save($newEvent);
 

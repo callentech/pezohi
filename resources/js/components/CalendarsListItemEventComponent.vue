@@ -225,6 +225,7 @@
                         currentObj.requestSuccess = response.data.data.message;
                         // Update table event data
                         currentObj.event.started_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.startDate);
+                        currentObj.event.ended_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.endDate);
                         currentObj.event.location = currentObj.editedEventData.location;
                         currentObj.event.type = currentObj.editedEventData.type;
                         currentObj.event.description = currentObj.editedEventData.description;

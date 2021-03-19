@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Services\Google;
 use Google_Service_Calendar_Event;
 use Google_Service_Calendar_EventExtendedProperties;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -97,17 +98,12 @@ class EventsController extends Controller
         }
     }
 
-    public function editSingleEventAction(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editSingleEventAction(Request $request): JsonResponse
     {
-        /**
-         * array(5) {
-         * ["id"]=> int(5)
-         * ["dateTime"]=> string(9) "3/11/2021"
-         * ["location"]=> string(10) "Location 2"
-         * ["type"]=> string(4) "game"
-         * ["description"]=> string(13) "Description 2" }
-         */
-
         $request->validate([
             'id' => 'required',
             'dateTime' => 'required',
@@ -126,8 +122,8 @@ class EventsController extends Controller
             ]);
         }
 
-        $started_at = date_create($request->dateTime);
-        $ended_at = date_create($request->dateTime);
+        $started_at = date_create($request->dateTime['startDate']);
+        $ended_at = date_create($request->dateTime['endDate']);
 
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');

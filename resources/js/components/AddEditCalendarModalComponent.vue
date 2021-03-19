@@ -61,12 +61,10 @@
                                                             </thead>
                                                             <tbody>
                                                                 <tr v-for="(event, index) in current_calendar.events" :data-index="index">
-                                                                    <td data-val="startDate">
-                                                                        {{ event.started_at|formatDate }}
+                                                                    <td data-val="startDate" colspan="2">
+                                                                        {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                     </td>
-                                                                    <td data-val="startTime">
-                                                                        5:30 PM - 6:30 PM
-                                                                    </td>
+
                                                                     <td data-val="location">
                                                                         <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
                                                                     </td>
@@ -89,16 +87,47 @@
                                                     <transition name="fade">
                                                         <div class="card-footer" v-if="showNewEventDataForm">
                                                             <div class="row">
-                                                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
-                                                                    <div class="input-group-append">
-                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                                    </div>
-                                                                </div>
+                                                                <div class="input-group input-group-sm mb-3 col-md-4">
+                                                                    <date-range-picker
+                                                                        v-model="dateRange",
+                                                                        :time-picker="timePicker"
+                                                                        :showWeekNumbers="showWeekNumbers"
+                                                                        :singleDatePicker="singleDatePicker"
+                                                                        :showDropdowns="showDropdowns"
+                                                                        :ranges="ranges"
+                                                                        :always-show-calendars="showCalendar"
+                                                                        :appendToBody="appendToBody"
+                                                                        valueType="format"
+                                                                    >
+                                                                        <!--    header slot-->
+                                                                        <div slot="header" slot-scope="header" class="slot">
+                                                                            <h3>Select Event date & time</h3>
+                                                                        </div>
 
-                                                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">
+                                                                        <!--    input slot (new slot syntax)-->
+                                                                        <template #input="picker" name="event-date-range">
+                                                                            {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                                                                        </template>
+
+                                                                        <!--    footer slot-->
+                                                                        <div slot="footer" slot-scope="data" class="slot">
+                                                                            Selected range : {{data.rangeText}}
+                                                                            <div style="margin-left: auto">
+                                                                                <a @click="data.clickApply" class="btn btn-primary btn-sm">Set range</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </date-range-picker>
                                                                 </div>
+<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
+<!--                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>-->
+<!--                                                                    <div class="input-group-append">-->
+<!--                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>-->
+<!--                                                                    </div>-->
+<!--                                                                </div>-->
+
+<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
+<!--                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">-->
+<!--                                                                </div>-->
 
                                                                 <div class="col-md-2">
                                                                     <input type="text" v-model="newEventData.location" name="new-event-address" class="form-control form-control-sm" placeholder="Location" required>
@@ -231,11 +260,8 @@
                                                             </thead>
                                                             <tbody>
                                                             <tr v-for="(event, index) in current_calendar.events" :data-index="index">
-                                                                <td data-val="startDate">
-                                                                    {{ event.started_at|formatDate }}
-                                                                </td>
-                                                                <td data-val="startTime">
-                                                                    5:30 PM - 6:30 PM
+                                                                <td data-val="startDate" colspan="2">
+                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                 </td>
                                                                 <td data-val="location">
                                                                     <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
@@ -259,16 +285,39 @@
                                                     <transition name="fade">
                                                         <div class="card-footer" v-if="showNewEventDataForm">
                                                             <div class="row">
-                                                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
-                                                                    <div class="input-group-append">
-                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                                    </div>
+                                                                <div class="input-group input-group-sm mb-3 col-md-4">
+                                                                    <date-range-picker
+                                                                        v-model="dateRange",
+                                                                        :time-picker="timePicker"
+                                                                        :showWeekNumbers="showWeekNumbers"
+                                                                        :singleDatePicker="singleDatePicker"
+                                                                        :showDropdowns="showDropdowns"
+                                                                        :ranges="ranges"
+                                                                        :always-show-calendars="showCalendar"
+                                                                        :appendToBody="appendToBody"
+                                                                        valueType="format"
+                                                                    >
+                                                                        <!--    header slot-->
+                                                                        <div slot="header" slot-scope="header" class="slot">
+                                                                            <h3>Select Event date & time</h3>
+                                                                        </div>
+
+                                                                        <!--    input slot (new slot syntax)-->
+                                                                        <template #input="picker" name="event-date-range">
+                                                                            {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                                                                        </template>
+
+                                                                        <!--    footer slot-->
+                                                                        <div slot="footer" slot-scope="data" class="slot">
+                                                                            Selected range : {{data.rangeText}}
+                                                                            <div style="margin-left: auto">
+                                                                                <a @click="data.clickApply" class="btn btn-primary btn-sm">Set range</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </date-range-picker>
                                                                 </div>
 
-                                                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">
-                                                                </div>
+
 
                                                                 <div class="col-md-2">
                                                                     <input type="text" v-model="newEventData.location" name="new-event-address" class="form-control form-control-sm" placeholder="Location" required>
@@ -400,11 +449,8 @@
                                                             </thead>
                                                             <tbody>
                                                             <tr v-for="(event, index) in new_calendar.events" :data-index="index">
-                                                                <td data-val="startDate">
-                                                                    {{ event.started_at|formatDate }}
-                                                                </td>
-                                                                <td data-val="startTime">
-                                                                    5:30 PM - 6:30 PM
+                                                                <td data-val="startDate" colspan="2">
+                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                 </td>
                                                                 <td data-val="location">
                                                                     <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
@@ -430,15 +476,47 @@
                                                         <div class="card-footer" v-if="showNewEventDataForm">
                                                             <div class="row">
 
-                                                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
-                                                                    <div class="input-group-append">
-                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                                    </div>
-                                                                </div>
+<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
+<!--                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>-->
+<!--                                                                    <div class="input-group-append">-->
+<!--                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>-->
+<!--                                                                    </div>-->
+<!--                                                                </div>-->
 
-                                                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">
+<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
+<!--                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">-->
+<!--                                                                </div>-->
+
+                                                                <div class="input-group input-group-sm mb-3 col-md-4">
+                                                                    <date-range-picker
+                                                                        v-model="dateRange",
+                                                                        :time-picker="timePicker"
+                                                                        :showWeekNumbers="showWeekNumbers"
+                                                                        :singleDatePicker="singleDatePicker"
+                                                                        :showDropdowns="showDropdowns"
+                                                                        :ranges="ranges"
+                                                                        :always-show-calendars="showCalendar"
+                                                                        :appendToBody="appendToBody"
+                                                                        valueType="format"
+                                                                    >
+                                                                        <!--    header slot-->
+                                                                        <div slot="header" slot-scope="header" class="slot">
+                                                                            <h3>Select Event date & time</h3>
+                                                                        </div>
+
+                                                                        <!--    input slot (new slot syntax)-->
+                                                                        <template #input="picker" name="event-date-range">
+                                                                            {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                                                                        </template>
+
+                                                                        <!--    footer slot-->
+                                                                        <div slot="footer" slot-scope="data" class="slot">
+                                                                            Selected range : {{data.rangeText}}
+                                                                            <div style="margin-left: auto">
+                                                                                <a @click="data.clickApply" class="btn btn-primary btn-sm">Set range</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </date-range-picker>
                                                                 </div>
 
 
@@ -528,7 +606,20 @@
 	export default {
 
 		data() {
-			return {
+            let startDate = new Date();
+            let endDate = new Date();
+            endDate.setDate(endDate.getDate());
+
+            return {
+
+                dateRange: { startDate, endDate },
+                timePicker: true,
+                dateFormat: 'M/DD/YYYY',
+                showWeekNumbers: false,
+                singleDatePicker: false,
+                showDropdowns: false,
+                ranges: false,
+                showCalendar: true,
                 owner_email_address: '',
                 showAddCalendarModal: false,
                 showEditCalendarModal: false,
@@ -540,6 +631,7 @@
                 csrf_token: null,
                 edit_calendar_id: null,
                 current_calendar: null,
+                appendToBody: false,
                 new_calendar: {
                     summary: '',
                     events: []
@@ -910,6 +1002,16 @@
 				//return day+'.'+month+'.'+date.getFullYear();
                 return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear();
 			},
+            formatTime: function(value) {
+                let date = new Date(value);
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                let ampm = hours >= 12 ? 'pm' : 'am';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? '0'+minutes : minutes;
+                return hours+':'+minutes+' '+ampm;
+            },
 
             sliceString: function(value) {
                 let sliced = value.slice(0,10);
@@ -917,6 +1019,16 @@
                     sliced += '...';
                 }
                 return sliced;
+            },
+            date: function(date) {
+                let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+                let dateHours = date.getHours();
+                let dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+                dateHours = dateHours % 12;
+                dateHours = dateHours ? dateHours : 12;
+                let dateMinutes = date.getMinutes();
+                dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
+                return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear()+' '+dateHours+':'+dateMinutes+' '+dateAmpm;
             }
 		}
 	}

@@ -20,6 +20,15 @@ class AdminController extends Controller
     public function indexAction() {
         $calendars = Calendar::with('events')->get();
 
+        foreach ($calendars as $key => $calendar) {
+            if ($calendar->google_id == Auth::user()->email) {
+                unset($calendars[$key]);;
+            }
+            $calendar->eventsCount = count($calendar->events);
+            //$calendar->publicUrl = 'https://calendar.google.com/calendar/embed?src='.$calendar->google_id.'&ctz='.$calendar->timezone;
+            $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
+        }
+
         $users = User::with('calendars')->get();
         foreach ($users as $user) {
             $user->ownCalendarsCount = count($user->calendars);

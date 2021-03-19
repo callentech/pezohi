@@ -1,16 +1,12 @@
 <template>
     <div class="card calendar-single">
         <div v-if="!showEditSingleEventForm" class="row">
-            <div class="col-2">
-                <div class="data">
-                    {{ event.started_at|formatDate }}
+            <div class="col-4">
+                <div class="data" title>
+                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                 </div>
             </div>
-            <div class="col-2">
-                <div class="data">
-                    {{ event.started_at|formatTime }} - {{ event.ended_at|formatTime }}
-                </div>
-            </div>
+
             <div class="col-2">
                 <div class="data">
                     <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
@@ -36,23 +32,51 @@
         </div>
         <div v-else class="row">
 
-            <div class="col-2">
+            <div class="col-4">
                 <div class="data">
                     <div class="input-group input-group-sm mb-3">
-                        <date-picker v-model="editedEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                        </div>
+<!--                        <date-picker v-model="editedEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>-->
+<!--                        <div class="input-group-append">-->
+<!--                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>-->
+<!--                        </div>-->
+                        <date-range-picker
+                            v-model="dateRange",
+                            :time-picker="timePicker"
+                            :showWeekNumbers="showWeekNumbers"
+                            :singleDatePicker="singleDatePicker"
+                            :showDropdowns="showDropdowns"
+                            :ranges="ranges"
+                            :always-show-calendars="showCalendar"
+                            valueType="format"
+                        >
+                            <!--    header slot-->
+                            <div slot="header" slot-scope="header" class="slot">
+                                <h3>Select Event date & time</h3>
+                            </div>
+
+                            <!--    input slot (new slot syntax)-->
+                            <template #input="picker" name="event-date-range">
+                                {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                            </template>
+
+                            <!--    footer slot-->
+                            <div slot="footer" slot-scope="data" class="slot">
+                                    Selected range : {{data.rangeText}}
+                                <div style="margin-left: auto">
+                                    <a @click="data.clickApply" class="btn btn-primary btn-sm">Set range</a>
+                                </div>
+                            </div>
+                        </date-range-picker>
                     </div>
                 </div>
             </div>
-            <div class="col-2">
-                <div class="data">
-                    <div class="input-group input-group-sm mb-3">
-                        <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM" value="5:30 PM - 6:30 PM">
-                    </div>
-                </div>
-            </div>
+<!--            <div class="col-2">-->
+<!--                <div class="data">-->
+<!--                    <div class="input-group input-group-sm mb-3">-->
+<!--                        <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM" value="5:30 PM - 6:30 PM">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="col-2">
                 <div class="data">
                     <input type="text" v-model="editedEventData.location" class="form-control form-control-sm">
@@ -114,7 +138,22 @@
         },
 
         data() {
+
+            let startDate = new Date();
+            let endDate = new Date();
+            endDate.setDate(endDate.getDate());
+
             return {
+
+                dateRange: { startDate, endDate },
+                timePicker: true,
+                dateFormat: 'M/DD/YYYY',
+                showWeekNumbers: false,
+                singleDatePicker: false,
+                showDropdowns: false,
+                ranges: false,
+                showCalendar: true,
+
                 showEditSingleEventForm: false,
 
                 editedEventData: {
@@ -129,10 +168,10 @@
                 requestSuccess: false,
                 requestDanger: false,
 
-                dateOptions: {
-                    format: 'M/DD/YYYY',
-                    useCurrent: true
-                }
+                // dateOptions: {
+                //     format: 'M/DD/YYYY',
+                //     useCurrent: true
+                // }
             }
         },
 
@@ -163,23 +202,28 @@
                 axios.interceptors.request.use(function (config) {
                     // Do something before request is sent
                     currentObj.requestProcess = true;
+                    currentObj.requestDanger = '';
+                    currentObj.requestSuccess = '';
                     return config;
                 }, function (error) {
                     // Do something with request error
                     return Promise.reject(error);
                 });
 
+                currentObj.editedEventData.dateTime = this.dateRange;
+
                 axios.post('/edit-single-event', currentObj.editedEventData)
                 .then(function(response) {
+                    console.log(response.data.code);
+
                     if (response.data.code === 401) {
                         document.location.href="/";
                     } else if (response.data.code === 404) {
                         currentObj.requestDanger = response.data.data.message;
                     } else if (response.data.code === 1) {
                         currentObj.requestSuccess = response.data.data.message;
-
                         // Update table event data
-                        currentObj.event.started_at = currentObj.editedEventData.dateTime;
+                        currentObj.event.started_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.startDate);
                         currentObj.event.location = currentObj.editedEventData.location;
                         currentObj.event.type = currentObj.editedEventData.type;
                         currentObj.event.description = currentObj.editedEventData.description;
@@ -243,6 +287,17 @@
                 if (!value) return ''
                 value = value.toString()
                 return value.charAt(0).toUpperCase() + value.slice(1)
+            },
+
+            date: function(date) {
+                let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+                let dateHours = date.getHours();
+                let dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+                dateHours = dateHours % 12;
+                dateHours = dateHours ? dateHours : 12;
+                let dateMinutes = date.getMinutes();
+                dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
+                return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear()+' '+dateHours+':'+dateMinutes+' '+dateAmpm;
             }
         }
     }

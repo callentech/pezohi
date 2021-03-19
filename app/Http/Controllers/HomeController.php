@@ -35,7 +35,8 @@ class HomeController extends Controller
                     unset($calendars[$key]);;
                 }
                 $calendar->eventsCount = count($calendar->events);
-                $calendar->publicUrl = 'https://calendar.google.com/calendar/embed?src='.$calendar->google_id.'&ctz='.$calendar->timezone;
+//                $calendar->publicUrl = 'https://calendar.google.com/calendar/embed?src='.$calendar->google_id.'&ctz='.$calendar->timezone;
+                $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
             }
             $jobsStatus = Auth::user()->jobs_status;
             return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE), 'jobs_status' => $jobsStatus]);

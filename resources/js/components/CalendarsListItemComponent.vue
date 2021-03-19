@@ -92,17 +92,11 @@
 	            	<div class="eventsDataFilters">
 	            		<div class="row">
 
-	            			<div class="col-2">
+	            			<div class="col-4">
 	            				<a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDate">
-                                	Date
+                                	Event Date and Time
                                     <i v-if="sortByDateDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
-                                </a>
-                            </div>
-
-                            <div class="col-2">
-                            	<a href="javascript:void(0)" class="sort-link">
-                                	Time
                                 </a>
                             </div>
 

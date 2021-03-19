@@ -2370,13 +2370,105 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
+    var startDate = new Date();
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate());
     return {
+      dateRange: {
+        startDate: startDate,
+        endDate: endDate
+      },
+      timePicker: true,
+      dateFormat: 'M/DD/YYYY',
+      showWeekNumbers: false,
+      singleDatePicker: false,
+      showDropdowns: false,
+      ranges: false,
+      showCalendar: true,
       owner_email_address: '',
       showAddCalendarModal: false,
       showEditCalendarModal: false,
@@ -2388,6 +2480,7 @@ __webpack_require__.r(__webpack_exports__);
       csrf_token: null,
       edit_calendar_id: null,
       current_calendar: null,
+      appendToBody: false,
       new_calendar: {
         summary: '',
         events: []
@@ -2709,6 +2802,16 @@ __webpack_require__.r(__webpack_exports__);
 
       return date.getMonth() + 1 + '/' + day + '/' + date.getFullYear();
     },
+    formatTime: function formatTime(value) {
+      var date = new Date(value);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return hours + ':' + minutes + ' ' + ampm;
+    },
     sliceString: function sliceString(value) {
       var sliced = value.slice(0, 10);
 
@@ -2717,6 +2820,20 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return sliced;
+    },
+    date: function date(_date) {
+      var day = _date.getDate() >= 10 ? _date.getDate() : '0' + _date.getDate();
+
+      var dateHours = _date.getHours();
+
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+
+      var dateMinutes = _date.getMinutes();
+
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      return _date.getMonth() + 1 + '/' + day + '/' + _date.getFullYear() + ' ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
     }
   }
 });
@@ -3042,12 +3159,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -3683,6 +3794,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3694,7 +3829,21 @@ __webpack_require__.r(__webpack_exports__);
     dateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default())
   },
   data: function data() {
+    var startDate = new Date();
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate());
     return {
+      dateRange: {
+        startDate: startDate,
+        endDate: endDate
+      },
+      timePicker: true,
+      dateFormat: 'M/DD/YYYY',
+      showWeekNumbers: false,
+      singleDatePicker: false,
+      showDropdowns: false,
+      ranges: false,
+      showCalendar: true,
       showEditSingleEventForm: false,
       editedEventData: {
         id: null,
@@ -3705,11 +3854,11 @@ __webpack_require__.r(__webpack_exports__);
       },
       requestProcess: false,
       requestSuccess: false,
-      requestDanger: false,
-      dateOptions: {
-        format: 'M/DD/YYYY',
-        useCurrent: true
-      }
+      requestDanger: false // dateOptions: {
+      //     format: 'M/DD/YYYY',
+      //     useCurrent: true
+      // }
+
     };
   },
   computed: {
@@ -3735,12 +3884,17 @@ __webpack_require__.r(__webpack_exports__);
       axios.interceptors.request.use(function (config) {
         // Do something before request is sent
         currentObj.requestProcess = true;
+        currentObj.requestDanger = '';
+        currentObj.requestSuccess = '';
         return config;
       }, function (error) {
         // Do something with request error
         return Promise.reject(error);
       });
+      currentObj.editedEventData.dateTime = this.dateRange;
       axios.post('/edit-single-event', currentObj.editedEventData).then(function (response) {
+        console.log(response.data.code);
+
         if (response.data.code === 401) {
           document.location.href = "/";
         } else if (response.data.code === 404) {
@@ -3748,7 +3902,7 @@ __webpack_require__.r(__webpack_exports__);
         } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message; // Update table event data
 
-          currentObj.event.started_at = currentObj.editedEventData.dateTime;
+          currentObj.event.started_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.startDate);
           currentObj.event.location = currentObj.editedEventData.location;
           currentObj.event.type = currentObj.editedEventData.type;
           currentObj.event.description = currentObj.editedEventData.description; // Hide edit event form
@@ -3808,6 +3962,20 @@ __webpack_require__.r(__webpack_exports__);
       if (!value) return '';
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    date: function date(_date) {
+      var day = _date.getDate() >= 10 ? _date.getDate() : '0' + _date.getDate();
+
+      var dateHours = _date.getHours();
+
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+
+      var dateMinutes = _date.getMinutes();
+
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      return _date.getMonth() + 1 + '/' + day + '/' + _date.getFullYear() + ' ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
     }
   }
 });
@@ -66404,7 +66572,8 @@ var render = function() {
                                                             {
                                                               attrs: {
                                                                 "data-val":
-                                                                  "startDate"
+                                                                  "startDate",
+                                                                colspan: "2"
                                                               }
                                                             },
                                                             [
@@ -66417,22 +66586,31 @@ var render = function() {
                                                                       event.started_at
                                                                     )
                                                                   ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " - " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
                                                                   "\n                                                                    "
-                                                              )
-                                                            ]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "td",
-                                                            {
-                                                              attrs: {
-                                                                "data-val":
-                                                                  "startTime"
-                                                              }
-                                                            },
-                                                            [
-                                                              _vm._v(
-                                                                "\n                                                                        5:30 PM - 6:30 PM\n                                                                    "
                                                               )
                                                             ]
                                                           ),
@@ -66646,78 +66824,158 @@ var render = function() {
                                                           "div",
                                                           {
                                                             staticClass:
-                                                              "input-group input-group-sm mb-3 col-md-2"
+                                                              "input-group input-group-sm mb-3 col-md-4"
                                                           },
                                                           [
-                                                            _c("date-picker", {
-                                                              attrs: {
-                                                                config:
-                                                                  _vm.dateOptions,
-                                                                name:
-                                                                  "new-event-datetime"
-                                                              },
-                                                              model: {
-                                                                value:
-                                                                  _vm
-                                                                    .newEventData
-                                                                    .dateTime,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.$set(
-                                                                    _vm.newEventData,
-                                                                    "dateTime",
-                                                                    $$v
-                                                                  )
-                                                                },
-                                                                expression:
-                                                                  "newEventData.dateTime"
-                                                              }
-                                                            }),
-                                                            _vm._v(" "),
                                                             _c(
-                                                              "div",
+                                                              "date-range-picker",
                                                               {
-                                                                staticClass:
-                                                                  "input-group-append"
-                                                              },
-                                                              [
-                                                                _c(
-                                                                  "span",
-                                                                  {
-                                                                    staticClass:
-                                                                      "input-group-text"
-                                                                  },
+                                                                attrs: {
+                                                                  ",": "",
+                                                                  "time-picker":
+                                                                    _vm.timePicker,
+                                                                  showWeekNumbers:
+                                                                    _vm.showWeekNumbers,
+                                                                  singleDatePicker:
+                                                                    _vm.singleDatePicker,
+                                                                  showDropdowns:
+                                                                    _vm.showDropdowns,
+                                                                  ranges:
+                                                                    _vm.ranges,
+                                                                  "always-show-calendars":
+                                                                    _vm.showCalendar,
+                                                                  appendToBody:
+                                                                    _vm.appendToBody,
+                                                                  valueType:
+                                                                    "format"
+                                                                },
+                                                                scopedSlots: _vm._u(
                                                                   [
-                                                                    _c("i", {
-                                                                      staticClass:
-                                                                        "far fa-calendar-alt"
-                                                                    })
-                                                                  ]
-                                                                )
-                                                              ]
+                                                                    {
+                                                                      key:
+                                                                        "header",
+                                                                      fn: function(
+                                                                        header
+                                                                      ) {
+                                                                        return _c(
+                                                                          "div",
+                                                                          {
+                                                                            staticClass:
+                                                                              "slot"
+                                                                          },
+                                                                          [
+                                                                            _c(
+                                                                              "h3",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Select Event date & time"
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      }
+                                                                    },
+                                                                    {
+                                                                      key:
+                                                                        "input",
+                                                                      fn: function(
+                                                                        picker
+                                                                      ) {
+                                                                        return [
+                                                                          _vm._v(
+                                                                            "\n                                                                            " +
+                                                                              _vm._s(
+                                                                                _vm._f(
+                                                                                  "date"
+                                                                                )(
+                                                                                  picker.startDate
+                                                                                )
+                                                                              ) +
+                                                                              " - " +
+                                                                              _vm._s(
+                                                                                _vm._f(
+                                                                                  "date"
+                                                                                )(
+                                                                                  picker.endDate
+                                                                                )
+                                                                              ) +
+                                                                              "\n                                                                        "
+                                                                          )
+                                                                        ]
+                                                                      }
+                                                                    },
+                                                                    {
+                                                                      key:
+                                                                        "footer",
+                                                                      fn: function(
+                                                                        data
+                                                                      ) {
+                                                                        return _c(
+                                                                          "div",
+                                                                          {
+                                                                            staticClass:
+                                                                              "slot"
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              "\n                                                                            Selected range : " +
+                                                                                _vm._s(
+                                                                                  data.rangeText
+                                                                                ) +
+                                                                                "\n                                                                            "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticStyle: {
+                                                                                  "margin-left":
+                                                                                    "auto"
+                                                                                }
+                                                                              },
+                                                                              [
+                                                                                _c(
+                                                                                  "a",
+                                                                                  {
+                                                                                    staticClass:
+                                                                                      "btn btn-primary btn-sm",
+                                                                                    on: {
+                                                                                      click:
+                                                                                        data.clickApply
+                                                                                    }
+                                                                                  },
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "Set range"
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      }
+                                                                    }
+                                                                  ],
+                                                                  null,
+                                                                  false,
+                                                                  2108583246
+                                                                ),
+                                                                model: {
+                                                                  value:
+                                                                    _vm.dateRange,
+                                                                  callback: function(
+                                                                    $$v
+                                                                  ) {
+                                                                    _vm.dateRange = $$v
+                                                                  },
+                                                                  expression:
+                                                                    "dateRange"
+                                                                }
+                                                              }
                                                             )
                                                           ],
                                                           1
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "input-group input-group-sm mb-3 col-md-2"
-                                                          },
-                                                          [
-                                                            _c("input", {
-                                                              staticClass:
-                                                                "form-control",
-                                                              attrs: {
-                                                                type: "text",
-                                                                placeholder:
-                                                                  "5:30 PM - 6:30 PM"
-                                                              }
-                                                            })
-                                                          ]
                                                         ),
                                                         _vm._v(" "),
                                                         _c(
@@ -67510,7 +67768,8 @@ var render = function() {
                                                             {
                                                               attrs: {
                                                                 "data-val":
-                                                                  "startDate"
+                                                                  "startDate",
+                                                                colspan: "2"
                                                               }
                                                             },
                                                             [
@@ -67523,22 +67782,31 @@ var render = function() {
                                                                       event.started_at
                                                                     )
                                                                   ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " - " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
                                                                   "\n                                                                "
-                                                              )
-                                                            ]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "td",
-                                                            {
-                                                              attrs: {
-                                                                "data-val":
-                                                                  "startTime"
-                                                              }
-                                                            },
-                                                            [
-                                                              _vm._v(
-                                                                "\n                                                                    5:30 PM - 6:30 PM\n                                                                "
                                                               )
                                                             ]
                                                           ),
@@ -67752,78 +68020,158 @@ var render = function() {
                                                           "div",
                                                           {
                                                             staticClass:
-                                                              "input-group input-group-sm mb-3 col-md-2"
+                                                              "input-group input-group-sm mb-3 col-md-4"
                                                           },
                                                           [
-                                                            _c("date-picker", {
-                                                              attrs: {
-                                                                config:
-                                                                  _vm.dateOptions,
-                                                                name:
-                                                                  "new-event-datetime"
-                                                              },
-                                                              model: {
-                                                                value:
-                                                                  _vm
-                                                                    .newEventData
-                                                                    .dateTime,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.$set(
-                                                                    _vm.newEventData,
-                                                                    "dateTime",
-                                                                    $$v
-                                                                  )
-                                                                },
-                                                                expression:
-                                                                  "newEventData.dateTime"
-                                                              }
-                                                            }),
-                                                            _vm._v(" "),
                                                             _c(
-                                                              "div",
+                                                              "date-range-picker",
                                                               {
-                                                                staticClass:
-                                                                  "input-group-append"
-                                                              },
-                                                              [
-                                                                _c(
-                                                                  "span",
-                                                                  {
-                                                                    staticClass:
-                                                                      "input-group-text"
-                                                                  },
+                                                                attrs: {
+                                                                  ",": "",
+                                                                  "time-picker":
+                                                                    _vm.timePicker,
+                                                                  showWeekNumbers:
+                                                                    _vm.showWeekNumbers,
+                                                                  singleDatePicker:
+                                                                    _vm.singleDatePicker,
+                                                                  showDropdowns:
+                                                                    _vm.showDropdowns,
+                                                                  ranges:
+                                                                    _vm.ranges,
+                                                                  "always-show-calendars":
+                                                                    _vm.showCalendar,
+                                                                  appendToBody:
+                                                                    _vm.appendToBody,
+                                                                  valueType:
+                                                                    "format"
+                                                                },
+                                                                scopedSlots: _vm._u(
                                                                   [
-                                                                    _c("i", {
-                                                                      staticClass:
-                                                                        "far fa-calendar-alt"
-                                                                    })
-                                                                  ]
-                                                                )
-                                                              ]
+                                                                    {
+                                                                      key:
+                                                                        "header",
+                                                                      fn: function(
+                                                                        header
+                                                                      ) {
+                                                                        return _c(
+                                                                          "div",
+                                                                          {
+                                                                            staticClass:
+                                                                              "slot"
+                                                                          },
+                                                                          [
+                                                                            _c(
+                                                                              "h3",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Select Event date & time"
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      }
+                                                                    },
+                                                                    {
+                                                                      key:
+                                                                        "input",
+                                                                      fn: function(
+                                                                        picker
+                                                                      ) {
+                                                                        return [
+                                                                          _vm._v(
+                                                                            "\n                                                                            " +
+                                                                              _vm._s(
+                                                                                _vm._f(
+                                                                                  "date"
+                                                                                )(
+                                                                                  picker.startDate
+                                                                                )
+                                                                              ) +
+                                                                              " - " +
+                                                                              _vm._s(
+                                                                                _vm._f(
+                                                                                  "date"
+                                                                                )(
+                                                                                  picker.endDate
+                                                                                )
+                                                                              ) +
+                                                                              "\n                                                                        "
+                                                                          )
+                                                                        ]
+                                                                      }
+                                                                    },
+                                                                    {
+                                                                      key:
+                                                                        "footer",
+                                                                      fn: function(
+                                                                        data
+                                                                      ) {
+                                                                        return _c(
+                                                                          "div",
+                                                                          {
+                                                                            staticClass:
+                                                                              "slot"
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              "\n                                                                            Selected range : " +
+                                                                                _vm._s(
+                                                                                  data.rangeText
+                                                                                ) +
+                                                                                "\n                                                                            "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticStyle: {
+                                                                                  "margin-left":
+                                                                                    "auto"
+                                                                                }
+                                                                              },
+                                                                              [
+                                                                                _c(
+                                                                                  "a",
+                                                                                  {
+                                                                                    staticClass:
+                                                                                      "btn btn-primary btn-sm",
+                                                                                    on: {
+                                                                                      click:
+                                                                                        data.clickApply
+                                                                                    }
+                                                                                  },
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "Set range"
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      }
+                                                                    }
+                                                                  ],
+                                                                  null,
+                                                                  false,
+                                                                  2108583246
+                                                                ),
+                                                                model: {
+                                                                  value:
+                                                                    _vm.dateRange,
+                                                                  callback: function(
+                                                                    $$v
+                                                                  ) {
+                                                                    _vm.dateRange = $$v
+                                                                  },
+                                                                  expression:
+                                                                    "dateRange"
+                                                                }
+                                                              }
                                                             )
                                                           ],
                                                           1
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "input-group input-group-sm mb-3 col-md-2"
-                                                          },
-                                                          [
-                                                            _c("input", {
-                                                              staticClass:
-                                                                "form-control",
-                                                              attrs: {
-                                                                type: "text",
-                                                                placeholder:
-                                                                  "5:30 PM - 6:30 PM"
-                                                              }
-                                                            })
-                                                          ]
                                                         ),
                                                         _vm._v(" "),
                                                         _c(
@@ -68614,7 +68962,8 @@ var render = function() {
                                                             {
                                                               attrs: {
                                                                 "data-val":
-                                                                  "startDate"
+                                                                  "startDate",
+                                                                colspan: "2"
                                                               }
                                                             },
                                                             [
@@ -68627,22 +68976,31 @@ var render = function() {
                                                                       event.started_at
                                                                     )
                                                                   ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " - " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
                                                                   "\n                                                                "
-                                                              )
-                                                            ]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "td",
-                                                            {
-                                                              attrs: {
-                                                                "data-val":
-                                                                  "startTime"
-                                                              }
-                                                            },
-                                                            [
-                                                              _vm._v(
-                                                                "\n                                                                    5:30 PM - 6:30 PM\n                                                                "
                                                               )
                                                             ]
                                                           ),
@@ -68856,78 +69214,158 @@ var render = function() {
                                                           "div",
                                                           {
                                                             staticClass:
-                                                              "input-group input-group-sm mb-3 col-md-2"
+                                                              "input-group input-group-sm mb-3 col-md-4"
                                                           },
                                                           [
-                                                            _c("date-picker", {
-                                                              attrs: {
-                                                                config:
-                                                                  _vm.dateOptions,
-                                                                name:
-                                                                  "new-event-datetime"
-                                                              },
-                                                              model: {
-                                                                value:
-                                                                  _vm
-                                                                    .newEventData
-                                                                    .dateTime,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.$set(
-                                                                    _vm.newEventData,
-                                                                    "dateTime",
-                                                                    $$v
-                                                                  )
-                                                                },
-                                                                expression:
-                                                                  "newEventData.dateTime"
-                                                              }
-                                                            }),
-                                                            _vm._v(" "),
                                                             _c(
-                                                              "div",
+                                                              "date-range-picker",
                                                               {
-                                                                staticClass:
-                                                                  "input-group-append"
-                                                              },
-                                                              [
-                                                                _c(
-                                                                  "span",
-                                                                  {
-                                                                    staticClass:
-                                                                      "input-group-text"
-                                                                  },
+                                                                attrs: {
+                                                                  ",": "",
+                                                                  "time-picker":
+                                                                    _vm.timePicker,
+                                                                  showWeekNumbers:
+                                                                    _vm.showWeekNumbers,
+                                                                  singleDatePicker:
+                                                                    _vm.singleDatePicker,
+                                                                  showDropdowns:
+                                                                    _vm.showDropdowns,
+                                                                  ranges:
+                                                                    _vm.ranges,
+                                                                  "always-show-calendars":
+                                                                    _vm.showCalendar,
+                                                                  appendToBody:
+                                                                    _vm.appendToBody,
+                                                                  valueType:
+                                                                    "format"
+                                                                },
+                                                                scopedSlots: _vm._u(
                                                                   [
-                                                                    _c("i", {
-                                                                      staticClass:
-                                                                        "far fa-calendar-alt"
-                                                                    })
-                                                                  ]
-                                                                )
-                                                              ]
+                                                                    {
+                                                                      key:
+                                                                        "header",
+                                                                      fn: function(
+                                                                        header
+                                                                      ) {
+                                                                        return _c(
+                                                                          "div",
+                                                                          {
+                                                                            staticClass:
+                                                                              "slot"
+                                                                          },
+                                                                          [
+                                                                            _c(
+                                                                              "h3",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Select Event date & time"
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      }
+                                                                    },
+                                                                    {
+                                                                      key:
+                                                                        "input",
+                                                                      fn: function(
+                                                                        picker
+                                                                      ) {
+                                                                        return [
+                                                                          _vm._v(
+                                                                            "\n                                                                            " +
+                                                                              _vm._s(
+                                                                                _vm._f(
+                                                                                  "date"
+                                                                                )(
+                                                                                  picker.startDate
+                                                                                )
+                                                                              ) +
+                                                                              " - " +
+                                                                              _vm._s(
+                                                                                _vm._f(
+                                                                                  "date"
+                                                                                )(
+                                                                                  picker.endDate
+                                                                                )
+                                                                              ) +
+                                                                              "\n                                                                        "
+                                                                          )
+                                                                        ]
+                                                                      }
+                                                                    },
+                                                                    {
+                                                                      key:
+                                                                        "footer",
+                                                                      fn: function(
+                                                                        data
+                                                                      ) {
+                                                                        return _c(
+                                                                          "div",
+                                                                          {
+                                                                            staticClass:
+                                                                              "slot"
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              "\n                                                                            Selected range : " +
+                                                                                _vm._s(
+                                                                                  data.rangeText
+                                                                                ) +
+                                                                                "\n                                                                            "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticStyle: {
+                                                                                  "margin-left":
+                                                                                    "auto"
+                                                                                }
+                                                                              },
+                                                                              [
+                                                                                _c(
+                                                                                  "a",
+                                                                                  {
+                                                                                    staticClass:
+                                                                                      "btn btn-primary btn-sm",
+                                                                                    on: {
+                                                                                      click:
+                                                                                        data.clickApply
+                                                                                    }
+                                                                                  },
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "Set range"
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      }
+                                                                    }
+                                                                  ],
+                                                                  null,
+                                                                  false,
+                                                                  2108583246
+                                                                ),
+                                                                model: {
+                                                                  value:
+                                                                    _vm.dateRange,
+                                                                  callback: function(
+                                                                    $$v
+                                                                  ) {
+                                                                    _vm.dateRange = $$v
+                                                                  },
+                                                                  expression:
+                                                                    "dateRange"
+                                                                }
+                                                              }
                                                             )
                                                           ],
                                                           1
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "div",
-                                                          {
-                                                            staticClass:
-                                                              "input-group input-group-sm mb-3 col-md-2"
-                                                          },
-                                                          [
-                                                            _c("input", {
-                                                              staticClass:
-                                                                "form-control",
-                                                              attrs: {
-                                                                type: "text",
-                                                                placeholder:
-                                                                  "5:30 PM - 6:30 PM"
-                                                              }
-                                                            })
-                                                          ]
                                                         ),
                                                         _vm._v(" "),
                                                         _c(
@@ -70099,7 +70537,7 @@ var render = function() {
               _c("div", { staticClass: "card calendar-events" }, [
                 _c("div", { staticClass: "eventsDataFilters" }, [
                   _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-2" }, [
+                    _c("div", { staticClass: "col-4" }, [
                       _c(
                         "a",
                         {
@@ -70109,7 +70547,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                                \tDate\n                                    "
+                            "\n                                \tEvent Date and Time\n                                    "
                           ),
                           _vm.sortByDateDirection === "desc"
                             ? _c("i", {
@@ -70120,21 +70558,6 @@ var render = function() {
                                 staticClass:
                                   "fas fa-sort-amount-down-alt float-right"
                               })
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-2" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "sort-link",
-                          attrs: { href: "javascript:void(0)" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                                \tTime\n                                "
-                          )
                         ]
                       )
                     ]),
@@ -70680,24 +71103,18 @@ var render = function() {
   return _c("div", { staticClass: "card calendar-single" }, [
     !_vm.showEditSingleEventForm
       ? _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-2" }, [
-            _c("div", { staticClass: "data" }, [
+          _c("div", { staticClass: "col-4" }, [
+            _c("div", { staticClass: "data", attrs: { title: "" } }, [
               _vm._v(
-                "\n                " +
+                "\n                    " +
                   _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
-                  "\n            "
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-2" }, [
-            _c("div", { staticClass: "data" }, [
-              _vm._v(
-                "\n                " +
+                  " " +
                   _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
                   " - " +
+                  _vm._s(_vm._f("formatDate")(_vm.event.ended_at)) +
+                  " " +
                   _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
-                  "\n            "
+                  "\n                "
               )
             ])
           ]),
@@ -70720,9 +71137,9 @@ var render = function() {
           _c("div", { staticClass: "col-2" }, [
             _c("div", { staticClass: "data" }, [
               _vm._v(
-                "\n                " +
+                "\n                    " +
                   _vm._s(_vm._f("capitalize")(_vm.event.type)) +
-                  "\n            "
+                  "\n                "
               )
             ])
           ]),
@@ -70764,34 +71181,86 @@ var render = function() {
           ])
         ])
       : _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-2" }, [
+          _c("div", { staticClass: "col-4" }, [
             _c("div", { staticClass: "data" }, [
               _c(
                 "div",
                 { staticClass: "input-group input-group-sm mb-3" },
                 [
-                  _c("date-picker", {
+                  _c("date-range-picker", {
                     attrs: {
-                      config: _vm.dateOptions,
-                      name: "new-event-datetime"
+                      ",": "",
+                      "time-picker": _vm.timePicker,
+                      showWeekNumbers: _vm.showWeekNumbers,
+                      singleDatePicker: _vm.singleDatePicker,
+                      showDropdowns: _vm.showDropdowns,
+                      ranges: _vm.ranges,
+                      "always-show-calendars": _vm.showCalendar,
+                      valueType: "format"
                     },
-                    model: {
-                      value: _vm.editedEventData.dateTime,
-                      callback: function($$v) {
-                        _vm.$set(_vm.editedEventData, "dateTime", $$v)
+                    scopedSlots: _vm._u([
+                      {
+                        key: "header",
+                        fn: function(header) {
+                          return _c("div", { staticClass: "slot" }, [
+                            _c("h3", [_vm._v("Select Event date & time")])
+                          ])
+                        }
                       },
-                      expression: "editedEventData.dateTime"
+                      {
+                        key: "input",
+                        fn: function(picker) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(_vm._f("date")(picker.startDate)) +
+                                " - " +
+                                _vm._s(_vm._f("date")(picker.endDate)) +
+                                "\n                            "
+                            )
+                          ]
+                        }
+                      },
+                      {
+                        key: "footer",
+                        fn: function(data) {
+                          return _c("div", { staticClass: "slot" }, [
+                            _vm._v(
+                              "\n                                    Selected range : " +
+                                _vm._s(data.rangeText) +
+                                "\n                                "
+                            ),
+                            _c(
+                              "div",
+                              { staticStyle: { "margin-left": "auto" } },
+                              [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "btn btn-primary btn-sm",
+                                    on: { click: data.clickApply }
+                                  },
+                                  [_vm._v("Set range")]
+                                )
+                              ]
+                            )
+                          ])
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dateRange,
+                      callback: function($$v) {
+                        _vm.dateRange = $$v
+                      },
+                      expression: "dateRange"
                     }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(1)
+                  })
                 ],
                 1
               )
             ])
           ]),
-          _vm._v(" "),
-          _vm._m(2),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _c("div", { staticClass: "data" }, [
@@ -70968,35 +71437,6 @@ var staticRenderFns = [
       },
       [_c("i", { staticClass: "fas fa-ellipsis-v" })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
-      _c("span", { staticClass: "input-group-text" }, [
-        _c("i", { staticClass: "far fa-calendar-alt" })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-2" }, [
-      _c("div", { staticClass: "data" }, [
-        _c("div", { staticClass: "input-group input-group-sm mb-3" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              type: "text",
-              placeholder: "5:30 PM - 6:30 PM",
-              value: "5:30 PM - 6:30 PM"
-            }
-          })
-        ])
-      ])
-    ])
   }
 ]
 render._withStripped = true

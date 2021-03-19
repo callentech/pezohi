@@ -16167,6 +16167,31 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   margin-left: 10px;
 }
 
+#editCalendarForm .daterangepicker, #duplicateCalendarForm .daterangepicker, #addCalendarForm .daterangepicker {
+  top: -200px !important;
+}
+
+#editCalendarForm .daterangepicker::before, #duplicateCalendarForm .daterangepicker::before, #addCalendarForm .daterangepicker::before {
+  content: "";
+  top: 0;
+  border: none !important;
+}
+
+.slot {
+  background-color: #0090ff;
+  padding: 0.5rem;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.slot h3 {
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
 .filter-links {
   margin-bottom: 20px;
 }

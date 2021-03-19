@@ -73,11 +73,11 @@
 DateRangePicker
                         <date-range-picker
             ref="picker"
-            
+
             :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
 
             v-model="dateRange"
-            
+
     >
         <template v-slot:input="picker" style="min-width: 350px;">
             {{ picker.startDate | date }} - {{ picker.endDate | date }}
@@ -157,15 +157,8 @@ DateRangePicker
         data() {
 
             let startDate = new Date();
-<<<<<<< HEAD
             let endDate = new Date();
-            endDate.setDate(endDate.getDate());
-=======
-          let endDate = new Date();
-          endDate.setDate(endDate.getDate() + 6);
-      
-
->>>>>>> 28129b5be49afcaf5ad3658fa117a14e6f4e65ba
+            endDate.setDate(endDate.getDate() + 6);
 
             return {
 
@@ -192,19 +185,10 @@ DateRangePicker
                 requestSuccess: false,
                 requestDanger: false,
 
-<<<<<<< HEAD
-                // dateOptions: {
-                //     format: 'M/DD/YYYY',
-                //     useCurrent: true
-                // }
-=======
                 dateOptions: {
                     format: 'M/DD/YYYY',
                     useCurrent: true
                 },
-
-                dateRange: {startDate, endDate}
->>>>>>> 28129b5be49afcaf5ad3658fa117a14e6f4e65ba
             }
         },
 
@@ -322,7 +306,6 @@ DateRangePicker
                 return value.charAt(0).toUpperCase() + value.slice(1)
             },
 
-<<<<<<< HEAD
             date: function(date) {
                 let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
                 let dateHours = date.getHours();
@@ -333,11 +316,6 @@ DateRangePicker
                 dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
                 return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear()+' '+dateHours+':'+dateMinutes+' '+dateAmpm;
             }
-=======
-            date(val) {
-        return val ? val.toLocaleString() : ''
-      }
->>>>>>> 28129b5be49afcaf5ad3658fa117a14e6f4e65ba
         }
     }
 </script>

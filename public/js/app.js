@@ -3683,9 +3683,319 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CalendarsListItemEventComponent.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************************************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /home/ws/pezohi/resources/js/components/CalendarsListItemEventComponent.vue: Unexpected token (160:0)\n\n\u001b[0m \u001b[90m 158 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 159 |\u001b[39m             \u001b[36mlet\u001b[39m startDate \u001b[33m=\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mDate\u001b[39m()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 160 |\u001b[39m \u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     |\u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 161 |\u001b[39m             \u001b[36mlet\u001b[39m endDate \u001b[33m=\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mDate\u001b[39m()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 162 |\u001b[39m             endDate\u001b[33m.\u001b[39msetDate(endDate\u001b[33m.\u001b[39mgetDate())\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 163 |\u001b[39m \u001b[33m===\u001b[39m\u001b[33m===\u001b[39m\u001b[33m=\u001b[39m\u001b[0m\n    at Parser._raise (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:776:17)\n    at Parser.raiseWithData (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:769:17)\n    at Parser.raise (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:737:17)\n    at Parser.unexpected (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:9183:16)\n    at Parser.parseExprAtom (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10673:20)\n    at Parser.parseExprSubscripts (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10248:23)\n    at Parser.parseUpdate (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10228:21)\n    at Parser.parseMaybeUnary (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10206:23)\n    at Parser.parseExprOps (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10071:23)\n    at Parser.parseMaybeConditional (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10045:23)\n    at Parser.parseMaybeAssign (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:10008:21)\n    at Parser.parseExpressionBase (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:9953:23)\n    at /home/ws/pezohi/node_modules/@babel/parser/lib/index.js:9947:39\n    at Parser.allowInAnd (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:11641:16)\n    at Parser.parseExpression (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:9947:17)\n    at Parser.parseStatementContent (/home/ws/pezohi/node_modules/@babel/parser/lib/index.js:11907:23)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
+/* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
+/* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['event'],
+  components: {
+    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
+    dateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default())
+  },
+  data: function data() {
+    var startDate = new Date();
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate() + 6);
+    return {
+      dateRange: {
+        startDate: startDate,
+        endDate: endDate
+      },
+      timePicker: true,
+      dateFormat: 'M/DD/YYYY',
+      showWeekNumbers: false,
+      singleDatePicker: false,
+      showDropdowns: false,
+      ranges: false,
+      showCalendar: true,
+      showEditSingleEventForm: false,
+      editedEventData: {
+        id: null,
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      },
+      requestProcess: false,
+      requestSuccess: false,
+      requestDanger: false,
+      dateOptions: {
+        format: 'M/DD/YYYY',
+        useCurrent: true
+      }
+    };
+  },
+  computed: {
+    editedEventDataValid: function editedEventDataValid() {
+      return !(this.editedEventData.location === '' || this.editedEventData.dateTime === '' || this.editedEventData.type === 'none' || this.editedEventData.description === '');
+    }
+  },
+  methods: {
+    showEditSingleEvent: function showEditSingleEvent() {
+      this.$parent.$refs.event.forEach(function (element) {
+        element.showEditSingleEventForm = false;
+      });
+      this.showEditSingleEventForm = true;
+    },
+    hideEditSingleEvent: function hideEditSingleEvent() {
+      this.showEditSingleEventForm = false;
+    },
+    submitEditSingleEvent: function submitEditSingleEvent(event_id, event) {
+      event.preventDefault();
+      this.requestProcess = true;
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.requestDanger = '';
+        currentObj.requestSuccess = '';
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      currentObj.editedEventData.dateTime = this.dateRange;
+      axios.post('/edit-single-event', currentObj.editedEventData).then(function (response) {
+        console.log(response.data.code);
+
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message; // Update table event data
+
+          currentObj.event.started_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.startDate);
+          currentObj.event.location = currentObj.editedEventData.location;
+          currentObj.event.type = currentObj.editedEventData.type;
+          currentObj.event.description = currentObj.editedEventData.description; // Hide edit event form
+
+          setTimeout(function () {
+            currentObj.requestSuccess = false;
+            currentObj.hideEditSingleEvent();
+          }, 2000);
+        } else {
+          currentObj.requestDanger = 'Request Error';
+        }
+      })["catch"](function (response) {
+        currentObj.requestDanger = 'Request Error';
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.event.dateTime = this.$options.filters.formatDate(this.event.started_at);
+    this.editedEventData = {
+      id: this.event.id,
+      dateTime: this.event.dateTime,
+      location: this.event.location,
+      type: this.event.type,
+      description: this.event.description
+    };
+  },
+  filters: {
+    formatDate: function formatDate(value) {
+      var date = new Date(value);
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var year = date.getFullYear();
+      return month + '/' + day + '/' + year;
+    },
+    formatTime: function formatTime(value) {
+      var date = new Date(value);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return hours + ':' + minutes + ' ' + ampm;
+    },
+    sliceString: function sliceString(value) {
+      var sliced = value.slice(0, 10);
+
+      if (sliced.length < value.length) {
+        sliced += '...';
+      }
+
+      return sliced;
+    },
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    date: function date(_date) {
+      var day = _date.getDate() >= 10 ? _date.getDate() : '0' + _date.getDate();
+
+      var dateHours = _date.getHours();
+
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+
+      var dateMinutes = _date.getMinutes();
+
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      return _date.getMonth() + 1 + '/' + day + '/' + _date.getFullYear() + ' ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
+    }
+  }
+});
 
 /***/ }),
 

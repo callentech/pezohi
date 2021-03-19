@@ -117,17 +117,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </date-range-picker>
-                                                                </div>
-<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
-<!--                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>-->
-<!--                                                                    <div class="input-group-append">-->
-<!--                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-
-<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
-<!--                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">-->
-<!--                                                                </div>-->
+                                                                </div>                                                              
 
                                                                 <div class="col-md-2">
                                                                     <input type="text" v-model="newEventData.location" name="new-event-address" class="form-control form-control-sm" placeholder="Location" required>
@@ -143,7 +133,7 @@
                                                                     <input type="text" v-model="newEventData.description" class="form-control form-control-sm" placeholder="e.g. Instructions">
                                                                 </div>
                                                                 <div class="col-md-2 text-right">
-                                                                    <button class="btn btn-primary btn-sm" @click="saveEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
+                                                                    <button class="btn btn-primary btn-sm" @click="saveEvent" :disabled="formRequestProcess"><i class="fas fa-check"></i></button>
                                                                     <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm"><i class="fas fa-times"></i></button>
                                                                 </div>
                                                             </div>
@@ -223,7 +213,6 @@
                                         <form id="duplicateCalendarForm" class="needs-validation" method="POST" @submit="duplicateCalendarSubmit" novalidate>
 
                                             <input type="hidden" name="_token" :value="csrf_token">
-<!--                                            <input type="hidden" name="calendar_id" :value="current_calendar.id">-->
 
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
@@ -333,7 +322,7 @@
                                                                     <input type="text" v-model="newEventData.description" class="form-control form-control-sm" placeholder="e.g. Instructions">
                                                                 </div>
                                                                 <div class="col-md-2 text-right">
-                                                                    <button class="btn btn-primary btn-sm" @click="saveEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
+                                                                    <button class="btn btn-primary btn-sm" @click="saveEvent" :disabled="formRequestProcess"><i class="fas fa-check"></i></button>
                                                                     <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm"><i class="fas fa-times"></i></button>
                                                                 </div>
                                                             </div>
@@ -476,16 +465,6 @@
                                                         <div class="card-footer" v-if="showNewEventDataForm">
                                                             <div class="row">
 
-<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
-<!--                                                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>-->
-<!--                                                                    <div class="input-group-append">-->
-<!--                                                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-
-<!--                                                                <div class="input-group input-group-sm mb-3 col-md-2">-->
-<!--                                                                    <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM">-->
-<!--                                                                </div>-->
 
                                                                 <div class="input-group input-group-sm mb-3 col-md-4">
                                                                     <date-range-picker
@@ -534,7 +513,8 @@
                                                                     <input type="text" v-model="newEventData.description" class="form-control form-control-sm" placeholder="e.g. Instructions">
                                                                 </div>
                                                                 <div class="col-md-2 text-right">
-                                                                    <button class="btn btn-primary btn-sm" @click="saveNewCalendarEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button>
+                                                                    <!-- <button class="btn btn-primary btn-sm" @click="saveNewCalendarEvent" :disabled="!newEventDataValid || formRequestProcess"><i class="fas fa-check"></i></button> -->
+                                                                    <button class="btn btn-primary btn-sm" @click="saveNewCalendarEvent" :disabled="formRequestProcess"><i class="fas fa-check"></i></button>
                                                                     <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm" :disabled="formRequestProcess"><i class="fas fa-times"></i></button>
                                                                 </div>
                                                             </div>
@@ -837,10 +817,12 @@
                 let currentObj = this;
 
                 if (currentObj.newEventData.index === '') {
+                    console.log(currentObj.dateRange);
                     // Add new Event
                     let newEvent = {
                         id: 'new',
-                        started_at: currentObj.newEventData.dateTime,
+                        started_at: currentObj.dateRange.startDate,
+                        ended_at: currentObj.dateRange.endDate,
                         location: currentObj.newEventData.location,
                         type: currentObj.newEventData.type,
                         description: currentObj.newEventData.description
@@ -848,7 +830,8 @@
                     currentObj.current_calendar.events.push(newEvent);
                 } else {
                     // Update current event
-                    currentObj.current_calendar.events[currentObj.newEventData.index].started_at = currentObj.newEventData.dateTime;
+                    currentObj.current_calendar.events[currentObj.newEventData.index].started_at = currentObj.dateRange.startDate;
+                    currentObj.current_calendar.events[currentObj.newEventData.index].ended_at = currentObj.dateRange.endDate;
                     currentObj.current_calendar.events[currentObj.newEventData.index].location = currentObj.newEventData.location;
                     currentObj.current_calendar.events[currentObj.newEventData.index].type = currentObj.newEventData.type;
                     currentObj.current_calendar.events[currentObj.newEventData.index].description = currentObj.newEventData.description;
@@ -873,7 +856,8 @@
                 let currentObj = this;
                 let newEvent = {
                     id: 'new',
-                    started_at: currentObj.newEventData.dateTime,
+                    started_at: currentObj.dateRange.startDate,
+                    ended_at: currentObj.dateRange.endDate,
                     location: currentObj.newEventData.location,
                     type: currentObj.newEventData.type,
                     description: currentObj.newEventData.description

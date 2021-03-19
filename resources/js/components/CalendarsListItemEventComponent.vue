@@ -35,7 +35,7 @@
             <div class="col-4">
                 <div class="data">
                     <div class="input-group input-group-sm mb-3">
-<<<<<<< HEAD
+
 <!--                        <date-picker v-model="editedEventData.dateTime" :config="dateOptions" name="new-event-datetime"></date-picker>-->
 <!--                        <div class="input-group-append">-->
 <!--                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>-->
@@ -68,22 +68,6 @@
                                 </div>
                             </div>
                         </date-range-picker>
-=======
-                        <!-- <input type="text" class="form-control" placeholder="5:30 PM - 6:30 PM" value="5:30 PM - 6:30 PM"> -->
-DateRangePicker
-                        <date-range-picker
-            ref="picker"
-
-            :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
-
-            v-model="dateRange"
-
-    >
-        <template v-slot:input="picker" style="min-width: 350px;">
-            {{ picker.startDate | date }} - {{ picker.endDate | date }}
-        </template>
-    </date-range-picker>
->>>>>>> 28129b5be49afcaf5ad3658fa117a14e6f4e65ba
                     </div>
                 </div>
             </div>

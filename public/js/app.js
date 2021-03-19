@@ -2428,26 +2428,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2655,10 +2635,12 @@ __webpack_require__.r(__webpack_exports__);
       var currentObj = this;
 
       if (currentObj.newEventData.index === '') {
-        // Add new Event
+        console.log(currentObj.dateRange); // Add new Event
+
         var newEvent = {
           id: 'new',
-          started_at: currentObj.newEventData.dateTime,
+          started_at: currentObj.dateRange.startDate,
+          ended_at: currentObj.dateRange.endDate,
           location: currentObj.newEventData.location,
           type: currentObj.newEventData.type,
           description: currentObj.newEventData.description
@@ -2666,7 +2648,8 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.current_calendar.events.push(newEvent);
       } else {
         // Update current event
-        currentObj.current_calendar.events[currentObj.newEventData.index].started_at = currentObj.newEventData.dateTime;
+        currentObj.current_calendar.events[currentObj.newEventData.index].started_at = currentObj.dateRange.startDate;
+        currentObj.current_calendar.events[currentObj.newEventData.index].ended_at = currentObj.dateRange.endDate;
         currentObj.current_calendar.events[currentObj.newEventData.index].location = currentObj.newEventData.location;
         currentObj.current_calendar.events[currentObj.newEventData.index].type = currentObj.newEventData.type;
         currentObj.current_calendar.events[currentObj.newEventData.index].description = currentObj.newEventData.description;
@@ -2690,7 +2673,8 @@ __webpack_require__.r(__webpack_exports__);
       var currentObj = this;
       var newEvent = {
         id: 'new',
-        started_at: currentObj.newEventData.dateTime,
+        started_at: currentObj.dateRange.startDate,
+        ended_at: currentObj.dateRange.endDate,
         location: currentObj.newEventData.location,
         type: currentObj.newEventData.type,
         description: currentObj.newEventData.description
@@ -3696,22 +3680,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -67251,7 +67219,6 @@ var render = function() {
                                                                   "btn btn-primary btn-sm",
                                                                 attrs: {
                                                                   disabled:
-                                                                    !_vm.newEventDataValid ||
                                                                     _vm.formRequestProcess
                                                                 },
                                                                 on: {
@@ -68447,7 +68414,6 @@ var render = function() {
                                                                   "btn btn-primary btn-sm",
                                                                 attrs: {
                                                                   disabled:
-                                                                    !_vm.newEventDataValid ||
                                                                     _vm.formRequestProcess
                                                                 },
                                                                 on: {
@@ -69638,7 +69604,6 @@ var render = function() {
                                                                   "btn btn-primary btn-sm",
                                                                 attrs: {
                                                                   disabled:
-                                                                    !_vm.newEventDataValid ||
                                                                     _vm.formRequestProcess
                                                                 },
                                                                 on: {
@@ -71204,8 +71169,6 @@ var render = function() {
                 "div",
                 { staticClass: "input-group input-group-sm mb-3" },
                 [
-                  _vm._v("\n<<<<<<< HEAD\n"),
-                  _vm._v(" "),
                   _c("date-range-picker", {
                     attrs: {
                       ",": "",
@@ -71274,44 +71237,7 @@ var render = function() {
                       },
                       expression: "dateRange"
                     }
-                  }),
-                  _vm._v("\n=======\n                        "),
-                  _vm._v("\nDateRangePicker\n                        "),
-                  _c("date-range-picker", {
-                    ref: "picker",
-                    attrs: {
-                      "locale-data": {
-                        firstDay: 1,
-                        format: "DD-MM-YYYY HH:mm:ss"
-                      }
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "input",
-                        fn: function(picker) {
-                          return [
-                            _vm._v(
-                              "\n            " +
-                                _vm._s(_vm._f("date")(picker.startDate)) +
-                                " - " +
-                                _vm._s(_vm._f("date")(picker.endDate)) +
-                                "\n        "
-                            )
-                          ]
-                        }
-                      }
-                    ]),
-                    model: {
-                      value: _vm.dateRange,
-                      callback: function($$v) {
-                        _vm.dateRange = $$v
-                      },
-                      expression: "dateRange"
-                    }
-                  }),
-                  _vm._v(
-                    "\n>>>>>>> 28129b5be49afcaf5ad3658fa117a14e6f4e65ba\n                    "
-                  )
+                  })
                 ],
                 1
               )

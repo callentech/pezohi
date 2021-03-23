@@ -20,7 +20,8 @@
 	            </div>
 
 	            <div class="col-2">
-	                {{ calendar.updated_at|formatDate() }}
+	                <span v-if="calendar.updated == null"></span>
+                    <span v-else>{{ calendar.updated|formatDate }}</span>
 	            </div>
 
 	            <div class="col-4 text-right actions">

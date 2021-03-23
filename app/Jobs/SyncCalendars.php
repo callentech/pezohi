@@ -118,7 +118,6 @@ class SyncCalendars implements ShouldQueue
                             Event::where('google_id', $googleEvent->id)->delete();
                             continue;
                         }
-
                         $calendar->events()->updateOrCreate(
                             [
                                 'google_id' => $googleEvent->id
@@ -131,8 +130,9 @@ class SyncCalendars implements ShouldQueue
                                 'location' => $googleEvent->location,
                                 'status' => $googleEvent->status,
                                 'allday' => 0,
-                                'started_at' => $this->parseDatetime($googleEvent->start),
-                                'ended_at' => $this->parseDatetime($googleEvent->end)
+                                'started_at' => Carbon::parse($googleEvent->start->dateTime)->setTimezone($googleEvent->start->timeZone),
+                                'ended_at' => Carbon::parse($googleEvent->end->dateTime)->setTimezone($googleEvent->end->timeZone),
+                                'updated_data_at' => Carbon::parse($googleEvent->updated)->setTimezone($googleEvent->start->timeZone)
                             ]
                         );
                     }
@@ -144,16 +144,5 @@ class SyncCalendars implements ShouldQueue
 
         $this->user->jobs_status = 'finished';
         $this->user->save();
-
-    }
-
-    /**
-     * @param $googleDatetime
-     * @return Carbon
-     */
-    protected function parseDatetime($googleDatetime): Carbon
-    {
-        $rawDatetime = $googleDatetime->dateTime ?: $googleDatetime->date;
-        return Carbon::parse($rawDatetime)->setTimezone('UTC');
     }
 }

@@ -2471,10 +2471,10 @@ __webpack_require__.r(__webpack_exports__);
       },
       newEventData: {
         index: '',
-        dateTime: '2/10/2020',
-        location: 'Location',
-        type: 'game',
-        description: 'Description'
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
       }
     };
   },
@@ -2502,6 +2502,14 @@ __webpack_require__.r(__webpack_exports__);
       this.calendar_name = '';
       this.calendar_events = [];
       this.showAddCalendarModal = false;
+      this.newEventData = {
+        index: '',
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      };
+      this.showNewEventDataForm = false;
     },
     addCalendarSubmit: function addCalendarSubmit(event) {
       event.preventDefault();
@@ -2568,6 +2576,14 @@ __webpack_require__.r(__webpack_exports__);
       this.calendar_name = '';
       this.calendar_events = [];
       this.showEditCalendarModal = false;
+      this.newEventData = {
+        index: '',
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      };
+      this.showNewEventDataForm = false;
     },
     editCalendarSubmit: function editCalendarSubmit(event) {
       event.preventDefault();
@@ -2722,6 +2738,14 @@ __webpack_require__.r(__webpack_exports__);
       this.calendar_name = '';
       this.calendar_events = [];
       this.showDuplicateCalendarModal = false;
+      this.newEventData = {
+        index: '',
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      };
+      this.showNewEventDataForm = false;
     },
     duplicateCalendarSubmit: function duplicateCalendarSubmit(event) {
       event.preventDefault();
@@ -3143,6 +3167,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
 //
 //
 //
@@ -3861,6 +3886,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3914,7 +3947,9 @@ __webpack_require__.r(__webpack_exports__);
       this.$parent.$refs.event.forEach(function (element) {
         element.showEditSingleEventForm = false;
       });
-      this.showEditSingleEventForm = true;
+      this.showEditSingleEventForm = true; // init location input google maps
+
+      var autocomplete = new google.maps.places.Autocomplete(this.$refs["origin"]);
     },
     hideEditSingleEvent: function hideEditSingleEvent() {
       this.showEditSingleEventForm = false;
@@ -70399,11 +70434,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm._v(
-              "\n\t                " +
-                _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
-                "\n\t            "
-            )
+            _vm.calendar.updated == null
+              ? _c("span")
+              : _c("span", [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.calendar.updated)))
+                ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-4 text-right actions" }, [
@@ -73137,14 +73172,14 @@ var render = function() {
                   ),
                   _c("i", { staticClass: "fas fa-circle" }),
                   _vm._v(
-                    "\n                        Owned by " +
+                    "\n                        Owned by : " +
                       _vm._s(_vm.calendar.user.name) +
                       " "
                   ),
                   _c("i", { staticClass: "fas fa-circle" }),
                   _vm._v(
-                    "\n                        Last updated " +
-                      _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
+                    "\n                        Last updated : " +
+                      _vm._s(_vm._f("formatDate")(_vm.calendar.updated)) +
                       "\n                    "
                   )
                 ])

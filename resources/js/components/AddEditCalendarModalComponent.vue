@@ -117,7 +117,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </date-range-picker>
-                                                                </div>                                                              
+                                                                </div>
 
                                                                 <div class="col-md-2">
                                                                     <input type="text" v-model="newEventData.location" name="new-event-address" class="form-control form-control-sm" placeholder="Location" required>
@@ -597,6 +597,7 @@
                 dateFormat: 'M/DD/YYYY',
                 showWeekNumbers: false,
                 singleDatePicker: false,
+
                 showDropdowns: false,
                 ranges: false,
                 showCalendar: true,
@@ -623,10 +624,10 @@
                 },
                 newEventData: {
                     index: '',
-                    dateTime: '2/10/2020',
-                    location: 'Location',
-                    type: 'game',
-                    description: 'Description'
+                    dateTime: '',
+                    location: '',
+                    type: '',
+                    description: ''
                 },
 
 
@@ -664,6 +665,14 @@
                 this.calendar_name = '';
                 this.calendar_events = [];
                 this.showAddCalendarModal = false;
+                this.newEventData = {
+                    index: '',
+                    dateTime: '',
+                    location: '',
+                    type: '',
+                    description: ''
+                };
+                this.showNewEventDataForm = false;
             },
             addCalendarSubmit: function(event) {
                 event.preventDefault();
@@ -742,6 +751,15 @@
                 this.calendar_name = '';
                 this.calendar_events = [];
                 this.showEditCalendarModal = false;
+
+                this.newEventData = {
+                    index: '',
+                        dateTime: '',
+                        location: '',
+                        type: '',
+                        description: ''
+                };
+                this.showNewEventDataForm = false;
             },
             editCalendarSubmit: function(event) {
                 event.preventDefault();
@@ -913,6 +931,14 @@
                 this.calendar_name = '';
                 this.calendar_events = [];
                 this.showDuplicateCalendarModal = false;
+                this.newEventData = {
+                    index: '',
+                    dateTime: '',
+                    location: '',
+                    type: '',
+                    description: ''
+                };
+                this.showNewEventDataForm = false;
             },
             duplicateCalendarSubmit: function(event) {
                 event.preventDefault();

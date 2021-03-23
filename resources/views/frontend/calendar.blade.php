@@ -29,11 +29,15 @@
 
         <main class="frontend-main-content">
 
-            <div id="top-nav" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white">
-                <h5 class="my-0 mr-md-auto font-weight-normal">pezohi</h5>
+            <div id="top-nav" class="d-flex flex-column flex-md-row align-items-center">
+{{--                <h5 class="my-0 mr-md-auto font-weight-normal">pezohi</h5>--}}
 
-                <a class="btn btn-outline-primary" href="#">Sign in</a>
-                <a class="btn btn-primary" href="#">Sign up</a>
+                <a class="my-0 mr-md-auto font-weight-bold navbar-brand" href="{{ url('/') }}">
+                    <span class="badge brand-logo">P</span>{{ config('app.name', 'Laravel') }}
+                </a>
+
+                <a class="btn btn-outline-primary" href="{{ url('/login') }}">Sign in</a>
+{{--                <a class="btn btn-primary" href="#">Sign up</a>--}}
             </div>
 
 

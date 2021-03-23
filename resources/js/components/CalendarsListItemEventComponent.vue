@@ -1,6 +1,12 @@
 <template>
     <div class="card calendar-single">
+
+
+
         <div v-if="!showEditSingleEventForm" class="row">
+
+
+
             <div class="col-4">
                 <div class="data" title>
                     {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
@@ -31,6 +37,8 @@
             </div>
         </div>
         <div v-else class="row">
+
+
 
             <div class="col-4">
                 <div class="data">
@@ -190,6 +198,10 @@
                     element.showEditSingleEventForm = false;
                 });
                 this.showEditSingleEventForm = true;
+
+                // init location input google maps
+
+                const autocomplete = new google.maps.places.Autocomplete(this.$refs["origin"]);
             },
             hideEditSingleEvent: function() {
                 this.showEditSingleEventForm = false;
@@ -256,6 +268,9 @@
                 type: this.event.type,
                 description: this.event.description
             };
+
+
+
         },
         filters: {
             formatDate: function(value) {

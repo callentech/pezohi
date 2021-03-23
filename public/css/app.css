@@ -16154,6 +16154,25 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   border-radius: 10px;
 }
 
+#top-nav .navbar-brand {
+  margin-left: 20px;
+  display: block;
+  font-size: 25px;
+  text-transform: lowercase;
+  text-align: center;
+}
+#top-nav .navbar-brand .badge.brand-logo {
+  padding: 10px 15px 5px 15px;
+  font-weight: 700;
+  font-size: 35px;
+  background: #0090ff;
+  color: #FFFFFF;
+  vertical-align: middle;
+  margin-right: 10px;
+  text-transform: uppercase;
+  border-radius: 10px;
+}
+
 .table .sort-link i {
   margin-top: 5px;
 }

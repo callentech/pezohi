@@ -19,8 +19,8 @@
                         </div>
                         <div class="description">
                             {{ calendar.events.length }} events <i class="fas fa-circle"></i>
-                            Owned by {{ calendar.user.name }} <i class="fas fa-circle"></i>
-                            Last updated {{ calendar.updated_at|formatDate() }}
+                            Owned by : {{ calendar.user.name }} <i class="fas fa-circle"></i>
+                            Last updated : {{ calendar.updated|formatDate() }}
                         </div>
                     </div>
                     <div class="col-md-6 text-right">

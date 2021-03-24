@@ -233,7 +233,8 @@
 					    			</div>
 
 					    			<div class="col-md-2 text-right">
-					    				<button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm" :disabled="!newEventDataValid || requestProcess"><i class="fas fa-check"></i></button>
+<!--					    				<button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm" :disabled="!newEventDataValid || requestProcess"><i class="fas fa-check"></i></button>-->
+                                        <button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm" :disabled="requestProcess"><i class="fas fa-check"></i></button>
 					    				<!-- <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>  -->
 					    				<button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm"><i class="fas fa-times"></i></button>
 					    			</div>
@@ -499,8 +500,12 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 					} else {
 						currentObj.requestDanger = 'Request Error';
 					}
+
+                    currentObj.requestProcess = false;
 				})
 				.catch(function (error) {
+
+                    currentObj.requestProcess = false;
 
 					if (error.response && error.response.status === 422) {
 						currentObj.requestDanger = error.response.data.message;

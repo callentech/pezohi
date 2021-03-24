@@ -22,7 +22,7 @@ class CalendarsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function addCalendarAction(Request $request): JsonResponse
+    public function newCalendarAction(Request $request): JsonResponse
     {
         $request->validate([
             'calendar_name' => 'required'
@@ -53,7 +53,8 @@ class CalendarsController extends Controller
 
                 // Save new event data to Google Calendar
                 $started_at = date_create($event['started_at']);
-                $ended_at = date_create($event['started_at']);
+                $ended_at = date_create($event['ended_at']);
+
                 $newGoogleEvent = new Google_Service_Calendar_Event(array(
                     'summary' => 'Pezohi Event',
                     'location' => trim($event['location']),
@@ -81,12 +82,12 @@ class CalendarsController extends Controller
                     'description' => $newGoogleEvent->description,
                     'location' => $newGoogleEvent->location,
                     'allday' => 0,
-                    'started_at' => $this->parseDatetime($newGoogleEvent->start),
-                    'ended_at' => $this->parseDatetime($newGoogleEvent->end)
+                    'started_at' => Carbon::parse($newGoogleEvent->start->dateTime)->setTimezone($newGoogleEvent->start->timeZone),
+                    'ended_at' => Carbon::parse($newGoogleEvent->end->dateTime)->setTimezone($newGoogleEvent->end->timeZone),
+                    'updated_data_at' => Carbon::parse($newGoogleEvent->updated)->setTimezone($newGoogleEvent->start->timeZone)
                 ]);
                 $createdCalendar->events()->save($newEvent);
             }
-
             return response()->json([
                 'code' => 1,
                 'data' => [
@@ -94,7 +95,6 @@ class CalendarsController extends Controller
                     'message' => 'Calendar created successfully'
                 ]
             ]);
-
         } catch(\Exception $ex) {
             if ($ex->getCode() === 401) {
                 Auth::logout();
@@ -119,7 +119,7 @@ class CalendarsController extends Controller
             'calendar_id' => 'required'
         ]);
 
-        $calendar = Calendar::with('events')->find($request->calendar_id);
+        $calendar = Calendar::with('events')->with('user')->find($request->calendar_id);
         if (!$calendar) {
             return response()->json([
                 'code' => 0
@@ -153,7 +153,6 @@ class CalendarsController extends Controller
         }
 
         try {
-
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
             $googleCalendar = $service->calendars->get($calendar->google_id);
             $googleCalendar->setSummary($request->calendar_name);
@@ -161,7 +160,6 @@ class CalendarsController extends Controller
 
             // Update calendar in DB
             $calendar->name = $updatedGoogleCalendar->summary;
-            $calendar->updated_at = \Carbon\Carbon::now();
             $calendar->save();
 
             // Sync events Data
@@ -184,11 +182,12 @@ class CalendarsController extends Controller
 
             // Update or create events
             foreach ($editedEvents as $event) {
+
                 if ($event['id'] == 'new') {
 
                     // Save new event data to Google Calendar
                     $started_at = date_create($event['started_at']);
-                    $ended_at = date_create($event['started_at']);
+                    $ended_at = date_create($event['ended_at']);
 
                     $newGoogleEvent = new Google_Service_Calendar_Event(array(
                         'summary' => 'Pezohi Event',
@@ -208,17 +207,17 @@ class CalendarsController extends Controller
                     $extendedProperties->setPrivate(['type' => $event['type']]);
                     $newGoogleEvent->setExtendedProperties($extendedProperties);
                     $newGoogleEvent = $service->events->insert($updatedGoogleCalendar->id, $newGoogleEvent);
-
-                    // Save new event data to DB
                     $newEvent = new Event([
                         'google_id' => $newGoogleEvent->id,
                         'name' => $newGoogleEvent->summary,
                         'type' => $newGoogleEvent->extendedProperties->getPrivate()['type'],
                         'description' => $newGoogleEvent->description,
                         'location' => $newGoogleEvent->location,
+                        'status' => $newGoogleEvent->status,
                         'allday' => 0,
-                        'started_at' => $this->parseDatetime($newGoogleEvent->start),
-                        'ended_at' => $this->parseDatetime($newGoogleEvent->end),
+                        'started_at' => Carbon::parse($newGoogleEvent->start->dateTime)->setTimezone($newGoogleEvent->start->timeZone),
+                        'ended_at' => Carbon::parse($newGoogleEvent->end->dateTime)->setTimezone($newGoogleEvent->end->timeZone),
+                        'updated_data_at' => Carbon::parse($newGoogleEvent->updated)->setTimezone($newGoogleEvent->start->timeZone)
                     ]);
                     $calendar->events()->save($newEvent);
 
@@ -226,7 +225,7 @@ class CalendarsController extends Controller
 
                     // Update events data
                     $started_at = date_create($event['started_at']);
-                    $ended_at = date_create($event['started_at']);
+                    $ended_at = date_create($event['ended_at']);
 
                     $updatedEvent = $service->events->get($updatedGoogleCalendar->id, $event['google_id']);
                     $updatedEvent->location = trim($event['location']);
@@ -245,15 +244,18 @@ class CalendarsController extends Controller
                     $updatedEvent->setExtendedProperties($extendedProperties);
                     $updatedEvent = $service->events->update($updatedGoogleCalendar->id, $updatedEvent->getId(), $updatedEvent);
 
+
                     // Update event data in DB
                     $updatedLocalEvent = Event::find($event['id']);
                     $updatedLocalEvent->name = $updatedEvent->summary;
                     $updatedLocalEvent->type = $updatedEvent->extendedProperties->getPrivate()['type'];
-                    $updatedLocalEvent->description =$updatedEvent->description;
+                    $updatedLocalEvent->description = $updatedEvent->description;
                     $updatedLocalEvent->location = $updatedEvent->location;
-                    $updatedLocalEvent->started_at = $this->parseDatetime($updatedEvent->start);
-                    $updatedLocalEvent->ended_at = $this->parseDatetime($updatedEvent->end);
+                    $updatedLocalEvent->started_at = Carbon::parse($updatedEvent->start->dateTime)->setTimezone($updatedEvent->start->timeZone);
+                    $updatedLocalEvent->ended_at = Carbon::parse($updatedEvent->end->dateTime)->setTimezone($updatedEvent->end->timeZone);
+                    $updatedLocalEvent->updated_data_at = Carbon::parse($updatedEvent->updated)->setTimezone($updatedEvent->start->timeZone);
                     $updatedLocalEvent->save();
+                    $calendar->touch();
                 }
             }
 

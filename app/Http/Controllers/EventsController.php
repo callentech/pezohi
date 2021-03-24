@@ -106,7 +106,14 @@ class EventsController extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'dateTime' => 'required',
+            'startDate' => 'required',
+            'startTimeHours' => 'required',
+            'startTimeMinutes' => 'required',
+            'startTimeAmPm' => 'required',
+            'endDate' => 'required',
+            'endTimeHours' => 'required',
+            'endTimeMinutes' => 'required',
+            'endTimeAmPm' => 'required',
             'location' => 'required',
             'type' => 'required',
             'description' => 'required'
@@ -122,13 +129,18 @@ class EventsController extends Controller
             ]);
         }
 
-        $started_at = date_create($request->dateTime['startDate']);
-        $ended_at = date_create($request->dateTime['endDate']);
+        $startedHours = $request->startTimeAmPm == 'AM' ? $request->startTimeHours : $request->startTimeHours + 12;
+        $started_at = new Carbon($request->startDate.' '.$startedHours.':'.$request->startTimeMinutes);
+
+        $endedHours = $request->endTimeAmPm == 'AM' ? $request->endTimeHours : $request->endTimeHours + 12;
+        $ended_at = new Carbon($request->endDate.' '.$endedHours.':'.$request->endTimeMinutes);
+
+//        $started_at = date_create($request->dateTime['startDate']);
+//        $ended_at = date_create($request->dateTime['endDate']);
 
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
             $updatedEvent = $service->events->get($event->calendar->google_id, $event->google_id);
-
 
             $updatedEvent->start = [
                 'dateTime' => date_format($started_at, 'c'),
@@ -155,12 +167,18 @@ class EventsController extends Controller
             $event->location = $updatedEvent->location;
             $event->started_at = $this->parseDatetime($updatedEvent->start);
             $event->ended_at = $this->parseDatetime($updatedEvent->end);
+            $event->updated_data_at = Carbon::parse($updatedEvent->updated)->setTimezone($updatedEvent->start->timeZone);
             $event->save();
+
+            // Update event calendar
+            $event->calendar->touch();
 
             return response()->json([
                 'code' => 1,
                 'data' => [
-                    'updatedEvent' => $updatedEvent,
+//                    'started_at' => Carbon::parse($updatedEvent->start->dateTime)->setTimezone($updatedEvent->start->timeZone),
+//                    'ended_at' => Carbon::parse($updatedEvent->end->dateTime)->setTimezone($updatedEvent->end->timeZone),
+                    'event' => $event,
                     'message' => 'Event updated successfully'
                 ]
             ]);

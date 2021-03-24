@@ -81,6 +81,29 @@ body #app nav.navbar .navbar-brand {
     }
 }
 
+.event-data-wrapper {
+    .input-group-prepend {
+        .input-group-text {
+            width: 135px;
+        }
+    }
+    .event-request-success {
+        text-align: center;
+        border: 1px solid #5fd95f;
+        border-radius: 2px;
+        background: #e0f2e0;
+        padding: 5px 25px;
+
+    }
+    .event-request-error {
+        text-align: center;
+        border: 1px solid #d9765f;
+        border-radius: 2px;
+        background: #f2e0e0;
+        padding: 5px 25px;
+    }
+}
+
 #editCalendarForm .daterangepicker, #duplicateCalendarForm .daterangepicker, #addCalendarForm .daterangepicker {
     top: -200px!important;
 }

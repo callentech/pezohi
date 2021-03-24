@@ -29,7 +29,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 /* Calendars Actions */
-Route::post('/new-calendar', [App\Http\Controllers\CalendarsController::class, 'addCalendarAction'])->name('addCalendar');
+Route::post('/new-calendar', [App\Http\Controllers\CalendarsController::class, 'newCalendarAction'])->name('newCalendar');
 Route::post('/edit-calendar', [App\Http\Controllers\CalendarsController::class, 'editCalendarAction'])->name('editCalendar');
 Route::get('/get-calendar-data', [App\Http\Controllers\CalendarsController::class, 'getCalendarDataAction'])->name('getCalendarData');
 Route::post('/delete-calendar', [App\Http\Controllers\CalendarsController::class, 'deleteCalendarAction'])->name('deleteCalendar');

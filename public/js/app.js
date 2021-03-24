@@ -2428,6 +2428,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2714,7 +2715,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     editEvent: function editEvent(index, event) {
       event.preventDefault();
-      var currentEvent = this.current_calendar.events[index];
+      var currentEvent = this.current_calendar ? this.current_calendar.events[index] : this.new_calendar.events[index];
       this.newEventData = {
         index: index,
         dateTime: this.$options.filters.formatDate(currentEvent.started_at),
@@ -69198,9 +69199,6 @@ var render = function() {
                                                                   staticClass:
                                                                     "btn btn-outline-secondary btn-sm",
                                                                   attrs: {
-                                                                    disabled:
-                                                                      event.id ===
-                                                                      "new",
                                                                     title:
                                                                       "Edit"
                                                                   },

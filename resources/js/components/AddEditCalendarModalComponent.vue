@@ -451,7 +451,8 @@
                                                                     <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
                                                                 </td>
                                                                 <td class="text-right">
-                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+<!--                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>-->
+                                                                    <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
                                                                     <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
                                                                     <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More"><i class="fas fa-ellipsis-h"></i></button>
                                                                 </td>
@@ -899,8 +900,13 @@
 
             editEvent: function(index, event) {
 			    event.preventDefault();
-                let currentEvent = this.current_calendar.events[index];
-                this.newEventData =  {
+
+
+			    let currentEvent = this.current_calendar ? this.current_calendar.events[index] : this.new_calendar.events[index];
+
+
+
+			    this.newEventData =  {
                     index: index,
                     dateTime: this.$options.filters.formatDate(currentEvent.started_at),
                     location: currentEvent.location,

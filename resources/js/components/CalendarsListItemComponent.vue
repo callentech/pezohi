@@ -19,10 +19,15 @@
 	                <span v-else>Other ({{ calendar.access_role }})</span>
 	            </div>
 
-	            <div class="col-2">
-	                <span v-if="calendar.updated == null"></span>
-                    <span v-else>{{ calendar.updated|formatDate }}</span>
-	            </div>
+<!--	            <div class="col-2">-->
+<!--	                <span v-if="calendar.updated == null"></span>-->
+<!--                    <span v-else>{{ calendar.updated|formatDate }}</span>-->
+<!--	            </div>-->
+
+                <div class="col-2">
+
+                    {{ calendar.updated_at|formatDate }}
+                </div>
 
 	            <div class="col-4 text-right actions">
 

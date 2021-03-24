@@ -92,7 +92,8 @@ class SyncCalendars implements ShouldQueue
                         'name' => $googleCalendar->summary,
                         'description' => $googleCalendar->description,
                         'color' => $googleCalendar->backgroundColor,
-                        'timezone' => $googleCalendar->timeZone
+                        'timezone' => $googleCalendar->timeZone,
+                        'timestamps' => false
                     ]
                 );
 

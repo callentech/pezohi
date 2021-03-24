@@ -3453,6 +3453,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -70434,11 +70439,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm.calendar.updated == null
-              ? _c("span")
-              : _c("span", [
-                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.calendar.updated)))
-                ])
+            _vm._v(
+              "\n\n                    " +
+                _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
+                "\n                "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-4 text-right actions" }, [

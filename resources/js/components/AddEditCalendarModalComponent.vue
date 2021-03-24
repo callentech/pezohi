@@ -866,7 +866,12 @@
             },
             removeEvent: function(index, event) {
                 event.preventDefault();
-                this.current_calendar.events.splice(index, 1);
+                if (this.current_calendar) {
+                    this.current_calendar.events.splice(index, 1);
+                }
+                if (this.new_calendar) {
+                    this.new_calendar.events.splice(index, 1);
+                }
             },
 
             saveNewCalendarEvent: function(event) {

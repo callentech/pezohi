@@ -3008,6 +3008,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
+      if (this.editedEventData.description.length > 150) {
+        this.editedEventData.description = this.editedEventData.description.substring(0, 150);
+      }
+    },
     // Edit calendar Methods
     showEditCalendarModalAction: function showEditCalendarModalAction(id) {
       var currentObj = this;
@@ -4212,6 +4217,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4300,6 +4311,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
+      if (this.editedEventData.description.length > 150) {
+        this.editedEventData.description = this.editedEventData.description.substring(0, 150);
+      }
+    },
     toggleCalendarDataForm: function toggleCalendarDataForm() {
       if (this.showBody) {
         this.showBody = !this.showBody;
@@ -4539,6 +4555,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5081,6 +5131,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
+      if (this.editedEventData.description.length > 150) {
+        this.editedEventData.description = this.editedEventData.description.substring(0, 150);
+      }
+    },
     hideEditSingleEvent: function hideEditSingleEvent() {
       this.$parent.showEditSingleEventForm = false;
     },
@@ -70364,24 +70419,27 @@ var render = function() {
                                                                               .description
                                                                         },
                                                                         on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            if (
+                                                                          input: [
+                                                                            function(
                                                                               $event
-                                                                                .target
-                                                                                .composing
                                                                             ) {
-                                                                              return
-                                                                            }
-                                                                            _vm.$set(
-                                                                              _vm.editedEventData,
-                                                                              "description",
-                                                                              $event
-                                                                                .target
-                                                                                .value
-                                                                            )
-                                                                          }
+                                                                              if (
+                                                                                $event
+                                                                                  .target
+                                                                                  .composing
+                                                                              ) {
+                                                                                return
+                                                                              }
+                                                                              _vm.$set(
+                                                                                _vm.editedEventData,
+                                                                                "description",
+                                                                                $event
+                                                                                  .target
+                                                                                  .value
+                                                                              )
+                                                                            },
+                                                                            _vm.assertEventDescriptionMaxChars
+                                                                          ]
                                                                         }
                                                                       }
                                                                     )
@@ -73248,6 +73306,8 @@ var render = function() {
                                                                         attrs: {
                                                                           type:
                                                                             "text",
+                                                                          max:
+                                                                            "150",
                                                                           name:
                                                                             "event-location"
                                                                         },
@@ -73489,24 +73549,27 @@ var render = function() {
                                                                               .description
                                                                         },
                                                                         on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            if (
+                                                                          input: [
+                                                                            function(
                                                                               $event
-                                                                                .target
-                                                                                .composing
                                                                             ) {
-                                                                              return
-                                                                            }
-                                                                            _vm.$set(
-                                                                              _vm.editedEventData,
-                                                                              "description",
-                                                                              $event
-                                                                                .target
-                                                                                .value
-                                                                            )
-                                                                          }
+                                                                              if (
+                                                                                $event
+                                                                                  .target
+                                                                                  .composing
+                                                                              ) {
+                                                                                return
+                                                                              }
+                                                                              _vm.$set(
+                                                                                _vm.editedEventData,
+                                                                                "description",
+                                                                                $event
+                                                                                  .target
+                                                                                  .value
+                                                                              )
+                                                                            },
+                                                                            _vm.assertEventDescriptionMaxChars
+                                                                          ]
                                                                         }
                                                                       }
                                                                     )
@@ -76605,24 +76668,27 @@ var render = function() {
                                                                               .description
                                                                         },
                                                                         on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            if (
+                                                                          input: [
+                                                                            function(
                                                                               $event
-                                                                                .target
-                                                                                .composing
                                                                             ) {
-                                                                              return
-                                                                            }
-                                                                            _vm.$set(
-                                                                              _vm.editedEventData,
-                                                                              "description",
-                                                                              $event
-                                                                                .target
-                                                                                .value
-                                                                            )
-                                                                          }
+                                                                              if (
+                                                                                $event
+                                                                                  .target
+                                                                                  .composing
+                                                                              ) {
+                                                                                return
+                                                                              }
+                                                                              _vm.$set(
+                                                                                _vm.editedEventData,
+                                                                                "description",
+                                                                                $event
+                                                                                  .target
+                                                                                  .value
+                                                                              )
+                                                                            },
+                                                                            _vm.assertEventDescriptionMaxChars
+                                                                          ]
                                                                         }
                                                                       }
                                                                     )
@@ -77590,7 +77656,7 @@ var render = function() {
                 [
                   _c("div", { staticClass: "eventsDataFilters" }, [
                     _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-4" }, [
+                      _c("div", { staticClass: "col-2" }, [
                         _c(
                           "a",
                           {
@@ -77686,6 +77752,21 @@ var render = function() {
                                   staticClass:
                                     "fas fa-sort-amount-down-alt float-right"
                                 })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-2" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "sort-link",
+                            attrs: { href: "javascript:void(0)" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    Status\n                                "
+                            )
                           ]
                         )
                       ]),
@@ -78905,16 +78986,19 @@ var render = function() {
                                           value: _vm.editedEventData.description
                                         },
                                         on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.editedEventData,
-                                              "description",
-                                              $event.target.value
-                                            )
-                                          }
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.editedEventData,
+                                                "description",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.assertEventDescriptionMaxChars
+                                          ]
                                         }
                                       })
                                     ])
@@ -79140,102 +79224,166 @@ var render = function() {
     "div",
     { staticClass: "card calendar-single" },
     [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-4" }, [
-          _c("div", { staticClass: "data", attrs: { title: "" } }, [
-            _vm._v(
-              "\n                " +
-                _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
-                " " +
-                _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
-                " - " +
-                _vm._s(_vm._f("formatDate")(_vm.event.ended_at)) +
-                " " +
-                _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
-                "\n            "
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c("div", { staticClass: "data" }, [
-            _c(
-              "a",
-              {
-                attrs: { title: "Details", href: "javascript:void(0)" },
-                on: {
-                  click: function($event) {
-                    _vm.showEventDetails = !_vm.showEventDetails
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  "\n                    " +
-                    _vm._s(_vm._f("sliceString")(_vm.event.location)) +
-                    " "
-                ),
-                _c("i", { staticClass: "fas fa-angle-down" })
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c("div", { staticClass: "data" }, [
-            _vm._v(
-              "\n                " +
-                _vm._s(_vm._f("capitalize")(_vm.event.type)) +
-                "\n            "
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c("div", { staticClass: "data" }, [
-            _c(
-              "a",
-              {
-                attrs: { title: "Details", href: "javascript:void(0)" },
-                on: {
-                  click: function($event) {
-                    _vm.showEventDetails = !_vm.showEventDetails
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  "\n                    " +
-                    _vm._s(_vm._f("sliceString")(_vm.event.description)) +
-                    " "
-                ),
-                _c("i", { staticClass: "fas fa-angle-down" })
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c("div", { staticClass: "data text-right" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "btn btn-outline-primary btn-sm pull-right btn-open",
-                attrs: { type: "button", title: "Edit" },
-                on: {
-                  click: function($event) {
-                    return _vm.showEditSingleEvent(_vm.event.id)
-                  }
-                }
-              },
-              [_c("i", { staticClass: "far fa-edit" })]
-            ),
+      _vm.event.status === "cancelled"
+        ? _c("div", { staticClass: "row text-muted" }, [
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data", attrs: { title: "" } }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.event.started_at)))
+                ])
+              ])
+            ]),
             _vm._v(" "),
-            _vm._m(0)
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("sliceString")(_vm.event.location)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("capitalize")(_vm.event.type)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("sliceString")(_vm.event.description)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c(
+                  "span",
+                  { staticClass: "badge badge-secondary event-status-badge" },
+                  [_vm._v(_vm._s(_vm.event.status))]
+                )
+              ])
+            ])
           ])
-        ])
-      ]),
+        : _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data", attrs: { title: "" } }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
+                    " " +
+                    _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
+                    " - " +
+                    _vm._s(_vm._f("formatDate")(_vm.event.ended_at)) +
+                    " " +
+                    _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
+                    "\n            "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { title: "Details", href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        _vm.showEventDetails = !_vm.showEventDetails
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm._f("sliceString")(_vm.event.location)) +
+                        " "
+                    ),
+                    _c("i", { staticClass: "fas fa-angle-down" })
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm._f("capitalize")(_vm.event.type)) +
+                    "\n            "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { title: "Details", href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        _vm.showEventDetails = !_vm.showEventDetails
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm._f("sliceString")(_vm.event.description)) +
+                        " "
+                    ),
+                    _c("i", { staticClass: "fas fa-angle-down" })
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _vm.event.status === "confirmed"
+                  ? _c(
+                      "span",
+                      { staticClass: "badge badge-success event-status-badge" },
+                      [_vm._v(_vm._s(_vm.event.status))]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.event.status === "tentative"
+                  ? _c(
+                      "span",
+                      { staticClass: "badge badge-warning event-status-badge" },
+                      [_vm._v(_vm._s(_vm.event.status))]
+                    )
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "btn btn-outline-primary btn-sm pull-right btn-open",
+                    attrs: { type: "button", title: "Edit" },
+                    on: {
+                      click: function($event) {
+                        return _vm.showEditSingleEvent(_vm.event.id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-edit" })]
+                ),
+                _vm._v(" "),
+                _vm._m(0)
+              ])
+            ])
+          ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [
         _vm.showEventDetails
@@ -79874,16 +80022,19 @@ var render = function() {
               attrs: { type: "text", name: "event-description" },
               domProps: { value: _vm.editedEventData.description },
               on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(
-                    _vm.editedEventData,
-                    "description",
-                    $event.target.value
-                  )
-                }
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.editedEventData,
+                      "description",
+                      $event.target.value
+                    )
+                  },
+                  _vm.assertEventDescriptionMaxChars
+                ]
               }
             })
           ])

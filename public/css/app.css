@@ -16265,6 +16265,10 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 .filter-content .calendars-list .card .calendar-single .fa-angle-down {
   vertical-align: middle;
 }
+.filter-content .calendars-list .card .calendar-single .event-status-badge {
+  font-size: 12px;
+  padding: 5px;
+}
 .filter-content .calendars-list .card .calendar-single .event-details .card-header {
   padding: 3px;
 }

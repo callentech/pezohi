@@ -98,7 +98,7 @@
 	            	<div class="eventsDataFilters">
 	            		<div class="row">
 
-	            			<div class="col-4">
+	            			<div class="col-2">
 	            				<a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDate">
                                 	Event Date and Time
                                     <i v-if="sortByDateDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
@@ -127,6 +127,12 @@
                                     Notes
                                     <i v-if="sortByDescriptionDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
+                                </a>
+                            </div>
+
+                            <div class="col-2">
+                                <a href="javascript:void(0)" class="sort-link">
+                                    Status
                                 </a>
                             </div>
 
@@ -347,7 +353,7 @@
                                         <div class="data">
                                             <div class="form-group">
                                                 <label><small>Description</small></label>
-                                                <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" name="event_description">
+                                                <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event_description">
                                             </div>
                                         </div>
                                     </div>
@@ -520,6 +526,12 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 		},
 
 		methods: {
+
+            assertEventDescriptionMaxChars: function() {
+                if (this.editedEventData.description.length > 150) {
+                    this.editedEventData.description = this.editedEventData.description.substring(0, 150);
+                }
+            },
 
 			toggleCalendarDataForm: function() {
 				if (this.showBody) {

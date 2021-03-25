@@ -109,16 +109,18 @@ class SyncCalendars implements ShouldQueue
                     foreach ($eventsList as $googleEvent) {
 
                         // Delete Event
-                        if ($googleEvent->status === 'cancelled') {
-                            Event::where('google_id', $googleEvent->id)->delete();
-                            continue;
-                        }
+//                        if ($googleEvent->status === 'cancelled') {
+//                            Event::where('google_id', $googleEvent->id)->delete();
+//                            continue;
+//                        }
 
-                        // Delete Event
-                        if ($googleEvent->status === 'cancelled') {
-                            Event::where('google_id', $googleEvent->id)->delete();
-                            continue;
-                        }
+                        // Get event status
+//                        прошедшие ивенты (дата ивента+время > текущей) выдяются другим цветом и статусом = Over
+//                        отмененные/удаленные ивенты вычеркиваются, ряд имеет другой цвет и статус Cancelled/Deleted https://tppr.me/6yRrx
+//                        перенесенные ивенты (ивенты, где дата или время редактировались хотя бы раз, имеют статус Rescheduled
+
+
+
                         $calendar->events()->updateOrCreate(
                             [
                                 'google_id' => $googleEvent->id

@@ -197,7 +197,7 @@
                 <div class="data">
                     <div class="form-group">
                         <label><small>Description</small></label>
-                        <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" name="event-description">
+                        <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event-description">
                     </div>
                 </div>
             </div>
@@ -282,6 +282,12 @@ export default {
     },
 
     methods: {
+        assertEventDescriptionMaxChars: function() {
+            if (this.editedEventData.description.length > 150) {
+                this.editedEventData.description = this.editedEventData.description.substring(0, 150);
+            }
+        },
+
         hideEditSingleEvent: function() {
             this.$parent.showEditSingleEventForm = false;
         },

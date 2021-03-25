@@ -1,8 +1,39 @@
 <template>
     <div class="card calendar-single">
 
-        <div class="row">
-            <div class="col-4">
+        <div v-if="event.status === 'cancelled'" class="row text-muted">
+            <div class="col-2">
+                <div class="data" title>
+                    <del>{{ event.started_at|formatDate }}</del>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="data">
+                    <del>{{ event.location|sliceString }}</del>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="data">
+                    <del>{{ event.type|capitalize }}</del>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="data">
+                    <del>{{ event.description|sliceString }}</del>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="data">
+                    <span class="badge badge-secondary event-status-badge">{{event.status}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div v-else class="row">
+            <div class="col-2">
                 <div class="data" title>
                     {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{
                         event.ended_at|formatDate
@@ -30,16 +61,19 @@
                 </div>
             </div>
             <div class="col-2">
+                <div class="data">
+                    <span v-if="event.status === 'confirmed'" class="badge badge-success event-status-badge">{{event.status}}</span>
+                    <span v-if="event.status === 'tentative'" class="badge badge-warning event-status-badge">{{event.status}}</span>
+                </div>
+            </div>
+            <div class="col-2">
                 <div class="data text-right">
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit"
                             @click="showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i
                         class="fas fa-ellipsis-v"></i></button>
                 </div>
-
             </div>
-
-
         </div>
 
         <transition name="fade">

@@ -16262,6 +16262,15 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   padding: 5px 5px 5px 10px;
   margin-top: 10px;
 }
+.filter-content .calendars-list .card .calendar-single .fa-angle-down {
+  vertical-align: middle;
+}
+.filter-content .calendars-list .card .calendar-single .event-details .card-header {
+  padding: 3px;
+}
+.filter-content .calendars-list .card .calendar-single .event-details .card-body {
+  padding: 3px;
+}
 .filter-content .calendars-list .card .request-success {
   float: left;
   width: 92px;

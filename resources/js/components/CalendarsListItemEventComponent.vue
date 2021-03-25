@@ -1,8 +1,6 @@
 <template>
     <div class="card calendar-single">
 
-
-
         <div class="row">
             <div class="col-4">
                 <div class="data" title>
@@ -14,7 +12,9 @@
 
             <div class="col-2">
                 <div class="data">
-                    <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
+                    <a title="Details" href="javascript:void(0)" @click="showEventDetails=!showEventDetails">
+                        {{ event.location|sliceString }} <i class="fas fa-angle-down"></i>
+                    </a>
                 </div>
             </div>
             <div class="col-2">
@@ -24,7 +24,9 @@
             </div>
             <div class="col-2">
                 <div class="data">
-                    <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
+                    <a title="Details" href="javascript:void(0)" @click="showEventDetails=!showEventDetails">
+                        {{ event.description|sliceString }} <i class="fas fa-angle-down"></i>
+                    </a>
                 </div>
             </div>
             <div class="col-2">
@@ -36,7 +38,35 @@
                 </div>
 
             </div>
+
+
         </div>
+
+        <transition name="fade">
+            <div v-if="showEventDetails" class="row event-details">
+                <div class="col-12">
+                    <div>
+                        <div class="card border-secondary">
+                            <div class="card-header bg-transparent border-secondary">
+                                <strong>Address : </strong>
+                            </div>
+                            <div class="card-body text-secondary">
+                                {{ event.location }}
+                            </div>
+                        </div>
+
+                        <div class="card border-secondary">
+                            <div class="card-header bg-transparent border-secondary">
+                                <strong>Notes : </strong>
+                            </div>
+                            <div class="card-body text-secondary">
+                                {{ event.description }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
 
         <transition name="fade">
             <div v-if="showEditSingleEventForm">
@@ -52,18 +82,14 @@
 <script>
 
 import datePicker from 'vue-bootstrap-datetimepicker';
-// import dateRangePicker from 'vue2-daterange-picker'
-//
-// import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-// import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
 export default {
 
     props: ['event'],
 
     components: {
-        datePicker,
-        //dateRangePicker
+        datePicker
     },
 
     data() {
@@ -84,6 +110,7 @@ export default {
             showCalendar: true,
 
             showEditSingleEventForm: false,
+            showEventDetails: false,
 
             editedEventData: {
                 id: null,
@@ -126,6 +153,8 @@ export default {
         hideEditSingleEvent: function () {
             this.showEditSingleEventForm = false;
         },
+
+
 
         /*
         submitEditSingleEvent: function (event_id, event) {

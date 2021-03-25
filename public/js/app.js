@@ -4399,6 +4399,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 //
 //
 //
@@ -4450,16 +4451,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- // import dateRangePicker from 'vue2-daterange-picker'
 //
-// import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-// import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['event'],
   components: {
-    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()) //dateRangePicker
-
+    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default())
   },
   data: function data() {
     var startDate = new Date();
@@ -4478,6 +4505,7 @@ __webpack_require__.r(__webpack_exports__);
       ranges: false,
       showCalendar: true,
       showEditSingleEventForm: false,
+      showEventDetails: false,
       editedEventData: {
         id: null,
         dateTime: '',
@@ -78046,9 +78074,21 @@ var render = function() {
             _c(
               "a",
               {
-                attrs: { href: "javascript:void(0)", title: _vm.event.location }
+                attrs: { title: "Details", href: "javascript:void(0)" },
+                on: {
+                  click: function($event) {
+                    _vm.showEventDetails = !_vm.showEventDetails
+                  }
+                }
               },
-              [_vm._v(_vm._s(_vm._f("sliceString")(_vm.event.location)))]
+              [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm._f("sliceString")(_vm.event.location)) +
+                    " "
+                ),
+                _c("i", { staticClass: "fas fa-angle-down" })
+              ]
             )
           ])
         ]),
@@ -78068,12 +78108,21 @@ var render = function() {
             _c(
               "a",
               {
-                attrs: {
-                  href: "javascript:void(0)",
-                  title: _vm.event.description
+                attrs: { title: "Details", href: "javascript:void(0)" },
+                on: {
+                  click: function($event) {
+                    _vm.showEventDetails = !_vm.showEventDetails
+                  }
                 }
               },
-              [_vm._v(_vm._s(_vm._f("sliceString")(_vm.event.description)))]
+              [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm._f("sliceString")(_vm.event.description)) +
+                    " "
+                ),
+                _c("i", { staticClass: "fas fa-angle-down" })
+              ]
             )
           ])
         ]),
@@ -78098,6 +78147,54 @@ var render = function() {
             _vm._m(0)
           ])
         ])
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.showEventDetails
+          ? _c("div", { staticClass: "row event-details" }, [
+              _c("div", { staticClass: "col-12" }, [
+                _c("div", [
+                  _c("div", { staticClass: "card border-secondary" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "card-header bg-transparent border-secondary"
+                      },
+                      [_c("strong", [_vm._v("Address : ")])]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body text-secondary" }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(_vm.event.location) +
+                          "\n                        "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card border-secondary" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "card-header bg-transparent border-secondary"
+                      },
+                      [_c("strong", [_vm._v("Notes : ")])]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body text-secondary" }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(_vm.event.description) +
+                          "\n                        "
+                      )
+                    ])
+                  ])
+                ])
+              ])
+            ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("transition", { attrs: { name: "fade" } }, [

@@ -170,6 +170,21 @@ body #app nav.navbar .navbar-brand {
 		padding: 5px 5px 5px 10px;
 		margin-top: 10px;
 
+        .calendar-single {
+            .fa-angle-down {
+                vertical-align: middle;
+            }
+            .event-details {
+                .card-header {
+                    padding: 3px;
+                }
+
+                .card-body {
+                    padding: 3px;
+                }
+            }
+        }
+
         .request-success {
             float: left;
             width: 92px;
@@ -248,6 +263,8 @@ body #app nav.navbar .navbar-brand {
 .calendars-list .actions .btn-share, .calendars-list .actions .btn-delete {
     color: #949fae;
 }
+
+
 
 // Calendar Modal
 #addCalendarModal .modal-content .modal-header,

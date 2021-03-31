@@ -42,48 +42,48 @@
                     <table class="table table-bordered table-sm">
                         <thead>
                         <tr>
-                            <th scope="col">
-                                <a class="sort-link" href="javascript:void(0)" @click="sortUsersListById">
-                                    ID
-                                    <i v-if="sortByIdDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
-                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
-                                </a>
-                            </th>
+<!--                            <th scope="col">-->
+<!--                                <a class="sort-link" href="javascript:void(0)" @click="sortUsersListById">-->
+<!--                                    ID-->
+<!--                                    <i v-if="sortByIdDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>-->
+<!--                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>-->
+<!--                                </a>-->
+<!--                            </th>-->
 
-                            <th scope="col">
-                                <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByName">
-                                    Name
-                                    <i v-if="sortByNameDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
-                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
-                                </a>
-                            </th>
+<!--                            <th scope="col">-->
+<!--                                <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByName">-->
+<!--                                    Name-->
+<!--                                    <i v-if="sortByNameDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>-->
+<!--                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>-->
+<!--                                </a>-->
+<!--                            </th>-->
                             <th scope="col">
                                 <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByEmail">
-                                    E-mail
+                                    User Email
                                     <i v-if="sortByEmailDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </th>
-                            <th scope="col">
-                                Is Admin
-                            </th>
+<!--                            <th scope="col">-->
+<!--                                Is Admin-->
+<!--                            </th>-->
                             <th scope="col">
                                 <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByOwnCalendars">
-                                    Own calendars
+                                    Owned Calendars
                                     <i v-if="sortByOwnCalendarsDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </th>
                             <th scope="col">
                                 <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByPublicCalendars">
-                                    Public calendars
+                                    Shared Calendars
                                     <i v-if="sortByPublicCalendarsDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </th>
                             <th scope="col">
                                 <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByRole">
-                                    Role
+                                    Role(Admin/User)
                                     <i v-if="sortByRoleDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
@@ -92,18 +92,20 @@
                         </thead>
                         <tbody>
                         <tr v-for="user in sortedUsers" >
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.name }}</td>
+<!--                            <td>{{ user.id }}</td>-->
+<!--                            <td>{{ user.name }}</td>-->
                             <td>{{ user.email }}</td>
+
+                            <td>{{ user.ownCalendarsCount}}</td>
+                            <td>{{ user.publicCalendarsCount}}</td>
+<!--                            <td>{{ user.role}}</td>-->
+
                             <td>
                                 <div class="form-group form-check">
                                     <input :id="'user_'+user.id+'_role'" type="checkbox" class="form-check-input" :checked="user.role === 'admin'" :disabled="requestProcess" @change="setUserRole(user.id, $event)">
                                     <label class="form-check-label" :for="'user_'+user.id+'_role'">Admin</label>
                                 </div>
                             </td>
-                            <td>{{ user.ownCalendarsCount}}</td>
-                            <td>{{ user.publicCalendarsCount}}</td>
-                            <td>{{ user.role}}</td>
                         </tr>
                         </tbody>
                     </table>

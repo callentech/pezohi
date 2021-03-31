@@ -16275,6 +16275,10 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 .filter-content .calendars-list .card .calendar-single .event-details .card-body {
   padding: 3px;
 }
+.filter-content .calendars-list .card .calendar-single.event-cancelled {
+  background: #ffe8e8;
+  border: 1px solid #ffb0b0;
+}
 .filter-content .calendars-list .card .request-success {
   float: left;
   width: 92px;

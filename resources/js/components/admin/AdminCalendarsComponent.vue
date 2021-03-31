@@ -282,7 +282,7 @@ export default {
 
         sortCalendarsListByOwner: function() {
             let direction = this.sortByOwnerDirection === 'desc' ? 'asc' : 'desc';
-            this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
+            this.sortedCalendars = this.sortArray(this.calendars, 'access_role', direction);
             this.sortByOwnerDirection = direction;
         },
 

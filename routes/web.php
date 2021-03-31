@@ -39,6 +39,7 @@ Route::post('/delete-calendar', [App\Http\Controllers\CalendarsController::class
 //Route::post('/new-event', [App\Http\Controllers\EventsController::class, 'addEventAction'])->name('addEvent');
 Route::post('/new-single-event', [App\Http\Controllers\EventsController::class, 'addSingleEventAction'])->name('addSingleEvent');
 Route::post('/edit-single-event', [App\Http\Controllers\EventsController::class, 'editSingleEventAction'])->name('editSingleEvent');
+Route::post('/delete-event', [App\Http\Controllers\EventsController::class, 'deleteEventAction'])->name('deleteEvent');
 
 /* Admin */
 Route::get('/admin-home', [App\Http\Controllers\AdminController::class, 'indexAction'])->name('adminHome')->middleware('admin');

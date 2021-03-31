@@ -116,7 +116,7 @@
 
 	                        <div class="col-2">
                                 <a href="javascript:void(0)" class="sort-link" @click="sortEventsListByType">
-                                    Event
+                                    Event Type
                                     <i v-if="sortByTypeDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
@@ -391,7 +391,7 @@
 		<div v-if="showInfoModal">
 			<transition name="modal">
 				<div class="modal-mask">
-	        		<div class="modal-wrapper">
+	        		<div class="modal-wrapper" @click="hideShareCalendarModal($event)">
 	        			<div class="message-modal" tabindex="-1" role="dialog">
 				  			<div class="modal-dialog" role="document">
 				    			<div class="modal-content">
@@ -578,7 +578,8 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 				this.showNewEventDataForm = true;
 			},
 
-			hideAddEventForm: function() {
+			hideAddEventForm: function(event) {
+                event.preventDefault();
 				this.calendar_id = null;
 				this.showNewEventDataForm = false;
 			},
@@ -590,7 +591,6 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
             },
 
 			shareCalendar: function(url) {
-				console.log(url);
 				let input_temp = document.createElement('textarea');
 				input_temp.innerHTML = url;
 				document.body.appendChild(input_temp);
@@ -598,10 +598,18 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 				input_temp.setSelectionRange(0, 99999);
 				document.execCommand('copy');
 				document.body.removeChild(input_temp);
-
 				this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
 				this.showInfoModal = true;
 			},
+
+            hideShareCalendarModal: function(event) {
+                if(event.target.classList.contains("modal-wrapper") || event.target.classList.contains("message-modal")) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    this.infoModalText='';
+                    this.showInfoModal=false
+                }
+            },
 
             addEventSubmit: function(event) {
                 event.preventDefault();

@@ -19,8 +19,14 @@
                     <span v-else>Other ({{ calendar.access_role }})</span>
                 </div>
 
+                <!--	            <div class="col-2">-->
+                <!--	                <span v-if="calendar.updated == null"></span>-->
+                <!--                    <span v-else>{{ calendar.updated|formatDate }}</span>-->
+                <!--	            </div>-->
+
                 <div class="col-2">
-                    {{ calendar.updated_at|formatDate() }}
+
+                    {{ calendar.updated_at|formatDate }}
                 </div>
 
                 <div class="col-4 text-right actions">
@@ -73,8 +79,12 @@
 
                 <div class="row align-items-center">
                     <div class="col-lg-6" >
-                        <div v-if="calendar.events.length > 5">
-                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>
+                        <!--	                	<div v-if="calendar.events.length > 5">-->
+                        <!--	                		1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>-->
+                        <!--	                	</div>-->
+
+                        <div>
+                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#">View all</a>
                         </div>
                     </div>
 
@@ -90,15 +100,9 @@
 
                             <div class="col-2">
                                 <a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDate">
-                                    Date
+                                    Event Date and Time
                                     <i v-if="sortByDateDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
-                                </a>
-                            </div>
-
-                            <div class="col-2">
-                                <a href="javascript:void(0)" class="sort-link">
-                                    Time
                                 </a>
                             </div>
 
@@ -112,7 +116,7 @@
 
                             <div class="col-2">
                                 <a href="javascript:void(0)" class="sort-link" @click="sortEventsListByType">
-                                    Event
+                                    Event Type
                                     <i v-if="sortByTypeDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
@@ -128,6 +132,12 @@
 
                             <div class="col-2">
                                 <a href="javascript:void(0)" class="sort-link">
+                                    Status
+                                </a>
+                            </div>
+
+                            <div class="col-2">
+                                <a href="javascript:void(0)" class="sort-link">
                                     Actions
                                 </a>
                             </div>
@@ -136,87 +146,246 @@
                     </div>
 
                     <div class="events-list">
-                        <!--						<div v-for="event in calendar.events">-->
-                        <!--                            <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>-->
-                        <!--            			</div>-->
                         <div v-for="event in sortedEvents">
                             <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
                         </div>
-
                     </div>
 
-                    <div class="card-footer" v-if="showNewEventDataForm">
+                    <transition name="fade">
+                        <div class="card-footer" v-if="showNewEventDataForm">
 
-                        <form id="addCalendarEventForm" class="needs-validation" @submit="addEventSubmit" novalidate>
+                            <form id="addCalendarEventForm" class="needs-validation" @submit="addEventSubmit" novalidate>
 
-                            <input type="hidden" name="calendar_id" :value="calendar.id">
+                                <input type="hidden" name="calendar_id" :value="calendar.id">
 
-                            <div class="row">
-
-                                <div class="input-group input-group-sm mb-3 col-md-2">
-
-                                    <date-picker v-model="newEventData.dateTime" :config="dateOptions" name="new_event_datetime" :disabled="requestProcess" placeholder="dd.mm.YYYY" required></date-picker>
-
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                <!-- Event Date Time -->
+                                <hr>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Start Date</span>
+                                                </div>
+                                                <date-picker v-model="editedEventData.startDate" :config="dateOptions" readonly name="event-start-date"></date-picker>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="invalid-feedback">Please provide a valid date.</div>
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Start Time [hours]</span>
+                                                </div>
+                                                <select v-model="editedEventData.startTimeHours" class="custom-select" name="event-start-time-hours">
+                                                    <option value="1">01</option>
+                                                    <option value="2">02</option>
+                                                    <option value="3">03</option>
+                                                    <option value="4">04</option>
+                                                    <option value="5">05</option>
+                                                    <option value="6">06</option>
+                                                    <option value="7">07</option>
+                                                    <option value="8">08</option>
+                                                    <option value="9">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Start Time [minutes]</span>
+                                                </div>
+                                                <select v-model="editedEventData.startTimeMinutes" class="custom-select" name="event-start-time-minutes">
+                                                    <option value="0">00</option>
+                                                    <option value="5">05</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                    <option value="30">30</option>
+                                                    <option value="35">35</option>
+                                                    <option value="40">40</option>
+                                                    <option value="45">45</option>
+                                                    <option value="50">50</option>
+                                                    <option value="55">55</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Start Time [am/pm]</span>
+                                                </div>
+                                                <select v-model="editedEventData.startTimeAmPm" class="custom-select" name="event-start-time-ampm">
+                                                    <option value="AM">AM</option>
+                                                    <option value="PM">PM</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-
-                                <div class="input-group input-group-sm mb-3 col-md-2">
-                                    <input type="text" class="form-control" placeholder="H:MM PM - H:MM PM" :disabled="requestProcess" required value="05:20 PM - 10:35 PM">
-                                    <div class="invalid-feedback">Please provide a valid times.</div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">End Date</span>
+                                                </div>
+                                                <date-picker v-model="editedEventData.endDate" :config="dateOptions" readonly name="event-end-date"></date-picker>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">End Time [hours]</span>
+                                                </div>
+                                                <select v-model="editedEventData.endTimeHours" class="custom-select" name="event-end-time-hours">
+                                                    <option value="1">01</option>
+                                                    <option value="2">02</option>
+                                                    <option value="3">03</option>
+                                                    <option value="4">04</option>
+                                                    <option value="5">05</option>
+                                                    <option value="6">06</option>
+                                                    <option value="7">07</option>
+                                                    <option value="8">08</option>
+                                                    <option value="9">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">End Time [minutes]</span>
+                                                </div>
+                                                <select v-model="editedEventData.endTimeMinutes" class="custom-select" name="event-end-time-minutes">
+                                                    <option value="0">00</option>
+                                                    <option value="5">05</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                    <option value="30">30</option>
+                                                    <option value="35">35</option>
+                                                    <option value="40">40</option>
+                                                    <option value="45">45</option>
+                                                    <option value="50">50</option>
+                                                    <option value="55">55</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="data">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">End Time [am/pm]</span>
+                                                </div>
+                                                <select v-model="editedEventData.endTimeAmPm" class="custom-select" name="event-end-time-ampm">
+                                                    <option value="AM">AM</option>
+                                                    <option value="PM">PM</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-2">
-                                    <input ref="newEventAddressAutocomplete" type="text" v-model="newEventData.address" name="new_event_address" class="form-control form-control-sm" placeholder="Location" required>
-
-                                    <!-- <vue-google-autocomplete
-        ref="address"
-        id="map"
-        classname="form-control"
-        placeholder="Please type your address"
-        v-on:placechanged="getAddressData"
-        country="sg"
-    >
-    </vue-google-autocomplete> -->
-                                    <div class="invalid-feedback">Please provide a valid address.</div>
+                                <!-- END Event Date Time -->
+                                <hr>
+                                <!-- Event Data -->
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="data">
+                                            <div class="form-group">
+                                                <label><small>Location</small></label>
+                                                <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event_location">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="data">
+                                            <div class="form-group">
+                                                <label><small>Type</small></label>
+                                                <select v-model="editedEventData.type" class="form-control form-control-sm" name="event_type">
+                                                    <option value="game">Game</option>
+                                                    <option value="practice">Practice</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="data">
+                                            <div class="form-group">
+                                                <label><small>Description</small></label>
+                                                <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event_description">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <!-- END Event Data -->
 
-                                <div class="col-md-2">
-                                    <select v-model="newEventData.type" name="new_event_type" class="form-control form-control-sm" required>
-                                        <option value="" disabled selected>Select type</option>
-                                        <option value="game">Game</option>
-                                        <option value="practice">Practice</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please provide a valid type.</div>
+                                <hr>
+                                <!-- Event Actions -->
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="data">
+                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || requestProcess"><i class="far fa-save"></i> Save Event Data</button>
+                                            <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-8">
+                                        <div class="data">
+                                            <span v-if="requestSuccess" class="text-success event-request-success">{{ requestSuccess }}</span>
+                                            <span v-if="requestDanger"class="text-danger event-request-error">{{ requestDanger }}</span>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-md-2">
-                                    <input type="text" v-model="newEventData.notes" name="new_event_notes" class="form-control form-control-sm" placeholder="e.g. Instructions" required>
-                                    <div class="invalid-feedback">Please provide a valid notes.</div>
-                                </div>
-
-                                <div class="col-md-2 text-right">
-                                    <button type="submit" form="addCalendarEventForm" class="btn btn-primary btn-sm" :disabled="!newEventDataValid || requestProcess"><i class="fas fa-check"></i></button>
-                                    <!-- <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>  -->
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="hideAddEventForm"><i class="fas fa-times"></i></button>
-                                </div>
-                            </div>
-
-
-                            <div v-if="requestSuccess" class="alert alert-success" role="alert">{{ requestSuccess }}</div>
-                            <div v-if="requestDanger"class="alert alert-danger" role="alert">{{ requestDanger }}</div>
-
-
-                        </form>
-                    </div>
-
+                                <!-- END Event Actions -->
+                            </form>
+                        </div>
+                    </transition>
 
                 </div>
             </div>
         </transition>
+        <!-- END Calendar details -->
 
         <!-- Share Calendar Message modal -->
         <div v-if="showInfoModal">
@@ -246,10 +415,6 @@
         </div>
         <!-- END Share Calendar Message modal -->
 
-
-
-
-        <!-- END Calendar details -->
     </div>
 
 </template>
@@ -270,19 +435,36 @@ export default {
 
     components: {
         datePicker,
-        DateRangePicker
+        //DateRangePicker
         //VueGoogleAutocomplete
     },
 
     data() {
+        let startDate = new Date();
+        let endDate = new Date();
+        endDate.setDate(endDate.getDate() + 6);
+
         return {
+
+            dateRange: { startDate, endDate },
+            timePicker: true,
+            dateFormat: 'M/DD/YYYY',
+            showWeekNumbers: false,
+            singleDatePicker: false,
+            showDropdowns: false,
+            ranges: false,
+            showCalendar: true,
+
+
+
             showBody: false,
             showCalendarDropdownActions: false,
             showNewEventDataForm: false,
 
             dateOptions: {
-                format: 'DD.MM.YYYY',
-                useCurrent: true
+                format: 'M/DD/YYYY',
+                useCurrent: true,
+                ignoreReadonly: true
             },
 
             requestProcess: false,
@@ -295,6 +477,21 @@ export default {
                 address: '',
                 type: '',
                 notes: ''
+            },
+
+            editedEventData: {
+                id: null,
+                startDate: null,
+                startTimeHours: null,
+                startTimeMinutes: null,
+                startTimeAmPm: null,
+                endDate: null,
+                endTimeHours: null,
+                endTimeMinutes: null,
+                endTimeAmPm: null,
+                location: null,
+                type: null,
+                description: null
             },
 
             calendar_id: null,
@@ -317,14 +514,24 @@ export default {
 
     computed:  {
         newEventDataValid() {
-            return !(
-                this.newEventData.address === '' || this.newEventData.dateTime === ''
-                || this.newEventData.type === 'none' || this.newEventData.notes === ''
-            );
+            let result = true;
+            if (!this.editedEventData.location || this.editedEventData.location === '') {
+                result = false;
+            }
+            if (!this.editedEventData.description || this.editedEventData.description === '') {
+                result = false;
+            }
+            return result;
         }
     },
 
     methods: {
+
+        assertEventDescriptionMaxChars: function() {
+            if (this.editedEventData.description.length > 150) {
+                this.editedEventData.description = this.editedEventData.description.substring(0, 150);
+            }
+        },
 
         toggleCalendarDataForm: function() {
             if (this.showBody) {
@@ -371,7 +578,8 @@ export default {
             this.showNewEventDataForm = true;
         },
 
-        hideAddEventForm: function() {
+        hideAddEventForm: function(event) {
+            event.preventDefault();
             this.calendar_id = null;
             this.showNewEventDataForm = false;
         },
@@ -380,88 +588,6 @@ export default {
             this.showBody = false;
             this.showCalendarDropdownActions = false;
             this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
-        },
-
-        addEventSubmit: function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            let currentObj = this;
-
-            let dateArray = currentObj.newEventData.dateTime.split('.');
-            let dateTime = new Date(dateArray[2], dateArray[1]-1, dateArray[0]);
-
-            let newEvent = {
-                id: 'new',
-                start:  {
-                    dateTime: dateTime
-                },
-                location: currentObj.newEventData.address,
-                extendedProperties: {
-                    private: {
-                        type: currentObj.newEventData.type
-                    }
-                },
-                description: currentObj.newEventData.notes
-            };
-
-            //currentObj.calendar_events.items.push(newEvent);
-
-            let formData = new FormData();
-            formData.append('calendar_id', currentObj.calendar_id);
-            formData.append('new_event_datetime', currentObj.newEventData.dateTime);
-            formData.append('new_event_address', currentObj.newEventData.address);
-            formData.append('new_event_type', currentObj.newEventData.type);
-            formData.append('new_event_notes', currentObj.newEventData.notes);
-
-            axios.interceptors.request.use(function (config) {
-                // Do something before request is sent
-                currentObj.requestProcess = true;
-                return config;
-            }, function (error) {
-                // Do something with request error
-                return Promise.reject(error);
-            });
-
-            let url = '/new-single-event'
-
-            axios.post(url, formData)
-                .then(function(response) {
-                    if (response.data.code === 401) {
-                        document.location.href="/";
-                    } else if (response.data.code === 404) {
-                        currentObj.requestDanger = response.data.data.message;
-                    } else if (response.data.code === 1) {
-                        currentObj.requestSuccess = response.data.data.message;
-                        currentObj.calendar.events.push(response.data.data.event);
-
-                        // Reset New event form
-                        currentObj.newEventData.dateTime = '';
-                        currentObj.newEventData.address = '';
-                        currentObj.newEventData.type = '';
-                        currentObj.newEventData.notes = '';
-
-                        setTimeout(function() {
-                            currentObj.requestSuccess = false;
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        currentObj.requestDanger = 'Request Error';
-                    }
-                })
-                .catch(function (error) {
-
-                    if (error.response && error.response.status === 422) {
-                        currentObj.requestDanger = error.response.data.message;
-                        form.classList.add('was-validated');
-                    } else {
-                        currentObj.requestDanger = 'Request Error';
-                    }
-
-                })
-                .then(function() {
-                    currentObj.requestProcess = false;
-                });
         },
 
         shareCalendar: function(url) {
@@ -476,6 +602,56 @@ export default {
 
             this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
             this.showInfoModal = true;
+        },
+
+        addEventSubmit: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            let currentObj = this;
+            let form = document.getElementById('addCalendarEventForm');
+            if (form.checkValidity() === false) {
+                form.classList.add('was-validated');
+                return false;
+            }
+
+            axios.interceptors.request.use(function (config) {
+                // Do something before request is sent
+                currentObj.requestProcess = true;
+                return config;
+            }, function (error) {
+                // Do something with request error
+                return Promise.reject(error);
+            });
+
+            let started_at = this.getDateTime(currentObj.editedEventData.startDate, currentObj.editedEventData.startTimeHours, currentObj.editedEventData.startTimeMinutes, currentObj.editedEventData.startTimeAmPm);
+            let ended_at = this.getDateTime(currentObj.editedEventData.endDate, currentObj.editedEventData.endTimeHours, currentObj.editedEventData.endTimeMinutes, currentObj.editedEventData.endTimeAmPm);
+
+            let formData = new FormData(form);
+            formData.append('event_started_at', started_at);
+            formData.append('event_ended_at', ended_at);
+
+            axios.post('/new-single-event', formData)
+                .then(function(response) {
+                    if (response.data.code === 401) {
+                        document.location.href="/";
+                    } else if (response.data.code === 404) {
+                        currentObj.requestDanger = response.data.data.message;
+                    } else if (response.data.code === 1) {
+                        currentObj.requestSuccess = response.data.data.message;
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        currentObj.requestDanger = 'Request Error';
+                    }
+                })
+                .catch(function (error) {
+                    currentObj.requestDanger = 'Request Error';
+                })
+                .then(function() {
+                    currentObj.requestProcess = false;
+                });
         },
 
         /**
@@ -515,7 +691,22 @@ export default {
             return _.orderBy(array, field, direction);
         },
 
-
+        getDateTime: function(date, hours, minutes, ampm) {
+            let dateArray = date.split ("/");
+            let day = dateArray[1];
+            let month = dateArray[0] < 10 ? '0' + dateArray[0] : dateArray[0];
+            hours = parseInt(hours);
+            minutes = parseInt(minutes);
+            if (hours === 12 && ampm === 'PM') {
+                hours = 0;
+            } else {
+                hours = ampm === 'PM' ? hours + 12 : hours;
+            }
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            let result = dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
+            return result;
+        }
     },
 
     filters: {
@@ -565,6 +756,17 @@ export default {
                 outputDate = (date.getMonth()+1)+'/'+day+'/'+date.getFullYear();
             }
             return outputDate;
+        },
+
+        date: function(date) {
+            let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
+            let dateHours = date.getHours();
+            let dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+            dateHours = dateHours % 12;
+            dateHours = dateHours ? dateHours : 12;
+            let dateMinutes = date.getMinutes();
+            dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
+            return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear()+' '+dateHours+':'+dateMinutes+' '+dateAmpm;
         }
 
     },

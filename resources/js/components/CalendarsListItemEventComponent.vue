@@ -1,8 +1,7 @@
 <template>
-    <div class="card calendar-single">
-
-        <div v-if="event.status === 'cancelled'" class="row text-muted">
-            <div class="col-2">
+    <div v-if="event.status === 'cancelled' || event.status === 'over'" class="card calendar-single event-cancelled">
+        <div  class="row text-muted">
+            <div class="col-3">
                 <div class="data" title>
                     <del>{{ event.started_at|formatDate }}</del>
                 </div>
@@ -30,10 +29,18 @@
                     <span class="badge badge-secondary event-status-badge">{{event.status}}</span>
                 </div>
             </div>
-        </div>
 
-        <div v-else class="row">
-            <div class="col-2">
+            <div class="col-1">
+                <div class="data text-right">
+                    <button title="Delete" class="btn btn-outline-danger btn-sm" @click="showConfirmEventDeleteModal(event.id)"><i class="far fa-trash-alt"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-else class="card calendar-single">
+        <div class="row">
+            <div class="col-3">
                 <div class="data" title>
                     {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{
                         event.ended_at|formatDate
@@ -62,20 +69,19 @@
             </div>
             <div class="col-2">
                 <div class="data">
+                    <span v-if="event.status === 'over'" class="badge badge-secondary event-status-badge">{{event.status}}</span>
                     <span v-if="event.status === 'confirmed'" class="badge badge-success event-status-badge">{{event.status}}</span>
                     <span v-if="event.status === 'tentative'" class="badge badge-warning event-status-badge">{{event.status}}</span>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <div class="data text-right">
-                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit"
-                            @click="showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
-                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i
-                        class="fas fa-ellipsis-v"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
+
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i class="fas fa-ellipsis-v"></i></button>
                 </div>
             </div>
         </div>
-
         <transition name="fade">
             <div v-if="showEventDetails" class="row event-details">
                 <div class="col-12">
@@ -101,48 +107,26 @@
                 </div>
             </div>
         </transition>
-
         <transition name="fade">
             <div v-if="showEditSingleEventForm">
                 <event-data-edit-component :event="event" ref="event"></event-data-edit-component>
             </div>
         </transition>
 
-
-
     </div>
 </template>
 
 <script>
 
-import datePicker from 'vue-bootstrap-datetimepicker';
-import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+import moment from 'moment';
 
 export default {
 
     props: ['event'],
 
-    components: {
-        datePicker
-    },
-
     data() {
 
-        let startDate = new Date();
-        let endDate = new Date();
-        endDate.setDate(endDate.getDate() + 6);
-
         return {
-
-            dateRange: {startDate, endDate},
-            timePicker: true,
-            dateFormat: 'M/DD/YYYY',
-            showWeekNumbers: false,
-            singleDatePicker: false,
-            showDropdowns: false,
-            ranges: false,
-            showCalendar: true,
-
             showEditSingleEventForm: false,
             showEventDetails: false,
 
@@ -162,17 +146,14 @@ export default {
                 format: 'M/DD/YYYY',
                 useCurrent: true
             },
+
+
+
+
+            moment: moment
         }
     },
 
-    computed: {
-        editedEventDataValid() {
-            // return !(
-            //     this.editedEventData.location === '' || this.editedEventData.dateTime === ''
-            //     || this.editedEventData.type === 'none' || this.editedEventData.description === ''
-            // );
-        }
-    },
     methods: {
         showEditSingleEvent: function () {
             this.$parent.$refs.event.forEach((element) => {
@@ -181,73 +162,19 @@ export default {
             this.showEditSingleEventForm = true;
 
             // init location input google maps
-
             //const autocomplete = new google.maps.places.Autocomplete(this.$refs["origin"]);
         },
         hideEditSingleEvent: function () {
             this.showEditSingleEventForm = false;
         },
 
-
-
-        /*
-        submitEditSingleEvent: function (event_id, event) {
-            event.preventDefault();
-            this.requestProcess = true;
-
-            let currentObj = this;
-            // Send request
-            axios.interceptors.request.use(function (config) {
-                // Do something before request is sent
-                currentObj.requestProcess = true;
-                currentObj.requestDanger = '';
-                currentObj.requestSuccess = '';
-                return config;
-            }, function (error) {
-                // Do something with request error
-                return Promise.reject(error);
-            });
-
-            currentObj.editedEventData.dateTime = this.dateRange;
-
-            axios.post('/edit-single-event', currentObj.editedEventData)
-                .then(function (response) {
-                    console.log(response.data.code);
-
-                    if (response.data.code === 401) {
-                        document.location.href = "/";
-                    } else if (response.data.code === 404) {
-                        currentObj.requestDanger = response.data.data.message;
-                    } else if (response.data.code === 1) {
-                        currentObj.requestSuccess = response.data.data.message;
-                        // Update table event data
-                        currentObj.event.started_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.startDate);
-                        currentObj.event.ended_at = currentObj.$options.filters.formatDate(currentObj.editedEventData.dateTime.endDate);
-                        currentObj.event.location = currentObj.editedEventData.location;
-                        currentObj.event.type = currentObj.editedEventData.type;
-                        currentObj.event.description = currentObj.editedEventData.description;
-
-                        // Hide edit event form
-                        setTimeout(function () {
-                            currentObj.requestSuccess = false;
-                            currentObj.hideEditSingleEvent();
-                        }, 2000);
-                    } else {
-                        currentObj.requestDanger = 'Request Error';
-                    }
-                })
-                .catch(function (response) {
-                    currentObj.requestDanger = 'Request Error';
-                })
-                .then(function () {
-                    currentObj.requestProcess = false;
-                });
-        }
-
-         */
+        showConfirmEventDeleteModal: function(id) {
+            this.$parent.$parent.delete_event_id = id;
+            this.$parent.$parent.showConfirmDeleteEventModal = true;
+        },
     },
     mounted() {
-        this.event.dateTime = this.$options.filters.formatDate(this.event.started_at);
+
         this.editedEventData = {
             id: this.event.id,
             dateTime: this.event.dateTime,
@@ -256,7 +183,9 @@ export default {
             description: this.event.description
         };
 
-
+        if (this.moment(this.event.ended_at).isBefore(new Date())) {
+            this.event.status = 'over';
+        }
     },
     filters: {
         formatDate: function (value) {
@@ -271,7 +200,7 @@ export default {
             let date = new Date(value);
             let hours = date.getHours();
             let minutes = date.getMinutes();
-            let ampm = hours >= 12 ? 'pm' : 'am';
+            let ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12;
             minutes = minutes < 10 ? '0' + minutes : minutes;

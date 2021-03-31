@@ -39,9 +39,6 @@ Vue.component('admin-users-component', require('./components/admin/AdminUsersCom
 Vue.component('admin-calendars-list-item-component', require('./components/admin/AdminCalendarsListItemComponent.vue').default);
 
 
-
-
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -54,8 +51,10 @@ const app = new Vue({
     data() {
     	return {
 
-            showAdminUsers: true,
-            showAdminCalendars: false
+            showAdminUsers: false,
+            showAdminCalendars: true,
+
+            isAcceptedTerms: true
 
     	}
     },

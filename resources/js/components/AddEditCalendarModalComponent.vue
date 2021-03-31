@@ -344,6 +344,11 @@
                                     </div>
 
                                     <div class="modal-footer">
+
+                                        <div v-if="showCancelModalAlert" class="alert alert-warning" role="alert">
+                                            Please save all data before closing modal...
+                                        </div>
+
                                         <button v-if="!formRequestProcess" type="submit" form="editCalendarForm" class="btn btn-primary">Save</button>
                                         <button v-else class="btn btn-primary" type="button" disabled>
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -703,6 +708,9 @@
                                     </div>
 
                                     <div class="modal-footer">
+                                        <div v-if="showCancelModalAlert" class="alert alert-warning" role="alert">
+                                            Please save all data before closing modal...
+                                        </div>
                                         <button v-if="!formRequestProcess" type="submit" form="duplicateCalendarForm" class="btn btn-primary">Save</button>
                                         <button v-else class="btn btn-primary" type="button" disabled>
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -1061,6 +1069,9 @@
 										</form>
 								    </div>
 								    <div class="modal-footer">
+                                        <div v-if="showCancelModalAlert" class="alert alert-warning" role="alert">
+                                            Please save all data before closing modal...
+                                        </div>
 								    	<button v-if="!formRequestProcess" type="submit" form="addCalendarForm" class="btn btn-primary">Save</button>
 								    	<button v-else class="btn btn-primary" type="button" disabled>
 											<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -1114,6 +1125,8 @@
                     events: []
                 },
                 appendToBody: false,
+
+                showCancelModalAlert: false,
 
 
                 new_calendar: {
@@ -1197,27 +1210,32 @@
                     });
             },
             hideEditCalendarModalAction() {
-                this.requestDanger = false;
-                this.requestSuccess = false;
-                this.calendar_name = '';
-                this.calendar_events = [];
-                this.showEditCalendarModal = false;
-                this.editedEventData = {
-                    index: null,
-                    id: null,
-                    startDate: null,
-                    startTimeHours: null,
-                    startTimeMinutes: null,
-                    startTimeAmPm: null,
-                    endDate: null,
-                    endTimeHours: null,
-                    endTimeMinutes: null,
-                    endTimeAmPm: null,
-                    location: null,
-                    type: null,
-                    description: null
-                };
-                this.showNewEventDataForm = false;
+                if (!this.showCancelModalAlert) {
+                    this.showCancelModalAlert = true;
+                } else {
+                    this.requestDanger = false;
+                    this.requestSuccess = false;
+                    this.calendar_name = '';
+                    this.calendar_events = [];
+                    this.showEditCalendarModal = false;
+                    this.editedEventData = {
+                        index: null,
+                        id: null,
+                        startDate: null,
+                        startTimeHours: null,
+                        startTimeMinutes: null,
+                        startTimeAmPm: null,
+                        endDate: null,
+                        endTimeHours: null,
+                        endTimeMinutes: null,
+                        endTimeAmPm: null,
+                        location: null,
+                        type: null,
+                        description: null
+                    };
+                    this.showNewEventDataForm = false;
+                    this.showCancelModalAlert = false;
+                }
             },
             editCalendarSubmit: function(event) {
                 event.preventDefault();
@@ -1377,27 +1395,32 @@
                 this.showAddCalendarModal = true;
             },
             hideAddCalendarModalAction: function() {
-                this.requestDanger = false;
-                this.requestSuccess = false;
-                this.calendar_name = '';
-                this.calendar_events = [];
-                this.showAddCalendarModal = false;
-                this.editedEventData = {
-                    index: null,
-                    id: null,
-                    startDate: null,
-                    startTimeHours: null,
-                    startTimeMinutes: null,
-                    startTimeAmPm: null,
-                    endDate: null,
-                    endTimeHours: null,
-                    endTimeMinutes: null,
-                    endTimeAmPm: null,
-                    location: null,
-                    type: null,
-                    description: null
-                };
-                this.showNewEventDataForm = false;
+                if (!this.showCancelModalAlert) {
+                    this.showCancelModalAlert = true;
+                } else {
+                    this.requestDanger = false;
+                    this.requestSuccess = false;
+                    this.calendar_name = '';
+                    this.calendar_events = [];
+                    this.showAddCalendarModal = false;
+                    this.editedEventData = {
+                        index: null,
+                        id: null,
+                        startDate: null,
+                        startTimeHours: null,
+                        startTimeMinutes: null,
+                        startTimeAmPm: null,
+                        endDate: null,
+                        endTimeHours: null,
+                        endTimeMinutes: null,
+                        endTimeAmPm: null,
+                        location: null,
+                        type: null,
+                        description: null
+                    };
+                    this.showNewEventDataForm = false;
+                    this.showCancelModalAlert = false;
+                }
             },
             addCalendarSubmit: function(event) {
                 event.preventDefault();
@@ -1473,27 +1496,32 @@
                     });
             },
             hideDuplicateCalendarModalAction: function() {
-                this.requestDanger = false;
-                this.requestSuccess = false;
-                this.calendar_name = '';
-                this.calendar_events = [];
-                this.showDuplicateCalendarModal = false;
-                this.editedEventData = {
-                    index: null,
-                    id: null,
-                    startDate: null,
-                    startTimeHours: null,
-                    startTimeMinutes: null,
-                    startTimeAmPm: null,
-                    endDate: null,
-                    endTimeHours: null,
-                    endTimeMinutes: null,
-                    endTimeAmPm: null,
-                    location: null,
-                    type: null,
-                    description: null
-                };
-                this.showNewEventDataForm = false;
+                if (!this.showCancelModalAlert) {
+                    this.showCancelModalAlert = true;
+                } else {
+                    this.requestDanger = false;
+                    this.requestSuccess = false;
+                    this.calendar_name = '';
+                    this.calendar_events = [];
+                    this.showDuplicateCalendarModal = false;
+                    this.editedEventData = {
+                        index: null,
+                        id: null,
+                        startDate: null,
+                        startTimeHours: null,
+                        startTimeMinutes: null,
+                        startTimeAmPm: null,
+                        endDate: null,
+                        endTimeHours: null,
+                        endTimeMinutes: null,
+                        endTimeAmPm: null,
+                        location: null,
+                        type: null,
+                        description: null
+                    };
+                    this.showNewEventDataForm = false;
+                    this.showCancelModalAlert = false;
+                }
             },
 
             duplicateCalendarSubmit: function(event) {

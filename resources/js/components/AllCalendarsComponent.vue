@@ -163,6 +163,47 @@
         </div>
         <!-- END Confirm Delete Calendar Modal -->
 
+        <!-- Confirm Delete Event Modal -->
+        <transition name="modal">
+            <div v-if="showConfirmDeleteEventModal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div id="confirmDeleteEventModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header text-white bg-danger">
+                                        <h5 class="modal-title w-100 text-center">Confirm delete event</h5>
+                                        <button type="button" class="close" @click="hideConfirmEventDeleteModal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p>You are about to delete event, this procedure is irreversible.</p>
+                                        <p>Do you want to proceed?</p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button v-if="!requestProcess" type="button" class="btn btn-danger" @click="deleteEvent(delete_event_id)">Delete</button>
+                                        <button v-else class="btn btn-primary" type="button" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Loading...
+                                        </button>
+
+                                        <button type="button" class="btn btn-secondary" @click="hideConfirmEventDeleteModal">Close</button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+        <!-- END Confirm Delete Event Modal -->
+
     </div>
 
 </template>
@@ -185,14 +226,17 @@
                 requestSuccess: false,
                 requestProcess: false,
 
-                delete_calendar_id: '',
+
 
                 sortBySummaryDirection: 'asc',
                 sortByEventsDirection: 'asc',
                 sortByOwnerDirection: 'asc',
                 sortByUpdatedDirection: 'asc',
 
-                showConfirmDeleteCalendarModal: false
+                delete_calendar_id: '',
+                delete_event_id: null,
+                showConfirmDeleteCalendarModal: false,
+                showConfirmDeleteEventModal: false,
             }
         },
 
@@ -223,8 +267,6 @@
             hideConfirmCalendarDeleteModal: function() {
                 this.showConfirmDeleteCalendarModal = false;
             },
-
-
             deleteCalendar: function(id) {
 
                 let currentObj = this;
@@ -268,6 +310,60 @@
                 });
             },
 
+            showConfirmEventDeleteModal: function(id) {
+                this.delete_event_id = id;
+                this.showConfirmDeleteEventModal = true;
+            },
+            hideConfirmEventDeleteModal: function() {
+                this.showConfirmDeleteEventModal = false;
+            },
+
+            deleteEvent: function(id) {
+                let currentObj = this;
+                axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    currentObj.requestProcess = true;
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+
+                axios.post('/delete-event', { event_id: id })
+                    .then(function (response) {
+                        if (response.data.code === 401) {
+                            document.location.href="/";
+                        } else if (response.data.code === 404) {
+                            currentObj.requestDanger = response.data.data.message;
+                        } else if (response.data.code === 1) {
+                            currentObj.requestSuccess = response.data.data.message;
+                            currentObj.requestSuccess = false;
+                            currentObj.delete_event_id = null;
+
+                            // Remove event from list
+                            let calendarId = response.data.data.calendarId;
+                            currentObj.sortedCalendars.map(function(item, key) {
+                                if (item.id === calendarId) {
+                                    currentObj.sortedCalendars[key].events.map(function(evt, index) {
+                                        currentObj.sortedCalendars[key].events.splice(index, 1);
+                                    });
+                                }
+                            });
+
+                            currentObj.sortCalendarsListByUpdated();
+                        } else {
+                            currentObj.requestDanger = 'Request Error';
+                        }
+                    })
+                    .catch(function (error) {
+                        currentObj.requestDanger = 'Error Request';
+                    })
+                    .then(function() {
+                        currentObj.requestProcess = false;
+                        currentObj.showConfirmDeleteEventModal = false;
+                    });
+            },
+
             sortArray: function(array, field, direction) {
                 return _.orderBy(array, field, direction);
             },
@@ -287,7 +383,7 @@
 
             sortCalendarsListByOwner: function() {
                 let direction = this.sortByOwnerDirection === 'desc' ? 'asc' : 'desc';
-                this.sortedCalendars = this.sortArray(this.calendars, 'accessRole', direction);
+                this.sortedCalendars = this.sortArray(this.calendars, 'access_role', direction);
                 this.sortByOwnerDirection = direction;
             },
 
@@ -300,8 +396,6 @@
 
         mounted() {
             this.sortCalendarsListByUpdated();
-
-
         }
     }
 </script>

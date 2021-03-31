@@ -219,6 +219,119 @@ class EventsController extends Controller
         exit;
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteEventAction(Request $request): JsonResponse
+    {
+        $request->validate([
+            'event_id' => 'required'
+        ]);
+
+        $event = Event::find($request->event_id);
+        if (!$event) {
+            return response()->json([
+                'code' => 404,
+                'data' => [
+                    'message' => 'Event not found'
+                ]
+            ]);
+        }
+
+        try {
+
+//            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+//            $service->events->delete($event->calendar->google_id, $event->google_id);
+//
+//            // Delete event from DB
+//            $event->calendar->touch();
+//            $event->delete();
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => 'Google Event delete success',
+                    'calendarId' => $event->calendar->id
+                ]
+            ]);
+
+
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                ]);
+            }
+        }
+        /*
+         * $request->validate([
+            'calendar_id' => 'required'
+        ]);
+
+        $calendar = Calendar::with('events')->find($request->calendar_id);
+        if (!$calendar) {
+            return response()->json([
+                'code' => 0
+            ]);
+        }
+
+        try {
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+            $service->calendars->delete($calendar->google_id);
+
+            // Delete calendar from DB
+            $calendar->delete();
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => 'Google calendar delete success'
+                ]
+            ]);
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                ]);
+            }
+        }
+         *
+         *
+         *
+         *
+         * */
+    }
+
+
+    /**
+     * @param $dateTime
+     * @return Carbon
+     */
     protected function parseDatetime($dateTime): Carbon
     {
         $rawDatetime = $dateTime->dateTime ?: $dateTime->date;

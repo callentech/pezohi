@@ -104,6 +104,15 @@ body #app nav.navbar .navbar-brand {
     }
 }
 
+#editCalendarForm {
+    .event-cancelled {
+        background: #ffe8e8;
+        border-top: 1px solid #ffb0b0;
+        border-bottom: 1px solid #ffb0b0;
+        text-decoration: line-through;
+    }
+}
+
 #editCalendarForm .daterangepicker, #duplicateCalendarForm .daterangepicker, #addCalendarForm .daterangepicker {
     top: -200px!important;
 }
@@ -199,6 +208,12 @@ body #app nav.navbar .navbar-brand {
         .calendar-single.event-cancelled {
             background: #ffe8e8;
             border: 1px solid #ffb0b0;
+        }
+
+        .calendar-single.event-active:hover {
+            //background: #eaffe8;
+            cursor: pointer;
+            border: 1px solid #7deaab;
         }
 
         .request-success {
@@ -307,9 +322,13 @@ body #app nav.navbar .navbar-brand {
 	text-align: center;
 }
 
-#addEditCalendarForm .alert {
-	margin-top: 10px;
+#addEditCalendarForm {
+    .alert {
+        margin-top: 10px;
+    }
 }
+
+
 
 #calendarData {
 

@@ -101,9 +101,16 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 401
                 ]);
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
+                    ]
+                ]);
             } else {
                 return response()->json([
-                    'code' => 0
+                    'code' => 0,
                 ]);
             }
         }
@@ -280,6 +287,13 @@ class CalendarsController extends Controller
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
+                    ]
+                ]);
             } else {
                 return response()->json([
                     'code' => 0,
@@ -329,6 +343,13 @@ class CalendarsController extends Controller
                     'code' => 404,
                     'data' => [
                         'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
                     ]
                 ]);
             } else {

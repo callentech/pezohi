@@ -56,6 +56,7 @@
                                                 <label>Events: {{ current_calendar.events.length }}</label>
                                                 <div class="card col-md-12">
                                                     <div class="card-body">
+
                                                         <table class="table table-sm">
                                                             <thead>
                                                                 <tr>
@@ -68,27 +69,49 @@
                                                             </thead>
                                                             <tbody>
                                                                 <tr v-for="(event, index) in current_calendar.events" :data-index="index">
-                                                                    <td data-val="startDate">
+
+                                                                    <td data-val="startDate" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                        {{ event.started_at|formatDate }}
+                                                                    </td>
+                                                                    <td data-val="startDate" v-else>
                                                                         {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                     </td>
 
-                                                                    <td data-val="location">
+                                                                    <td data-val="location" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                        {{ event.location|sliceString }}
+                                                                    </td>
+                                                                    <td data-val="location" v-else>
                                                                         <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
                                                                     </td>
-                                                                    <td data-val="type">
+
+                                                                    <td data-val="type" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
                                                                         {{ event.type|capitalize }}
                                                                     </td>
-                                                                    <td data-val="description">
+                                                                    <td data-val="type" v-else>
+                                                                        {{ event.type|capitalize }}
+                                                                    </td>
+
+                                                                    <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                        {{ event.description|sliceString }}
+                                                                    </td>
+                                                                    <td data-val="type" v-else>
                                                                         <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
                                                                     </td>
-                                                                    <td class="text-right">
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+
+                                                                    <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-right event-cancelled">
                                                                         <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>
                                                                     </td>
+                                                                    <td data-val="type" v-else class="text-right">
+                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
+                                                                    </td>
+
                                                                 </tr>
                                                             </tbody>
                                                         </table>
+
+
                                                     </div>
 
                                                     <transition name="fade">
@@ -320,23 +343,17 @@
                                                 </div>
 
                                                 <div class="col-md-8">
-                                                    <transition name="fade">
 
-                                                        <div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+                                                        <div v-if="requestSuccess" class="alert alert-success fade show" role="alert">
                                                             <strong>Success!</strong> {{ requestSuccess }}
-                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
                                                         </div>
 
-                                                        <div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                                                        <div v-if="requestDanger" class="alert alert-danger fade show" role="alert">
                                                             <strong>Error!</strong> {{ requestDanger }}
-                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
                                                         </div>
 
-                                                    </transition>
+
                                                 </div>
                                             </div>
 
@@ -809,9 +826,9 @@
                                                                     <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
                                                                 </td>
                                                                 <td class="text-right">
-                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+                                                                    <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
                                                                     <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
-                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>
+                                                                    <!--<button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>-->
                                                                 </td>
                                                             </tr>
                                                             </tbody>
@@ -1097,6 +1114,7 @@
 
 	import datePicker from 'vue-bootstrap-datetimepicker';
 	import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+    import moment from 'moment';
 
 	export default {
 
@@ -1151,6 +1169,8 @@
                     type: null,
                     description: null
                 },
+
+                moment: moment
 			}
 		},
 
@@ -1177,7 +1197,9 @@
                     result = false;
                 }
                 return result;
-			}
+			},
+
+
 		},
 
 		methods: {
@@ -1262,6 +1284,8 @@
                 formData.append('events', JSON.stringify(currentObj.current_calendar.events));
                 axios.post('/edit-calendar', formData)
                     .then(function(response) {
+
+
                         if (response.data.code === 401) {
                             document.location.href="/";
                         } else if (response.data.code === 404) {
@@ -1334,31 +1358,20 @@
 
                 if (this.editedEventData.index === null) {
                     // Add new Event
-                    console.log(this.editedEventData);
-
                     let started_at = this.getDateTime(this.editedEventData.startDate, this.editedEventData.startTimeHours, this.editedEventData.startTimeMinutes, this.editedEventData.startTimeAmPm);
                     let ended_at = this.getDateTime(this.editedEventData.endDate, this.editedEventData.endTimeHours, this.editedEventData.endTimeMinutes, this.editedEventData.endTimeAmPm);
+                    let newEvent = {
+                        id: 'new',
+                        started_at: started_at,
+                        ended_at: ended_at,
+                        location: this.editedEventData.location,
+                        type: this.editedEventData.type,
+                        description: this.editedEventData.description
+                    };
+                    this.current_calendar.events.push(newEvent);
 
-                        let newEvent = {
-                            id: 'new',
-                            started_at: started_at,
-                            ended_at: ended_at,
-                            location: this.editedEventData.location,
-                            type: this.editedEventData.type,
-                            description: this.editedEventData.description
-                        };
-                        this.current_calendar.events.push(newEvent);
+                    this.requestSuccess = 'Save event data success';
 
-                } else {
-                    // Update current event
-                    let started_at = this.getDateTime(this.editedEventData.startDate, this.editedEventData.startTimeHours, this.editedEventData.startTimeMinutes, this.editedEventData.startTimeAmPm);
-                    this.current_calendar.events[this.editedEventData.index].started_at = started_at;
-
-                    let ended_at = this.getDateTime(this.editedEventData.endDate, this.editedEventData.endTimeHours, this.editedEventData.endTimeMinutes, this.editedEventData.endTimeAmPm);
-                    this.current_calendar.events[this.editedEventData.index].ended_at = ended_at;
-                    this.current_calendar.events[this.editedEventData.index].location = this.editedEventData.location;
-                    this.current_calendar.events[this.editedEventData.index].type = this.editedEventData.type;
-                    this.current_calendar.events[this.editedEventData.index].description = this.editedEventData.description;
                     this.editedEventData = {
                         index: null,
                         id: null,
@@ -1374,7 +1387,42 @@
                         type: null,
                         description: null
                     };
-                    this.showNewEventDataForm = false;
+
+                        this.showNewEventDataForm = false;
+                        this.requestSuccess = false;
+                    
+                } else {
+                    // Update current event
+                    let started_at = this.getDateTime(this.editedEventData.startDate, this.editedEventData.startTimeHours, this.editedEventData.startTimeMinutes, this.editedEventData.startTimeAmPm);
+                    this.current_calendar.events[this.editedEventData.index].started_at = started_at;
+
+                    let ended_at = this.getDateTime(this.editedEventData.endDate, this.editedEventData.endTimeHours, this.editedEventData.endTimeMinutes, this.editedEventData.endTimeAmPm);
+                    this.current_calendar.events[this.editedEventData.index].ended_at = ended_at;
+                    this.current_calendar.events[this.editedEventData.index].location = this.editedEventData.location;
+                    this.current_calendar.events[this.editedEventData.index].type = this.editedEventData.type;
+                    this.current_calendar.events[this.editedEventData.index].description = this.editedEventData.description;
+
+                    this.requestSuccess = 'Save event data success';
+
+                    this.editedEventData = {
+                        index: null,
+                        id: null,
+                        startDate: null,
+                        startTimeHours: null,
+                        startTimeMinutes: null,
+                        startTimeAmPm: null,
+                        endDate: null,
+                        endTimeHours: null,
+                        endTimeMinutes: null,
+                        endTimeAmPm: null,
+                        location: null,
+                        type: null,
+                        description: null
+                    };
+
+                        this.showNewEventDataForm = false;
+                        this.requestSuccess = false;
+
                 }
             },
             removeEvent: function(index, event) {

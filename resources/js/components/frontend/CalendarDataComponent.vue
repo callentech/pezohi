@@ -20,7 +20,7 @@
                         <div class="description">
                             {{ calendar.events.length }} events <i class="fas fa-circle"></i>
                             Owned by : {{ calendar.user.email }} <i class="fas fa-circle"></i>
-                            Last updated : {{ calendar.updated|formatDate() }}
+                            Last updated : {{ calendar.updated_at|formatDate() }}
                         </div>
                     </div>
                     <div class="col-md-6 text-right">

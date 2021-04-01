@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div v-else class="card calendar-single">
+    <div v-else class="card calendar-single event-active" @click="copyEventAddress">
         <div class="row">
             <div class="col-3">
                 <div class="data" title>
@@ -50,7 +50,7 @@
 
             <div class="col-2">
                 <div class="data">
-                    <a title="Details" href="javascript:void(0)" @click="showEventDetails=!showEventDetails">
+                    <a title="Details" href="javascript:void(0)" @click="$event.stopPropagation(), showEventDetails=!showEventDetails">
                         {{ event.location|sliceString }} <i class="fas fa-angle-down"></i>
                     </a>
                 </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="col-2">
                 <div class="data">
-                    <a title="Details" href="javascript:void(0)" @click="showEventDetails=!showEventDetails">
+                    <a title="Details" href="javascript:void(0)" @click="$event.stopPropagation(), showEventDetails=!showEventDetails">
                         {{ event.description|sliceString }} <i class="fas fa-angle-down"></i>
                     </a>
                 </div>
@@ -76,9 +76,9 @@
             </div>
             <div class="col-1">
                 <div class="data text-right">
-                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="$event.stopPropagation(), showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i class="fas fa-ellipsis-v"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More" @click="$event.stopPropagation()"><i class="fas fa-ellipsis-v"></i></button>
                 </div>
             </div>
         </div>
@@ -147,14 +147,25 @@ export default {
                 useCurrent: true
             },
 
-
-
-
             moment: moment
         }
     },
 
     methods: {
+        copyEventAddress: function() {
+            if (this.showEditSingleEventForm || this.showEventDetails) {
+                return false;
+            }
+            let input_temp = document.createElement('textarea');
+            input_temp.innerHTML = this.event.location;
+            document.body.appendChild(input_temp);
+            input_temp.select();
+            input_temp.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(input_temp);
+            this.$parent.infoModalHtml = '<p>Event Address was copied to your clipboard</p><input type="text" value="'+input_temp.innerHTML+'" readonly>';
+            this.$parent.showInfoModal = true;
+        },
         showEditSingleEvent: function () {
             this.$parent.$refs.event.forEach((element) => {
                 element.showEditSingleEventForm = false;

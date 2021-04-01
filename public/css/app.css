@@ -16204,6 +16204,13 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   padding: 5px 25px;
 }
 
+#editCalendarForm .event-cancelled {
+  background: #ffe8e8;
+  border-top: 1px solid #ffb0b0;
+  border-bottom: 1px solid #ffb0b0;
+  text-decoration: line-through;
+}
+
 #editCalendarForm .daterangepicker, #duplicateCalendarForm .daterangepicker, #addCalendarForm .daterangepicker {
   top: -200px !important;
 }
@@ -16278,6 +16285,10 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 .filter-content .calendars-list .card .calendar-single.event-cancelled {
   background: #ffe8e8;
   border: 1px solid #ffb0b0;
+}
+.filter-content .calendars-list .card .calendar-single.event-active:hover {
+  cursor: pointer;
+  border: 1px solid #7deaab;
 }
 .filter-content .calendars-list .card .request-success {
   float: left;

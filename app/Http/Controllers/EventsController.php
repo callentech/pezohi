@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Auth;
 
 class EventsController extends Controller
 {
-    public function addSingleEventAction(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addSingleEventAction(Request $request): JsonResponse
     {
         $request->validate([
             'calendar_id' => 'required',
@@ -103,7 +107,16 @@ class EventsController extends Controller
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
+
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
+                    ]
+                ]);
             } else {
+
                 return response()->json([
                     'code' => 0,
                 ]);
@@ -207,6 +220,13 @@ class EventsController extends Controller
                     'code' => 404,
                     'data' => [
                         'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
                     ]
                 ]);
             } else {

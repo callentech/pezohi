@@ -196,7 +196,7 @@
             <div class="col-5">
                 <div class="data">
                     <div class="form-group">
-                        <label><small>Description</small></label>
+                        <label><small>Description [max 150 symbols]</small></label>
                         <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event-description">
                     </div>
                 </div>
@@ -208,8 +208,8 @@
         <div class="row">
             <div class="col-4">
                 <div class="data">
-                    <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!editedEventDataValid || requestProcess" @click="submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
-                    <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideEditSingleEvent"><i class="far fa-times-circle"></i> Cancel</button>
+                    <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!editedEventDataValid || requestProcess" @click="$event.stopPropagation(), submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
+                    <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideEditSingleEvent($event)"><i class="far fa-times-circle"></i> Cancel</button>
                 </div>
             </div>
 
@@ -288,8 +288,9 @@ export default {
             }
         },
 
-        hideEditSingleEvent: function() {
+        hideEditSingleEvent: function(event) {
             this.$parent.showEditSingleEventForm = false;
+            event.stopPropagation();
         },
         submitEditSingleEvent: function(id, event) {
 
@@ -301,7 +302,7 @@ export default {
             axios.interceptors.request.use(function (config) {
                 // Do something before request is sent
                 currentObj.requestProcess = true;
-                currentObj.requestDanger = null;
+                currentObj.requestError = null;
                 currentObj.requestSuccess = null;
                 return config;
             }, function (error) {

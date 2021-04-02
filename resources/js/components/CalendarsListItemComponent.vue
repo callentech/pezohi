@@ -334,7 +334,14 @@
                                         <div class="data">
                                             <div class="form-group">
                                                 <label><small>Location</small></label>
-                                                <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event_location">
+                                                <vue-google-autocomplete
+                                                    :id="'map'+editedEventData.id"
+                                                    classname="form-control form-control-sm"
+                                                    name="event-location"
+                                                    placeholder="Change Event Location"
+                                                    v-on:placechanged="getAddressData"
+                                                >
+                                                </vue-google-autocomplete>
                                             </div>
                                         </div>
                                     </div>
@@ -422,7 +429,7 @@
 <script>
 
 import datePicker from 'vue-bootstrap-datetimepicker';
-import DateRangePicker from 'vue2-daterange-picker'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
@@ -435,8 +442,7 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
 		components: {
 			datePicker,
-			//DateRangePicker
-			//VueGoogleAutocomplete
+            VueGoogleAutocomplete
 		},
 
 		data() {
@@ -526,6 +532,10 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 		},
 
 		methods: {
+
+            getAddressData: function (addressData, placeResultData, id) {
+                this.editedEventData.location = JSON.stringify(addressData);
+            },
 
             assertEventDescriptionMaxChars: function() {
                 if (this.editedEventData.description.length > 150) {

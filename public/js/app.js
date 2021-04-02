@@ -3979,10 +3979,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
-/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-google-autocomplete */ "./node_modules/vue-google-autocomplete/src/VueGoogleAutocomplete.vue");
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4412,9 +4418,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['calendar', 'jobs_status'],
   components: {
-    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()) //DateRangePicker
-    //VueGoogleAutocomplete
-
+    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
+    VueGoogleAutocomplete: vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
     var startDate = new Date();
@@ -4492,6 +4497,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getAddressData: function getAddressData(addressData, placeResultData, id) {
+      this.editedEventData.location = JSON.stringify(addressData);
+    },
     assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
       if (this.editedEventData.description.length > 150) {
         this.editedEventData.description = this.editedEventData.description.substring(0, 150);
@@ -79979,44 +79987,29 @@ var render = function() {
                               _c("div", { staticClass: "row" }, [
                                 _c("div", { staticClass: "col-5" }, [
                                   _c("div", { staticClass: "data" }, [
-                                    _c("div", { staticClass: "form-group" }, [
-                                      _c("label", [
-                                        _c("small", [_vm._v("Location")])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.editedEventData.location,
-                                            expression:
-                                              "editedEventData.location"
+                                    _c(
+                                      "div",
+                                      { staticClass: "form-group" },
+                                      [
+                                        _c("label", [
+                                          _c("small", [_vm._v("Location")])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("vue-google-autocomplete", {
+                                          attrs: {
+                                            id: "map" + _vm.editedEventData.id,
+                                            classname:
+                                              "form-control form-control-sm",
+                                            name: "event-location",
+                                            placeholder: "Change Event Location"
+                                          },
+                                          on: {
+                                            placechanged: _vm.getAddressData
                                           }
-                                        ],
-                                        staticClass:
-                                          "form-control form-control-sm",
-                                        attrs: {
-                                          type: "text",
-                                          name: "event_location"
-                                        },
-                                        domProps: {
-                                          value: _vm.editedEventData.location
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.editedEventData,
-                                              "location",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ])
+                                        })
+                                      ],
+                                      1
+                                    )
                                   ])
                                 ]),
                                 _vm._v(" "),

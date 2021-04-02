@@ -51,6 +51,9 @@ return [
         'access_type' => 'offline',
 
         'include_granted_scopes' => true
+    ],
+
+    'google_maps' => [
+        'api_key' => env('GOOGLE_MAPS_API_KEY')
     ]
-    
 ];

@@ -134,8 +134,8 @@ class CalendarsController extends Controller
         }
 
         foreach ($calendar->events as $event) {
-            $location = json_decode($event->location);
-            if ($location) {
+            if ($this->isJSON($event->location)) {
+                $location = json_decode($event->location);
                 $event->location = $location->route.', '.$location->country;
             }
         }
@@ -375,6 +375,10 @@ class CalendarsController extends Controller
     {
         $rawDatetime = $dateTime->dateTime ?: $dateTime->date;
         return Carbon::parse($rawDatetime)->setTimezone(config('app.timezone'));
+    }
+
+    private function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE);
     }
 
 }

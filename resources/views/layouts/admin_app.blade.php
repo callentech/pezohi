@@ -12,7 +12,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYNqIrc58KKRgaWvu7NLbx_k8BMpkDBcc&libraries=places" async></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key={{ config('services.google_maps.api_key') }}"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
@@ -25,6 +25,8 @@
 
 </head>
 <body>
+
+
 <div id="app">
     <nav class="navbar navbar-light bg-white shadow-sm">
 

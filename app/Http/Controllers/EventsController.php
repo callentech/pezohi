@@ -199,8 +199,8 @@ class EventsController extends Controller
             // Update event calendar
             $event->calendar->touch();
 
-            $location = json_decode($event->location);
-            if ($location) {
+            if ($this->isJSON($event->location)) {
+                $location = json_decode($event->location);
                 $event->location = $location->route.', '.$location->country;
             }
 
@@ -227,7 +227,7 @@ class EventsController extends Controller
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
-            } 
+            }
 
 
 
@@ -239,12 +239,11 @@ class EventsController extends Controller
 //                         'message' => $ex->getErrors()[0]['message']
 //                     ]
 //                 ]);
-//             } 
+//             }
 
             else {
 
-                var_dump($ex->getMessage());
-            exit;
+
                 return response()->json([
                     'code' => 0,
                 ]);
@@ -371,6 +370,10 @@ class EventsController extends Controller
     {
         $rawDatetime = $dateTime->dateTime ?: $dateTime->date;
         return Carbon::parse($rawDatetime)->setTimezone(config('app.timezone'));
+    }
+
+    private function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE);
     }
 
 }

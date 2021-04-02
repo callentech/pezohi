@@ -16133,6 +16133,10 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
+div.pac-container {
+  z-index: 10000 !important;
+}
+
 body #app nav.navbar .navbar-brand {
   text-transform: lowercase;
   font-weight: 700;

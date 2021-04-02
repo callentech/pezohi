@@ -25,17 +25,19 @@ class CalendarController extends Controller
             }
             $updated = $date;
 
-            $location = json_decode($event->location);
-            if ($location) {
+            if ($this->isJSON($event->location)) {
+                $location = json_decode($event->location);
                 $event->location = $location->route.', '.$location->country;
             }
         }
         $calendar->updated = $updated;
 
-//        var_dump($calendar);
-//        exit;
-
         return view('frontend.calendar', ['calendar' =>$calendar]);
+    }
+
+    private function isJSON($string): bool
+    {
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE);
     }
 
 }

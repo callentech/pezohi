@@ -178,7 +178,6 @@
                 <div class="data">
                     <div class="form-group">
                         <label><small>Location</small></label>
-                        <!-- <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location"> -->
 
                         <vue-google-autocomplete
                             :id="'map'+editedEventData.id"
@@ -189,10 +188,6 @@
                         >
                         </vue-google-autocomplete>
                     </div>
-
-                     
-
-
 
                 </div>
             </div>
@@ -251,10 +246,7 @@ export default {
 
     components: {
         datePicker,
-
         VueGoogleAutocomplete
-
-
     },
 
     data() {

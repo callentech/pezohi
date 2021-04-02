@@ -56,7 +56,6 @@
                                                 <label>Events: {{ current_calendar.events.length }}</label>
                                                 <div class="card col-md-12">
                                                     <div class="card-body">
-
                                                         <table class="table table-sm">
                                                             <thead>
                                                                 <tr>
@@ -293,10 +292,20 @@
                                                                     <div class="data">
                                                                         <div class="form-group">
                                                                             <label><small>Location</small></label>
-                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">
+<!--                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">-->
+                                                                                <vue-google-autocomplete
+                                                                                    :id="'map'+editedEventData.id"
+                                                                                    classname="form-control form-control-sm"
+                                                                                    name="event-location"
+                                                                                    placeholder="Change Event Location"
+                                                                                    v-on:placechanged="getAddressData"
+                                                                                >
+                                                                                </vue-google-autocomplete>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
+
                                                                 <div class="col-2">
                                                                     <div class="data">
                                                                         <div class="form-group">
@@ -651,7 +660,15 @@
                                                                     <div class="data">
                                                                         <div class="form-group">
                                                                             <label><small>Location</small></label>
-                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" max="150" name="event-location">
+<!--                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" max="150" name="event-location">-->
+                                                                                <vue-google-autocomplete
+                                                                                    :id="'map'"
+                                                                                    classname="form-control form-control-sm"
+                                                                                    name="event-location"
+                                                                                    placeholder="Change Event Location"
+                                                                                    v-on:placechanged="getAddressData"
+                                                                                >
+                                                                                </vue-google-autocomplete>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1014,7 +1031,15 @@
                                                                     <div class="data">
                                                                         <div class="form-group">
                                                                             <label><small>Location</small></label>
-                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">
+<!--                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">-->
+                                                                                <vue-google-autocomplete
+                                                                                    :id="'map'"
+                                                                                    classname="form-control form-control-sm"
+                                                                                    name="event-location"
+                                                                                    placeholder="Change Event Location"
+                                                                                    v-on:placechanged="getAddressData"
+                                                                                >
+                                                                                </vue-google-autocomplete>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1115,8 +1140,14 @@
 	import datePicker from 'vue-bootstrap-datetimepicker';
 	import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
     import moment from 'moment';
+    import vueGoogleAutocomplete from 'vue-google-autocomplete'
 
 	export default {
+
+        components: {
+            datePicker,
+            vueGoogleAutocomplete
+        },
 
 		data() {
             return {
@@ -1178,9 +1209,7 @@
 			this.$root.$refs.addEditCalendarModal = this;
 		},
 
-		components: {
-			datePicker,
-		},
+
 
         mounted() {
             this.csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -1203,6 +1232,10 @@
 		},
 
 		methods: {
+
+            getAddressData: function (addressData, placeResultData, id) {
+                this.editedEventData.location = JSON.stringify(addressData);
+            },
 
             assertEventDescriptionMaxChars: function() {
                 if (this.editedEventData.description.length > 150) {
@@ -1390,7 +1423,7 @@
 
                         this.showNewEventDataForm = false;
                         this.requestSuccess = false;
-                    
+
                 } else {
                     // Update current event
                     let started_at = this.getDateTime(this.editedEventData.startDate, this.editedEventData.startTimeHours, this.editedEventData.startTimeMinutes, this.editedEventData.startTimeAmPm);

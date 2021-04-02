@@ -1850,6 +1850,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-google-autocomplete */ "./node_modules/vue-google-autocomplete/src/VueGoogleAutocomplete.vue");
 //
 //
 //
@@ -2962,10 +2963,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
+    vueGoogleAutocomplete: vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_3__.default
+  },
   data: function data() {
     return {
       dateOptions: {
@@ -3018,9 +3049,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.$root.$refs.addEditCalendarModal = this;
   },
-  components: {
-    datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default())
-  },
   mounted: function mounted() {
     this.csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     this.owner_email_address = document.querySelector('meta[name="current_user_email"]').getAttribute('content');
@@ -3041,6 +3069,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getAddressData: function getAddressData(addressData, placeResultData, id) {
+      this.editedEventData.location = JSON.stringify(addressData);
+    },
     assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
       if (this.editedEventData.description.length > 150) {
         this.editedEventData.description = this.editedEventData.description.substring(0, 150);
@@ -4964,11 +4995,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-bootstrap-datetimepicker */ "./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
 /* harmony import */ var vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-google-autocomplete */ "./node_modules/vue-google-autocomplete/src/VueGoogleAutocomplete.vue");
-//
-//
-//
-//
-//
 //
 //
 //
@@ -71273,59 +71299,29 @@ var render = function() {
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
-                                                                      "input",
+                                                                      "vue-google-autocomplete",
                                                                       {
-                                                                        directives: [
-                                                                          {
-                                                                            name:
-                                                                              "model",
-                                                                            rawName:
-                                                                              "v-model",
-                                                                            value:
-                                                                              _vm
-                                                                                .editedEventData
-                                                                                .location,
-                                                                            expression:
-                                                                              "editedEventData.location"
-                                                                          }
-                                                                        ],
-                                                                        staticClass:
-                                                                          "form-control form-control-sm",
                                                                         attrs: {
-                                                                          type:
-                                                                            "text",
-                                                                          name:
-                                                                            "event-location"
-                                                                        },
-                                                                        domProps: {
-                                                                          value:
+                                                                          id:
+                                                                            "map" +
                                                                             _vm
                                                                               .editedEventData
-                                                                              .location
+                                                                              .id,
+                                                                          classname:
+                                                                            "form-control form-control-sm",
+                                                                          name:
+                                                                            "event-location",
+                                                                          placeholder:
+                                                                            "Change Event Location"
                                                                         },
                                                                         on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            if (
-                                                                              $event
-                                                                                .target
-                                                                                .composing
-                                                                            ) {
-                                                                              return
-                                                                            }
-                                                                            _vm.$set(
-                                                                              _vm.editedEventData,
-                                                                              "location",
-                                                                              $event
-                                                                                .target
-                                                                                .value
-                                                                            )
-                                                                          }
+                                                                          placechanged:
+                                                                            _vm.getAddressData
                                                                         }
                                                                       }
                                                                     )
-                                                                  ]
+                                                                  ],
+                                                                  1
                                                                 )
                                                               ]
                                                             )
@@ -74351,61 +74347,26 @@ var render = function() {
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
-                                                                      "input",
+                                                                      "vue-google-autocomplete",
                                                                       {
-                                                                        directives: [
-                                                                          {
-                                                                            name:
-                                                                              "model",
-                                                                            rawName:
-                                                                              "v-model",
-                                                                            value:
-                                                                              _vm
-                                                                                .editedEventData
-                                                                                .location,
-                                                                            expression:
-                                                                              "editedEventData.location"
-                                                                          }
-                                                                        ],
-                                                                        staticClass:
-                                                                          "form-control form-control-sm",
                                                                         attrs: {
-                                                                          type:
-                                                                            "text",
-                                                                          max:
-                                                                            "150",
+                                                                          id:
+                                                                            "map",
+                                                                          classname:
+                                                                            "form-control form-control-sm",
                                                                           name:
-                                                                            "event-location"
-                                                                        },
-                                                                        domProps: {
-                                                                          value:
-                                                                            _vm
-                                                                              .editedEventData
-                                                                              .location
+                                                                            "event-location",
+                                                                          placeholder:
+                                                                            "Change Event Location"
                                                                         },
                                                                         on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            if (
-                                                                              $event
-                                                                                .target
-                                                                                .composing
-                                                                            ) {
-                                                                              return
-                                                                            }
-                                                                            _vm.$set(
-                                                                              _vm.editedEventData,
-                                                                              "location",
-                                                                              $event
-                                                                                .target
-                                                                                .value
-                                                                            )
-                                                                          }
+                                                                          placechanged:
+                                                                            _vm.getAddressData
                                                                         }
                                                                       }
                                                                     )
-                                                                  ]
+                                                                  ],
+                                                                  1
                                                                 )
                                                               ]
                                                             )
@@ -77461,59 +77422,26 @@ var render = function() {
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
-                                                                      "input",
+                                                                      "vue-google-autocomplete",
                                                                       {
-                                                                        directives: [
-                                                                          {
-                                                                            name:
-                                                                              "model",
-                                                                            rawName:
-                                                                              "v-model",
-                                                                            value:
-                                                                              _vm
-                                                                                .editedEventData
-                                                                                .location,
-                                                                            expression:
-                                                                              "editedEventData.location"
-                                                                          }
-                                                                        ],
-                                                                        staticClass:
-                                                                          "form-control form-control-sm",
                                                                         attrs: {
-                                                                          type:
-                                                                            "text",
+                                                                          id:
+                                                                            "map",
+                                                                          classname:
+                                                                            "form-control form-control-sm",
                                                                           name:
-                                                                            "event-location"
-                                                                        },
-                                                                        domProps: {
-                                                                          value:
-                                                                            _vm
-                                                                              .editedEventData
-                                                                              .location
+                                                                            "event-location",
+                                                                          placeholder:
+                                                                            "Change Event Location"
                                                                         },
                                                                         on: {
-                                                                          input: function(
-                                                                            $event
-                                                                          ) {
-                                                                            if (
-                                                                              $event
-                                                                                .target
-                                                                                .composing
-                                                                            ) {
-                                                                              return
-                                                                            }
-                                                                            _vm.$set(
-                                                                              _vm.editedEventData,
-                                                                              "location",
-                                                                              $event
-                                                                                .target
-                                                                                .value
-                                                                            )
-                                                                          }
+                                                                          placechanged:
+                                                                            _vm.getAddressData
                                                                         }
                                                                       }
                                                                     )
-                                                                  ]
+                                                                  ],
+                                                                  1
                                                                 )
                                                               ]
                                                             )

@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isJson;
 
 
 class HomeController extends Controller
@@ -44,15 +45,20 @@ class HomeController extends Controller
                 }
                 $updated = $date;
 
-                $location = json_decode($event->location);
-                if ($location) {
+                if ($this->isJSON($event->location)) {
+                    $location = json_decode($event->location);
                     $event->location = $location->route.', '.$location->country;
                 }
+
             }
             $calendar->updated = $updated;
             $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
         }
         $jobsStatus = Auth::user()->jobs_status;
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE), 'jobs_status' => $jobsStatus]);
+    }
+
+    private function isJSON($string){
+       return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE);
     }
 }

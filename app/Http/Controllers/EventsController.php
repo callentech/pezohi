@@ -177,7 +177,7 @@ class EventsController extends Controller
                 'timeZone' => config('app.timezone')
             ];
 
-            $updatedEvent->location = trim($request->location);
+            $updatedEvent->location = $request->location;
             $updatedEvent->description = trim($request->description);
 
             $extendedProperties = new Google_Service_Calendar_EventExtendedProperties();
@@ -198,6 +198,11 @@ class EventsController extends Controller
 
             // Update event calendar
             $event->calendar->touch();
+
+            $location = json_decode($event->location);
+            if ($location) {
+                $event->location = $location->route.', '.$location->country;
+            }
 
             return response()->json([
                 'code' => 1,
@@ -222,14 +227,24 @@ class EventsController extends Controller
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
-            } else if ($ex->getErrors()[0]['message']) {
-                return response()->json([
-                    'code' => 404,
-                    'data' => [
-                        'message' => $ex->getErrors()[0]['message']
-                    ]
-                ]);
-            } else {
+            } 
+
+
+
+
+// else if ($ex->getErrors()[0]['message']) {
+//                 return response()->json([
+//                     'code' => 404,
+//                     'data' => [
+//                         'message' => $ex->getErrors()[0]['message']
+//                     ]
+//                 ]);
+//             } 
+
+            else {
+
+                var_dump($ex->getMessage());
+            exit;
                 return response()->json([
                     'code' => 0,
                 ]);
@@ -261,12 +276,12 @@ class EventsController extends Controller
 
         try {
 
-//            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
-//            $service->events->delete($event->calendar->google_id, $event->google_id);
-//
-//            // Delete event from DB
-//            $event->calendar->touch();
-//            $event->delete();
+           $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+           $service->events->delete($event->calendar->google_id, $event->google_id);
+
+           // Delete event from DB
+           $event->calendar->touch();
+           $event->delete();
 
             return response()->json([
                 'code' => 1,

@@ -1,6 +1,6 @@
 <template>
-    <div v-if="event.status === 'cancelled' || event.status === 'over'" class="card calendar-single event-cancelled">
-        <div  class="row text-muted">
+    <div :id="'event'+event.id"  v-if="event.status === 'cancelled' || event.status === 'over'" class="card calendar-single event-cancelled">
+        <div class="row text-muted">
             <div class="col-3">
                 <div class="data" title>
                     <del>{{ event.started_at|formatDate }}</del>
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div v-else class="card calendar-single event-active" @click="copyEventAddress">
+    <div :id="'event'+event.id"  v-else class="card calendar-single event-active" @click="copyEventAddress">
         <div class="row">
             <div class="col-3">
                 <div class="data" title>
@@ -180,6 +180,8 @@ export default {
         },
 
         showConfirmEventDeleteModal: function(id) {
+
+            console.log(this.$parent.$parent);
             this.$parent.$parent.delete_event_id = id;
             this.$parent.$parent.showConfirmDeleteEventModal = true;
         },

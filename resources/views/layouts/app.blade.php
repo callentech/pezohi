@@ -12,7 +12,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAnfF8JsGFFKo4-pBGktX4P3f4xCVzsmvY"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBDvqtPF3PlHCVBVmo_qi4U2oGEMuAJthw"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->

@@ -178,8 +178,22 @@
                 <div class="data">
                     <div class="form-group">
                         <label><small>Location</small></label>
-                        <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">
+                        <!-- <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location"> -->
+
+                        <vue-google-autocomplete
+                            :id="'map'+editedEventData.id"
+                            classname="form-control form-control-sm"
+                            name="event-location"
+                            placeholder="Change Event Location"
+                            v-on:placechanged="getAddressData"
+                        >
+                        </vue-google-autocomplete>
                     </div>
+
+                     
+
+
+
                 </div>
             </div>
             <div class="col-2">
@@ -230,11 +244,17 @@
 
 import datePicker from 'vue-bootstrap-datetimepicker';
 
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
+
 export default {
     props: ['event'],
 
     components: {
-        datePicker
+        datePicker,
+
+        VueGoogleAutocomplete
+
+
     },
 
     data() {
@@ -282,6 +302,12 @@ export default {
     },
 
     methods: {
+
+        getAddressData: function (addressData, placeResultData, id) {
+            this.editedEventData.location = JSON.stringify(addressData);
+        },
+
+
         assertEventDescriptionMaxChars: function() {
             if (this.editedEventData.description.length > 150) {
                 this.editedEventData.description = this.editedEventData.description.substring(0, 150);

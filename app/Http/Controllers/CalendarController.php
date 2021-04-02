@@ -24,6 +24,11 @@ class CalendarController extends Controller
                 $date = $date->format('m/d/Y');
             }
             $updated = $date;
+
+            $location = json_decode($event->location);
+            if ($location) {
+                $event->location = $location->route.', '.$location->country;
+            }
         }
         $calendar->updated = $updated;
 

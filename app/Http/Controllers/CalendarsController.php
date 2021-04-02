@@ -133,6 +133,13 @@ class CalendarsController extends Controller
             ]);
         }
 
+        foreach ($calendar->events as $event) {
+            $location = json_decode($event->location);
+            if ($location) {
+                $event->location = $location->route.', '.$location->country;
+            }
+        }
+
         return response()->json([
             'code' => 1,
             'data' => [

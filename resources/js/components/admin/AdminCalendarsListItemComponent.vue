@@ -585,9 +585,11 @@ export default {
         },
 
         showConfirmCalendarDelete: function(id) {
-            this.showBody = false;
-            this.showCalendarDropdownActions = false;
-            this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
+            // this.showBody = false;
+            // this.showCalendarDropdownActions = false;
+            // this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
+
+            alert();
         },
 
         shareCalendar: function(url) {

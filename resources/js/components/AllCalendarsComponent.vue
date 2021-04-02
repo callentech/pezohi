@@ -339,18 +339,8 @@
                             currentObj.requestSuccess = response.data.data.message;
                             currentObj.requestSuccess = false;
                             currentObj.delete_event_id = null;
-
-                            // Remove event from list
-                            let calendarId = response.data.data.calendarId;
-                            currentObj.sortedCalendars.map(function(item, key) {
-                                if (item.id === calendarId) {
-                                    currentObj.sortedCalendars[key].events.map(function(evt, index) {
-                                        currentObj.sortedCalendars[key].events.splice(index, 1);
-                                    });
-                                }
-                            });
-
-                            currentObj.sortCalendarsListByUpdated();
+                            document.getElementById("event"+id).remove();
+                            location.reload();
                         } else {
                             currentObj.requestDanger = 'Request Error';
                         }

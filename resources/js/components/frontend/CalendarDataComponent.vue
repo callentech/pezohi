@@ -12,7 +12,7 @@
                 </div>
 
                 <div v-else class="row p-3 px-md-4 mb-3">
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="title">
                             <img :src="'/img/soccer_ball.png'" alt="">
                             <span class="text">{{ calendar.name }}</span>
@@ -23,10 +23,19 @@
                             Last updated : {{ calendar.updated_at|formatDate() }}
                         </div>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-4">
+                        <div v-if="requestSuccess" class="alert alert-success" role="alert">
+                            {{ requestSuccess }}
+                        </div>
+                        <div v-if="requestError" class="alert alert-danger" role="alert">
+                            {{ requestError }}
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-right">
                         <div class="actions mt-2">
-                            <button type="button" class="btn btn-primary"><i class="fas fa-bell"></i> Subscribe</button>
-                            <button type="button" class="btn btn-primary"><i class="fas fa-user-plus"></i> Share</button>
+                            <button v-if="calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>
+                            <button v-else type="button" class="btn btn-primary" @click="unsubscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Unsubscribe</button>
+                            <button type="button" class="btn btn-primary" @click="shareCalendar(calendar.publicUrl)"><i class="fas fa-user-plus"></i> Share</button>
                         </div>
                     </div>
                 </div>
@@ -91,7 +100,37 @@
                 </div>
             </div>
         </div>
+
+        <!-- Share Calendar Message modal -->
+        <div v-if="showInfoModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper" @click="hideShareCalendarModal($event)">
+                        <div class="message-modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Information</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="infoModalText='', showInfoModal=false">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div v-html="infoModalHtml" class="modal-body">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" @click="infoModalText='', showInfoModal=false">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- END Share Calendar Message modal -->
     </div>
+
+
 
 </template>
 
@@ -109,11 +148,114 @@ export default {
             sortByDescriptionDirection: 'desc',
             sortByStatusDirection: 'desc',
 
-            sortedEvents: []
+            sortedEvents: [],
+
+            showInfoModal: false,
+            infoModalHtml: '',
+
+            requestProcess: false,
+            requestError: '',
+            requestSuccess: ''
         }
     },
 
     methods: {
+
+        unsubscribeCalendar: function(id) {
+            let currentObj = this;
+            // Send request
+            axios.interceptors.request.use(function (config) {
+                // Do something before request is sent
+                currentObj.requestProcess = true;
+                currentObj.requestError = null;
+                currentObj.requestSuccess = null;
+                return config;
+            }, function (error) {
+                // Do something with request error
+                return Promise.reject(error);
+            });
+
+            axios.post('/unsubscribe-calendar', {calendar_id: id})
+                .then(function (response) {
+                    if (response.data.code === 401) {
+                        document.location.href = "/";
+                    } else if (response.data.code === 404) {
+                        currentObj.requestError = response.data.data.message;
+                    } else if (response.data.code === 1) {
+                        currentObj.requestSuccess = response.data.data.message;
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        currentObj.requestError = 'Request Error';
+                    }
+                })
+                .catch(function (error) {
+                    currentObj.requestError = 'Request Error';
+                })
+                .then(function () {
+                    currentObj.requestProcess = false;
+                });
+        },
+
+        subscribeCalendar: function(id) {
+
+            let currentObj = this;
+            // Send request
+            axios.interceptors.request.use(function (config) {
+                // Do something before request is sent
+                currentObj.requestProcess = true;
+                currentObj.requestError = null;
+                currentObj.requestSuccess = null;
+                return config;
+            }, function (error) {
+                // Do something with request error
+                return Promise.reject(error);
+            });
+
+            axios.post('/subscribe-calendar', {calendar_id: id})
+            .then(function (response) {
+                if (response.data.code === 401) {
+                    document.location.href = "/";
+                } else if (response.data.code === 404) {
+                    currentObj.requestError = response.data.data.message;
+                } else if (response.data.code === 1) {
+                    currentObj.requestSuccess = response.data.data.message;
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    currentObj.requestError = 'Request Error';
+                }
+            })
+            .catch(function (error) {
+                currentObj.requestError = 'Request Error';
+            })
+            .then(function () {
+                currentObj.requestProcess = false;
+            });
+        },
+
+        shareCalendar: function(url) {
+            let input_temp = document.createElement('textarea');
+            input_temp.innerHTML = url;
+            document.body.appendChild(input_temp);
+            input_temp.select();
+            input_temp.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(input_temp);
+            this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
+            this.showInfoModal = true;
+        },
+
+        hideShareCalendarModal: function(event) {
+            if(event.target.classList.contains("modal-wrapper") || event.target.classList.contains("message-modal")) {
+                event.stopPropagation();
+                event.preventDefault();
+                this.infoModalText='';
+                this.showInfoModal=false
+            }
+        },
 
         sortEventsListByDate: function() {
             this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
@@ -135,12 +277,9 @@ export default {
             this.sortByStatusDirection = this.sortByStatusDirection === 'desc' ? 'asc' : 'desc';
             this.sortedEvents = this.sortArray(this.calendar.events, 'status', this.sortByStatusDirection);
         },
-
-
         sortArray: function(array, field, direction) {
             return _.orderBy(array, field, direction);
         }
-
     },
 
     mounted() {

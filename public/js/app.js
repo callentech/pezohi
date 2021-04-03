@@ -3773,35 +3773,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'jobs_status', 'user_role'],
   data: function data() {
@@ -6878,6 +6849,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data'],
   data: function data() {
@@ -6888,10 +6898,102 @@ __webpack_require__.r(__webpack_exports__);
       sortByTypeDirection: 'desc',
       sortByDescriptionDirection: 'desc',
       sortByStatusDirection: 'desc',
-      sortedEvents: []
+      sortedEvents: [],
+      showInfoModal: false,
+      infoModalHtml: '',
+      requestProcess: false,
+      requestError: '',
+      requestSuccess: ''
     };
   },
   methods: {
+    unsubscribeCalendar: function unsubscribeCalendar(id) {
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.requestError = null;
+        currentObj.requestSuccess = null;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/unsubscribe-calendar', {
+        calendar_id: id
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestError = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          setTimeout(function () {
+            location.reload();
+          }, 2000);
+        } else {
+          currentObj.requestError = 'Request Error';
+        }
+      })["catch"](function (error) {
+        currentObj.requestError = 'Request Error';
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
+    subscribeCalendar: function subscribeCalendar(id) {
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.requestError = null;
+        currentObj.requestSuccess = null;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/subscribe-calendar', {
+        calendar_id: id
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestError = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          setTimeout(function () {
+            location.reload();
+          }, 2000);
+        } else {
+          currentObj.requestError = 'Request Error';
+        }
+      })["catch"](function (error) {
+        currentObj.requestError = 'Request Error';
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
+    shareCalendar: function shareCalendar(url) {
+      var input_temp = document.createElement('textarea');
+      input_temp.innerHTML = url;
+      document.body.appendChild(input_temp);
+      input_temp.select();
+      input_temp.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.body.removeChild(input_temp);
+      this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="' + url + '" readonly>';
+      this.showInfoModal = true;
+    },
+    hideShareCalendarModal: function hideShareCalendarModal(event) {
+      if (event.target.classList.contains("modal-wrapper") || event.target.classList.contains("message-modal")) {
+        event.stopPropagation();
+        event.preventDefault();
+        this.infoModalText = '';
+        this.showInfoModal = false;
+      }
+    },
     sortEventsListByDate: function sortEventsListByDate() {
       this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
       this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
@@ -84098,7 +84200,7 @@ var render = function() {
         _vm.calendar === 404
           ? _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [_vm._m(0)])
           : _c("div", { staticClass: "row p-3 px-md-4 mb-3" }, [
-              _c("div", { staticClass: "col-6" }, [
+              _c("div", { staticClass: "col-4" }, [
                 _c("div", { staticClass: "title" }, [
                   _c("img", {
                     attrs: { src: "/img/soccer_ball.png", alt: "" }
@@ -84130,7 +84232,96 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(1)
+              _c("div", { staticClass: "col-4" }, [
+                _vm.requestSuccess
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "alert alert-success",
+                        attrs: { role: "alert" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.requestSuccess) +
+                            "\n                    "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.requestError
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "alert alert-danger",
+                        attrs: { role: "alert" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(_vm.requestError) +
+                            "\n                    "
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-4 text-right" }, [
+                _c("div", { staticClass: "actions mt-2" }, [
+                  _vm.calendar.isSubscribed
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.subscribeCalendar(_vm.calendar.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-bell" }),
+                          _vm._v(" Subscribe")
+                        ]
+                      )
+                    : _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.unsubscribeCalendar(_vm.calendar.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-bell" }),
+                          _vm._v(" Unsubscribe")
+                        ]
+                      ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.shareCalendar(_vm.calendar.publicUrl)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-user-plus" }),
+                      _vm._v(" Share")
+                    ]
+                  )
+                ])
+              ])
             ])
       ])
     ]),
@@ -84345,6 +84536,106 @@ var render = function() {
             ])
           ])
         ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.showInfoModal
+      ? _c(
+          "div",
+          [
+            _c("transition", { attrs: { name: "modal" } }, [
+              _c("div", { staticClass: "modal-mask" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "modal-wrapper",
+                    on: {
+                      click: function($event) {
+                        return _vm.hideShareCalendarModal($event)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "message-modal",
+                        attrs: { tabindex: "-1", role: "dialog" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "modal-dialog",
+                            attrs: { role: "document" }
+                          },
+                          [
+                            _c("div", { staticClass: "modal-content" }, [
+                              _c("div", { staticClass: "modal-header" }, [
+                                _c("h5", { staticClass: "modal-title" }, [
+                                  _vm._v("Information")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "close",
+                                    attrs: {
+                                      type: "button",
+                                      "data-dismiss": "modal",
+                                      "aria-label": "Close"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        ;(_vm.infoModalText = ""),
+                                          (_vm.showInfoModal = false)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "span",
+                                      { attrs: { "aria-hidden": "true" } },
+                                      [_vm._v("×")]
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", {
+                                staticClass: "modal-body",
+                                domProps: {
+                                  innerHTML: _vm._s(_vm.infoModalHtml)
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "modal-footer" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-secondary",
+                                    attrs: { type: "button" },
+                                    on: {
+                                      click: function($event) {
+                                        ;(_vm.infoModalText = ""),
+                                          (_vm.showInfoModal = false)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Close")]
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ])
+          ],
+          1
+        )
       : _vm._e()
   ])
 }
@@ -84358,26 +84649,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "text" }, [
           _vm._v("404 Calendar not found ...")
         ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-6 text-right" }, [
-      _c("div", { staticClass: "actions mt-2" }, [
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "button" } },
-          [_c("i", { staticClass: "fas fa-bell" }), _vm._v(" Subscribe")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "button" } },
-          [_c("i", { staticClass: "fas fa-user-plus" }), _vm._v(" Share")]
-        )
       ])
     ])
   }

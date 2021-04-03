@@ -27,7 +27,6 @@ Route::get('auth/google/callback', [App\Http\Controllers\GoogleController::class
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
 /* Calendars Actions */
 Route::post('/new-calendar', [App\Http\Controllers\CalendarsController::class, 'newCalendarAction'])->name('newCalendar');
 Route::post('/edit-calendar', [App\Http\Controllers\CalendarsController::class, 'editCalendarAction'])->name('editCalendar');
@@ -44,44 +43,10 @@ Route::post('/delete-event', [App\Http\Controllers\EventsController::class, 'del
 /* Admin */
 Route::get('/admin-home', [App\Http\Controllers\AdminController::class, 'indexAction'])->name('adminHome')->middleware('admin');
 Route::post('/admin-set-user-role', [App\Http\Controllers\AdminController::class, 'setUserRoleAction'])->name('adminSetUserRole')->middleware('admin');
-//Route::get('/admin-users', [App\Http\Controllers\AdminController::class, 'usersAction'])->name('adminUsers');
-
-/*
-Route::post('/calendar-edit', [App\Http\Controllers\HomeController::class, 'editCalendarAction'])->name('editCalendar');
-
-Route::post('/calendar-delete', [App\Http\Controllers\HomeController::class, 'deleteCalendarAction'])->name('deleteCalendar');
-Route::post('/calendar-get-data', [App\Http\Controllers\HomeController::class, 'getCalendarDataAction']);
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Route::post('google/webhook', [App\Http\Controllers\GoogleWebhookController::class])->name('google.webhook');
 //Route::name('google.webhook')->post('google/webhook', 'GoogleWebhookController');
 
-
-
-
-// Route::get('/calendar', [App\Http\Controllers\GoogleController::class, 'calendar']);
-//Route::get('/oauth', [App\Http\Controllers\GCalendarController::class, 'oauth'])->name('oauthCallback');
-
-
-//Route::get('oauth', ['as' => 'oauthCallback', 'uses' => [App\Http\Controllers\GCalendarController::class, 'index']]);
-
-
-
-// Route::get('/google-calendar/connect', [App\Http\Controllers\GoogleController::class, 'connect']);
+/* Subscribe to Calendar */
+Route::post('/subscribe-calendar', [App\Http\Controllers\CalendarsController::class, 'subscribeCalendarAction'])->name('subscribeCalendar');
+Route::post('/unsubscribe-calendar', [App\Http\Controllers\CalendarsController::class, 'unsubscribeCalendarAction'])->name('unsubscribeCalendar');

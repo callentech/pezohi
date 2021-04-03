@@ -383,6 +383,13 @@ body #app nav.navbar .navbar-brand {
 /* Frontend styles */
 .frontend-main-content {
 
+    .alert {
+        font-size: 12px;
+        position: absolute;
+        width: 100%;
+        margin-top: 7px;
+    }
+
     .container {
         max-width: 100%;
     }

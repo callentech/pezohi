@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Calendar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CalendarController extends Controller
 {
     public function indexAction($google_id)
     {
-
         $calendar = Calendar::where('google_id', $google_id)->with('events')->with('user')->first();
-
-        $calendar = $calendar ? $calendar : '404';
-
+        if (!$calendar) {
+            return view('frontend.calendar', ['calendar' => '404']);
+        }
+        
         // Get Calendar Updated Date by Events updated date
         $updated = NULL;
         foreach ($calendar->events as $event) {
@@ -31,6 +32,18 @@ class CalendarController extends Controller
             }
         }
         $calendar->updated = $updated;
+
+        // Subscribe / Unsubscribe status
+        $calendar->isSubscribed = FALSE;
+        if (Auth::user()) {
+            foreach (Auth::user()->calendars() as $userCalendar) {
+                if ($userCalendar->google_id == $calendar->google_id) {
+                    $calendar->isSubscribed = TRUE;
+                }
+            }
+        }
+
+        $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
 
         return view('frontend.calendar', ['calendar' =>$calendar]);
     }

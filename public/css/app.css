@@ -16434,6 +16434,12 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 }
 
 /* Frontend styles */
+.frontend-main-content .alert {
+  font-size: 12px;
+  position: absolute;
+  width: 100%;
+  margin-top: 7px;
+}
 .frontend-main-content .container {
   max-width: 100%;
 }

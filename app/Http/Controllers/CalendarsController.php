@@ -7,6 +7,7 @@ use App\Models\Calendar;
 use App\Models\Event;
 use App\Services\Google;
 use Google_Service_Calendar_Calendar;
+use Google_Service_Calendar_CalendarListEntry;
 use Google_Service_Calendar_Event;
 use Google_Service_Calendar_EventExtendedProperties;
 use Illuminate\Http\JsonResponse;
@@ -337,6 +338,127 @@ class CalendarsController extends Controller
                 'code' => 1,
                 'data' => [
                     'message' => 'Google calendar delete success'
+                ]
+            ]);
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function subscribeCalendarAction(Request $request): JsonResponse
+    {
+        $request->validate([
+            'calendar_id' => 'required'
+        ]);
+
+        $calendar = Calendar::with('events')->find($request->calendar_id);
+        if (!$calendar) {
+            return response()->json([
+                'code' => 0
+            ]);
+        }
+
+        try {
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+
+            $calendarListEntry = new Google_Service_Calendar_CalendarListEntry();
+            $calendarListEntry->setId($calendar->google_id);
+            $createdCalendarListEntry = $service->calendarList->insert($calendarListEntry);
+
+            // Sync calendars
+            $this->dispatch(new SyncCalendars(Auth::user()));
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => 'Subscribe success',
+                    'calendar' => $createdCalendarListEntry
+                ]
+            ]);
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else if ($ex->getErrors()[0]['message']) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => $ex->getErrors()[0]['message']
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function unsubscribeCalendarAction(Request  $request): JsonResponse
+    {
+        $request->validate([
+            'calendar_id' => 'required'
+        ]);
+
+        $calendar = Calendar::with('events')->find($request->calendar_id);
+        if (!$calendar) {
+            return response()->json([
+                'code' => 0
+            ]);
+        }
+
+        try {
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+
+            $service->calendarList->delete($calendar->google_id);
+
+            //$this->dispatch(new SyncCalendars(Auth::user()));
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => 'Unsubscribe success',
+
                 ]
             ]);
         } catch(\Exception $ex) {

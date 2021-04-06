@@ -176,19 +176,17 @@
         <div class="row">
             <div class="col-5">
                 <div class="data">
+
                     <div class="form-group">
                         <label><small>Location</small></label>
-
                         <vue-google-autocomplete
+                            ref="eventLocationAutocomplete"
                             :id="'map'+editedEventData.id"
                             classname="form-control form-control-sm"
-                            name="event-location"
                             placeholder="Change Event Location"
-                            v-on:placechanged="getAddressData"
-                        >
-                        </vue-google-autocomplete>
+                            v-on:inputChange="getAddressData"
+                        ></vue-google-autocomplete>
                     </div>
-
                 </div>
             </div>
             <div class="col-2">
@@ -217,7 +215,7 @@
         <div class="row">
             <div class="col-4">
                 <div class="data">
-                    <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!editedEventDataValid || requestProcess" @click="$event.stopPropagation(), submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
+                    <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="requestProcess" @click="$event.stopPropagation(), submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
                     <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideEditSingleEvent($event)"><i class="far fa-times-circle"></i> Cancel</button>
                 </div>
             </div>
@@ -261,6 +259,7 @@ export default {
 
             editedEventData: {
                 id: null,
+                duplicate_event_id: null,
                 startDate: null,
                 startTimeHours: null,
                 startTimeMinutes: null,
@@ -270,6 +269,7 @@ export default {
                 endTimeMinutes: null,
                 endTimeAmPm: null,
                 location: null,
+                addressData: null,
                 type: null,
                 description: null
             },
@@ -281,24 +281,14 @@ export default {
     },
 
     computed: {
-        editedEventDataValid() {
-            let result = true;
-            if (!this.editedEventData.location || this.editedEventData.location === '') {
-                result = false;
-            }
-            if (!this.editedEventData.description || this.editedEventData.description === '') {
-                result = false;
-            }
-            return result;
-        }
+
     },
 
     methods: {
 
         getAddressData: function (addressData, placeResultData, id) {
-            this.editedEventData.location = JSON.stringify(addressData);
+            this.editedEventData.location = addressData.newVal;
         },
-
 
         assertEventDescriptionMaxChars: function() {
             if (this.editedEventData.description.length > 150) {
@@ -328,7 +318,9 @@ export default {
                 return Promise.reject(error);
             });
 
-            axios.post('/edit-single-event', currentObj.editedEventData)
+            let url = currentObj.editedEventData.duplicate_event_id ? '/duplicate-single-event' : '/edit-single-event';
+
+            axios.post(url, currentObj.editedEventData)
             .then(function (response) {
                 if (response.data.code === 401) {
                     document.location.href = "/";
@@ -336,22 +328,29 @@ export default {
                     currentObj.requestError = response.data.data.message;
                 } else if (response.data.code === 1) {
                     currentObj.requestSuccess = response.data.data.message;
+                    if (currentObj.editedEventData.duplicate_event_id) {
+                        // Hide Edit event form
+                        setTimeout(function () {
+                            currentObj.requestSuccess = false;
+                            currentObj.hideEditSingleEvent(event);
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        // Update Edited event data
+                        currentObj.event.started_at = new Date(response.data.data.event.started_at).toLocaleString("en-US", {timeZone: "UTC"});
+                        currentObj.event.ended_at = new Date(response.data.data.event.ended_at).toLocaleString("en-US", {timeZone: "UTC"});
+                        currentObj.event.location = response.data.data.event.location;
+                        currentObj.event.type = response.data.data.event.type;
+                        currentObj.event.description = response.data.data.event.description;
 
-                    // Update Edited event data
-                    currentObj.event.started_at = new Date(response.data.data.event.started_at).toLocaleString("en-US", {timeZone: "UTC"});
-                    currentObj.event.ended_at = new Date(response.data.data.event.ended_at).toLocaleString("en-US", {timeZone: "UTC"});
-                    currentObj.event.location = response.data.data.event.location;
-                    currentObj.event.type = response.data.data.event.type;
-                    currentObj.event.description = response.data.data.event.description;
-
-                    // Hide Edit event form
-                    setTimeout(function () {
-                        currentObj.requestSuccess = false;
-                        currentObj.hideEditSingleEvent();
-                    }, 2000);
-
+                        // Hide Edit event form
+                        setTimeout(function () {
+                            currentObj.requestSuccess = false;
+                            currentObj.hideEditSingleEvent(event);
+                        }, 2000);
+                    }
                 } else {
-                    currentObj.requestError = 'Request Error';
+                    currentObj.requestError = response.data.data.message;
                 }
             })
             .catch(function (error) {
@@ -366,6 +365,7 @@ export default {
     mounted() {
         this.editedEventData = {
             id: this.event.id,
+            duplicate_event_id: this.event.duplicate_event_id,
             startDate: this.$options.filters.formatDate(this.event.started_at),
             startTimeHours: this.$options.filters.formatHours(this.event.started_at),
             startTimeMinutes: this.$options.filters.formatMinutes(this.event.started_at),
@@ -378,6 +378,9 @@ export default {
             type: this.event.type,
             description: this.event.description
         };
+
+        this.$refs.eventLocationAutocomplete.focus();
+        this.$refs.eventLocationAutocomplete.update(this.event.location);
     },
 
     filters: {

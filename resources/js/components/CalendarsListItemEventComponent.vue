@@ -32,7 +32,7 @@
 
             <div class="col-1">
                 <div class="data text-right">
-                    <button title="Delete" class="btn btn-outline-danger btn-sm" @click="showConfirmEventDeleteModal(event.id)"><i class="far fa-trash-alt"></i></button>
+<!--                    <button title="Delete" class="btn btn-outline-danger btn-sm" @click="showConfirmEventDeleteModal(event.id)"><i class="far fa-trash-alt"></i></button>-->
                 </div>
             </div>
         </div>
@@ -78,7 +78,16 @@
                 <div class="data text-right">
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="$event.stopPropagation(), showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More" @click="$event.stopPropagation()"><i class="fas fa-ellipsis-v"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More" @click="toggleEventDropdownActions($event)"><i class="fas fa-ellipsis-v"></i></button>
+                    <div class="dropdown-event-actions">
+                        <transition name="fade">
+                            <div class="items" v-if="showEventDropdownActions">
+                                <a href="javascript:void(0)" @click="$event.stopPropagation(), duplicateEventAction();"><i class="far fa-clone"></i> Duplicate</a>
+                                <a href="javascript:void(0)" @click="$event.stopPropagation(), cancelEventAction(event.id);"><i class="fas fa-ban"></i> Cancel</a>
+                                <a href="javascript:void(0)" @click="$event.stopPropagation(), showConfirmEventDeleteModal(event.id);"><i class="far fa-trash-alt"></i> Delete</a>
+                            </div>
+                        </transition>
+                    </div>
                 </div>
             </div>
         </div>
@@ -129,6 +138,7 @@ export default {
         return {
             showEditSingleEventForm: false,
             showEventDetails: false,
+            showEventDropdownActions: false,
 
             editedEventData: {
                 id: null,
@@ -152,6 +162,53 @@ export default {
     },
 
     methods: {
+
+        duplicateEventAction: function() {
+            this.showEventDropdownActions = false;
+            this.event.duplicate_event_id = this.event.id;
+            this.showEditSingleEventForm = true;
+        },
+
+        cancelEventAction: function(event_id) {
+            this.showEventDropdownActions = false;
+            let currentObj = this;
+            axios.interceptors.request.use(function (config) {
+                // Do something before request is sent
+                currentObj.requestProcess = true;
+                currentObj.$parent.$parent.requestDanger = false;
+                currentObj.$parent.$parent.requestSuccess = false;
+                return config;
+            }, function (error) {
+                // Do something with request error
+                return Promise.reject(error);
+            });
+            axios.post('/cancel-event', { event_id: event_id })
+            .then(function (response) {
+                if (response.data.code === 401) {
+                    document.location.href="/";
+                } else if (response.data.code === 404) {
+                    currentObj.$parent.$parent.requestDanger = response.data.data.message;
+                } else if (response.data.code === 1) {
+                    currentObj.$parent.$parent.requestSuccess = response.data.data.message;
+                    currentObj.event.status = 'cancelled';
+                } else {
+                    currentObj.$parent.$parent.requestDanger = 'Request Error';
+                }
+            })
+            .catch(function (error) {
+                currentObj.$parent.$parent.requestDanger = 'Error Request';
+            })
+            .then(function() {
+                currentObj.requestProcess = false;
+            });
+        },
+
+        toggleEventDropdownActions: function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            this.showEventDropdownActions = !this.showEventDropdownActions;
+        },
+
         copyEventAddress: function() {
             if (this.showEditSingleEventForm || this.showEventDetails) {
                 return false;
@@ -171,17 +228,14 @@ export default {
                 element.showEditSingleEventForm = false;
             });
             this.showEditSingleEventForm = true;
-
-            // init location input google maps
-            //const autocomplete = new google.maps.places.Autocomplete(this.$refs["origin"]);
+            this.showEventDropdownActions = false;
         },
         hideEditSingleEvent: function () {
             this.showEditSingleEventForm = false;
         },
 
         showConfirmEventDeleteModal: function(id) {
-
-            console.log(this.$parent.$parent);
+            this.showEventDropdownActions = false;
             this.$parent.$parent.delete_event_id = id;
             this.$parent.$parent.showConfirmDeleteEventModal = true;
         },
@@ -221,11 +275,15 @@ export default {
         },
 
         sliceString: function (value) {
-            let sliced = value.slice(0, 10);
-            if (sliced.length < value.length) {
-                sliced += '...';
+            if (value && value.length > 10) {
+                let sliced = value.slice(0, 10);
+                if (sliced.length < value.length) {
+                    sliced += '...';
+                }
+                return sliced;
+            } else {
+                return value;
             }
-            return sliced;
         },
 
         capitalize: function (value) {

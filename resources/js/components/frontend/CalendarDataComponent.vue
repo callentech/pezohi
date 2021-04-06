@@ -11,6 +11,8 @@
                     </div>
                 </div>
 
+
+
                 <div v-else class="row p-3 px-md-4 mb-3">
                     <div class="col-4">
                         <div class="title">
@@ -31,11 +33,23 @@
                             {{ requestError }}
                         </div>
                     </div>
-                    <div class="col-md-4 text-right">
+                    <div v-if="user.status && user.status === 'anonimous'" class="col-md-4 text-right">
                         <div class="actions mt-2">
-                            <button v-if="calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>
+                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>
                             <button v-else type="button" class="btn btn-primary" @click="unsubscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Unsubscribe</button>
                             <button type="button" class="btn btn-primary" @click="shareCalendar(calendar.publicUrl)"><i class="fas fa-user-plus"></i> Share</button>
+                        </div>
+                    </div>
+                    <div v-else class="col-md-4 text-right">
+                        <div v-if="user.jobs_status === 'finished'" class="actions mt-2">
+                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>
+                            <button v-else type="button" class="btn btn-primary" @click="unsubscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Unsubscribe</button>
+                            <button type="button" class="btn btn-primary" @click="shareCalendar(calendar.publicUrl)"><i class="fas fa-user-plus"></i> Share</button>
+                        </div>
+                        <div v-else class="actions mt-2">
+                            <div class="alert alert-info" role="alert">
+                                Sync in process. Please wait ...
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -93,7 +107,12 @@
                                 <td><a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a></td>
                                 <td>{{ event.type|capitalize }}</td>
                                 <td><a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a></td>
-                                <td>{{ event.status|capitalize }}</td>
+                                <td v-if="moment(event.ended_at).isBefore(new Date())">
+                                    Over
+                                </td>
+                                <td v-else>
+                                    {{ event.status|capitalize }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -136,8 +155,10 @@
 
 <script>
 
+import moment from 'moment';
+
 export default {
-    props:['data'],
+    props:['data', 'user'],
     data() {
         return {
             calendar: this.data,
@@ -155,7 +176,9 @@ export default {
 
             requestProcess: false,
             requestError: '',
-            requestSuccess: ''
+            requestSuccess: '',
+
+            moment: moment
         }
     },
 
@@ -284,6 +307,15 @@ export default {
 
     mounted() {
         this.sortEventsListByDate();
+
+        if (this.user.jobs_status && this.user.jobs_status === 'started') {
+            setInterval(function() {
+                location.reload();
+            }, 5000);
+        }
+
+
+
     },
 
     filters: {

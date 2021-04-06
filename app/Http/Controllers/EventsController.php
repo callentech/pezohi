@@ -18,21 +18,127 @@ class EventsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function duplicateSingleEventAction(Request $request): JsonResponse
+    {
+        $request->validate([
+            'duplicate_event_id' => 'required',
+            'startDate' => 'required',
+            'startTimeHours' => 'required',
+            'startTimeMinutes' => 'required',
+            'startTimeAmPm' => 'required',
+            'endDate' => 'required',
+            'endTimeHours' => 'required',
+            'endTimeMinutes' => 'required',
+            'endTimeAmPm' => 'required',
+            'type' => 'required'
+        ]);
+
+        $event = Event::find($request->id);
+        if (!$event) {
+            return response()->json([
+                'code' => 404,
+                'data' => [
+                    'message' => 'Event not found'
+                ]
+            ]);
+        }
+
+        $calendar = Calendar::with('events')->find($event->calendar->id);
+        if (!$calendar) {
+            return response()->json([
+                'code' => 0
+            ]);
+        }
+
+        try {
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+
+            // Save new event data to Google Calendar
+            $startedHours = $request->startTimeAmPm == 'AM' ? $request->startTimeHours : $request->startTimeHours + 12;
+            $started_at = new Carbon($request->startDate.' '.$startedHours.':'.$request->startTimeMinutes);
+
+            $endedHours = $request->endTimeAmPm == 'AM' ? $request->endTimeHours : $request->endTimeHours + 12;
+            $ended_at = new Carbon($request->endDate.' '.$endedHours.':'.$request->endTimeMinutes);
+
+            $newGoogleEvent = new Google_Service_Calendar_Event(array(
+                'summary' => 'Pezohi Event',
+                'location' => isset($request->location) ? $request->location : '',
+                'description' => isset($request->description) ? $request->description : '',
+                'start' => array(
+                    'dateTime' => date_format($started_at, 'c'),
+                    'timeZone' => config('app.timezone')
+                ),
+                'end' => array(
+                    'dateTime' => date_format($ended_at, 'c'),
+                    'timeZone' => config('app.timezone')
+                ),
+            ));
+
+            $extendedProperties = new Google_Service_Calendar_EventExtendedProperties();
+            $extendedProperties->setPrivate(['type' => $request->type]);
+            $newGoogleEvent->setExtendedProperties($extendedProperties);
+            $newGoogleEvent = $service->events->insert($calendar->google_id, $newGoogleEvent);
+
+            // Save new event data to DB
+            $newEvent = new Event([
+                'google_id' => $newGoogleEvent->id,
+                'name' => $newGoogleEvent->summary,
+                'type' => $newGoogleEvent->extendedProperties->getPrivate()['type'],
+                'description' => $newGoogleEvent->description,
+                'location' => $newGoogleEvent->location,
+                'status' => $newGoogleEvent->status,
+                'allday' => 0,
+                'started_at' => Carbon::parse($newGoogleEvent->start->dateTime)->setTimezone($newGoogleEvent->start->timeZone),
+                'ended_at' => Carbon::parse($newGoogleEvent->end->dateTime)->setTimezone($newGoogleEvent->end->timeZone),
+                'updated_data_at' => Carbon::parse($newGoogleEvent->updated)->setTimezone($newGoogleEvent->start->timeZone)
+            ]);
+            $calendar->events()->save($newEvent);
+            $calendar->touch();
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+//                    'started_at' => Carbon::parse($updatedEvent->start->dateTime)->setTimezone($updatedEvent->start->timeZone),
+//                    'ended_at' => Carbon::parse($updatedEvent->end->dateTime)->setTimezone($updatedEvent->end->timeZone),
+                    'event' => $newEvent,
+                    'message' => 'Event updated successfully'
+                ]
+            ]);
+
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                    'data' => [
+                        'message' => 'Request Error'
+                    ]
+                ]);
+            }
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function addSingleEventAction(Request $request): JsonResponse
     {
         $request->validate([
             'calendar_id' => 'required',
-            'event-start-date' => 'required',
-            'event-start-time-hours' => 'required',
-            'event-start-time-minutes' => 'required',
-            'event-start-time-ampm' => 'required',
-            'event-end-date' => 'required',
-            'event-end-time-hours' => 'required',
-            'event-end-time-minutes' => 'required',
-            'event-end-time-ampm' => 'required',
-            'event_location' => 'required',
             'event_type' => 'required',
-            'event_description' => 'required',
             'event_started_at' => 'required',
             'event_ended_at' => 'required'
         ]);
@@ -54,8 +160,8 @@ class EventsController extends Controller
 
             $newGoogleEvent = new Google_Service_Calendar_Event(array(
                 'summary' => 'Pezohi Event',
-                'location' => $request->event_location,
-                'description' => $request->event_description,
+                'location' => isset($request->event_location) ? $request->event_location : '',
+                'description' => isset($request->event_description) ? $request->event_description : '',
                 'start' => array(
                     'dateTime' => date_format($started_at, 'c'),
                     'timeZone' => config('app.timezone')
@@ -140,9 +246,7 @@ class EventsController extends Controller
             'endTimeHours' => 'required',
             'endTimeMinutes' => 'required',
             'endTimeAmPm' => 'required',
-            'location' => 'required',
-            'type' => 'required',
-            'description' => 'required'
+            'type' => 'required'
         ]);
 
         $event = Event::find($request->id);
@@ -190,7 +294,9 @@ class EventsController extends Controller
             $event->name = $updatedEvent->summary;
             $event->type = $updatedEvent->extendedProperties->getPrivate()['type'];
             $event->description =$updatedEvent->description;
+
             $event->location = $updatedEvent->location;
+
             $event->started_at = $this->parseDatetime($updatedEvent->start);
             $event->ended_at = $this->parseDatetime($updatedEvent->end);
             $event->updated_data_at = Carbon::parse($updatedEvent->updated)->setTimezone($updatedEvent->start->timeZone);
@@ -198,11 +304,6 @@ class EventsController extends Controller
 
             // Update event calendar
             $event->calendar->touch();
-
-            if ($this->isJSON($event->location)) {
-                $location = json_decode($event->location);
-                $event->location = $location->route.', '.$location->country;
-            }
 
             return response()->json([
                 'code' => 1,
@@ -227,30 +328,17 @@ class EventsController extends Controller
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
-            }
-
-
-
-
-// else if ($ex->getErrors()[0]['message']) {
-//                 return response()->json([
-//                     'code' => 404,
-//                     'data' => [
-//                         'message' => $ex->getErrors()[0]['message']
-//                     ]
-//                 ]);
-//             }
-
-            else {
+            } else {
 
 
                 return response()->json([
                     'code' => 0,
+                    'data' => [
+                        'message' => 'Request Error'
+                    ]
                 ]);
             }
         }
-
-        exit;
     }
 
     /**
@@ -289,8 +377,6 @@ class EventsController extends Controller
                     'calendarId' => $event->calendar->id
                 ]
             ]);
-
-
         } catch(\Exception $ex) {
             if ($ex->getCode() === 401) {
                 Auth::logout();
@@ -310,31 +396,48 @@ class EventsController extends Controller
                 ]);
             }
         }
-        /*
-         * $request->validate([
-            'calendar_id' => 'required'
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function cancelEventAction(Request $request): JsonResponse
+    {
+        $request->validate([
+            'event_id' => 'required'
         ]);
 
-        $calendar = Calendar::with('events')->find($request->calendar_id);
-        if (!$calendar) {
+        $event = Event::find($request->event_id);
+        if (!$event) {
             return response()->json([
-                'code' => 0
+                'code' => 404,
+                'data' => [
+                    'message' => 'Event not found'
+                ]
             ]);
         }
 
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
-            $service->calendars->delete($calendar->google_id);
+            $googleEvent = $service->events->get($event->calendar->google_id, $event->google_id);
+            $googleEvent->setStatus('cancelled');
+            $updatedEvent = $service->events->update($event->calendar->google_id, $googleEvent->getId(), $googleEvent);
 
-            // Delete calendar from DB
-            $calendar->delete();
+            // Update event in DB
+            $event->status = $updatedEvent->status;
+            $event->save();
+            $event->calendar->touch();
 
             return response()->json([
                 'code' => 1,
                 'data' => [
-                    'message' => 'Google calendar delete success'
+                    'message' => 'Google Event cancelled success',
+                    'calendarId' => $event->calendar->id
                 ]
             ]);
+
+
         } catch(\Exception $ex) {
             if ($ex->getCode() === 401) {
                 Auth::logout();
@@ -354,13 +457,7 @@ class EventsController extends Controller
                 ]);
             }
         }
-         *
-         *
-         *
-         *
-         * */
     }
-
 
     /**
      * @param $dateTime

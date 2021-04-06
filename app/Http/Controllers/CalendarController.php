@@ -15,7 +15,7 @@ class CalendarController extends Controller
         if (!$calendar) {
             return view('frontend.calendar', ['calendar' => '404']);
         }
-        
+
         // Get Calendar Updated Date by Events updated date
         $updated = NULL;
         foreach ($calendar->events as $event) {
@@ -36,16 +36,17 @@ class CalendarController extends Controller
         // Subscribe / Unsubscribe status
         $calendar->isSubscribed = FALSE;
         if (Auth::user()) {
-            foreach (Auth::user()->calendars() as $userCalendar) {
+            foreach(Auth::user()->calendars as $userCalendar) {
                 if ($userCalendar->google_id == $calendar->google_id) {
                     $calendar->isSubscribed = TRUE;
                 }
             }
         }
 
-        $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
 
-        return view('frontend.calendar', ['calendar' =>$calendar]);
+
+        $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
+        return view('frontend.calendar', ['calendar' =>$calendar, 'user' => Auth::user() ? Auth::user() : "{'status':'anonimous'}"]);
     }
 
     private function isJSON($string): bool

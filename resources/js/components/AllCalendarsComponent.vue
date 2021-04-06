@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByOwner">
-                                Owner
+                                Owner(Access Role)
                                 <i v-if="sortByOwnerDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
@@ -311,7 +311,7 @@
                             currentObj.requestSuccess = false;
                             currentObj.delete_event_id = null;
                             document.getElementById("event"+id).remove();
-                            location.reload();
+                            //location.reload();
                         } else {
                             currentObj.requestDanger = 'Request Error';
                         }

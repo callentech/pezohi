@@ -83,12 +83,16 @@ class SyncCalendars implements ShouldQueue
                     continue;
                 }
 
+                var_dump($googleCalendar);
+                var_dump($googleCalendar->accessRole);
+                echo "\n=========================================\n";
+
                 $this->user->calendars()->updateOrCreate(
                     [
                         'google_id' => $googleCalendar->id,
                     ],
                     [
-                        'access_role' => 'owner',
+                        'access_role' => $googleCalendar->accessRole,
                         'name' => $googleCalendar->summary,
                         'description' => $googleCalendar->description,
                         'color' => $googleCalendar->backgroundColor,
@@ -108,19 +112,6 @@ class SyncCalendars implements ShouldQueue
                     $eventsList = $service->events->listEvents($googleCalendar->id, $optParams);
                     foreach ($eventsList as $googleEvent) {
 
-                        // Delete Event
-//                        if ($googleEvent->status === 'cancelled') {
-//                            Event::where('google_id', $googleEvent->id)->delete();
-//                            continue;
-//                        }
-
-                        // Get event status
-//                        прошедшие ивенты (дата ивента+время > текущей) выдяются другим цветом и статусом = Over
-//                        отмененные/удаленные ивенты вычеркиваются, ряд имеет другой цвет и статус Cancelled/Deleted https://tppr.me/6yRrx
-//                        перенесенные ивенты (ивенты, где дата или время редактировались хотя бы раз, имеют статус Rescheduled
-
-
-
                         $calendar->events()->updateOrCreate(
                             [
                                 'google_id' => $googleEvent->id
@@ -138,6 +129,9 @@ class SyncCalendars implements ShouldQueue
                                 'updated_data_at' => Carbon::parse($googleEvent->updated)->setTimezone($googleEvent->start->timeZone)
                             ]
                         );
+
+
+
                     }
                     $eventsPageToken = $eventsList->getNextPageToken();
                 } while($eventsPageToken);

@@ -39,7 +39,7 @@
 	                    <i class="far fa-bell"></i> Subscribe ???
 	                </button> -->
 
-	                <button type="button" class="btn btn-outline-danger btn-sm" name="button">
+	                <button type="button" class="btn btn-outline-danger btn-sm" name="button" @click="showUnsubscribeCalendarModalAction">
 	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
 
@@ -65,12 +65,8 @@
 	                <button type="button" v-else class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDataForm()">
 	                    <i class="fas fa-angle-right"></i>
 	                </button>
-
 	            </div>
-
 		    </div>
-
-
 		</div>
 
 		<!-- Calendar details -->
@@ -79,12 +75,10 @@
 
 				<div class="row align-items-center">
 	                <div class="col-lg-6" >
-<!--	                	<div v-if="calendar.events.length > 5">-->
-<!--	                		1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>-->
-<!--	                	</div>-->
-
                         <div>
-                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#">View all</a>
+                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i>
+                            <a v-if="calendar.access_role === 'owner'" href="javascript:void(0)" @click="showEditCalendarModalAction(calendar.id)">View all</a>
+                            <a v-if="calendar.access_role === 'reader'" :href="calendar.publicUrl" target="_blank">View all</a>
                         </div>
 	                </div>
 
@@ -98,7 +92,7 @@
 	            	<div class="eventsDataFilters">
 	            		<div class="row">
 
-	            			<div class="col-2">
+	            			<div class="col-3">
 	            				<a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDate">
                                 	Event Date and Time
                                     <i v-if="sortByDateDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
@@ -136,7 +130,7 @@
                                 </a>
                             </div>
 
-                            <div class="col-2">
+                            <div class="col-1">
 	                        	<a href="javascript:void(0)" class="sort-link">
                                     Actions
                                 </a>
@@ -337,7 +331,7 @@
                                                 <vue-google-autocomplete
                                                     :id="'map'+editedEventData.id"
                                                     classname="form-control form-control-sm"
-                                                    name="event-location"
+                                                    name="event_location"
                                                     placeholder="Change Event Location"
                                                     v-on:placechanged="getAddressData"
                                                 >
@@ -372,7 +366,7 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="data">
-                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || requestProcess"><i class="far fa-save"></i> Save Event Data</button>
+                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="requestProcess"><i class="far fa-save"></i> Save Event Data</button>
                                             <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
                                         </div>
                                     </div>
@@ -421,6 +415,47 @@
 			</transition>
 		</div>
 		<!-- END Share Calendar Message modal -->
+
+        <!-- Confirm Delete Calendar -->
+        <div v-if="showConfirmUnsubscribeCalendarModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div id="confirmDeleteCalendarModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header text-white bg-danger">
+                                        <h5 class="modal-title w-100 text-center">Confirm unsubscribe from calendar</h5>
+                                        <button type="button" class="close" @click="hideConfirmUnsubscribeCalendarModal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p>You are about to unsubscribe from calendar, this procedure is irreversible.</p>
+                                        <p>Do you want to proceed?</p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button v-if="!requestProcess" type="button" class="btn btn-danger" @click="unsubscribeCalendar(calendar.id)">Process</button>
+                                        <button v-else class="btn btn-primary" type="button" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Loading...
+                                        </button>
+
+                                        <button type="button" class="btn btn-secondary" @click="hideConfirmUnsubscribeCalendarModal">Close</button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- END Confirm Delete Calendar Modal -->
 
 	</div>
 
@@ -509,6 +544,9 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                 showInfoModal: false,
 				infoModalHtml: '',
 
+                showConfirmUnsubscribeCalendarModal: false,
+
+
                 sortByDateDirection: 'desc',
                 sortByLocationDirection: 'desc',
                 sortByTypeDirection: 'desc',
@@ -519,22 +557,68 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 		},
 
 		computed:  {
-            newEventDataValid() {
-                let result = true;
-                if (!this.editedEventData.location || this.editedEventData.location === '') {
-                    result = false;
-                }
-                if (!this.editedEventData.description || this.editedEventData.description === '') {
-                    result = false;
-                }
-                return result;
-            }
+            // newEventDataValid() {
+            //     let result = true;
+            //     if (!this.editedEventData.location || this.editedEventData.location === '') {
+            //         result = false;
+            //     }
+            //     if (!this.editedEventData.description || this.editedEventData.description === '') {
+            //         result = false;
+            //     }
+            //     return result;
+            // }
 		},
 
 		methods: {
+            showUnsubscribeCalendarModalAction(id) {
+                // this.delete_calendar_id = id;
+                // jQuery('#confirmCalendarDelete').modal('show');
+
+                this.showConfirmUnsubscribeCalendarModal = true;
+            },
+            hideConfirmUnsubscribeCalendarModal: function() {
+                this.showConfirmUnsubscribeCalendarModal = false;
+            },
+            unsubscribeCalendar: function(id) {
+                let currentObj = this;
+                // Send request
+                axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    currentObj.requestProcess = true;
+                    currentObj.$parent.requestDanger = null;
+                    currentObj.$parent.requestSuccess = null;
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+
+                axios.post('/unsubscribe-calendar', {calendar_id: id})
+                    .then(function (response) {
+                        if (response.data.code === 401) {
+                            document.location.href = "/";
+                        } else if (response.data.code === 404) {
+                            currentObj.$parent.requestDanger = response.data.data.message;
+                        } else if (response.data.code === 1) {
+                            currentObj.$parent.requestSuccess = response.data.data.message;
+                            setTimeout(function () {
+                                currentObj.hideConfirmUnsubscribeCalendarModal();
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            currentObj.$parent.requestDanger = 'Request Error';
+                        }
+                    })
+                    .catch(function (error) {
+                        currentObj.$parent.requestError = 'Request Error';
+                    })
+                    .then(function () {
+                        currentObj.requestProcess = false;
+                    });
+            },
 
             getAddressData: function (addressData, placeResultData, id) {
-                this.editedEventData.location = JSON.stringify(addressData);
+                this.editedEventData.location = addressData.newVal;
             },
 
             assertEventDescriptionMaxChars: function() {
@@ -635,6 +719,8 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                 axios.interceptors.request.use(function (config) {
                     // Do something before request is sent
                     currentObj.requestProcess = true;
+                    currentObj.requestDanger = false;
+                    currentObj.requestSuccess = false;
                     return config;
                 }, function (error) {
                     // Do something with request error

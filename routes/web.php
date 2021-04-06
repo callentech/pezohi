@@ -37,8 +37,10 @@ Route::post('/delete-calendar', [App\Http\Controllers\CalendarsController::class
 /* Events Actions */
 //Route::post('/new-event', [App\Http\Controllers\EventsController::class, 'addEventAction'])->name('addEvent');
 Route::post('/new-single-event', [App\Http\Controllers\EventsController::class, 'addSingleEventAction'])->name('addSingleEvent');
+Route::post('/duplicate-single-event', [App\Http\Controllers\EventsController::class, 'duplicateSingleEventAction'])->name('duplicateSingleEvent');
 Route::post('/edit-single-event', [App\Http\Controllers\EventsController::class, 'editSingleEventAction'])->name('editSingleEvent');
 Route::post('/delete-event', [App\Http\Controllers\EventsController::class, 'deleteEventAction'])->name('deleteEvent');
+Route::post('/cancel-event', [App\Http\Controllers\EventsController::class, 'cancelEventAction'])->name('cancelEvent');
 
 /* Admin */
 Route::get('/admin-home', [App\Http\Controllers\AdminController::class, 'indexAction'])->name('adminHome')->middleware('admin');

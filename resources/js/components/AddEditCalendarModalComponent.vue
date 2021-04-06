@@ -56,7 +56,7 @@
                                                 <label>Events: {{ current_calendar.events.length }}</label>
                                                 <div class="card col-md-12">
                                                     <div class="card-body">
-                                                        <table class="table table-sm">
+                                                        <table class="table table-sm edited-event-data">
                                                             <thead>
                                                                 <tr>
                                                                     <th scope="col">Date</th>
@@ -80,7 +80,9 @@
                                                                         {{ event.location|sliceString }}
                                                                     </td>
                                                                     <td data-val="location" v-else>
-                                                                        <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
+                                                                        <a href="javascript:void(0)" title="Details" v-if="event.location != null" @click="showEventDetails($event, event.location, event.description)">
+                                                                            {{ event.location|sliceString }} <i class="fas fa-angle-down"></i>
+                                                                        </a>
                                                                     </td>
 
                                                                     <td data-val="type" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
@@ -93,8 +95,10 @@
                                                                     <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
                                                                         {{ event.description|sliceString }}
                                                                     </td>
-                                                                    <td data-val="type" v-else>
-                                                                        <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
+                                                                    <td data-val="description" v-else>
+                                                                        <a href="javascript:void(0)" title="Details" v-if="event.description != null" @click="showEventDetails($event, event.location, event.description)">
+                                                                            {{ event.description|sliceString }} <i class="fas fa-angle-down"></i>
+                                                                        </a>
                                                                     </td>
 
                                                                     <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-right event-cancelled">
@@ -107,8 +111,20 @@
                                                                     </td>
 
                                                                 </tr>
+
+                                                                <tr v-if="showEditedEventDetails" class="event-details-header">
+                                                                    <td colspan="8">Event details:</td>
+                                                                </tr>
+                                                                <tr v-if="showEditedEventDetails" class="event-details">
+                                                                    <td colspan="4">Location: {{ detailsEventLocation }}</td>
+                                                                    <td colspan="4">Notes: {{ detailsEventDescription }}</td>
+                                                                </tr>
+
+
                                                             </tbody>
                                                         </table>
+
+
 
 
                                                     </div>
@@ -291,16 +307,13 @@
                                                                 <div class="col-5">
                                                                     <div class="data">
                                                                         <div class="form-group">
-                                                                            <label><small>Location</small></label>
-<!--                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">-->
-                                                                                <vue-google-autocomplete
-                                                                                    :id="'map'+editedEventData.id"
-                                                                                    classname="form-control form-control-sm"
-                                                                                    name="event-location"
-                                                                                    placeholder="Change Event Location"
-                                                                                    v-on:placechanged="getAddressData"
-                                                                                >
-                                                                                </vue-google-autocomplete>
+                                                                            <label><small>Location: {{ editedEventData.location }}</small></label>
+                                                                            <vue-google-autocomplete
+                                                                                :id="'map'+editedEventData.id"
+                                                                                classname="form-control form-control-sm"
+                                                                                placeholder="Change Event Location"
+                                                                                v-on:inputChange="getAddressData"
+                                                                            ></vue-google-autocomplete>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -320,7 +333,7 @@
                                                                 <div class="col-5">
                                                                     <div class="data">
                                                                         <div class="form-group">
-                                                                            <label><small>Description</small></label>
+                                                                            <label><small>Description [max 150 symbols]</small></label>
                                                                             <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event-description">
                                                                         </div>
                                                                     </div>
@@ -333,7 +346,7 @@
                                                             <div class="row">
                                                                 <div class="col-4">
                                                                     <div class="data">
-                                                                        <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || formRequestProcess" @click="saveEvent"><i class="far fa-save"></i> Save Event Data</button>
+                                                                        <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="formRequestProcess" @click="saveEvent"><i class="far fa-save"></i> Save Event Data</button>
                                                                         <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="formRequestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
                                                                     </div>
                                                                 </div>
@@ -463,20 +476,33 @@
                                                                 </td>
 
                                                                 <td data-val="location">
-                                                                    <a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a>
+                                                                    <a href="javascript:void(0)" title="Details" v-if="event.location != null" @click="showEventDetails($event, event.location, event.description)">
+                                                                        {{ event.location|sliceString }} <i class="fas fa-angle-down"></i>
+                                                                    </a>
                                                                 </td>
+
                                                                 <td data-val="type">
                                                                     {{ event.type|capitalize }}
                                                                 </td>
                                                                 <td data-val="description">
-                                                                    <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
+                                                                    <a href="javascript:void(0)" title="Details" v-if="event.description != null" @click="showEventDetails($event, event.location, event.description)">
+                                                                        {{ event.description|sliceString }} <i class="fas fa-angle-down"></i>
+                                                                    </a>
                                                                 </td>
                                                                 <td class="text-right">
                                                                     <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
                                                                     <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
                                                                     <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>
                                                                 </td>
+                                                            <tr v-if="showEditedEventDetails" class="event-details-header">
+                                                                <td colspan="8">Event details:</td>
                                                             </tr>
+                                                            <tr v-if="showEditedEventDetails" class="event-details">
+                                                                <td colspan="4">Location: {{ detailsEventLocation }}</td>
+                                                                <td colspan="4">Notes: {{ detailsEventDescription }}</td>
+                                                            </tr>
+
+
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -659,16 +685,13 @@
                                                                 <div class="col-5">
                                                                     <div class="data">
                                                                         <div class="form-group">
-                                                                            <label><small>Location</small></label>
-<!--                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" max="150" name="event-location">-->
-                                                                                <vue-google-autocomplete
-                                                                                    :id="'map'"
-                                                                                    classname="form-control form-control-sm"
-                                                                                    name="event-location"
-                                                                                    placeholder="Change Event Location"
-                                                                                    v-on:placechanged="getAddressData"
-                                                                                >
-                                                                                </vue-google-autocomplete>
+                                                                            <label><small>Location: {{ editedEventData.location }}</small></label>
+                                                                            <vue-google-autocomplete
+                                                                                id="map"
+                                                                                classname="form-control form-control-sm"
+                                                                                placeholder="Change Event Location"
+                                                                                v-on:inputChange="getAddressData"
+                                                                            ></vue-google-autocomplete>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -686,7 +709,7 @@
                                                                 <div class="col-5">
                                                                     <div class="data">
                                                                         <div class="form-group">
-                                                                            <label><small>Description</small></label>
+                                                                            <label><small>Description [max 150 symbols]</small></label>
                                                                             <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event-description">
                                                                         </div>
                                                                     </div>
@@ -699,7 +722,7 @@
                                                             <div class="row">
                                                                 <div class="col-4">
                                                                     <div class="data">
-                                                                        <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || formRequestProcess" @click="saveEvent"><i class="far fa-save"></i> Save Event Data</button>
+                                                                        <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="formRequestProcess" @click="saveEvent"><i class="far fa-save"></i> Save Event Data</button>
                                                                         <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="formRequestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
                                                                     </div>
                                                                 </div>
@@ -1031,15 +1054,13 @@
                                                                     <div class="data">
                                                                         <div class="form-group">
                                                                             <label><small>Location</small></label>
-<!--                                                                            <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event-location">-->
-                                                                                <vue-google-autocomplete
-                                                                                    :id="'map'"
-                                                                                    classname="form-control form-control-sm"
-                                                                                    name="event-location"
-                                                                                    placeholder="Change Event Location"
-                                                                                    v-on:placechanged="getAddressData"
-                                                                                >
-                                                                                </vue-google-autocomplete>
+                                                                            <vue-google-autocomplete
+                                                                                ref="eventNewLocationAutocomplete"
+                                                                                id="map"
+                                                                                classname="form-control form-control-sm"
+                                                                                placeholder="Change Event Location"
+                                                                                v-on:inputChange="getAddressData"
+                                                                            ></vue-google-autocomplete>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1057,7 +1078,7 @@
                                                                 <div class="col-5">
                                                                     <div class="data">
                                                                         <div class="form-group">
-                                                                            <label><small>Description</small></label>
+                                                                            <label><small>Description [max 150 symbols]</small></label>
                                                                             <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event-description">
                                                                         </div>
                                                                     </div>
@@ -1070,7 +1091,7 @@
                                                             <div class="row">
                                                                 <div class="col-4">
                                                                     <div class="data">
-                                                                        <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || formRequestProcess" @click="saveEvent"><i class="far fa-save"></i> Save Event Data</button>
+                                                                        <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="formRequestProcess" @click="saveEvent"><i class="far fa-save"></i> Save Event Data</button>
                                                                         <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="formRequestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
                                                                     </div>
                                                                 </div>
@@ -1177,6 +1198,10 @@
 
                 showCancelModalAlert: false,
 
+                showEditedEventDetails: false,
+                detailsEventLocation: '',
+                detailsEventDescription: '',
+
 
                 new_calendar: {
                     user: {
@@ -1214,33 +1239,51 @@
         mounted() {
             this.csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             this.owner_email_address = document.querySelector('meta[name="current_user_email"]').getAttribute('content');
+
+
+
+
         },
 
 		computed:  {
-			newEventDataValid() {
-                let result = true;
-                if (!this.editedEventData.location || this.editedEventData.location === '') {
-                    result = false;
-                }
-                if (!this.editedEventData.description || this.editedEventData.description === '') {
-                    result = false;
-                }
-                return result;
-			},
+			// newEventDataValid() {
+            //     let result = true;
+            //     if (!this.editedEventData.location || this.editedEventData.location === '') {
+            //         result = false;
+            //     }
+            //     if (!this.editedEventData.description || this.editedEventData.description === '') {
+            //         result = false;
+            //     }
+            //     return result;
+			// },
 
 
 		},
 
 		methods: {
 
+
+
             getAddressData: function (addressData, placeResultData, id) {
-                this.editedEventData.location = JSON.stringify(addressData);
+                this.editedEventData.location = addressData.newVal;
             },
 
             assertEventDescriptionMaxChars: function() {
                 if (this.editedEventData.description.length > 150) {
                     this.editedEventData.description = this.editedEventData.description.substring(0, 150);
                 }
+            },
+
+            showEventDetails: function(event, location, description) {
+                event.stopPropagation();
+                this.showNewEventDataForm = false;
+                this.showEditedEventDetails = true;
+                this.detailsEventLocation = location;
+                this.detailsEventDescription = description;
+
+
+
+
             },
 
 		    // Edit calendar Methods
@@ -1366,6 +1409,9 @@
                     description: null
                 };
                 this.showNewEventDataForm = true;
+
+
+                this.showEditedEventDetails = false;
             },
             hideAddEventForm: function(event) {
                 event.preventDefault();
@@ -1471,6 +1517,7 @@
 
             // Add calendar Methods
             showAddCalendarModalAction: function() {
+                this.current_calendar.events = [];
                 this.calendar_name = '';
                 this.calendar_events = [];
                 this.showAddCalendarModal = true;
@@ -1664,23 +1711,6 @@
 
                 let currentEvent = this.current_calendar ? this.current_calendar.events[index] : this.new_calendar.events[index];
 
-                console.log(currentEvent);
-                // this.editedEventData = {
-                //     index: index,
-                //     id: null,
-                //     startDate: null,
-                //     startTimeHours: null,
-                //     startTimeMinutes: null,
-                //     startTimeAmPm: null,
-                //     endDate: null,
-                //     endTimeHours: null,
-                //     endTimeMinutes: null,
-                //     endTimeAmPm: null,
-                //     location: null,
-                //     type: null,
-                //     description: null
-                // };
-
                 this.editedEventData = {
                     index: index,
                     id: currentEvent.id,
@@ -1697,6 +1727,7 @@
                     description: currentEvent.description
                 };
                 this.showNewEventDataForm = true;
+                this.showEditedEventDetails = false;
             },
             getDateTime: function(date, hours, minutes, ampm) {
                 let dateArray = date.split ("/");
@@ -1715,8 +1746,6 @@
                 return result;
             },
 		},
-
-
 
 		filters: {
             formatHours: function (value) {
@@ -1765,11 +1794,15 @@
             },
 
             sliceString: function(value) {
-                let sliced = value.slice(0,10);
-                if (sliced.length < value.length) {
-                    sliced += '...';
+                if (value && value.length > 10) {
+                    let sliced = value.slice(0,10);
+                    if (sliced.length < value.length) {
+                        sliced += '...';
+                    }
+                    return sliced;
+                } else {
+                    return value;
                 }
-                return sliced;
             },
             date: function(date) {
                 let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();

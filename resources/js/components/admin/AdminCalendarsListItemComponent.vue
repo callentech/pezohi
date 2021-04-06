@@ -39,9 +39,9 @@
                         <i class="far fa-bell"></i> Subscribe ???
                     </button> -->
 
-                    <button type="button" class="btn btn-outline-danger btn-sm" name="button">
-                        <i class="far fa-bell"></i> Unsubscribe
-                    </button>
+<!--                    <button type="button" class="btn btn-outline-danger btn-sm" name="button">-->
+<!--                        <i class="far fa-bell"></i> Unsubscribe-->
+<!--                    </button>-->
 
                     <div class="dropdown-calendar-actions">
                         <button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDropdownActions()">
@@ -79,12 +79,9 @@
 
                 <div class="row align-items-center">
                     <div class="col-lg-6" >
-                        <!--	                	<div v-if="calendar.events.length > 5">-->
-                        <!--	                		1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#" class="btn btn-link">View all</a>-->
-                        <!--	                	</div>-->
-
                         <div>
-                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i> <a href="#">View all</a>
+                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i>
+                            <a href="javascript:void(0)" @click="showEditCalendarModalAction(calendar.id)">View all</a>
                         </div>
                     </div>
 
@@ -334,7 +331,15 @@
                                         <div class="data">
                                             <div class="form-group">
                                                 <label><small>Location</small></label>
-                                                <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event_location">
+<!--                                                <input type="text" v-model="editedEventData.location" class="form-control form-control-sm" name="event_location">-->
+                                                    <vue-google-autocomplete
+                                                        :id="'map'+editedEventData.id"
+                                                        classname="form-control form-control-sm"
+                                                        name="event-location"
+                                                        placeholder="Change Event Location"
+                                                        v-on:placechanged="getAddressData"
+                                                    >
+                                                    </vue-google-autocomplete>
                                             </div>
                                         </div>
                                     </div>
@@ -365,7 +370,7 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="data">
-                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || requestProcess"><i class="far fa-save"></i> Save Event Data</button>
+                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="requestProcess"><i class="far fa-save"></i> Save Event Data</button>
                                             <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
                                         </div>
                                     </div>
@@ -422,7 +427,7 @@
 <script>
 
 import datePicker from 'vue-bootstrap-datetimepicker';
-import DateRangePicker from 'vue2-daterange-picker'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
@@ -436,7 +441,7 @@ export default {
     components: {
         datePicker,
         //DateRangePicker
-        //VueGoogleAutocomplete
+        VueGoogleAutocomplete
     },
 
     data() {
@@ -513,19 +518,23 @@ export default {
     },
 
     computed:  {
-        newEventDataValid() {
-            let result = true;
-            if (!this.editedEventData.location || this.editedEventData.location === '') {
-                result = false;
-            }
-            if (!this.editedEventData.description || this.editedEventData.description === '') {
-                result = false;
-            }
-            return result;
-        }
+        // newEventDataValid() {
+        //     let result = true;
+        //     if (!this.editedEventData.location || this.editedEventData.location === '') {
+        //         result = false;
+        //     }
+        //     if (!this.editedEventData.description || this.editedEventData.description === '') {
+        //         result = false;
+        //     }
+        //     return result;
+        // }
     },
 
     methods: {
+
+        getAddressData: function (addressData, placeResultData, id) {
+            this.editedEventData.location = addressData.newVal;
+        },
 
         assertEventDescriptionMaxChars: function() {
             if (this.editedEventData.description.length > 150) {
@@ -620,6 +629,8 @@ export default {
             axios.interceptors.request.use(function (config) {
                 // Do something before request is sent
                 currentObj.requestProcess = true;
+                currentObj.requestDanger = false;
+                currentObj.requestSuccess = false;
                 return config;
             }, function (error) {
                 // Do something with request error
@@ -656,22 +667,6 @@ export default {
                 });
         },
 
-        /**
-         * When the location found
-         * @param {Object} addressData Data of the found location
-         * @param {Object} placeResultData PlaceResult object
-         * @param {String} id Input container ID
-         */
-        // getAddressData: function (addressData, placeResultData, id) {
-        //     this.address = addressData;
-        // }
-
-        // Sort events list methods
-        // sortCalendarsListBySummary: function() {
-        //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
-        //     this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
-        //     this.sortBySummaryDirection = direction;
-        // },
         sortEventsListByDate: function() {
             this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
             this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
@@ -716,6 +711,19 @@ export default {
             if (!value) return ''
             value = value.toString()
             return value.charAt(0).toUpperCase() + value.slice(1)
+        },
+
+        sliceString: function (value) {
+            if (value && value.length > 10) {
+                let sliced = value.slice(0, 10);
+                if (sliced.length < value.length) {
+                    sliced += '...';
+                }
+                return sliced;
+            } else {
+                return value;
+            }
+
         },
 
         formatDate: function(value) {

@@ -393,6 +393,8 @@ class CalendarsController extends Controller
             $createdCalendarListEntry = $service->calendarList->insert($calendarListEntry);
 
             // Sync calendars
+            Auth::user()->jobs_status = 'started';
+            Auth::user()->save();
             $this->dispatch(new SyncCalendars(Auth::user()));
 
             return response()->json([
@@ -403,6 +405,7 @@ class CalendarsController extends Controller
                 ]
             ]);
         } catch(\Exception $ex) {
+
             if ($ex->getCode() === 401) {
                 Auth::logout();
                 return response()->json([
@@ -412,7 +415,7 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 404,
                     'data' => [
-                        'message' => 'Google calendar or event not found'
+                        'message' => 'Google calendar not found or not have public access'
                     ]
                 ]);
             } else if ($ex->getErrors()[0]['message']) {
@@ -440,6 +443,7 @@ class CalendarsController extends Controller
             'calendar_id' => 'required'
         ]);
 
+
         $calendar = Calendar::with('events')->find($request->calendar_id);
         if (!$calendar) {
             return response()->json([
@@ -452,13 +456,19 @@ class CalendarsController extends Controller
 
             $service->calendarList->delete($calendar->google_id);
 
-            //$this->dispatch(new SyncCalendars(Auth::user()));
+            // Delete user calendar from DB
+            //$calendar->delete();
+
+            $calendar->where(['user_id' => Auth::user()->id, 'google_id' => $calendar->google_id])->delete();
+
+            Auth::user()->jobs_status = 'started';
+            Auth::user()->save();
+            $this->dispatch(new SyncCalendars(Auth::user()));
 
             return response()->json([
                 'code' => 1,
                 'data' => [
                     'message' => 'Unsubscribe success',
-
                 ]
             ]);
         } catch(\Exception $ex) {
@@ -471,7 +481,7 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 404,
                     'data' => [
-                        'message' => 'Google calendar or event not found'
+                        'message' => 'Google calendar not found or not have public access'
                     ]
                 ]);
             } else if ($ex->getErrors()[0]['message']) {
@@ -483,7 +493,7 @@ class CalendarsController extends Controller
                 ]);
             } else {
                 return response()->json([
-                    'code' => 0,
+                    'code' => 0
                 ]);
             }
         }

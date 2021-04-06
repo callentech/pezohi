@@ -42,7 +42,7 @@
 
 
 
-            <frontend-calendar-data-component :data="{{ $calendar }}"></frontend-calendar-data-component>
+            <frontend-calendar-data-component :data="{{ $calendar }}" :user="{{ $user }}"></frontend-calendar-data-component>
         </main>
 
     </div>

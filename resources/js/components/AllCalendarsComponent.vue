@@ -216,7 +216,7 @@
         },
 
         methods: {
-            
+
             applyCalendarsTypeFilter: function(typeFilter) {
                 this.calendarsTypesFilters.forEach(typeFilter => {
                     typeFilter.active = false;

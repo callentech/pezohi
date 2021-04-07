@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EventStatusNotify;
 use App\Models\Calendar;
 use App\Models\Event;
 use App\Services\Google;
@@ -11,9 +12,58 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class EventsController extends Controller
 {
+    /**
+     * @param $event
+     * @param $action
+     */
+    private function sendMainNotify($event, $action)
+    {
+        $params = [
+            'calendar' => $event->calendar,
+            'event' => $event,
+            'action' => $action,
+            'dateTime' => now()
+        ];
+        $calendars = Calendar::where('google_id', $event->calendar->google_id)->get();
+        foreach ($calendars as $calendar) {
+            Mail::to($calendar->user->email)->send(new EventStatusNotify($params));
+        }
+    }
+
+    public function testMailAction()
+    {
+
+
+        $event = Event::first();
+        $action = 'Cancelled';
+
+        $this->sendMainNotify($event, $action);
+
+
+
+        /*
+         * $calendar = Calendar::first();
+    $event = Event::first();
+    $params = [
+        'calendar' => $calendar,
+        'event' => $event,
+        'action' => 'Deleted',
+        'dateTime' => now()
+    ];
+
+    return new App\Mail\EventStatusNotify($params);
+         *
+         *
+         *
+         * */
+
+
+
+    }
     /**
      * @param Request $request
      * @return JsonResponse
@@ -305,6 +355,10 @@ class EventsController extends Controller
             // Update event calendar
             $event->calendar->touch();
 
+            // Send Mail to Calendar Shared and Owned users
+            $action = 'Updated';
+            $this->sendMainNotify($event, $action);
+
             return response()->json([
                 'code' => 1,
                 'data' => [
@@ -366,9 +420,13 @@ class EventsController extends Controller
            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
            $service->events->delete($event->calendar->google_id, $event->google_id);
 
-           // Delete event from DB
-           $event->calendar->touch();
-           $event->delete();
+            // Send Mail to Calendar Shared and Owned users
+            $action = 'Deleted';
+            $this->sendMainNotify($event, $action);
+
+            // Delete event from DB
+            $event->calendar->touch();
+            $event->delete();
 
             return response()->json([
                 'code' => 1,
@@ -423,6 +481,10 @@ class EventsController extends Controller
             $googleEvent = $service->events->get($event->calendar->google_id, $event->google_id);
             $googleEvent->setStatus('cancelled');
             $updatedEvent = $service->events->update($event->calendar->google_id, $googleEvent->getId(), $googleEvent);
+
+            // Send Mail to Calendar Shared and Owned users
+            $action = 'Cancelled';
+            $this->sendMainNotify($event, $action);
 
             // Update event in DB
             $event->status = $updatedEvent->status;

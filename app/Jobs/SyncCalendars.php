@@ -83,10 +83,6 @@ class SyncCalendars implements ShouldQueue
                     continue;
                 }
 
-                var_dump($googleCalendar);
-                var_dump($googleCalendar->accessRole);
-                echo "\n=========================================\n";
-
                 $this->user->calendars()->updateOrCreate(
                     [
                         'google_id' => $googleCalendar->id,

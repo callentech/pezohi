@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Calendar;
+use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -52,3 +54,21 @@ Route::post('google/webhook', [App\Http\Controllers\GoogleWebhookController::cla
 /* Subscribe to Calendar */
 Route::post('/subscribe-calendar', [App\Http\Controllers\CalendarsController::class, 'subscribeCalendarAction'])->name('subscribeCalendar');
 Route::post('/unsubscribe-calendar', [App\Http\Controllers\CalendarsController::class, 'unsubscribeCalendarAction'])->name('unsubscribeCalendar');
+
+
+Route::get('/test-mail', [App\Http\Controllers\EventsController::class, 'testMailAction'])->name('testMail');
+
+Route::get('/mail-preview', function() {
+
+    $calendar = Calendar::first();
+    $event = Event::first();
+    $params = [
+        'calendar' => $calendar,
+        'event' => $event,
+        'action' => 'Deleted',
+        'dateTime' => now()
+    ];
+
+    return new App\Mail\EventStatusNotify($params);
+});
+

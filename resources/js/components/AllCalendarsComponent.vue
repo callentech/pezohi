@@ -216,13 +216,28 @@
         },
 
         methods: {
+            
             applyCalendarsTypeFilter: function(typeFilter) {
-
                 this.calendarsTypesFilters.forEach(typeFilter => {
                     typeFilter.active = false;
                 });
-
                 typeFilter.active = true;
+
+                let sortedArray = [];
+                this.calendars.forEach(function(item) {
+                    if (typeFilter.val === 'all') {
+                        sortedArray.push(item);
+                    } else if (typeFilter.val === 'owned') {
+                        if (item.access_role === 'owner') {
+                            sortedArray.push(item);
+                        }
+                    } else if (typeFilter.val === 'shared') {
+                        if (item.access_role === 'reader') {
+                            sortedArray.push(item);
+                        }
+                    }
+                });
+                this.sortedCalendars = sortedArray;
             },
 
             showAddCalendarModal: function() {

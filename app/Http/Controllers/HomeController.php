@@ -60,7 +60,11 @@ class HomeController extends Controller
                 $calendar->owner = $calendar->user->email;
             } else {
                 $ownerCalendar = Calendar::where(['google_id' => $calendar->google_id, 'access_role' => 'owner'])->first();
-                $calendar->owner = $ownerCalendar->user->email;
+                if ($ownerCalendar) {
+                    $calendar->owner = $ownerCalendar->user->email;
+                } else {
+                    $calendar->owner = $calendar->user->email;
+                }
             }
         }
         $jobsStatus = Auth::user()->jobs_status;

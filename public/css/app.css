@@ -16389,6 +16389,154 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   line-height: 1.7em;
   font-size: 14px;
 }
+.filter-content .events-list {
+  /*
+
+   .over-status {
+
+              color: #0c5460;
+              background-color: #d1ecf1;
+              border-color: #bee5eb;
+
+              div {
+                  text-decoration: line-through;
+              }
+
+
+              .actions {
+                  text-decoration: none !important;
+              }
+
+              .fas.fa-angle-down {
+                  display: none;
+              }
+
+              a {
+                  color: #0c5460;
+              }
+
+              a:hover {
+                  text-decoration: none !important;
+                  color: #0c5460 !important;
+              }
+          }
+
+          .cancelled-status {
+              color: #856404;
+              background-color: #fff3cd;
+              border-color: #ffeeba;
+
+              div {
+                  text-decoration: line-through;
+              }
+
+              .actions {
+                  text-decoration: none !important;
+              }
+
+              .fas.fa-angle-down {
+                  display: none;
+              }
+
+              a {
+                  color: #856404;
+              }
+
+              a:hover {
+                  text-decoration: none !important;
+                  color: #856404 !important;
+              }
+          }
+
+          .deleted-status {
+              color: #721c24;
+              background-color: #f8d7da;
+              border-color: #f5c6cb;
+
+              div {
+                  text-decoration: line-through;
+              }
+
+              .actions {
+                  text-decoration: none !important;
+              }
+
+              .fas.fa-angle-down {
+                  display: none;
+              }
+
+              a {
+                  color: #721c24;
+              }
+
+              a:hover {
+                  text-decoration: none !important;
+                  color: #0c5460 !important;
+              }
+          }
+
+  */
+}
+.filter-content .events-list .event-datetime {
+  font-size: 12px;
+}
+.filter-content .events-list .over-status {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+.filter-content .events-list .over-status div {
+  text-decoration: line-through;
+}
+.filter-content .events-list .over-status .fas.fa-angle-down {
+  display: none;
+}
+.filter-content .events-list .over-status a {
+  color: #0c5460;
+}
+.filter-content .events-list .over-status a:hover {
+  text-decoration: none !important;
+  color: #0c5460 !important;
+}
+.filter-content .events-list .cancelled-status {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+.filter-content .events-list .cancelled-status div {
+  text-decoration: line-through;
+}
+.filter-content .events-list .cancelled-status .fas.fa-angle-down {
+  display: none;
+}
+.filter-content .events-list .cancelled-status a {
+  color: #856404;
+}
+.filter-content .events-list .cancelled-status a:hover {
+  text-decoration: none !important;
+  color: #856404 !important;
+}
+.filter-content .events-list .deleted-status {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+.filter-content .events-list .deleted-status div {
+  text-decoration: line-through;
+}
+.filter-content .events-list .deleted-status .fas.fa-angle-down {
+  display: none;
+}
+.filter-content .events-list .deleted-status a {
+  color: #721c24;
+}
+.filter-content .events-list .deleted-status a:hover {
+  text-decoration: none !important;
+  color: #0c5460 !important;
+}
+.filter-content .events-list .event-active .dropdown-event-actions {
+  display: inline-block;
+}
 .filter-content .calendars-list .card {
   padding: 5px 5px 5px 10px;
   margin-top: 10px;
@@ -16405,19 +16553,6 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
 }
 .filter-content .calendars-list .card .calendar-single .event-details .card-body {
   padding: 3px;
-}
-.filter-content .calendars-list .card .calendar-single.event-cancelled {
-  background: #ffe8e8;
-  border: 1px solid #ffb0b0;
-}
-.filter-content .calendars-list .card .calendar-single.event-cancelled .event-datetime {
-  font-size: 12px;
-}
-.filter-content .calendars-list .card .calendar-single.event-active .event-datetime {
-  font-size: 12px;
-}
-.filter-content .calendars-list .card .calendar-single.event-active .dropdown-event-actions {
-  display: inline-block;
 }
 .filter-content .calendars-list .card .calendar-single.event-active:hover {
   cursor: pointer;

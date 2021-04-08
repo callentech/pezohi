@@ -15,17 +15,10 @@
                 </div>
 
                 <div class="col-2">
-                    <span v-if="calendar.access_role == 'owner'">Me ({{ calendar.access_role }})</span>
-                    <span v-else>Other ({{ calendar.access_role }})</span>
+                    {{ calendar.owner }}
                 </div>
 
-                <!--	            <div class="col-2">-->
-                <!--	                <span v-if="calendar.updated == null"></span>-->
-                <!--                    <span v-else>{{ calendar.updated|formatDate }}</span>-->
-                <!--	            </div>-->
-
                 <div class="col-2">
-
                     {{ calendar.updated_at|formatDate }}
                 </div>
 
@@ -34,14 +27,6 @@
                     <button type="button" class="btn btn-primary btn-sm" @click="shareCalendar(calendar.publicUrl)">
                         <i class="fas fa-user-friends"></i> Share
                     </button>
-
-                    <!-- <button type="button" class="btn btn-outline-primary btn-sm" name="button">
-                        <i class="far fa-bell"></i> Subscribe ???
-                    </button> -->
-
-<!--                    <button type="button" class="btn btn-outline-danger btn-sm" name="button">-->
-<!--                        <i class="far fa-bell"></i> Unsubscribe-->
-<!--                    </button>-->
 
                     <div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
                         <button type="button" class="btn btn-light btn-sm pull-right btn-open">
@@ -95,7 +80,7 @@
                     <div class="eventsDataFilters">
                         <div class="row">
 
-                            <div class="col-2">
+                            <div class="col-3">
                                 <a href="javascript:void(0)" class="sort-link" @click="sortEventsListByDate">
                                     Event Date and Time
                                     <i v-if="sortByDateDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
@@ -133,7 +118,7 @@
                                 </a>
                             </div>
 
-                            <div class="col-2">
+                            <div class="col-1">
                                 <a href="javascript:void(0)" class="sort-link">
                                     Actions
                                 </a>

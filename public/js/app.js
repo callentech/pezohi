@@ -3411,7 +3411,7 @@ __webpack_require__.r(__webpack_exports__);
         endTimeMinutes: null,
         endTimeAmPm: null,
         location: null,
-        type: null,
+        type: 'game',
         description: null
       };
       this.showNewEventDataForm = true;
@@ -4225,15 +4225,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-google-autocomplete */ "./node_modules/vue-google-autocomplete/src/VueGoogleAutocomplete.vue");
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -6149,21 +6140,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-google-autocomplete */ "./node_modules/vue-google-autocomplete/src/VueGoogleAutocomplete.vue");
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -69409,13 +69385,9 @@ var render = function() {
                                                         {
                                                           staticClass: "row",
                                                           class: {
-                                                            "over-status": _vm
-                                                              .moment(
-                                                                event.ended_at
-                                                              )
-                                                              .isBefore(
-                                                                new Date()
-                                                              ),
+                                                            "over-status":
+                                                              event.status ===
+                                                              "over",
                                                             "cancelled-status":
                                                               event.status ===
                                                               "cancelled",
@@ -79311,7 +79283,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
-              "\n\n                    " +
+              "\n                    " +
                 _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
                 "\n                "
             )
@@ -81266,7 +81238,24 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(0)
+            _c("div", { staticClass: "col-1" }, [
+              _c("div", { staticClass: "data text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-danger btn-sm btn-open",
+                    attrs: { type: "button", title: "Delete" },
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation(),
+                          _vm.showConfirmEventDeleteModal(_vm.event.id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                )
+              ])
+            ])
           ])
         ]
       )
@@ -81282,7 +81271,7 @@ var render = function() {
             _c("div", { staticClass: "col-3" }, [
               _c("div", { staticClass: "data event-datetime" }, [
                 _vm._v(
-                  "\n                    " +
+                  "\n                " +
                     _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
                     " " +
                     _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
@@ -81290,7 +81279,7 @@ var render = function() {
                     _vm._s(_vm._f("formatDate")(_vm.event.ended_at)) +
                     " " +
                     _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
-                    "\n                "
+                    "\n            "
                 )
               ])
             ]),
@@ -81310,7 +81299,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        " +
+                      "\n                    " +
                         _vm._s(_vm._f("sliceString")(_vm.event.location)) +
                         " "
                     ),
@@ -81323,9 +81312,9 @@ var render = function() {
             _c("div", { staticClass: "col-2" }, [
               _c("div", { staticClass: "data" }, [
                 _vm._v(
-                  "\n                    " +
+                  "\n                " +
                     _vm._s(_vm._f("capitalize")(_vm.event.type)) +
-                    "\n                "
+                    "\n            "
                 )
               ])
             ]),
@@ -81345,7 +81334,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        " +
+                      "\n                    " +
                         _vm._s(_vm._f("sliceString")(_vm.event.description)) +
                         " "
                     ),
@@ -81417,7 +81406,7 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._m(1),
+                    _vm._m(0),
                     _vm._v(" "),
                     _c("transition", { attrs: { name: "fade" } }, [
                       _vm.showEventDropdownActions
@@ -81501,9 +81490,9 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body text-secondary" }, [
                           _vm._v(
-                            "\n                                " +
+                            "\n                            " +
                               _vm._s(_vm.event.location) +
-                              "\n                            "
+                              "\n                        "
                           )
                         ])
                       ]),
@@ -81520,9 +81509,9 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body text-secondary" }, [
                           _vm._v(
-                            "\n                                " +
+                            "\n                            " +
                               _vm._s(_vm.event.description) +
-                              "\n                            "
+                              "\n                        "
                           )
                         ])
                       ])
@@ -81551,14 +81540,6 @@ var render = function() {
       )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-1" }, [
-      _c("div", { staticClass: "data text-right" })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -82425,7 +82406,9 @@ var render = function() {
                   [
                     _c("strong", [_vm._v("Error!")]),
                     _vm._v(
-                      " " + _vm._s(_vm.requestDanger) + "\n                    "
+                      " " +
+                        _vm._s(_vm.requestDanger) +
+                        "\n                        "
                     ),
                     _vm._m(0)
                   ]
@@ -82445,7 +82428,7 @@ var render = function() {
                     _vm._v(
                       " " +
                         _vm._s(_vm.requestSuccess) +
-                        "\n                    "
+                        "\n                        "
                     ),
                     _vm._m(1)
                   ]
@@ -82466,29 +82449,6 @@ var render = function() {
           ])
         ])
       ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "filter-links" },
-        _vm._l(_vm.calendarsTypesFilters, function(typeFilter) {
-          return _c(
-            "button",
-            {
-              key: typeFilter.title,
-              staticClass: "btn btn-sm",
-              class: { active: typeFilter.active },
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  return _vm.applyCalendarsTypeFilter(typeFilter)
-                }
-              }
-            },
-            [_vm._v(_vm._s(typeFilter.title))]
-          )
-        }),
-        0
-      ),
       _vm._v(" "),
       _c(
         "div",
@@ -82514,7 +82474,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            Name\n                            "
+                          "\n                                Name\n                                "
                         ),
                         _vm.sortBySummaryDirection == "desc"
                           ? _c("i", {
@@ -82539,7 +82499,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            Events\n                            "
+                          "\n                                Events\n                                "
                         ),
                         _vm.sortByEventsDirection == "desc"
                           ? _c("i", {
@@ -82564,7 +82524,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            Owner\n                            "
+                          "\n                                Owner\n                                "
                         ),
                         _vm.sortByOwnerDirection == "desc"
                           ? _c("i", {
@@ -82589,7 +82549,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            Updated\n                            "
+                          "\n                                Updated\n                                "
                         ),
                         _vm.sortByUpdatedDirection == "desc"
                           ? _c("i", {
@@ -82639,7 +82599,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                    Calendars not found ...\n                "
+                          "\n                        Calendars not found ...\n                    "
                         )
                       ]
                     )
@@ -82746,7 +82706,7 @@ var render = function() {
                                         }
                                       }),
                                       _vm._v(
-                                        "\n                                        Loading...\n                                    "
+                                        "\n                                            Loading...\n                                        "
                                       )
                                     ]
                                   ),
@@ -82867,7 +82827,7 @@ var render = function() {
                                       }
                                     }),
                                     _vm._v(
-                                      "\n                                        Loading...\n                                    "
+                                      "\n                                            Loading...\n                                        "
                                     )
                                   ]
                                 ),
@@ -82976,18 +82936,16 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm.calendar.access_role == "owner"
-              ? _c("span", [
-                  _vm._v("Me (" + _vm._s(_vm.calendar.access_role) + ")")
-                ])
-              : _c("span", [
-                  _vm._v("Other (" + _vm._s(_vm.calendar.access_role) + ")")
-                ])
+            _vm._v(
+              "\n                    " +
+                _vm._s(_vm.calendar.owner) +
+                "\n                "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
-              "\n\n                    " +
+              "\n                    " +
                 _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
                 "\n                "
             )
@@ -83177,7 +83135,7 @@ var render = function() {
                 [
                   _c("div", { staticClass: "eventsDataFilters" }, [
                     _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-2" }, [
+                      _c("div", { staticClass: "col-3" }, [
                         _c(
                           "a",
                           {
@@ -83292,7 +83250,7 @@ var render = function() {
                         )
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-2" }, [
+                      _c("div", { staticClass: "col-1" }, [
                         _c(
                           "a",
                           {

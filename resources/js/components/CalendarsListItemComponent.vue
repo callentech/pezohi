@@ -15,18 +15,9 @@
 		        </div>
 
 		        <div class="col-2">
-<!--	                <span v-if="calendar.access_role == 'owner'">Me ({{ calendar.access_role }})</span>-->
-<!--	                <span v-else>Other ({{ calendar.access_role }})</span>-->
                     {{ calendar.owner }}
 	            </div>
-
-<!--	            <div class="col-2">-->
-<!--	                <span v-if="calendar.updated == null"></span>-->
-<!--                    <span v-else>{{ calendar.updated|formatDate }}</span>-->
-<!--	            </div>-->
-
                 <div class="col-2">
-
                     {{ calendar.updated_at|formatDate }}
                 </div>
 

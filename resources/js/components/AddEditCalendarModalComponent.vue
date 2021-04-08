@@ -71,7 +71,7 @@
                                                         <div  class="content">
                                                             <div v-for="(event, index) in current_calendar.events" :data-index="index">
 
-                                                                <div class="row" v-bind:class="{ 'over-status': moment(event.ended_at).isBefore(new Date()), 'cancelled-status': event.status === 'cancelled', 'deleted-status': event.status === 'deleted'  }">
+                                                                <div class="row" v-bind:class="{ 'over-status': event.status === 'over', 'cancelled-status': event.status === 'cancelled', 'deleted-status': event.status === 'deleted'  }">
                                                                     <div class="col-3 date">
                                                                         {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                     </div>
@@ -1603,7 +1603,7 @@
                     endTimeMinutes: null,
                     endTimeAmPm: null,
                     location: null,
-                    type: null,
+                    type: 'game',
                     description: null
                 };
                 this.showNewEventDataForm = true;

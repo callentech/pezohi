@@ -25,8 +25,15 @@ class AdminController extends Controller
                 unset($calendars[$key]);;
             }
             $calendar->eventsCount = count($calendar->events);
-            //$calendar->publicUrl = 'https://calendar.google.com/calendar/embed?src='.$calendar->google_id.'&ctz='.$calendar->timezone;
             $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
+
+            // Calendar owner
+            $ownerCalendar = Calendar::where(['google_id' => $calendar->google_id, 'access_role' => 'owner'])->first();
+            if ($ownerCalendar) {
+                $calendar->owner = $ownerCalendar->user->email;
+            } else {
+                $calendar->owner = $calendar->user->email;
+            }
         }
 
         $users = User::with('calendars')->get();

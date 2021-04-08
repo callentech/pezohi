@@ -31,9 +31,9 @@
             </div>
         </div>
 
-        <div class="filter-links">
-            <button v-for="typeFilter in calendarsTypesFilters" :key="typeFilter.title" @click="applyCalendarsTypeFilter(typeFilter)" type="button" class="btn btn-sm" :class="{ 'active': typeFilter.active }">{{ typeFilter.title }}</button>
-        </div>
+<!--        <div class="filter-links">-->
+<!--            <button v-for="typeFilter in calendarsTypesFilters" :key="typeFilter.title" @click="applyCalendarsTypeFilter(typeFilter)" type="button" class="btn btn-sm" :class="{ 'active': typeFilter.active }">{{ typeFilter.title }}</button>-->
+<!--        </div>-->
 
         <div class="filter-content">
             <div v-for="typeFilter in calendarsTypesFilters" class="item" :class="{ 'active': typeFilter.active }" :data-id="typeFilter.val">

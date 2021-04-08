@@ -32,7 +32,7 @@
 
             <div class="col-1">
                 <div class="data text-right">
-<!--                    <button title="Delete" class="btn btn-outline-danger btn-sm" @click="showConfirmEventDeleteModal(event.id)"><i class="far fa-trash-alt"></i></button>-->
+                    <button type="button" class="btn btn-outline-danger btn-sm btn-open" title="Delete" @click="$event.stopPropagation(), showConfirmEventDeleteModal(event.id);"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>

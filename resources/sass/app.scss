@@ -229,6 +229,7 @@ body #app nav.navbar .navbar-brand {
 }
 
 #editCalendarForm {
+
     .event-cancelled {
         background: #ffe8e8;
         border-top: 1px solid #ffb0b0;
@@ -329,6 +330,170 @@ body #app nav.navbar .navbar-brand {
 		}
 	}
 
+    .events-list {
+
+        .event-datetime {
+            font-size: 12px;
+        }
+
+        .over-status {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            div {
+                text-decoration: line-through;
+            }
+            .fas.fa-angle-down {
+                display: none;
+            }
+
+            a {
+                color: #0c5460;
+            }
+
+            a:hover {
+                text-decoration: none !important;
+                color: #0c5460 !important;
+            }
+        }
+
+        .cancelled-status {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            div {
+                text-decoration: line-through;
+            }
+            .fas.fa-angle-down {
+                display: none;
+            }
+
+            a {
+                color: #856404;
+            }
+
+            a:hover {
+                text-decoration: none !important;
+                color: #856404 !important;
+            }
+        }
+
+        .deleted-status {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            div {
+                text-decoration: line-through;
+            }
+            .fas.fa-angle-down {
+                display: none;
+            }
+
+            a {
+                color: #721c24;
+            }
+
+            a:hover {
+                text-decoration: none !important;
+                color: #0c5460 !important;
+            }
+        }
+
+        .event-active {
+
+
+            .dropdown-event-actions {
+                display: inline-block;
+            }
+        }
+        /*
+
+         .over-status {
+
+                    color: #0c5460;
+                    background-color: #d1ecf1;
+                    border-color: #bee5eb;
+
+                    div {
+                        text-decoration: line-through;
+                    }
+
+
+                    .actions {
+                        text-decoration: none !important;
+                    }
+
+                    .fas.fa-angle-down {
+                        display: none;
+                    }
+
+                    a {
+                        color: #0c5460;
+                    }
+
+                    a:hover {
+                        text-decoration: none !important;
+                        color: #0c5460 !important;
+                    }
+                }
+
+                .cancelled-status {
+                    color: #856404;
+                    background-color: #fff3cd;
+                    border-color: #ffeeba;
+
+                    div {
+                        text-decoration: line-through;
+                    }
+
+                    .actions {
+                        text-decoration: none !important;
+                    }
+
+                    .fas.fa-angle-down {
+                        display: none;
+                    }
+
+                    a {
+                        color: #856404;
+                    }
+
+                    a:hover {
+                        text-decoration: none !important;
+                        color: #856404 !important;
+                    }
+                }
+
+                .deleted-status {
+                    color: #721c24;
+                    background-color: #f8d7da;
+                    border-color: #f5c6cb;
+
+                    div {
+                        text-decoration: line-through;
+                    }
+
+                    .actions {
+                        text-decoration: none !important;
+                    }
+
+                    .fas.fa-angle-down {
+                        display: none;
+                    }
+
+                    a {
+                        color: #721c24;
+                    }
+
+                    a:hover {
+                        text-decoration: none !important;
+                        color: #0c5460 !important;
+                    }
+                }
+
+        */
+    }
+
 	.calendars-list .card {
 		padding: 5px 5px 5px 10px;
 		margin-top: 10px;
@@ -337,13 +502,6 @@ body #app nav.navbar .navbar-brand {
             .fa-angle-down {
                 vertical-align: middle;
             }
-
-            .events-list {
-                .row.event-cancelled {
-
-                }
-            }
-
             .event-status-badge {
                 font-size: 12px;
                 padding: 5px;
@@ -359,22 +517,8 @@ body #app nav.navbar .navbar-brand {
             }
         }
 
-        .calendar-single.event-cancelled {
-            background: #ffe8e8;
-            border: 1px solid #ffb0b0;
-            .event-datetime {
-                font-size: 12px;
-            }
-        }
-        .calendar-single.event-active {
-            .event-datetime {
-                font-size: 12px;
-            }
 
-            .dropdown-event-actions {
-                display: inline-block;
-            }
-        }
+
 
 
         .calendar-single.event-active:hover {

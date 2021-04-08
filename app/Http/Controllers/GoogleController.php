@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SyncCalendars;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
@@ -28,45 +29,18 @@ class GoogleController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @return RedirectResponse
      */
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(): RedirectResponse
     {
-
         session_start();
 
         try {
-
-            //$user = Socialite::driver('google')->stateless()->user();
-
-//            $account = Socialite::driver('google')
-//            // ->scopes(['openid', 'profile', 'email', \Google_Service_People::CONTACTS_READONLY])
-//            //->scopes(['openid', 'profile', 'email'])
-//            ->scopes([])
-//            ->with(["access_type" => "offline", "prompt" => "consent select_account"])
-//            ->user();
-
             $scopes = array(
                 'https://www.googleapis.com/auth/plus.business.manage'
             );
             $parameters = ['access_type' => 'offline', "prompt" => "consent select_account"];
             $account = Socialite::driver('google')->scopes($scopes)->with($parameters)->user();
-
-
-
-
-
-
-
-            // Set token for the Google API PHP Client
-            // $_SESSION['googleClientToken'] = [
-            //     'access_token' => $account->token,
-            //     'refresh_token' => $account->refreshToken,
-            //     'expires_in' => $account->expiresIn
-            // ];
-
-
-
 
             $user = User::updateOrCreate(
                 [
@@ -81,36 +55,15 @@ class GoogleController extends Controller
                 ]
             );
 
-//            \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-//            \DB::table('users')->truncate();
-//
-//            \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-
             Auth::login($user);
 
             $this->dispatch(new SyncCalendars(Auth::user()));
 
-
-
-            // $finduser = User::where('google_id', $user->id)->first();
-            // if ($finduser) {
-            //     Auth::login($finduser);
-            // } else {
-            //     $newUser = User::create([
-            //         'name' => $user->name,
-            //         'email' => $user->email,
-            //         'role' => 'owner',
-            //         'google_id'=> $user->id,
-            //         'password' => encrypt('123456dummy')
-            //     ]);
-            //     Auth::login($newUser);
-            // }
-
             return redirect()->intended('home');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            Auth::logout();
+            return redirect()->route('login');
         }
     }
 

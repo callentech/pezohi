@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByOwner">
-                                Owner(Access Role)
+                                Owner
                                 <i v-if="sortByOwnerDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>

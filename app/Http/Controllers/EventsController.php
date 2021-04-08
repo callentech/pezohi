@@ -34,36 +34,6 @@ class EventsController extends Controller
         }
     }
 
-    public function testMailAction()
-    {
-
-
-        $event = Event::first();
-        $action = 'Cancelled';
-
-        $this->sendMainNotify($event, $action);
-
-
-
-        /*
-         * $calendar = Calendar::first();
-    $event = Event::first();
-    $params = [
-        'calendar' => $calendar,
-        'event' => $event,
-        'action' => 'Deleted',
-        'dateTime' => now()
-    ];
-
-    return new App\Mail\EventStatusNotify($params);
-         *
-         *
-         *
-         * */
-
-
-
-    }
     /**
      * @param Request $request
      * @return JsonResponse

@@ -55,79 +55,177 @@
                                             <div class="form-row">
                                                 <label>Events: {{ current_calendar.events.length }}</label>
                                                 <div class="card col-md-12">
+
+
+                                                    <div id="editedCalendarEventsContent" class="card-body">
+
+                                                        <div class="row header">
+                                                            <div class="col-3">Date</div>
+                                                            <div class="col-2">Address</div>
+                                                            <div class="col-2">Event type</div>
+                                                            <div class="col-2">Notes</div>
+                                                            <div class="col-1">Status</div>
+                                                            <div class="col-2 text-right">Actions</div>
+                                                        </div>
+                                                        <hr>
+                                                        <div  class="content">
+                                                            <div v-for="(event, index) in current_calendar.events" :data-index="index">
+
+                                                                <div class="row" v-bind:class="{ 'over-status': moment(event.ended_at).isBefore(new Date()), 'cancelled-status': event.status === 'cancelled', 'deleted-status': event.status === 'deleted'  }">
+                                                                    <div class="col-3 date">
+                                                                        {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        <a href="javascript:void(0)" :title="event.location">
+                                                                            {{ event.location|sliceString }}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        {{ event.type|capitalize }}
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        <a href="javascript:void(0)" :title="event.description">
+                                                                            {{ event.description|sliceString }}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="col-1">
+                                                                        <span v-if="event.status === 'over'" class="badge badge-info event-status-badge">{{event.status}}</span>
+                                                                        <span v-else-if="event.status === 'confirmed'" class="badge badge-success event-status-badge">{{event.status}}</span>
+                                                                        <span v-else-if="event.status === 'cancelled'" class="badge badge-warning event-status-badge">{{event.status}}</span>
+                                                                        <span v-else-if="event.status === 'deleted'" class="badge badge-danger event-status-badge">{{event.status}}</span>
+                                                                    </div>
+
+                                                                    <div v-if="event.status === 'over'" class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else-if="event.status === 'cancelled'" class="col-2 text-right actions">
+                                                                        <button v-if="event.current_status" class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
+                                                                            <i class="fas fa-trash-restore-alt"></i>
+                                                                        </button>
+                                                                        <button v-else class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else-if="event.status === 'deleted'" class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
+                                                                            <i class="fas fa-trash-restore-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else-if="event.status === 'duplicated'" class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                            <i class="fas fa-pencil-alt"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeDuplicatedEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                            <i class="fas fa-pencil-alt"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Duplicate" @click="$event.preventDefault(), duplicateEditedEvent(index)">
+                                                                            <i class="far fa-clone"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Cancel" @click="$event.preventDefault(), markCancelEditedEvent(index)">
+                                                                            <i class="fas fa-ban"></i>
+                                                                        </button>
+
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!--
                                                     <div class="card-body">
                                                         <table class="table table-sm edited-event-data">
                                                             <thead>
-                                                                <tr>
-                                                                    <th scope="col">Date</th>
-                                                                    <th scope="col">Address</th>
-                                                                    <th scope="col">Event type</th>
-                                                                    <th scope="col">Notes</th>
-                                                                    <th scope="col" class="actions"></th>
-                                                                </tr>
+                                                            <tr>
+                                                                <th scope="col">Date</th>
+                                                                <th scope="col">Address</th>
+                                                                <th scope="col">Event type</th>
+                                                                <th scope="col">Notes</th>
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col" class="actions"></th>
+                                                            </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr v-for="(event, index) in current_calendar.events" :data-index="index">
+                                                            <tr v-for="(event, index) in current_calendar.events" :data-index="index">
 
-                                                                    <td data-val="startDate" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
-                                                                        {{ event.started_at|formatDate }}
-                                                                    </td>
-                                                                    <td data-val="startDate" v-else>
-                                                                        {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
-                                                                    </td>
 
-                                                                    <td data-val="location" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
-                                                                        {{ event.location|sliceString }}
-                                                                    </td>
-                                                                    <td data-val="location" v-else>
-                                                                        <a href="javascript:void(0)" title="Details" v-if="event.location != null" @click="showEventDetails($event, event.location, event.description)">
-                                                                            {{ event.location|sliceString }} <i class="fas fa-angle-down"></i>
-                                                                        </a>
-                                                                    </td>
+                                                                <td data-val="startDate" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                    {{ event.started_at|formatDate }}
+                                                                </td>
+                                                                <td data-val="startDate" v-else>
+                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
+                                                                </td>
 
-                                                                    <td data-val="type" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
-                                                                        {{ event.type|capitalize }}
-                                                                    </td>
-                                                                    <td data-val="type" v-else>
-                                                                        {{ event.type|capitalize }}
-                                                                    </td>
+                                                                <td data-val="location" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                    {{ event.location|sliceString }}
+                                                                </td>
+                                                                <td data-val="location" v-else>
+                                                                    <a href="javascript:void(0)" title="Details" v-if="event.location != null" @click="showEventDetails($event, event.location, event.description)">
+                                                                        {{ event.location|sliceString }} <i class="fas fa-angle-down"></i>
+                                                                    </a>
+                                                                </td>
 
-                                                                    <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
-                                                                        {{ event.description|sliceString }}
-                                                                    </td>
-                                                                    <td data-val="description" v-else>
-                                                                        <a href="javascript:void(0)" title="Details" v-if="event.description != null" @click="showEventDetails($event, event.location, event.description)">
-                                                                            {{ event.description|sliceString }} <i class="fas fa-angle-down"></i>
-                                                                        </a>
-                                                                    </td>
+                                                                <td data-val="type" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                    {{ event.type|capitalize }}
+                                                                </td>
+                                                                <td data-val="type" v-else>
+                                                                    {{ event.type|capitalize }}
+                                                                </td>
 
-                                                                    <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-right event-cancelled">
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
-                                                                    </td>
-                                                                    <td data-val="type" v-else class="text-right">
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
-                                                                    </td>
+                                                                <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-muted event-cancelled">
+                                                                    {{ event.description|sliceString }}
+                                                                </td>
+                                                                <td data-val="description" v-else>
+                                                                    <a href="javascript:void(0)" title="Details" v-if="event.description != null" @click="showEventDetails($event, event.location, event.description)">
+                                                                        {{ event.description|sliceString }} <i class="fas fa-angle-down"></i>
+                                                                    </a>
+                                                                </td>
 
-                                                                </tr>
+                                                                <td data-val="description" v-if="event.status === 'cancelled' || event.status === 'over' || moment(event.ended_at).isBefore(new Date())" class="text-right event-cancelled">
+                                                                    <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
+                                                                </td>
+                                                                <td data-val="type" v-else class="text-right">
+                                                                    <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
 
-                                                                <tr v-if="showEditedEventDetails" class="event-details-header">
-                                                                    <td colspan="8">Event details:</td>
-                                                                </tr>
-                                                                <tr v-if="showEditedEventDetails" class="event-details">
-                                                                    <td colspan="4">Location: {{ detailsEventLocation }}</td>
-                                                                    <td colspan="4">Notes: {{ detailsEventDescription }}</td>
-                                                                </tr>
+
+                                                                    <button class="btn btn-outline-secondary btn-sm" title="Duplicate" @click="$event.preventDefault(), duplicateEvent(index)"><i class="far fa-clone"></i></button>
+                                                                    <button class="btn btn-outline-secondary btn-sm" title="Cancel" @click="$event.preventDefault(), cancelEvent(index)"><i class="fas fa-ban"></i></button>
+                                                                    <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeEvent(index)"><i class="far fa-trash-alt"></i></button>
+
+
+                                                                </td>
+
+
+                                                            </tr>
+
+                                                            <tr  class="event-details-header">
+                                                                <td v-if="showEditedEventDetails" colspan="8">Event details:</td>
+                                                            </tr>
+                                                            <tr  class="event-details">
+                                                                <td v-if="showEditedEventDetails" colspan="4">Location: {{ detailsEventLocation }}</td>
+                                                                <td v-if="showEditedEventDetails" colspan="4">Notes: {{ detailsEventDescription }}</td>
+                                                            </tr>
 
 
                                                             </tbody>
                                                         </table>
-
-
-
-
                                                     </div>
+
+                                                -->
 
                                                     <transition name="fade">
                                                         <div class="card-footer" v-if="showNewEventDataForm">
@@ -458,6 +556,109 @@
                                             <div class="form-row">
                                                 <label>Events: {{ current_calendar.events.length }}</label>
                                                 <div class="card col-md-12">
+
+                                                    <div id="duplicatedCalendarEventsContent" class="card-body">
+
+                                                        <div class="row header">
+                                                            <div class="col-3">Date</div>
+                                                            <div class="col-2">Address</div>
+                                                            <div class="col-2">Event type</div>
+                                                            <div class="col-2">Notes</div>
+                                                            <div class="col-1">Status</div>
+                                                            <div class="col-2 text-right">Actions</div>
+                                                        </div>
+                                                        <hr>
+                                                        <div  class="content">
+                                                            <div v-for="(event, index) in current_calendar.events" :data-index="index">
+
+                                                                <div class="row" v-bind:class="{ 'over-status': moment(event.ended_at).isBefore(new Date()), 'cancelled-status': event.status === 'cancelled', 'deleted-status': event.status === 'deleted'  }">
+                                                                    <div class="col-3 date">
+                                                                        {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        <a href="javascript:void(0)" :title="event.location">
+                                                                            {{ event.location|sliceString }}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        {{ event.type|capitalize }}
+                                                                    </div>
+                                                                    <div class="col-2">
+                                                                        <a href="javascript:void(0)" :title="event.description">
+                                                                            {{ event.description|sliceString }}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="col-1">
+                                                                        <span v-if="event.status === 'over'" class="badge badge-info event-status-badge">{{event.status}}</span>
+                                                                        <span v-else-if="event.status === 'confirmed'" class="badge badge-success event-status-badge">{{event.status}}</span>
+                                                                        <span v-else-if="event.status === 'cancelled'" class="badge badge-warning event-status-badge">{{event.status}}</span>
+                                                                        <span v-else-if="event.status === 'deleted'" class="badge badge-danger event-status-badge">{{event.status}}</span>
+                                                                    </div>
+
+                                                                    <div class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                            <i class="fas fa-pencil-alt"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeDuplicatedEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <!--
+
+                                                                    <div v-if="event.status === 'over'" class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else-if="event.status === 'cancelled'" class="col-2 text-right actions">
+                                                                        <button v-if="event.current_status" class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
+                                                                            <i class="fas fa-trash-restore-alt"></i>
+                                                                        </button>
+                                                                        <button v-else class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else-if="event.status === 'deleted'" class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
+                                                                            <i class="fas fa-trash-restore-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else-if="event.status === 'duplicated'" class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                            <i class="fas fa-pencil-alt"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeDuplicatedEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div v-else class="col-2 text-right actions">
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                            <i class="fas fa-pencil-alt"></i>
+                                                                        </button>
+
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Duplicate" @click="$event.preventDefault(), duplicateEditedEvent(index)">
+                                                                            <i class="far fa-clone"></i>
+                                                                        </button>
+                                                                        <button class="btn btn-outline-secondary btn-sm" title="Cancel" @click="$event.preventDefault(), markCancelEditedEvent(index)">
+                                                                            <i class="fas fa-ban"></i>
+                                                                        </button>
+
+                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!--
                                                     <div class="card-body">
                                                         <table class="table table-sm">
                                                             <thead>
@@ -494,18 +695,18 @@
                                                                     <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
                                                                     <button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>
                                                                 </td>
-                                                            <tr v-if="showEditedEventDetails" class="event-details-header">
-                                                                <td colspan="8">Event details:</td>
+                                                            <tr class="event-details-header">
+                                                                <td v-if="showEditedEventDetails" colspan="8">Event details:</td>
                                                             </tr>
-                                                            <tr v-if="showEditedEventDetails" class="event-details">
-                                                                <td colspan="4">Location: {{ detailsEventLocation }}</td>
-                                                                <td colspan="4">Notes: {{ detailsEventDescription }}</td>
+                                                            <tr class="event-details">
+                                                                <td v-if="showEditedEventDetails" colspan="4">Location: {{ detailsEventLocation }}</td>
+                                                                <td v-if="showEditedEventDetails" colspan="4">Notes: {{ detailsEventDescription }}</td>
                                                             </tr>
-
 
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    -->
 
                                                     <transition name="fade">
                                                         <div class="card-footer" v-if="showNewEventDataForm">
@@ -866,7 +1067,7 @@
                                                                     <a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a>
                                                                 </td>
                                                                 <td class="text-right">
-                                                                    <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>
+                                                                    <!--<button class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEvent(index, $event)"><i class="fas fa-pencil-alt"></i></button>-->
                                                                     <button class="btn btn-outline-danger btn-sm" title="Delete" @click="removeEvent(index, $event)"><i class="far fa-trash-alt"></i></button>
                                                                     <!--<button class="btn btn-outline-secondary btn-sm" :disabled="event.id === 'new'" title="More" onclick="event.preventDefault(); return false;"><i class="fas fa-ellipsis-h"></i></button>-->
                                                                 </td>
@@ -1079,7 +1280,7 @@
                                                                     <div class="data">
                                                                         <div class="form-group">
                                                                             <label><small>Description [max 150 symbols]</small></label>
-                                                                            <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event-description">
+                                                                            <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" name="event-description">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1199,6 +1400,7 @@
                 showCancelModalAlert: false,
 
                 showEditedEventDetails: false,
+                showEventDropdownActions: false,
                 detailsEventLocation: '',
                 detailsEventDescription: '',
 
@@ -1277,13 +1479,9 @@
             showEventDetails: function(event, location, description) {
                 event.stopPropagation();
                 this.showNewEventDataForm = false;
-                this.showEditedEventDetails = true;
+                this.showEditedEventDetails = !this.showEditedEventDetails;
                 this.detailsEventLocation = location;
                 this.detailsEventDescription = description;
-
-
-
-
             },
 
 		    // Edit calendar Methods
@@ -1498,20 +1696,64 @@
                         type: null,
                         description: null
                     };
-
-                        this.showNewEventDataForm = false;
-                        this.requestSuccess = false;
-
+                    this.showNewEventDataForm = false;
+                    this.requestSuccess = false;
                 }
             },
-            removeEvent: function(index, event) {
-                event.preventDefault();
-                if (this.current_calendar) {
-                    this.current_calendar.events.splice(index, 1);
-                }
-                if (this.new_calendar) {
-                    this.new_calendar.events.splice(index, 1);
-                }
+
+            markRemoveEditedEvent: function(index) {
+                this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
+                this.current_calendar.events[index].status = 'deleted';
+                this.current_calendar.events[index].action = 'delete';
+
+                    //this.current_calendar.events.splice(index, 1);
+
+                // if (this.new_calendar) {
+                //     this.new_calendar.events.splice(index, 1);
+                // }
+            },
+            restoreEditedEventStatus: function(index) {
+               if(this.current_calendar.events[index].current_status) {
+                   this.current_calendar.events[index].status = this.current_calendar.events[index].current_status;
+               }
+            },
+            editEditedEvent: function(index) {
+
+                let currentEvent = this.current_calendar.events[index];
+                this.editedEventData = {
+                    index: index,
+                    id: currentEvent.id,
+                    startDate: this.$options.filters.formatDate(currentEvent.started_at),
+                    startTimeHours: this.$options.filters.formatHours(currentEvent.started_at),
+                    startTimeMinutes: this.$options.filters.formatMinutes(currentEvent.started_at),
+                    startTimeAmPm: this.$options.filters.formatAmPm(currentEvent.started_at),
+                    endDate: this.$options.filters.formatDate(currentEvent.ended_at),
+                    endTimeHours: this.$options.filters.formatHours(currentEvent.ended_at),
+                    endTimeMinutes: this.$options.filters.formatMinutes(currentEvent.ended_at),
+                    endTimeAmPm: this.$options.filters.formatAmPm(currentEvent.ended_at),
+                    location: currentEvent.location,
+                    type: currentEvent.type,
+                    description: currentEvent.description
+                };
+                this.showNewEventDataForm = true;
+            },
+            markCancelEditedEvent: function(index) {
+                this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
+                this.current_calendar.events[index].status = 'cancelled';
+                this.current_calendar.events[index].action = 'cancelled';
+            },
+
+            duplicateEditedEvent: function(index) {
+                let duplicatedEvent = this.current_calendar.events[index];
+                duplicatedEvent.status = 'duplicated';
+                duplicatedEvent.id = 'new';
+                this.current_calendar.events.push(duplicatedEvent);
+                console.log(this.current_calendar.events[index]);
+            },
+            removeDuplicatedEditedEvent: function(index) {
+                let eventsArray = this.current_calendar.events;
+                eventsArray.splice(index, 1);
+                this.current_calendar.events = eventsArray;
             },
             // END Edit calendar Methods
 
@@ -1705,6 +1947,7 @@
             },
             // END Duplicate Calendar Methods
 
+
             // Common methods
             editEvent: function(index, event) {
                 event.preventDefault();
@@ -1767,13 +2010,11 @@
                 let ampm = hours >= 12 ? 'PM' : 'AM';
                 return ampm;
             },
-
             capitalize: function (value) {
 				if (!value) return ''
 					value = value.toString()
 				return value.charAt(0).toUpperCase() + value.slice(1)
 			},
-
 			formatDate: function(value) {
 				let date = new Date(value);
 				//let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
@@ -1792,7 +2033,6 @@
                 minutes = minutes < 10 ? '0'+minutes : minutes;
                 return hours+':'+minutes+' '+ampm;
             },
-
             sliceString: function(value) {
                 if (value && value.length > 10) {
                     let sliced = value.slice(0,10);

@@ -16137,6 +16137,101 @@ div.pac-container {
   z-index: 10000 !important;
 }
 
+.btn-sm, .btn-group-sm > .btn {
+  padding: 0.1rem 0.3rem;
+}
+
+#editedCalendarEventsContent .header, #duplicatedCalendarEventsContent .header {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+#editedCalendarEventsContent .content, #duplicatedCalendarEventsContent .content {
+  max-height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+#editedCalendarEventsContent .content .badge, #duplicatedCalendarEventsContent .content .badge {
+  font-size: 12px;
+  padding: 5px;
+  width: 80px;
+}
+#editedCalendarEventsContent .content .row, #duplicatedCalendarEventsContent .content .row {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+  align-items: center;
+}
+#editedCalendarEventsContent .content .row .date, #duplicatedCalendarEventsContent .content .row .date {
+  font-size: 11px;
+}
+#editedCalendarEventsContent .content .row.over-status, #duplicatedCalendarEventsContent .content .row.over-status {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+#editedCalendarEventsContent .content .row.over-status div, #duplicatedCalendarEventsContent .content .row.over-status div {
+  text-decoration: line-through;
+}
+#editedCalendarEventsContent .content .row.over-status .actions, #duplicatedCalendarEventsContent .content .row.over-status .actions {
+  text-decoration: none !important;
+}
+#editedCalendarEventsContent .content .row.over-status .fas.fa-angle-down, #duplicatedCalendarEventsContent .content .row.over-status .fas.fa-angle-down {
+  display: none;
+}
+#editedCalendarEventsContent .content .row.over-status a, #duplicatedCalendarEventsContent .content .row.over-status a {
+  color: #0c5460;
+}
+#editedCalendarEventsContent .content .row.over-status a:hover, #duplicatedCalendarEventsContent .content .row.over-status a:hover {
+  text-decoration: none !important;
+  color: #0c5460 !important;
+}
+#editedCalendarEventsContent .content .row.cancelled-status, #duplicatedCalendarEventsContent .content .row.cancelled-status {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+#editedCalendarEventsContent .content .row.cancelled-status div, #duplicatedCalendarEventsContent .content .row.cancelled-status div {
+  text-decoration: line-through;
+}
+#editedCalendarEventsContent .content .row.cancelled-status .actions, #duplicatedCalendarEventsContent .content .row.cancelled-status .actions {
+  text-decoration: none !important;
+}
+#editedCalendarEventsContent .content .row.cancelled-status .fas.fa-angle-down, #duplicatedCalendarEventsContent .content .row.cancelled-status .fas.fa-angle-down {
+  display: none;
+}
+#editedCalendarEventsContent .content .row.cancelled-status a, #duplicatedCalendarEventsContent .content .row.cancelled-status a {
+  color: #856404;
+}
+#editedCalendarEventsContent .content .row.cancelled-status a:hover, #duplicatedCalendarEventsContent .content .row.cancelled-status a:hover {
+  text-decoration: none !important;
+  color: #856404 !important;
+}
+#editedCalendarEventsContent .content .row.deleted-status, #duplicatedCalendarEventsContent .content .row.deleted-status {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+#editedCalendarEventsContent .content .row.deleted-status div, #duplicatedCalendarEventsContent .content .row.deleted-status div {
+  text-decoration: line-through;
+}
+#editedCalendarEventsContent .content .row.deleted-status .actions, #duplicatedCalendarEventsContent .content .row.deleted-status .actions {
+  text-decoration: none !important;
+}
+#editedCalendarEventsContent .content .row.deleted-status .fas.fa-angle-down, #duplicatedCalendarEventsContent .content .row.deleted-status .fas.fa-angle-down {
+  display: none;
+}
+#editedCalendarEventsContent .content .row.deleted-status a, #duplicatedCalendarEventsContent .content .row.deleted-status a {
+  color: #721c24;
+}
+#editedCalendarEventsContent .content .row.deleted-status a:hover, #duplicatedCalendarEventsContent .content .row.deleted-status a:hover {
+  text-decoration: none !important;
+  color: #0c5460 !important;
+}
+
 body #app nav.navbar .navbar-brand {
   text-transform: lowercase;
   font-weight: 700;
@@ -16218,12 +16313,26 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   background: #3490dc;
   border-radius: 10px;
   color: #FFF;
+  height: 35px;
+}
+#editCalendarForm .event-details-header td {
+  padding-left: 25px;
+}
+#editCalendarForm .event-details {
+  height: 35px;
 }
 
 #duplicateCalendarModal .event-details-header {
   background: #3490dc;
   border-radius: 10px;
   color: #FFF;
+  height: 35px;
+}
+#duplicateCalendarModal .event-details-header td {
+  padding-left: 25px;
+}
+#duplicateCalendarModal .event-details {
+  height: 35px;
 }
 
 #editCalendarForm .daterangepicker, #duplicateCalendarForm .daterangepicker, #addCalendarForm .daterangepicker {
@@ -16301,6 +16410,15 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   background: #ffe8e8;
   border: 1px solid #ffb0b0;
 }
+.filter-content .calendars-list .card .calendar-single.event-cancelled .event-datetime {
+  font-size: 12px;
+}
+.filter-content .calendars-list .card .calendar-single.event-active .event-datetime {
+  font-size: 12px;
+}
+.filter-content .calendars-list .card .calendar-single.event-active .dropdown-event-actions {
+  display: inline-block;
+}
 .filter-content .calendars-list .card .calendar-single.event-active:hover {
   cursor: pointer;
   border: 1px solid #7deaab;
@@ -16332,7 +16450,7 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   flex-direction: column;
   position: absolute;
   right: 0;
-  top: 40px;
+  top: 25px;
   z-index: 1;
   background: #FFF;
   padding: 10px 10px 0 10px;
@@ -16349,8 +16467,8 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   display: flex;
   flex-direction: column;
   position: absolute;
-  right: 0;
-  top: 40px;
+  right: 15px;
+  top: 30px;
   z-index: 1;
   background: #FFF;
   padding: 10px 10px 0 10px;

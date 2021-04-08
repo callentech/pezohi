@@ -15,8 +15,9 @@
 		        </div>
 
 		        <div class="col-2">
-	                <span v-if="calendar.access_role == 'owner'">Me ({{ calendar.access_role }})</span>
-	                <span v-else>Other ({{ calendar.access_role }})</span>
+<!--	                <span v-if="calendar.access_role == 'owner'">Me ({{ calendar.access_role }})</span>-->
+<!--	                <span v-else>Other ({{ calendar.access_role }})</span>-->
+                    {{ calendar.owner }}
 	            </div>
 
 <!--	            <div class="col-2">-->
@@ -43,8 +44,8 @@
 	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
 
-					<div class="dropdown-calendar-actions">
-						<button type="button" class="btn btn-light btn-sm pull-right btn-open" @click="toggleCalendarDropdownActions()">
+					<div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
+						<button type="button" class="btn btn-light btn-sm pull-right btn-open" >
 							<i class="fas fa-ellipsis-v"></i>
 		                </button>
 
@@ -353,7 +354,7 @@
                                     <div class="col-5">
                                         <div class="data">
                                             <div class="form-group">
-                                                <label><small>Description</small></label>
+                                                <label><small>Description [max 150 symbols]</small></label>
                                                 <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="event_description">
                                             </div>
                                         </div>
@@ -640,21 +641,6 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 				}
 			},
 
-			toggleCalendarDropdownActions: function() {
-				if (this.showCalendarDropdownActions) {
-					this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
-					this.showBody = false;
-					this.showNewEventDataForm = false;
-				} else {
-					this.$parent.$refs.calendar.forEach((element) => {
-						element.showCalendarDropdownActions = false;
-						element.showBody = false;
-						element.showNewEventDataForm = false;
-					});
-					this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
-				}
-			},
-
             showEditCalendarModalAction: function(id) {
                 this.showBody = false;
                 this.showCalendarDropdownActions = false;
@@ -669,6 +655,7 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
 			showAddEventForm: function(calendar_id) {
 				this.calendar_id = calendar_id;
+				this.editedEventData.type = 'game';
 				this.showNewEventDataForm = true;
 			},
 

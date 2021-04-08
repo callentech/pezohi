@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Calendar;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
@@ -31,7 +32,7 @@ class HomeController extends Controller
         $calendars = Auth::user()->calendars()->with('events')->get();
         foreach ($calendars as $key => $calendar) {
             if ($calendar->google_id == Auth::user()->email) {
-                unset($calendars[$key]);;
+                unset($calendars[$key]);
             }
             $calendar->eventsCount = count($calendar->events);
 
@@ -53,6 +54,14 @@ class HomeController extends Controller
             }
             $calendar->updated = $updated;
             $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
+
+            // Calendar owner
+            if ($calendar->access_role == 'owner') {
+                $calendar->owner = $calendar->user->email;
+            } else {
+                $ownerCalendar = Calendar::where(['google_id' => $calendar->google_id, 'access_role' => 'owner'])->first();
+                $calendar->owner = $ownerCalendar->user->email;
+            }
         }
         $jobsStatus = Auth::user()->jobs_status;
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE), 'jobs_status' => $jobsStatus]);

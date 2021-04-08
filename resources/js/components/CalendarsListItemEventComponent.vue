@@ -2,7 +2,7 @@
     <div :id="'event'+event.id"  v-if="event.status === 'cancelled' || event.status === 'over'" class="card calendar-single event-cancelled">
         <div class="row text-muted">
             <div class="col-3">
-                <div class="data" title>
+                <div class="data event-datetime">
                     <del>{{ event.started_at|formatDate }}</del>
                 </div>
             </div>
@@ -41,7 +41,7 @@
     <div :id="'event'+event.id"  v-else class="card calendar-single event-active" @click="copyEventAddress">
         <div class="row">
             <div class="col-3">
-                <div class="data" title>
+                <div class="data event-datetime">
                     {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{
                         event.ended_at|formatDate
                     }} {{ event.ended_at|formatTime }}
@@ -67,19 +67,19 @@
                     </a>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-1">
                 <div class="data">
                     <span v-if="event.status === 'over'" class="badge badge-secondary event-status-badge">{{event.status}}</span>
                     <span v-if="event.status === 'confirmed'" class="badge badge-success event-status-badge">{{event.status}}</span>
                     <span v-if="event.status === 'tentative'" class="badge badge-warning event-status-badge">{{event.status}}</span>
                 </div>
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 <div class="data text-right">
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="$event.stopPropagation(), showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More" @click="toggleEventDropdownActions($event)"><i class="fas fa-ellipsis-v"></i></button>
-                    <div class="dropdown-event-actions">
+                    <div @mouseover="showEventDropdownActions=true" @mouseleave="showEventDropdownActions=false" class="dropdown-event-actions">
+                        <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i class="fas fa-ellipsis-v"></i></button>
                         <transition name="fade">
                             <div class="items" v-if="showEventDropdownActions">
                                 <a href="javascript:void(0)" @click="$event.stopPropagation(), duplicateEventAction();"><i class="far fa-clone"></i> Duplicate</a>
@@ -201,12 +201,6 @@ export default {
             .then(function() {
                 currentObj.requestProcess = false;
             });
-        },
-
-        toggleEventDropdownActions: function(event) {
-            event.stopPropagation();
-            event.preventDefault();
-            this.showEventDropdownActions = !this.showEventDropdownActions;
         },
 
         copyEventAddress: function() {

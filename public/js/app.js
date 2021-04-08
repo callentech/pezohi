@@ -3009,6 +3009,207 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3044,6 +3245,7 @@ __webpack_require__.r(__webpack_exports__);
       appendToBody: false,
       showCancelModalAlert: false,
       showEditedEventDetails: false,
+      showEventDropdownActions: false,
       detailsEventLocation: '',
       detailsEventDescription: '',
       new_calendar: {
@@ -3100,7 +3302,7 @@ __webpack_require__.r(__webpack_exports__);
     showEventDetails: function showEventDetails(event, location, description) {
       event.stopPropagation();
       this.showNewEventDataForm = false;
-      this.showEditedEventDetails = true;
+      this.showEditedEventDetails = !this.showEditedEventDetails;
       this.detailsEventLocation = location;
       this.detailsEventDescription = description;
     },
@@ -3300,16 +3502,54 @@ __webpack_require__.r(__webpack_exports__);
         this.requestSuccess = false;
       }
     },
-    removeEvent: function removeEvent(index, event) {
-      event.preventDefault();
-
-      if (this.current_calendar) {
-        this.current_calendar.events.splice(index, 1);
+    markRemoveEditedEvent: function markRemoveEditedEvent(index) {
+      this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
+      this.current_calendar.events[index].status = 'deleted';
+      this.current_calendar.events[index].action = 'delete'; //this.current_calendar.events.splice(index, 1);
+      // if (this.new_calendar) {
+      //     this.new_calendar.events.splice(index, 1);
+      // }
+    },
+    restoreEditedEventStatus: function restoreEditedEventStatus(index) {
+      if (this.current_calendar.events[index].current_status) {
+        this.current_calendar.events[index].status = this.current_calendar.events[index].current_status;
       }
-
-      if (this.new_calendar) {
-        this.new_calendar.events.splice(index, 1);
-      }
+    },
+    editEditedEvent: function editEditedEvent(index) {
+      var currentEvent = this.current_calendar.events[index];
+      this.editedEventData = {
+        index: index,
+        id: currentEvent.id,
+        startDate: this.$options.filters.formatDate(currentEvent.started_at),
+        startTimeHours: this.$options.filters.formatHours(currentEvent.started_at),
+        startTimeMinutes: this.$options.filters.formatMinutes(currentEvent.started_at),
+        startTimeAmPm: this.$options.filters.formatAmPm(currentEvent.started_at),
+        endDate: this.$options.filters.formatDate(currentEvent.ended_at),
+        endTimeHours: this.$options.filters.formatHours(currentEvent.ended_at),
+        endTimeMinutes: this.$options.filters.formatMinutes(currentEvent.ended_at),
+        endTimeAmPm: this.$options.filters.formatAmPm(currentEvent.ended_at),
+        location: currentEvent.location,
+        type: currentEvent.type,
+        description: currentEvent.description
+      };
+      this.showNewEventDataForm = true;
+    },
+    markCancelEditedEvent: function markCancelEditedEvent(index) {
+      this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
+      this.current_calendar.events[index].status = 'cancelled';
+      this.current_calendar.events[index].action = 'cancelled';
+    },
+    duplicateEditedEvent: function duplicateEditedEvent(index) {
+      var duplicatedEvent = this.current_calendar.events[index];
+      duplicatedEvent.status = 'duplicated';
+      duplicatedEvent.id = 'new';
+      this.current_calendar.events.push(duplicatedEvent);
+      console.log(this.current_calendar.events[index]);
+    },
+    removeDuplicatedEditedEvent: function removeDuplicatedEditedEvent(index) {
+      var eventsArray = this.current_calendar.events;
+      eventsArray.splice(index, 1);
+      this.current_calendar.events = eventsArray;
     },
     // END Edit calendar Methods
     // Add calendar Methods
@@ -4448,6 +4688,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -4595,20 +4836,6 @@ __webpack_require__.r(__webpack_exports__);
         this.showBody = !this.showBody;
       }
     },
-    toggleCalendarDropdownActions: function toggleCalendarDropdownActions() {
-      if (this.showCalendarDropdownActions) {
-        this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
-        this.showBody = false;
-        this.showNewEventDataForm = false;
-      } else {
-        this.$parent.$refs.calendar.forEach(function (element) {
-          element.showCalendarDropdownActions = false;
-          element.showBody = false;
-          element.showNewEventDataForm = false;
-        });
-        this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
-      }
-    },
     showEditCalendarModalAction: function showEditCalendarModalAction(id) {
       this.showBody = false;
       this.showCalendarDropdownActions = false;
@@ -4621,6 +4848,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     showAddEventForm: function showAddEventForm(calendar_id) {
       this.calendar_id = calendar_id;
+      this.editedEventData.type = 'game';
       this.showNewEventDataForm = true;
     },
     hideAddEventForm: function hideAddEventForm(event) {
@@ -5020,11 +5248,6 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function () {
         currentObj.requestProcess = false;
       });
-    },
-    toggleEventDropdownActions: function toggleEventDropdownActions(event) {
-      event.stopPropagation();
-      event.preventDefault();
-      this.showEventDropdownActions = !this.showEventDropdownActions;
     },
     copyEventAddress: function copyEventAddress() {
       if (this.showEditSingleEventForm || this.showEventDetails) {
@@ -6454,20 +6677,6 @@ __webpack_require__.r(__webpack_exports__);
           element.showCalendarDropdownActions = false;
         });
         this.showBody = !this.showBody;
-      }
-    },
-    toggleCalendarDropdownActions: function toggleCalendarDropdownActions() {
-      if (this.showCalendarDropdownActions) {
-        this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
-        this.showBody = false;
-        this.showNewEventDataForm = false;
-      } else {
-        this.$parent.$refs.calendar.forEach(function (element) {
-          element.showCalendarDropdownActions = false;
-          element.showBody = false;
-          element.showNewEventDataForm = false;
-        });
-        this.showCalendarDropdownActions = !this.showCalendarDropdownActions;
       }
     },
     showEditCalendarModalAction: function showEditCalendarModalAction(id) {
@@ -69127,630 +69336,645 @@ var render = function() {
                                       [
                                         _c(
                                           "div",
-                                          { staticClass: "card-body" },
+                                          {
+                                            staticClass: "card-body",
+                                            attrs: {
+                                              id: "editedCalendarEventsContent"
+                                            }
+                                          },
                                           [
                                             _c(
-                                              "table",
-                                              {
-                                                staticClass:
-                                                  "table table-sm edited-event-data"
-                                              },
+                                              "div",
+                                              { staticClass: "row header" },
                                               [
-                                                _c("thead", [
-                                                  _c("tr", [
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Date")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Address")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Event type")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Notes")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c("th", {
-                                                      staticClass: "actions",
-                                                      attrs: { scope: "col" }
-                                                    })
-                                                  ])
-                                                ]),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-3" },
+                                                  [_vm._v("Date")]
+                                                ),
                                                 _vm._v(" "),
                                                 _c(
-                                                  "tbody",
-                                                  [
-                                                    _vm._l(
-                                                      _vm.current_calendar
-                                                        .events,
-                                                      function(event, index) {
-                                                        return _c(
-                                                          "tr",
-                                                          {
-                                                            attrs: {
-                                                              "data-index": index
-                                                            }
-                                                          },
-                                                          [
-                                                            event.status ===
-                                                              "cancelled" ||
-                                                            event.status ===
-                                                              "over" ||
-                                                            _vm
-                                                              .moment(
-                                                                event.ended_at
-                                                              )
-                                                              .isBefore(
-                                                                new Date()
-                                                              )
-                                                              ? _c(
-                                                                  "td",
-                                                                  {
-                                                                    staticClass:
-                                                                      "text-muted event-cancelled",
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "startDate"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "\n                                                                        " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "formatDate"
-                                                                          )(
-                                                                            event.started_at
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                    "
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              : _c(
-                                                                  "td",
-                                                                  {
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "startDate"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "\n                                                                        " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "formatDate"
-                                                                          )(
-                                                                            event.started_at
-                                                                          )
-                                                                        ) +
-                                                                        " " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "formatTime"
-                                                                          )(
-                                                                            event.started_at
-                                                                          )
-                                                                        ) +
-                                                                        " - " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "formatDate"
-                                                                          )(
-                                                                            event.ended_at
-                                                                          )
-                                                                        ) +
-                                                                        " " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "formatTime"
-                                                                          )(
-                                                                            event.ended_at
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                    "
-                                                                    )
-                                                                  ]
-                                                                ),
-                                                            _vm._v(" "),
-                                                            event.status ===
-                                                              "cancelled" ||
-                                                            event.status ===
-                                                              "over" ||
-                                                            _vm
-                                                              .moment(
-                                                                event.ended_at
-                                                              )
-                                                              .isBefore(
-                                                                new Date()
-                                                              )
-                                                              ? _c(
-                                                                  "td",
-                                                                  {
-                                                                    staticClass:
-                                                                      "text-muted event-cancelled",
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "location"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "\n                                                                        " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "sliceString"
-                                                                          )(
-                                                                            event.location
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                    "
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              : _c(
-                                                                  "td",
-                                                                  {
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "location"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    event.location !=
-                                                                    null
-                                                                      ? _c(
-                                                                          "a",
-                                                                          {
-                                                                            attrs: {
-                                                                              href:
-                                                                                "javascript:void(0)",
-                                                                              title:
-                                                                                "Details"
-                                                                            },
-                                                                            on: {
-                                                                              click: function(
-                                                                                $event
-                                                                              ) {
-                                                                                return _vm.showEventDetails(
-                                                                                  $event,
-                                                                                  event.location,
-                                                                                  event.description
-                                                                                )
-                                                                              }
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "\n                                                                            " +
-                                                                                _vm._s(
-                                                                                  _vm._f(
-                                                                                    "sliceString"
-                                                                                  )(
-                                                                                    event.location
-                                                                                  )
-                                                                                ) +
-                                                                                " "
-                                                                            ),
-                                                                            _c(
-                                                                              "i",
-                                                                              {
-                                                                                staticClass:
-                                                                                  "fas fa-angle-down"
-                                                                              }
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      : _vm._e()
-                                                                  ]
-                                                                ),
-                                                            _vm._v(" "),
-                                                            event.status ===
-                                                              "cancelled" ||
-                                                            event.status ===
-                                                              "over" ||
-                                                            _vm
-                                                              .moment(
-                                                                event.ended_at
-                                                              )
-                                                              .isBefore(
-                                                                new Date()
-                                                              )
-                                                              ? _c(
-                                                                  "td",
-                                                                  {
-                                                                    staticClass:
-                                                                      "text-muted event-cancelled",
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "type"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "\n                                                                        " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "capitalize"
-                                                                          )(
-                                                                            event.type
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                    "
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              : _c(
-                                                                  "td",
-                                                                  {
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "type"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "\n                                                                        " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "capitalize"
-                                                                          )(
-                                                                            event.type
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                    "
-                                                                    )
-                                                                  ]
-                                                                ),
-                                                            _vm._v(" "),
-                                                            event.status ===
-                                                              "cancelled" ||
-                                                            event.status ===
-                                                              "over" ||
-                                                            _vm
-                                                              .moment(
-                                                                event.ended_at
-                                                              )
-                                                              .isBefore(
-                                                                new Date()
-                                                              )
-                                                              ? _c(
-                                                                  "td",
-                                                                  {
-                                                                    staticClass:
-                                                                      "text-muted event-cancelled",
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "description"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "\n                                                                        " +
-                                                                        _vm._s(
-                                                                          _vm._f(
-                                                                            "sliceString"
-                                                                          )(
-                                                                            event.description
-                                                                          )
-                                                                        ) +
-                                                                        "\n                                                                    "
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              : _c(
-                                                                  "td",
-                                                                  {
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "description"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    event.description !=
-                                                                    null
-                                                                      ? _c(
-                                                                          "a",
-                                                                          {
-                                                                            attrs: {
-                                                                              href:
-                                                                                "javascript:void(0)",
-                                                                              title:
-                                                                                "Details"
-                                                                            },
-                                                                            on: {
-                                                                              click: function(
-                                                                                $event
-                                                                              ) {
-                                                                                return _vm.showEventDetails(
-                                                                                  $event,
-                                                                                  event.location,
-                                                                                  event.description
-                                                                                )
-                                                                              }
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "\n                                                                            " +
-                                                                                _vm._s(
-                                                                                  _vm._f(
-                                                                                    "sliceString"
-                                                                                  )(
-                                                                                    event.description
-                                                                                  )
-                                                                                ) +
-                                                                                " "
-                                                                            ),
-                                                                            _c(
-                                                                              "i",
-                                                                              {
-                                                                                staticClass:
-                                                                                  "fas fa-angle-down"
-                                                                              }
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      : _vm._e()
-                                                                  ]
-                                                                ),
-                                                            _vm._v(" "),
-                                                            event.status ===
-                                                              "cancelled" ||
-                                                            event.status ===
-                                                              "over" ||
-                                                            _vm
-                                                              .moment(
-                                                                event.ended_at
-                                                              )
-                                                              .isBefore(
-                                                                new Date()
-                                                              )
-                                                              ? _c(
-                                                                  "td",
-                                                                  {
-                                                                    staticClass:
-                                                                      "text-right event-cancelled",
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "description"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "button",
-                                                                      {
-                                                                        staticClass:
-                                                                          "btn btn-outline-danger btn-sm",
-                                                                        attrs: {
-                                                                          title:
-                                                                            "Delete"
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            return _vm.removeEvent(
-                                                                              index,
-                                                                              $event
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "i",
-                                                                          {
-                                                                            staticClass:
-                                                                              "far fa-trash-alt"
-                                                                          }
-                                                                        )
-                                                                      ]
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              : _c(
-                                                                  "td",
-                                                                  {
-                                                                    staticClass:
-                                                                      "text-right",
-                                                                    attrs: {
-                                                                      "data-val":
-                                                                        "type"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "button",
-                                                                      {
-                                                                        staticClass:
-                                                                          "btn btn-outline-secondary btn-sm",
-                                                                        attrs: {
-                                                                          disabled:
-                                                                            event.id ===
-                                                                            "new",
-                                                                          title:
-                                                                            "Edit"
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            return _vm.editEvent(
-                                                                              index,
-                                                                              $event
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "i",
-                                                                          {
-                                                                            staticClass:
-                                                                              "fas fa-pencil-alt"
-                                                                          }
-                                                                        )
-                                                                      ]
-                                                                    ),
-                                                                    _vm._v(" "),
-                                                                    _c(
-                                                                      "button",
-                                                                      {
-                                                                        staticClass:
-                                                                          "btn btn-outline-secondary btn-sm",
-                                                                        attrs: {
-                                                                          disabled:
-                                                                            event.id ===
-                                                                            "new",
-                                                                          title:
-                                                                            "More",
-                                                                          onclick:
-                                                                            "event.preventDefault(); return false;"
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "i",
-                                                                          {
-                                                                            staticClass:
-                                                                              "fas fa-ellipsis-h"
-                                                                          }
-                                                                        )
-                                                                      ]
-                                                                    ),
-                                                                    _vm._v(" "),
-                                                                    _c(
-                                                                      "button",
-                                                                      {
-                                                                        staticClass:
-                                                                          "btn btn-outline-danger btn-sm",
-                                                                        attrs: {
-                                                                          title:
-                                                                            "Delete"
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            return _vm.removeEvent(
-                                                                              index,
-                                                                              $event
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "i",
-                                                                          {
-                                                                            staticClass:
-                                                                              "far fa-trash-alt"
-                                                                          }
-                                                                        )
-                                                                      ]
-                                                                    )
-                                                                  ]
-                                                                )
-                                                          ]
-                                                        )
-                                                      }
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _vm.showEditedEventDetails
-                                                      ? _c(
-                                                          "tr",
-                                                          {
-                                                            staticClass:
-                                                              "event-details-header"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  colspan: "8"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Event details:"
-                                                                )
-                                                              ]
-                                                            )
-                                                          ]
-                                                        )
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
-                                                    _vm.showEditedEventDetails
-                                                      ? _c(
-                                                          "tr",
-                                                          {
-                                                            staticClass:
-                                                              "event-details"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  colspan: "4"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Location: " +
-                                                                    _vm._s(
-                                                                      _vm.detailsEventLocation
-                                                                    )
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  colspan: "4"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Notes: " +
-                                                                    _vm._s(
-                                                                      _vm.detailsEventDescription
-                                                                    )
-                                                                )
-                                                              ]
-                                                            )
-                                                          ]
-                                                        )
-                                                      : _vm._e()
-                                                  ],
-                                                  2
+                                                  "div",
+                                                  { staticClass: "col-2" },
+                                                  [_vm._v("Address")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-2" },
+                                                  [_vm._v("Event type")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-2" },
+                                                  [_vm._v("Notes")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-1" },
+                                                  [_vm._v("Status")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "col-2 text-right"
+                                                  },
+                                                  [_vm._v("Actions")]
                                                 )
                                               ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("hr"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "content" },
+                                              _vm._l(
+                                                _vm.current_calendar.events,
+                                                function(event, index) {
+                                                  return _c(
+                                                    "div",
+                                                    {
+                                                      attrs: {
+                                                        "data-index": index
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass: "row",
+                                                          class: {
+                                                            "over-status": _vm
+                                                              .moment(
+                                                                event.ended_at
+                                                              )
+                                                              .isBefore(
+                                                                new Date()
+                                                              ),
+                                                            "cancelled-status":
+                                                              event.status ===
+                                                              "cancelled",
+                                                            "deleted-status":
+                                                              event.status ===
+                                                              "deleted"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-3 date"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                        " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " - " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                    "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.location
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "\n                                                                            " +
+                                                                      _vm._s(
+                                                                        _vm._f(
+                                                                          "sliceString"
+                                                                        )(
+                                                                          event.location
+                                                                        )
+                                                                      ) +
+                                                                      "\n                                                                        "
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                        " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "capitalize"
+                                                                    )(
+                                                                      event.type
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                    "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.description
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "\n                                                                            " +
+                                                                      _vm._s(
+                                                                        _vm._f(
+                                                                          "sliceString"
+                                                                        )(
+                                                                          event.description
+                                                                        )
+                                                                      ) +
+                                                                      "\n                                                                        "
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-1"
+                                                            },
+                                                            [
+                                                              event.status ===
+                                                              "over"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-info event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : event.status ===
+                                                                  "confirmed"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-success event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : event.status ===
+                                                                  "cancelled"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-warning event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : event.status ===
+                                                                  "deleted"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-danger event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e()
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          event.status ===
+                                                          "over"
+                                                            ? _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "col-2 text-right actions"
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-danger btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Delete"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.markRemoveEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "far fa-trash-alt"
+                                                                      })
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            : event.status ===
+                                                              "cancelled"
+                                                            ? _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "col-2 text-right actions"
+                                                                },
+                                                                [
+                                                                  event.current_status
+                                                                    ? _c(
+                                                                        "button",
+                                                                        {
+                                                                          staticClass:
+                                                                            "btn btn-outline-danger btn-sm",
+                                                                          attrs: {
+                                                                            title:
+                                                                              "Restore"
+                                                                          },
+                                                                          on: {
+                                                                            click: function(
+                                                                              $event
+                                                                            ) {
+                                                                              $event.preventDefault(),
+                                                                                _vm.restoreEditedEventStatus(
+                                                                                  index
+                                                                                )
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "i",
+                                                                            {
+                                                                              staticClass:
+                                                                                "fas fa-trash-restore-alt"
+                                                                            }
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    : _c(
+                                                                        "button",
+                                                                        {
+                                                                          staticClass:
+                                                                            "btn btn-outline-danger btn-sm",
+                                                                          attrs: {
+                                                                            title:
+                                                                              "Delete"
+                                                                          },
+                                                                          on: {
+                                                                            click: function(
+                                                                              $event
+                                                                            ) {
+                                                                              $event.preventDefault(),
+                                                                                _vm.markRemoveEditedEvent(
+                                                                                  index
+                                                                                )
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "i",
+                                                                            {
+                                                                              staticClass:
+                                                                                "far fa-trash-alt"
+                                                                            }
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                ]
+                                                              )
+                                                            : event.status ===
+                                                              "deleted"
+                                                            ? _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "col-2 text-right actions"
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-danger btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Restore"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.restoreEditedEventStatus(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "fas fa-trash-restore-alt"
+                                                                      })
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            : event.status ===
+                                                              "duplicated"
+                                                            ? _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "col-2 text-right actions"
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-secondary btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Edit"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.editEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "fas fa-pencil-alt"
+                                                                      })
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-danger btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Delete"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.removeDuplicatedEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "far fa-trash-alt"
+                                                                      })
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            : _c(
+                                                                "div",
+                                                                {
+                                                                  staticClass:
+                                                                    "col-2 text-right actions"
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-secondary btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Edit"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.editEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "fas fa-pencil-alt"
+                                                                      })
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-secondary btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Duplicate"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.duplicateEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "far fa-clone"
+                                                                      })
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-secondary btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Cancel"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.markCancelEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "fas fa-ban"
+                                                                      })
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "button",
+                                                                    {
+                                                                      staticClass:
+                                                                        "btn btn-outline-danger btn-sm",
+                                                                      attrs: {
+                                                                        title:
+                                                                          "Delete"
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          $event.preventDefault(),
+                                                                            _vm.markRemoveEditedEvent(
+                                                                              index
+                                                                            )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c("i", {
+                                                                        staticClass:
+                                                                          "far fa-trash-alt"
+                                                                      })
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                }
+                                              ),
+                                              0
                                             )
                                           ]
                                         ),
@@ -72506,419 +72730,376 @@ var render = function() {
                                       [
                                         _c(
                                           "div",
-                                          { staticClass: "card-body" },
+                                          {
+                                            staticClass: "card-body",
+                                            attrs: {
+                                              id:
+                                                "duplicatedCalendarEventsContent"
+                                            }
+                                          },
                                           [
                                             _c(
-                                              "table",
-                                              { staticClass: "table table-sm" },
+                                              "div",
+                                              { staticClass: "row header" },
                                               [
-                                                _c("thead", [
-                                                  _c("tr", [
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Date")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Address")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Event type")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "th",
-                                                      {
-                                                        attrs: { scope: "col" }
-                                                      },
-                                                      [_vm._v("Notes")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c("th", {
-                                                      staticClass: "actions",
-                                                      attrs: { scope: "col" }
-                                                    })
-                                                  ])
-                                                ]),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-3" },
+                                                  [_vm._v("Date")]
+                                                ),
                                                 _vm._v(" "),
                                                 _c(
-                                                  "tbody",
-                                                  [
-                                                    _vm._l(
-                                                      _vm.current_calendar
-                                                        .events,
-                                                      function(event, index) {
-                                                        return _c(
-                                                          "tr",
-                                                          {
-                                                            attrs: {
-                                                              "data-index": index
-                                                            }
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  "data-val":
-                                                                    "startDate"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "\n                                                                    " +
-                                                                    _vm._s(
-                                                                      _vm._f(
-                                                                        "formatDate"
-                                                                      )(
-                                                                        event.started_at
-                                                                      )
-                                                                    ) +
-                                                                    " " +
-                                                                    _vm._s(
-                                                                      _vm._f(
-                                                                        "formatTime"
-                                                                      )(
-                                                                        event.started_at
-                                                                      )
-                                                                    ) +
-                                                                    " - " +
-                                                                    _vm._s(
-                                                                      _vm._f(
-                                                                        "formatDate"
-                                                                      )(
-                                                                        event.ended_at
-                                                                      )
-                                                                    ) +
-                                                                    " " +
-                                                                    _vm._s(
-                                                                      _vm._f(
-                                                                        "formatTime"
-                                                                      )(
-                                                                        event.ended_at
-                                                                      )
-                                                                    ) +
-                                                                    "\n                                                                "
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  "data-val":
-                                                                    "location"
-                                                                }
-                                                              },
-                                                              [
-                                                                event.location !=
-                                                                null
-                                                                  ? _c(
-                                                                      "a",
-                                                                      {
-                                                                        attrs: {
-                                                                          href:
-                                                                            "javascript:void(0)",
-                                                                          title:
-                                                                            "Details"
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            return _vm.showEventDetails(
-                                                                              $event,
-                                                                              event.location,
-                                                                              event.description
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _vm._v(
-                                                                          "\n                                                                        " +
-                                                                            _vm._s(
-                                                                              _vm._f(
-                                                                                "sliceString"
-                                                                              )(
-                                                                                event.location
-                                                                              )
-                                                                            ) +
-                                                                            " "
-                                                                        ),
-                                                                        _c(
-                                                                          "i",
-                                                                          {
-                                                                            staticClass:
-                                                                              "fas fa-angle-down"
-                                                                          }
-                                                                        )
-                                                                      ]
-                                                                    )
-                                                                  : _vm._e()
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  "data-val":
-                                                                    "type"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "\n                                                                    " +
-                                                                    _vm._s(
-                                                                      _vm._f(
-                                                                        "capitalize"
-                                                                      )(
-                                                                        event.type
-                                                                      )
-                                                                    ) +
-                                                                    "\n                                                                "
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  "data-val":
-                                                                    "description"
-                                                                }
-                                                              },
-                                                              [
-                                                                event.description !=
-                                                                null
-                                                                  ? _c(
-                                                                      "a",
-                                                                      {
-                                                                        attrs: {
-                                                                          href:
-                                                                            "javascript:void(0)",
-                                                                          title:
-                                                                            "Details"
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            return _vm.showEventDetails(
-                                                                              $event,
-                                                                              event.location,
-                                                                              event.description
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _vm._v(
-                                                                          "\n                                                                        " +
-                                                                            _vm._s(
-                                                                              _vm._f(
-                                                                                "sliceString"
-                                                                              )(
-                                                                                event.description
-                                                                              )
-                                                                            ) +
-                                                                            " "
-                                                                        ),
-                                                                        _c(
-                                                                          "i",
-                                                                          {
-                                                                            staticClass:
-                                                                              "fas fa-angle-down"
-                                                                          }
-                                                                        )
-                                                                      ]
-                                                                    )
-                                                                  : _vm._e()
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                staticClass:
-                                                                  "text-right"
-                                                              },
-                                                              [
-                                                                _c(
-                                                                  "button",
-                                                                  {
-                                                                    staticClass:
-                                                                      "btn btn-outline-secondary btn-sm",
-                                                                    attrs: {
-                                                                      disabled:
-                                                                        event.id ===
-                                                                        "new",
-                                                                      title:
-                                                                        "Edit"
-                                                                    },
-                                                                    on: {
-                                                                      click: function(
-                                                                        $event
-                                                                      ) {
-                                                                        return _vm.editEvent(
-                                                                          index,
-                                                                          $event
-                                                                        )
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c("i", {
-                                                                      staticClass:
-                                                                        "fas fa-pencil-alt"
-                                                                    })
-                                                                  ]
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "button",
-                                                                  {
-                                                                    staticClass:
-                                                                      "btn btn-outline-danger btn-sm",
-                                                                    attrs: {
-                                                                      title:
-                                                                        "Delete"
-                                                                    },
-                                                                    on: {
-                                                                      click: function(
-                                                                        $event
-                                                                      ) {
-                                                                        return _vm.removeEvent(
-                                                                          index,
-                                                                          $event
-                                                                        )
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c("i", {
-                                                                      staticClass:
-                                                                        "far fa-trash-alt"
-                                                                    })
-                                                                  ]
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "button",
-                                                                  {
-                                                                    staticClass:
-                                                                      "btn btn-outline-secondary btn-sm",
-                                                                    attrs: {
-                                                                      disabled:
-                                                                        event.id ===
-                                                                        "new",
-                                                                      title:
-                                                                        "More",
-                                                                      onclick:
-                                                                        "event.preventDefault(); return false;"
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c("i", {
-                                                                      staticClass:
-                                                                        "fas fa-ellipsis-h"
-                                                                    })
-                                                                  ]
-                                                                )
-                                                              ]
-                                                            )
-                                                          ]
-                                                        )
-                                                      }
-                                                    ),
-                                                    _vm.showEditedEventDetails
-                                                      ? _c(
-                                                          "tr",
-                                                          {
-                                                            staticClass:
-                                                              "event-details-header"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  colspan: "8"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Event details:"
-                                                                )
-                                                              ]
-                                                            )
-                                                          ]
-                                                        )
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
-                                                    _vm.showEditedEventDetails
-                                                      ? _c(
-                                                          "tr",
-                                                          {
-                                                            staticClass:
-                                                              "event-details"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  colspan: "4"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Location: " +
-                                                                    _vm._s(
-                                                                      _vm.detailsEventLocation
-                                                                    )
-                                                                )
-                                                              ]
-                                                            ),
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "td",
-                                                              {
-                                                                attrs: {
-                                                                  colspan: "4"
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "Notes: " +
-                                                                    _vm._s(
-                                                                      _vm.detailsEventDescription
-                                                                    )
-                                                                )
-                                                              ]
-                                                            )
-                                                          ]
-                                                        )
-                                                      : _vm._e()
-                                                  ],
-                                                  2
+                                                  "div",
+                                                  { staticClass: "col-2" },
+                                                  [_vm._v("Address")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-2" },
+                                                  [_vm._v("Event type")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-2" },
+                                                  [_vm._v("Notes")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "col-1" },
+                                                  [_vm._v("Status")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "col-2 text-right"
+                                                  },
+                                                  [_vm._v("Actions")]
                                                 )
                                               ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("hr"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "content" },
+                                              _vm._l(
+                                                _vm.current_calendar.events,
+                                                function(event, index) {
+                                                  return _c(
+                                                    "div",
+                                                    {
+                                                      attrs: {
+                                                        "data-index": index
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass: "row",
+                                                          class: {
+                                                            "over-status": _vm
+                                                              .moment(
+                                                                event.ended_at
+                                                              )
+                                                              .isBefore(
+                                                                new Date()
+                                                              ),
+                                                            "cancelled-status":
+                                                              event.status ===
+                                                              "cancelled",
+                                                            "deleted-status":
+                                                              event.status ===
+                                                              "deleted"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-3 date"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                        " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.started_at
+                                                                    )
+                                                                  ) +
+                                                                  " - " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatDate"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  " " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "formatTime"
+                                                                    )(
+                                                                      event.ended_at
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                    "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.location
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "\n                                                                            " +
+                                                                      _vm._s(
+                                                                        _vm._f(
+                                                                          "sliceString"
+                                                                        )(
+                                                                          event.location
+                                                                        )
+                                                                      ) +
+                                                                      "\n                                                                        "
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                                                        " +
+                                                                  _vm._s(
+                                                                    _vm._f(
+                                                                      "capitalize"
+                                                                    )(
+                                                                      event.type
+                                                                    )
+                                                                  ) +
+                                                                  "\n                                                                    "
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "javascript:void(0)",
+                                                                    title:
+                                                                      event.description
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "\n                                                                            " +
+                                                                      _vm._s(
+                                                                        _vm._f(
+                                                                          "sliceString"
+                                                                        )(
+                                                                          event.description
+                                                                        )
+                                                                      ) +
+                                                                      "\n                                                                        "
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-1"
+                                                            },
+                                                            [
+                                                              event.status ===
+                                                              "over"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-info event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : event.status ===
+                                                                  "confirmed"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-success event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : event.status ===
+                                                                  "cancelled"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-warning event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : event.status ===
+                                                                  "deleted"
+                                                                ? _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "badge badge-danger event-status-badge"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          event.status
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                : _vm._e()
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "col-2 text-right actions"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "button",
+                                                                {
+                                                                  staticClass:
+                                                                    "btn btn-outline-secondary btn-sm",
+                                                                  attrs: {
+                                                                    title:
+                                                                      "Edit"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      $event.preventDefault(),
+                                                                        _vm.editEditedEvent(
+                                                                          index
+                                                                        )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("i", {
+                                                                    staticClass:
+                                                                      "fas fa-pencil-alt"
+                                                                  })
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "button",
+                                                                {
+                                                                  staticClass:
+                                                                    "btn btn-outline-danger btn-sm",
+                                                                  attrs: {
+                                                                    title:
+                                                                      "Delete"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      $event.preventDefault(),
+                                                                        _vm.removeDuplicatedEditedEvent(
+                                                                          index
+                                                                        )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c("i", {
+                                                                    staticClass:
+                                                                      "far fa-trash-alt"
+                                                                  })
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                }
+                                              ),
+                                              0
                                             )
                                           ]
                                         ),
@@ -75936,34 +76117,6 @@ var render = function() {
                                                                 "button",
                                                                 {
                                                                   staticClass:
-                                                                    "btn btn-outline-secondary btn-sm",
-                                                                  attrs: {
-                                                                    title:
-                                                                      "Edit"
-                                                                  },
-                                                                  on: {
-                                                                    click: function(
-                                                                      $event
-                                                                    ) {
-                                                                      return _vm.editEvent(
-                                                                        index,
-                                                                        $event
-                                                                      )
-                                                                    }
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _c("i", {
-                                                                    staticClass:
-                                                                      "fas fa-pencil-alt"
-                                                                  })
-                                                                ]
-                                                              ),
-                                                              _vm._v(" "),
-                                                              _c(
-                                                                "button",
-                                                                {
-                                                                  staticClass:
                                                                     "btn btn-outline-danger btn-sm",
                                                                   attrs: {
                                                                     title:
@@ -78213,27 +78366,24 @@ var render = function() {
                                                                               .description
                                                                         },
                                                                         on: {
-                                                                          input: [
-                                                                            function(
+                                                                          input: function(
+                                                                            $event
+                                                                          ) {
+                                                                            if (
                                                                               $event
+                                                                                .target
+                                                                                .composing
                                                                             ) {
-                                                                              if (
-                                                                                $event
-                                                                                  .target
-                                                                                  .composing
-                                                                              ) {
-                                                                                return
-                                                                              }
-                                                                              _vm.$set(
-                                                                                _vm.editedEventData,
-                                                                                "description",
-                                                                                $event
-                                                                                  .target
-                                                                                  .value
-                                                                              )
-                                                                            },
-                                                                            _vm.assertEventDescriptionMaxChars
-                                                                          ]
+                                                                              return
+                                                                            }
+                                                                            _vm.$set(
+                                                                              _vm.editedEventData,
+                                                                              "description",
+                                                                              $event
+                                                                                .target
+                                                                                .value
+                                                                            )
+                                                                          }
                                                                         }
                                                                       }
                                                                     )
@@ -78740,7 +78890,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            Owner(Access Role)\n                            "
+                          "\n                            Owner\n                            "
                         ),
                         _vm.sortByOwnerDirection == "desc"
                           ? _c("i", {
@@ -79152,13 +79302,11 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
-            _vm.calendar.access_role == "owner"
-              ? _c("span", [
-                  _vm._v("Me (" + _vm._s(_vm.calendar.access_role) + ")")
-                ])
-              : _c("span", [
-                  _vm._v("Other (" + _vm._s(_vm.calendar.access_role) + ")")
-                ])
+            _vm._v(
+              "\n                    " +
+                _vm._s(_vm.calendar.owner) +
+                "\n\t            "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
@@ -79202,21 +79350,19 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "dropdown-calendar-actions" },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-light btn-sm pull-right btn-open",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.toggleCalendarDropdownActions()
-                      }
-                    }
+              {
+                staticClass: "dropdown-calendar-actions",
+                on: {
+                  mouseover: function($event) {
+                    _vm.showCalendarDropdownActions = true
                   },
-                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
-                ),
+                  mouseleave: function($event) {
+                    _vm.showCalendarDropdownActions = false
+                  }
+                }
+              },
+              [
+                _vm._m(0),
                 _vm._v(" "),
                 _c("transition", { attrs: { name: "fade" } }, [
                   _vm.showCalendarDropdownActions
@@ -80674,7 +80820,11 @@ var render = function() {
                                   _c("div", { staticClass: "data" }, [
                                     _c("div", { staticClass: "form-group" }, [
                                       _c("label", [
-                                        _c("small", [_vm._v("Description")])
+                                        _c("small", [
+                                          _vm._v(
+                                            "Description [max 150 symbols]"
+                                          )
+                                        ])
                                       ]),
                                       _vm._v(" "),
                                       _c("input", {
@@ -81028,7 +81178,21 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-light btn-sm pull-right btn-open",
+        attrs: { type: "button" }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -81061,7 +81225,7 @@ var render = function() {
         [
           _c("div", { staticClass: "row text-muted" }, [
             _c("div", { staticClass: "col-3" }, [
-              _c("div", { staticClass: "data", attrs: { title: "" } }, [
+              _c("div", { staticClass: "data event-datetime" }, [
                 _c("del", [
                   _vm._v(_vm._s(_vm._f("formatDate")(_vm.event.started_at)))
                 ])
@@ -81116,7 +81280,7 @@ var render = function() {
         [
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-3" }, [
-              _c("div", { staticClass: "data", attrs: { title: "" } }, [
+              _c("div", { staticClass: "data event-datetime" }, [
                 _vm._v(
                   "\n                    " +
                     _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
@@ -81191,7 +81355,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-2" }, [
+            _c("div", { staticClass: "col-1" }, [
               _c("div", { staticClass: "data" }, [
                 _vm.event.status === "over"
                   ? _c(
@@ -81221,7 +81385,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-1" }, [
+            _c("div", { staticClass: "col-2" }, [
               _c("div", { staticClass: "data text-right" }, [
                 _c(
                   "button",
@@ -81240,24 +81404,21 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c(
-                  "button",
+                  "div",
                   {
-                    staticClass:
-                      "btn btn-outline-primary btn-sm pull-right btn-open",
-                    attrs: { type: "button", title: "More" },
+                    staticClass: "dropdown-event-actions",
                     on: {
-                      click: function($event) {
-                        return _vm.toggleEventDropdownActions($event)
+                      mouseover: function($event) {
+                        _vm.showEventDropdownActions = true
+                      },
+                      mouseleave: function($event) {
+                        _vm.showEventDropdownActions = false
                       }
                     }
                   },
-                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "dropdown-event-actions" },
                   [
+                    _vm._m(1),
+                    _vm._v(" "),
                     _c("transition", { attrs: { name: "fade" } }, [
                       _vm.showEventDropdownActions
                         ? _c("div", { staticClass: "items" }, [
@@ -81397,6 +81558,19 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-1" }, [
       _c("div", { staticClass: "data text-right" })
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-outline-primary btn-sm pull-right btn-open",
+        attrs: { type: "button", title: "More" }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
   }
 ]
 render._withStripped = true
@@ -82839,21 +83013,19 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "dropdown-calendar-actions" },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-light btn-sm pull-right btn-open",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.toggleCalendarDropdownActions()
-                      }
-                    }
+              {
+                staticClass: "dropdown-calendar-actions",
+                on: {
+                  mouseover: function($event) {
+                    _vm.showCalendarDropdownActions = true
                   },
-                  [_c("i", { staticClass: "fas fa-ellipsis-v" })]
-                ),
+                  mouseleave: function($event) {
+                    _vm.showCalendarDropdownActions = false
+                  }
+                }
+              },
+              [
+                _vm._m(0),
                 _vm._v(" "),
                 _c("transition", { attrs: { name: "fade" } }, [
                   _vm.showCalendarDropdownActions
@@ -84296,7 +84468,11 @@ var render = function() {
                                   _c("div", { staticClass: "data" }, [
                                     _c("div", { staticClass: "form-group" }, [
                                       _c("label", [
-                                        _c("small", [_vm._v("Description")])
+                                        _c("small", [
+                                          _vm._v(
+                                            "Description [max 150 symbols]"
+                                          )
+                                        ])
                                       ]),
                                       _vm._v(" "),
                                       _c("input", {
@@ -84512,7 +84688,21 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-light btn-sm pull-right btn-open",
+        attrs: { type: "button" }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
+  }
+]
 render._withStripped = true
 
 

@@ -16,6 +16,16 @@ use Illuminate\Support\Facades\Mail;
 
 class EventsController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * @param $event
      * @param $action

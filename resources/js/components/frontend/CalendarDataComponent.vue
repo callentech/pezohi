@@ -238,6 +238,8 @@ export default {
 
             axios.post('/subscribe-calendar', {calendar_id: id})
             .then(function (response) {
+
+                console.log(response);
                 if (response.data.code === 401) {
                     document.location.href = "/";
                 } else if (response.data.code === 404) {
@@ -252,6 +254,8 @@ export default {
                 }
             })
             .catch(function (error) {
+
+                console.log(error);
                 currentObj.requestError = 'Request Error';
             })
             .then(function () {

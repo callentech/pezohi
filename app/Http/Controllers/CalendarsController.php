@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Mail;
 class CalendarsController extends Controller
 {
 
+	
+
     /**
      * @param $event
      * @param $action
@@ -395,6 +397,12 @@ class CalendarsController extends Controller
      */
     public function subscribeCalendarAction(Request $request): JsonResponse
     {
+    	if (!Auth::user()) {
+    		return response()->json([
+                'code' => 401
+            ]);
+    	}
+
         $request->validate([
             'calendar_id' => 'required'
         ]);
@@ -427,6 +435,8 @@ class CalendarsController extends Controller
             ]);
         } catch(\Exception $ex) {
 
+        	var_dump($ex->getMessage());
+        	exit;
             if ($ex->getCode() === 401) {
                 Auth::logout();
                 return response()->json([
@@ -437,13 +447,6 @@ class CalendarsController extends Controller
                     'code' => 404,
                     'data' => [
                         'message' => 'Google calendar not found or not have public access'
-                    ]
-                ]);
-            } else if ($ex->getErrors()[0]['message']) {
-                return response()->json([
-                    'code' => 404,
-                    'data' => [
-                        'message' => $ex->getErrors()[0]['message']
                     ]
                 ]);
             } else {
@@ -460,6 +463,12 @@ class CalendarsController extends Controller
      */
     public function unsubscribeCalendarAction(Request  $request): JsonResponse
     {
+    	if (!Auth::user()) {
+    		return response()->json([
+                'code' => 401
+            ]);
+    	}
+    	
         $request->validate([
             'calendar_id' => 'required'
         ]);

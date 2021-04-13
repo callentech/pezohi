@@ -22,7 +22,7 @@
                         <div class="description">
                             {{ calendar.events.length }} events <i class="fas fa-circle"></i>
                             Owned by : {{ calendar.user.email }} <i class="fas fa-circle"></i>
-                            Last updated : {{ calendar.updated_at|formatDate() }}
+                            Last updated : {{ calendar.updated_at|formatDate }}
                         </div>
                     </div>
                     <div class="col-4">
@@ -101,11 +101,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="event in  sortedEvents" >
+                            <tr v-for="event in sortedEvents">
                                 <td>{{ event.started_at|formatEventDate }}</td>
-                                <td> {{ event.started_at|formatEventTime }} - {{ event.ended_at|formatEventTime }}</td>
+                                <td>{{ event.started_at|formatEventTime }} - {{ event.ended_at|formatEventTime }}</td>
                                 <td><a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a></td>
-                                <td>{{ event.type|capitalize }}</td>
+                                 <td>{{ event.type|capitalize }}</td>
                                 <td><a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a></td>
                                 <td v-if="moment(event.ended_at).isBefore(new Date())">
                                     Over
@@ -148,8 +148,6 @@
         </div>
         <!-- END Share Calendar Message modal -->
     </div>
-
-
 
 </template>
 
@@ -378,11 +376,16 @@ export default {
             return hours+':'+minutes+' '+ampm;
         },
         sliceString: function(value) {
-            let sliced = value.slice(0,20);
-            if (sliced.length < value.length) {
-                sliced += '...';
+            if (value) {
+                let sliced = value.slice(0,50);
+                if (sliced.length < value.length) {
+                    sliced += '...';
+                }
+                return sliced;
+            } else {
+                return '';
             }
-            return sliced;
+            
         },
 
         capitalize: function (value) {

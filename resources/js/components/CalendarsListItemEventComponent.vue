@@ -78,7 +78,7 @@
                 <div class="data text-right">
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="$event.stopPropagation(), showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
 
-                    <div @mouseover="showEventDropdownActions=true" @mouseleave="showEventDropdownActions=false" class="dropdown-event-actions">
+                    <div @mouseover="showEventDropdownActions=true" @mouseleave="showEventDropdownActions=false" @click="$event.stopPropagation()" class="dropdown-event-actions">
                         <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="More"><i class="fas fa-ellipsis-v"></i></button>
                         <transition name="fade">
                             <div class="items" v-if="showEventDropdownActions">

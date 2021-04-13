@@ -21,4 +21,9 @@ class Calendar extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public function subscribes()
+    {
+        return $this->hasMany(Subscribe::class);
+    }
 }

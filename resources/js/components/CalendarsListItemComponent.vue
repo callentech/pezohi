@@ -27,13 +27,17 @@
 	                    <i class="fas fa-user-friends"></i> Share
 	                </button>
 
-	                <!-- <button type="button" class="btn btn-outline-primary btn-sm" name="button">
-	                    <i class="far fa-bell"></i> Subscribe ???
-	                </button> -->
-
-	                <button type="button" class="btn btn-outline-danger btn-sm" name="button" @click="showUnsubscribeCalendarModalAction">
+                    <button v-if="calendar.isSubscribe" type="button" class="btn btn-outline-danger btn-sm" name="button" @click="showUnsubscribeCalendarModalAction">
 	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
+
+	                <button v-else type="button" class="btn btn-outline-primary btn-sm" name="button" @click="subscribeCalendarAction(calendar.id)">
+	                    <i class="far fa-bell"></i> Subscribe
+	                </button>
+
+                    
+
+	                
 
 					<div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
 						<button type="button" class="btn btn-light btn-sm pull-right btn-open" >
@@ -144,7 +148,182 @@
 
                                 <input type="hidden" name="calendar_id" :value="calendar.id">
 
-                                <!-- Event Date Time -->
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        <div class="data">
+                                            <label><small>Date</small></label>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <date-picker v-model="editedEventData.startDate" :config="dateOptions" readonly name="startDate"></date-picker>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <div class="data">
+                                            <label><small>Start time</small></label>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <select v-model="editedEventData.startTime" class="custom-select" name="startTime" @change="selectTimeAction('start')">
+                                                    <option value="01:00 AM">01:00 AM</option>
+                                                    <option value="01:30 AM">01:30 AM</option>
+                                                    <option value="02:00 AM">02:00 AM</option>
+                                                    <option value="02:30 AM">02:30 AM</option>
+                                                    <option value="03:00 AM">03:00 AM</option>
+                                                    <option value="03:30 AM">03:30 AM</option>
+                                                    <option value="04:00 AM">04:00 AM</option>
+                                                    <option value="04:30 AM">04:30 AM</option>
+                                                    <option value="05:00 AM">05:00 AM</option>
+                                                    <option value="05:30 AM">05:30 AM</option>
+                                                    <option value="06:00 AM">06:00 AM</option>
+                                                    <option value="06:30 AM">06:30 AM</option>
+                                                    <option value="07:00 AM">07:00 AM</option>
+                                                    <option value="07:30 AM">07:30 AM</option>
+                                                    <option value="08:00 AM">08:00 AM</option>
+                                                    <option value="08:30 AM">08:30 AM</option>
+                                                    <option value="09:00 AM">09:00 AM</option>
+                                                    <option value="09:30 AM">09:30 AM</option>
+                                                    <option value="10:00 AM">10:00 AM</option>
+                                                    <option value="10:30 AM">10:30 AM</option>
+                                                    <option value="11:00 AM">11:00 AM</option>
+                                                    <option value="11:30 AM">11:30 AM</option>
+                                                    <option value="12:00 AM">12:00 AM</option>
+                                                    <option value="12:30 AM">12:30 AM</option>
+                                                    <option value="01:00 PM">01:00 PM</option>
+                                                    <option value="01:30 PM">01:30 PM</option>
+                                                    <option value="02:00 PM">02:00 PM</option>
+                                                    <option value="02:30 PM">02:30 PM</option>
+                                                    <option value="03:00 PM">03:00 PM</option>
+                                                    <option value="03:30 PM">03:30 PM</option>
+                                                    <option value="04:00 PM">04:00 PM</option>
+                                                    <option value="04:30 PM">04:30 PM</option>
+                                                    <option value="05:00 PM">05:00 PM</option>
+                                                    <option value="05:30 PM">05:30 PM</option>
+                                                    <option value="06:00 PM">06:00 PM</option>
+                                                    <option value="06:30 PM">06:30 PM</option>
+                                                    <option value="07:00 PM">07:00 PM</option>
+                                                    <option value="07:30 PM">07:30 PM</option>
+                                                    <option value="08:00 PM">08:00 PM</option>
+                                                    <option value="08:30 PM">08:30 PM</option>
+                                                    <option value="09:00 PM">09:00 PM</option>
+                                                    <option value="09:30 PM">09:30 PM</option>
+                                                    <option value="10:00 PM">10:00 PM</option>
+                                                    <option value="10:30 PM">10:30 PM</option>
+                                                    <option value="11:00 PM">11:00 PM</option>
+                                                    <option value="11:30 PM">11:30 PM</option>
+                                                    <option value="12:00 PM">12:00 PM</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <div class="data">
+                                            <label><small>End time</small></label>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <select v-model="editedEventData.endTime" class="custom-select" name="endTime" @change="selectTimeAction('end')">
+                                                    <option value="01:00 AM">01:00 AM</option>
+                                                    <option value="01:30 AM">01:30 AM</option>
+                                                    <option value="02:00 AM">02:00 AM</option>
+                                                    <option value="02:30 AM">02:30 AM</option>
+                                                    <option value="03:00 AM">03:00 AM</option>
+                                                    <option value="03:30 AM">03:30 AM</option>
+                                                    <option value="04:00 AM">04:00 AM</option>
+                                                    <option value="04:30 AM">04:30 AM</option>
+                                                    <option value="05:00 AM">05:00 AM</option>
+                                                    <option value="05:30 AM">05:30 AM</option>
+                                                    <option value="06:00 AM">06:00 AM</option>
+                                                    <option value="06:30 AM">06:30 AM</option>
+                                                    <option value="07:00 AM">07:00 AM</option>
+                                                    <option value="07:30 AM">07:30 AM</option>
+                                                    <option value="08:00 AM">08:00 AM</option>
+                                                    <option value="08:30 AM">08:30 AM</option>
+                                                    <option value="09:00 AM">09:00 AM</option>
+                                                    <option value="09:30 AM">09:30 AM</option>
+                                                    <option value="10:00 AM">10:00 AM</option>
+                                                    <option value="10:30 AM">10:30 AM</option>
+                                                    <option value="11:00 AM">11:00 AM</option>
+                                                    <option value="11:30 AM">11:30 AM</option>
+                                                    <option value="12:00 AM">12:00 AM</option>
+                                                    <option value="12:30 AM">12:30 AM</option>
+                                                    <option value="01:00 PM">01:00 PM</option>
+                                                    <option value="01:30 PM">01:30 PM</option>
+                                                    <option value="02:00 PM">02:00 PM</option>
+                                                    <option value="02:30 PM">02:30 PM</option>
+                                                    <option value="03:00 PM">03:00 PM</option>
+                                                    <option value="03:30 PM">03:30 PM</option>
+                                                    <option value="04:00 PM">04:00 PM</option>
+                                                    <option value="04:30 PM">04:30 PM</option>
+                                                    <option value="05:00 PM">05:00 PM</option>
+                                                    <option value="05:30 PM">05:30 PM</option>
+                                                    <option value="06:00 PM">06:00 PM</option>
+                                                    <option value="06:30 PM">06:30 PM</option>
+                                                    <option value="07:00 PM">07:00 PM</option>
+                                                    <option value="07:30 PM">07:30 PM</option>
+                                                    <option value="08:00 PM">08:00 PM</option>
+                                                    <option value="08:30 PM">08:30 PM</option>
+                                                    <option value="09:00 PM">09:00 PM</option>
+                                                    <option value="09:30 PM">09:30 PM</option>
+                                                    <option value="10:00 PM">10:00 PM</option>
+                                                    <option value="10:30 PM">10:30 PM</option>
+                                                    <option value="11:00 PM">11:00 PM</option>
+                                                    <option value="11:30 PM">11:30 PM</option>
+                                                    <option value="12:00 PM">12:00 PM</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <label class="input-group-text"><i class="far fa-clock"></i></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <div class="data">
+                                            <div class="form-group">
+                                                <label><small>Type</small></label>
+                                                <select v-model="editedEventData.type" class="form-control form-control-sm" name="type">
+                                                    <option value="game">Game</option>
+                                                    <option value="practice">Practice</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="data">
+                                            <div class="form-group">
+                                                <label><small>Address</small></label>
+                                                <vue-google-autocomplete
+                                                    ref="eventLocationAutocomplete"
+                                                    :id="'map'+editedEventData.id"
+                                                    classname="form-control form-control-sm"
+                                                    placeholder="Change Event Location"
+                                                    v-on:inputChange="getAddressData"
+                                                    name="location"
+                                                ></vue-google-autocomplete>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="data">
+                                            <div class="form-group">
+                                                <label><small>Notes [max 150 symbols]</small></label>
+                                                <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="notes">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Event Data
                                 <hr>
                                 <div class="row">
                                     <div class="col-3">
@@ -312,9 +491,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- END Event Date Time -->
+
                                 <hr>
-                                <!-- Event Data -->
+
                                 <div class="row">
                                     <div class="col-5">
                                         <div class="data">
@@ -351,14 +530,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- END Event Data -->
+
 
                                 <hr>
+                                Event Data -->
+
                                 <!-- Event Actions -->
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="data">
-                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="requestProcess"><i class="far fa-save"></i> Save Event Data</button>
+                                            <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || requestProcess"><i class="far fa-save"></i> Save Event Data</button>
                                             <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideAddEventForm"><i class="far fa-times-circle"></i> Cancel</button>
                                         </div>
                                     </div>
@@ -460,6 +641,7 @@ import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
+import moment from 'moment';
 
 //import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
@@ -515,6 +697,8 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                 editedEventData: {
                     id: null,
                     startDate: null,
+                    startTime: '',
+                    endTime: '',
                     startTimeHours: null,
                     startTimeMinutes: null,
                     startTimeAmPm: null,
@@ -544,28 +728,82 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                 sortByTypeDirection: 'desc',
                 sortByDescriptionDirection: 'desc',
 
-                sortedEvents: []
+                sortedEvents: [],
+
+                moment: moment
 			}
 		},
 
 		computed:  {
-            // newEventDataValid() {
-            //     let result = true;
-            //     if (!this.editedEventData.location || this.editedEventData.location === '') {
-            //         result = false;
-            //     }
-            //     if (!this.editedEventData.description || this.editedEventData.description === '') {
-            //         result = false;
-            //     }
-            //     return result;
-            // }
+            newEventDataValid() {
+                let result = true;
+                if (this.editedEventData.startTime === '' || this.editedEventData.endTime === '') {
+                    result = false;
+                }
+                return result;
+            }
 		},
 
 		methods: {
-            showUnsubscribeCalendarModalAction(id) {
-                // this.delete_calendar_id = id;
-                // jQuery('#confirmCalendarDelete').modal('show');
 
+            selectTimeAction: function(select) {
+                let startTime = this.editedEventData.startTime.split(' ');
+                let sTime = startTime[0].split(':');
+                let sHours = startTime[1] === 'PM' ? parseInt(sTime[0])+12 : parseInt(sTime[0]);
+                let sTimeMinutes = sHours*60+parseInt(sTime[1]);
+                let endTime = this.editedEventData.endTime.split(' ');
+                let eTime = endTime[0].split(':');
+                let eHours = endTime[1] === 'PM' ? parseInt(eTime[0])+12 : parseInt(eTime[0]);
+                let eTimeMinutes = eHours*60+parseInt(eTime[1]);
+                if (sTimeMinutes > eTimeMinutes) {
+                    if (select === 'start') {
+                        this.editedEventData.endTime = '';
+                    }
+                    if (select === 'end') {
+                        this.editedEventData.startTime = '';
+                    }
+                }
+            },
+
+            subscribeCalendarAction: function(id) {
+               
+                let currentObj = this;
+                // Send request
+                axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    currentObj.requestProcess = true;
+                    currentObj.$parent.requestDanger = null;
+                    currentObj.$parent.requestSuccess = null;
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+
+                axios.post('/subscribe-calendar', {calendar_id: id})
+                    .then(function (response) {
+                        if (response.data.code === 401) {
+                            document.location.href = "/";
+                        } else if (response.data.code === 404) {
+                            currentObj.$parent.requestDanger = response.data.data.message;
+                        } else if (response.data.code === 1) {
+                            currentObj.$parent.requestSuccess = response.data.data.message;
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            currentObj.$parent.requestDanger = response.data.data.message;
+                        }
+                    })
+                    .catch(function (error) {
+                        currentObj.$parent.requestError = 'Request Error';
+                    })
+                    .then(function () {
+                        currentObj.requestProcess = false;
+                    });
+            },
+
+            showUnsubscribeCalendarModalAction(id) {
                 this.showConfirmUnsubscribeCalendarModal = true;
             },
             hideConfirmUnsubscribeCalendarModal: function() {
@@ -594,11 +832,10 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                         } else if (response.data.code === 1) {
                             currentObj.$parent.requestSuccess = response.data.data.message;
                             setTimeout(function () {
-                                currentObj.hideConfirmUnsubscribeCalendarModal();
                                 location.reload();
                             }, 2000);
                         } else {
-                            currentObj.$parent.requestDanger = 'Request Error';
+                            currentObj.$parent.requestDanger = response.data.data.message;
                         }
                     })
                     .catch(function (error) {
@@ -606,6 +843,7 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                     })
                     .then(function () {
                         currentObj.requestProcess = false;
+                        currentObj.hideConfirmUnsubscribeCalendarModal();
                     });
             },
 
@@ -647,7 +885,17 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 			showAddEventForm: function(calendar_id) {
 				this.calendar_id = calendar_id;
 				this.editedEventData.type = 'game';
-				this.showNewEventDataForm = true;
+
+                this.$refs.event.forEach((element) => {
+                    element.showEditSingleEventForm = false;
+                });
+
+                this.editedEventData.startDate = moment();
+                let startDateTime = moment();
+                startDateTime.add(30, 'minutes').startOf('hour');
+                this.editedEventData.startTime = (startDateTime.format('hh:mm a')).toUpperCase();
+                startDateTime.add(1, 'hours');
+                this.editedEventData.endTime = (startDateTime.format('hh:mm a')).toUpperCase();
 			},
 
 			hideAddEventForm: function(event) {
@@ -689,10 +937,6 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 
                 let currentObj = this;
                 let form = document.getElementById('addCalendarEventForm');
-                if (form.checkValidity() === false) {
-                    form.classList.add('was-validated');
-                    return false;
-                }
 
                 axios.interceptors.request.use(function (config) {
                     // Do something before request is sent
@@ -705,13 +949,7 @@ import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
                     return Promise.reject(error);
                 });
 
-                let started_at = this.getDateTime(currentObj.editedEventData.startDate, currentObj.editedEventData.startTimeHours, currentObj.editedEventData.startTimeMinutes, currentObj.editedEventData.startTimeAmPm);
-                let ended_at = this.getDateTime(currentObj.editedEventData.endDate, currentObj.editedEventData.endTimeHours, currentObj.editedEventData.endTimeMinutes, currentObj.editedEventData.endTimeAmPm);
-
                 let formData = new FormData(form);
-                formData.append('event_started_at', started_at);
-                formData.append('event_ended_at', ended_at);
-
                 axios.post('/new-single-event', formData)
                 .then(function(response) {
                     if (response.data.code === 401) {

@@ -6,6 +6,7 @@ use App\Jobs\SyncCalendars;
 use App\Mail\EventStatusNotify;
 use App\Models\Calendar;
 use App\Models\Event;
+use App\Models\Subscribe;
 use App\Services\Google;
 use Google_Service_Calendar_Calendar;
 use Google_Service_Calendar_CalendarListEntry;
@@ -21,9 +22,6 @@ use Illuminate\Support\Facades\Mail;
 
 class CalendarsController extends Controller
 {
-
-	
-
     /**
      * @param $event
      * @param $action
@@ -38,6 +36,11 @@ class CalendarsController extends Controller
         ];
         $calendars = Calendar::where('google_id', $event->calendar->google_id)->get();
         foreach ($calendars as $calendar) {
+            $subscribes = Subscribe::where('calendar_id', $calendar->id)->get();
+            foreach ($subscribes as $subscribe) {
+                $user = User::find($subscribe->user_id);
+                Mail::to($user->email)->send(new EventStatusNotify($params));
+            }
             Mail::to($calendar->user->email)->send(new EventStatusNotify($params));
         }
     }
@@ -397,7 +400,7 @@ class CalendarsController extends Controller
      */
     public function subscribeCalendarAction(Request $request): JsonResponse
     {
-    	if (!Auth::user()) {
+        if (!Auth::user()) {
     		return response()->json([
                 'code' => 401
             ]);
@@ -410,51 +413,24 @@ class CalendarsController extends Controller
         $calendar = Calendar::with('events')->find($request->calendar_id);
         if (!$calendar) {
             return response()->json([
-                'code' => 0
-            ]);
-        }
-
-        try {
-            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
-
-            $calendarListEntry = new Google_Service_Calendar_CalendarListEntry();
-            $calendarListEntry->setId($calendar->google_id);
-            $createdCalendarListEntry = $service->calendarList->insert($calendarListEntry);
-
-            // Sync calendars
-            Auth::user()->jobs_status = 'started';
-            Auth::user()->save();
-            $this->dispatch(new SyncCalendars(Auth::user()));
-
-            return response()->json([
-                'code' => 1,
+                'code' => 0,
                 'data' => [
-                    'message' => 'Subscribe success',
-                    'calendar' => $createdCalendarListEntry
+                    'message' => 'Calendar not found',
                 ]
             ]);
-        } catch(\Exception $ex) {
-
-        	var_dump($ex->getMessage());
-        	exit;
-            if ($ex->getCode() === 401) {
-                Auth::logout();
-                return response()->json([
-                    'code' => 401
-                ]);
-            } else if ($ex->getCode() === 404) {
-                return response()->json([
-                    'code' => 404,
-                    'data' => [
-                        'message' => 'Google calendar not found or not have public access'
-                    ]
-                ]);
-            } else {
-                return response()->json([
-                    'code' => 0,
-                ]);
-            }
         }
+
+        $subscribe = new Subscribe();
+        $subscribe->calendar_id = $calendar->id;
+        $subscribe->user_id = Auth::user()->id;
+        $subscribe->save();
+
+        return response()->json([
+            'code' => 1,
+            'data' => [
+                'message' => 'Subscribe success',
+            ]
+        ]);
     }
 
     /**
@@ -477,56 +453,31 @@ class CalendarsController extends Controller
         $calendar = Calendar::with('events')->find($request->calendar_id);
         if (!$calendar) {
             return response()->json([
-                'code' => 0
-            ]);
-        }
-
-        try {
-            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
-
-            $service->calendarList->delete($calendar->google_id);
-
-            // Delete user calendar from DB
-            //$calendar->delete();
-
-            $calendar->where(['user_id' => Auth::user()->id, 'google_id' => $calendar->google_id])->delete();
-
-            Auth::user()->jobs_status = 'started';
-            Auth::user()->save();
-            $this->dispatch(new SyncCalendars(Auth::user()));
-
-            return response()->json([
-                'code' => 1,
+                'code' => 0,
                 'data' => [
-                    'message' => 'Unsubscribe success',
+                    'message' => 'Calendar not found',
                 ]
             ]);
-        } catch(\Exception $ex) {
-            if ($ex->getCode() === 401) {
-                Auth::logout();
-                return response()->json([
-                    'code' => 401
-                ]);
-            } else if ($ex->getCode() === 404) {
-                return response()->json([
-                    'code' => 404,
-                    'data' => [
-                        'message' => 'Google calendar not found or not have public access'
-                    ]
-                ]);
-            } else if ($ex->getErrors()[0]['message']) {
-                return response()->json([
-                    'code' => 404,
-                    'data' => [
-                        'message' => $ex->getErrors()[0]['message']
-                    ]
-                ]);
-            } else {
-                return response()->json([
-                    'code' => 0
-                ]);
-            }
         }
+
+        $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();
+        if (!$subscribe) {
+            return response()->json([
+                'code' => 0,
+                'data' => [
+                    'message' => 'Subscribe not found',
+                ]
+            ]);
+        }
+
+        $subscribe->delete();
+
+        return response()->json([
+            'code' => 1,
+            'data' => [
+                'message' => 'Unsubscribe success',
+            ]
+        ]);
     }
 
     /**

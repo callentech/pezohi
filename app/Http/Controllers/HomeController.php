@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calendar;
+use App\Models\Subscribe;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
@@ -66,6 +67,11 @@ class HomeController extends Controller
                     $calendar->owner = $calendar->user->email;
                 }
             }
+
+            // Is subscribe
+            $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();
+            $calendar->isSubscribe = $subscribe ? TRUE : FALSE;
+            
         }
         $jobsStatus = Auth::user()->jobs_status;
         return view('home', ['calendars' => json_encode($calendars, JSON_UNESCAPED_UNICODE), 'jobs_status' => $jobsStatus]);

@@ -44,6 +44,14 @@ class User extends Authenticatable
         return $this->hasMany(Calendar::class);
     }
 
+     /**
+     * @return HasMany
+     */
+    public function subscribes()
+    {
+        return $this->hasMany(Subscribe::class);
+    }
+
 
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calendar;
+use App\Models\Subscribe;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,14 +37,10 @@ class CalendarController extends Controller
         // Subscribe / Unsubscribe status
         $calendar->isSubscribed = FALSE;
         if (Auth::user()) {
-            foreach(Auth::user()->calendars as $userCalendar) {
-                if ($userCalendar->google_id == $calendar->google_id) {
-                    $calendar->isSubscribed = TRUE;
-                }
-            }
+            $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();
+            $calendar->isSubscribed = $subscribe ? TRUE : FALSE;
         }
-
-
+        $calendar->isSubscribe = $subscribe ? TRUE : FALSE;
 
         $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
         return view('frontend.calendar', ['calendar' =>$calendar, 'user' => Auth::user() ? Auth::user() : "{'status':'anonimous'}"]);

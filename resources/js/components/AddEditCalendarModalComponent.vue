@@ -890,15 +890,13 @@
                                                     <transition name="fade">
                                                         <div class="card-footer" v-if="showNewEventDataForm">
 
-                                                            <!-- Event Date Time -->
+                                                            <!-- Event Data -->
                                                             <hr>
                                                             <div class="row">
-                                                                <div class="col-3">
+                                                                <div class="col-2">
                                                                     <div class="data">
+                                                                        <label><small>Date</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Start Date</span>
-                                                                            </div>
                                                                             <date-picker v-model="editedEventData.startDate" :config="dateOptions" readonly name="event-start-date"></date-picker>
                                                                             <div class="input-group-append">
                                                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -906,25 +904,60 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-3">
+
+                                                                <div class="col-2">
                                                                     <div class="data">
+                                                                        <label><small>Start time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Start Time [hours]</span>
-                                                                            </div>
-                                                                            <select v-model="editedEventData.startTimeHours" class="custom-select" name="event-start-time-hours">
-                                                                                <option value="1">01</option>
-                                                                                <option value="2">02</option>
-                                                                                <option value="3">03</option>
-                                                                                <option value="4">04</option>
-                                                                                <option value="5">05</option>
-                                                                                <option value="6">06</option>
-                                                                                <option value="7">07</option>
-                                                                                <option value="8">08</option>
-                                                                                <option value="9">09</option>
-                                                                                <option value="10">10</option>
-                                                                                <option value="11">11</option>
-                                                                                <option value="12">12</option>
+                                                                            <select v-model="editedEventData.startTime" class="custom-select" name="startTime" @change="selectTimeAction('start')">
+                                                                                <option value="00:30 AM">00:30 AM</option>
+                                                                                <option value="01:00 AM">01:00 AM</option>
+                                                                                <option value="01:30 AM">01:30 AM</option>
+                                                                                <option value="02:00 AM">02:00 AM</option>
+                                                                                <option value="02:30 AM">02:30 AM</option>
+                                                                                <option value="03:00 AM">03:00 AM</option>
+                                                                                <option value="03:30 AM">03:30 AM</option>
+                                                                                <option value="04:00 AM">04:00 AM</option>
+                                                                                <option value="04:30 AM">04:30 AM</option>
+                                                                                <option value="05:00 AM">05:00 AM</option>
+                                                                                <option value="05:30 AM">05:30 AM</option>
+                                                                                <option value="06:00 AM">06:00 AM</option>
+                                                                                <option value="06:30 AM">06:30 AM</option>
+                                                                                <option value="07:00 AM">07:00 AM</option>
+                                                                                <option value="07:30 AM">07:30 AM</option>
+                                                                                <option value="08:00 AM">08:00 AM</option>
+                                                                                <option value="08:30 AM">08:30 AM</option>
+                                                                                <option value="09:00 AM">09:00 AM</option>
+                                                                                <option value="09:30 AM">09:30 AM</option>
+                                                                                <option value="10:00 AM">10:00 AM</option>
+                                                                                <option value="10:30 AM">10:30 AM</option>
+                                                                                <option value="11:00 AM">11:00 AM</option>
+                                                                                <option value="11:30 AM">11:30 AM</option>
+                                                                                <option value="12:00 AM">12:00 AM</option>
+                                                                                <option value="12:30 AM">12:30 AM</option>
+                                                                                <option value="01:00 PM">01:00 PM</option>
+                                                                                <option value="01:30 PM">01:30 PM</option>
+                                                                                <option value="02:00 PM">02:00 PM</option>
+                                                                                <option value="02:30 PM">02:30 PM</option>
+                                                                                <option value="03:00 PM">03:00 PM</option>
+                                                                                <option value="03:30 PM">03:30 PM</option>
+                                                                                <option value="04:00 PM">04:00 PM</option>
+                                                                                <option value="04:30 PM">04:30 PM</option>
+                                                                                <option value="05:00 PM">05:00 PM</option>
+                                                                                <option value="05:30 PM">05:30 PM</option>
+                                                                                <option value="06:00 PM">06:00 PM</option>
+                                                                                <option value="06:30 PM">06:30 PM</option>
+                                                                                <option value="07:00 PM">07:00 PM</option>
+                                                                                <option value="07:30 PM">07:30 PM</option>
+                                                                                <option value="08:00 PM">08:00 PM</option>
+                                                                                <option value="08:30 PM">08:30 PM</option>
+                                                                                <option value="09:00 PM">09:00 PM</option>
+                                                                                <option value="09:30 PM">09:30 PM</option>
+                                                                                <option value="10:00 PM">10:00 PM</option>
+                                                                                <option value="10:30 PM">10:30 PM</option>
+                                                                                <option value="11:00 PM">11:00 PM</option>
+                                                                                <option value="11:30 PM">11:30 PM</option>
+                                                                                <option value="12:00 PM">12:00 PM</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -932,25 +965,61 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-3">
+
+                                                                 <div class="col-2">
                                                                     <div class="data">
+                                                                        <label><small>End time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Start Time [minutes]</span>
-                                                                            </div>
-                                                                            <select v-model="editedEventData.startTimeMinutes" class="custom-select" name="event-start-time-minutes">
-                                                                                <option value="0">00</option>
-                                                                                <option value="5">05</option>
-                                                                                <option value="10">10</option>
-                                                                                <option value="15">15</option>
-                                                                                <option value="20">20</option>
-                                                                                <option value="25">25</option>
-                                                                                <option value="30">30</option>
-                                                                                <option value="35">35</option>
-                                                                                <option value="40">40</option>
-                                                                                <option value="45">45</option>
-                                                                                <option value="50">50</option>
-                                                                                <option value="55">55</option>
+                                                                            <select v-model="editedEventData.endTime" class="custom-select" name="endTime" @change="selectTimeAction('end')">
+                                                                                
+                                                                                <option value="00:30 AM">00:30 AM</option>
+                                                                                <option value="01:00 AM">01:00 AM</option>
+                                                                                <option value="01:30 AM">01:30 AM</option>
+                                                                                <option value="02:00 AM">02:00 AM</option>
+                                                                                <option value="02:30 AM">02:30 AM</option>
+                                                                                <option value="03:00 AM">03:00 AM</option>
+                                                                                <option value="03:30 AM">03:30 AM</option>
+                                                                                <option value="04:00 AM">04:00 AM</option>
+                                                                                <option value="04:30 AM">04:30 AM</option>
+                                                                                <option value="05:00 AM">05:00 AM</option>
+                                                                                <option value="05:30 AM">05:30 AM</option>
+                                                                                <option value="06:00 AM">06:00 AM</option>
+                                                                                <option value="06:30 AM">06:30 AM</option>
+                                                                                <option value="07:00 AM">07:00 AM</option>
+                                                                                <option value="07:30 AM">07:30 AM</option>
+                                                                                <option value="08:00 AM">08:00 AM</option>
+                                                                                <option value="08:30 AM">08:30 AM</option>
+                                                                                <option value="09:00 AM">09:00 AM</option>
+                                                                                <option value="09:30 AM">09:30 AM</option>
+                                                                                <option value="10:00 AM">10:00 AM</option>
+                                                                                <option value="10:30 AM">10:30 AM</option>
+                                                                                <option value="11:00 AM">11:00 AM</option>
+                                                                                <option value="11:30 AM">11:30 AM</option>
+                                                                                <option value="12:00 AM">12:00 AM</option>
+                                                                                <option value="12:30 AM">12:30 AM</option>
+                                                                                <option value="01:00 PM">01:00 PM</option>
+                                                                                <option value="01:30 PM">01:30 PM</option>
+                                                                                <option value="02:00 PM">02:00 PM</option>
+                                                                                <option value="02:30 PM">02:30 PM</option>
+                                                                                <option value="03:00 PM">03:00 PM</option>
+                                                                                <option value="03:30 PM">03:30 PM</option>
+                                                                                <option value="04:00 PM">04:00 PM</option>
+                                                                                <option value="04:30 PM">04:30 PM</option>
+                                                                                <option value="05:00 PM">05:00 PM</option>
+                                                                                <option value="05:30 PM">05:30 PM</option>
+                                                                                <option value="06:00 PM">06:00 PM</option>
+                                                                                <option value="06:30 PM">06:30 PM</option>
+                                                                                <option value="07:00 PM">07:00 PM</option>
+                                                                                <option value="07:30 PM">07:30 PM</option>
+                                                                                <option value="08:00 PM">08:00 PM</option>
+                                                                                <option value="08:30 PM">08:30 PM</option>
+                                                                                <option value="09:00 PM">09:00 PM</option>
+                                                                                <option value="09:30 PM">09:30 PM</option>
+                                                                                <option value="10:00 PM">10:00 PM</option>
+                                                                                <option value="10:30 PM">10:30 PM</option>
+                                                                                <option value="11:00 PM">11:00 PM</option>
+                                                                                <option value="11:30 PM">11:30 PM</option>
+                                                                                <option value="12:00 PM">12:00 PM</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -958,140 +1027,41 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-3">
-                                                                    <div class="data">
-                                                                        <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Start Time [am/pm]</span>
-                                                                            </div>
-                                                                            <select v-model="editedEventData.startTimeAmPm" class="custom-select" name="event-start-time-ampm">
-                                                                                <option value="AM">AM</option>
-                                                                                <option value="PM">PM</option>
-                                                                            </select>
-                                                                            <div class="input-group-append">
-                                                                                <label class="input-group-text"><i class="far fa-clock"></i></label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-3">
-                                                                    <div class="data">
-                                                                        <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">End Date</span>
-                                                                            </div>
-                                                                            <date-picker v-model="editedEventData.endDate" :config="dateOptions" readonly name="event-end-date"></date-picker>
-                                                                            <div class="input-group-append">
-                                                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <div class="data">
-                                                                        <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">End Time [hours]</span>
-                                                                            </div>
-                                                                            <select v-model="editedEventData.endTimeHours" class="custom-select" name="event-end-time-hours">
-                                                                                <option value="1">01</option>
-                                                                                <option value="2">02</option>
-                                                                                <option value="3">03</option>
-                                                                                <option value="4">04</option>
-                                                                                <option value="5">05</option>
-                                                                                <option value="6">06</option>
-                                                                                <option value="7">07</option>
-                                                                                <option value="8">08</option>
-                                                                                <option value="9">09</option>
-                                                                                <option value="10">10</option>
-                                                                                <option value="11">11</option>
-                                                                                <option value="12">12</option>
-                                                                            </select>
-                                                                            <div class="input-group-append">
-                                                                                <label class="input-group-text"><i class="far fa-clock"></i></label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <div class="data">
-                                                                        <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">End Time [minutes]</span>
-                                                                            </div>
-                                                                            <select v-model="editedEventData.endTimeMinutes" class="custom-select" name="event-end-time-minutes">
-                                                                                <option value="0">00</option>
-                                                                                <option value="5">05</option>
-                                                                                <option value="10">10</option>
-                                                                                <option value="15">15</option>
-                                                                                <option value="20">20</option>
-                                                                                <option value="25">25</option>
-                                                                                <option value="30">30</option>
-                                                                                <option value="35">35</option>
-                                                                                <option value="40">40</option>
-                                                                                <option value="45">45</option>
-                                                                                <option value="50">50</option>
-                                                                                <option value="55">55</option>
-                                                                            </select>
-                                                                            <div class="input-group-append">
-                                                                                <label class="input-group-text"><i class="far fa-clock"></i></label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <div class="data">
-                                                                        <div class="input-group input-group-sm mb-3">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">End Time [am/pm]</span>
-                                                                            </div>
-                                                                            <select v-model="editedEventData.endTimeAmPm" class="custom-select" name="event-end-time-ampm">
-                                                                                <option value="AM">AM</option>
-                                                                                <option value="PM">PM</option>
-                                                                            </select>
-                                                                            <div class="input-group-append">
-                                                                                <label class="input-group-text"><i class="far fa-clock"></i></label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!-- END Event Date Time -->
-                                                            <hr>
-                                                            <!-- Event Data -->
-                                                            <div class="row">
-                                                                <div class="col-5">
-                                                                    <div class="data">
-                                                                        <div class="form-group">
-                                                                            <label><small>Location</small></label>
-                                                                            <vue-google-autocomplete
-                                                                                ref="eventNewLocationAutocomplete"
-                                                                                id="map"
-                                                                                classname="form-control form-control-sm"
-                                                                                placeholder="Change Event Location"
-                                                                                v-on:inputChange="getAddressData"
-                                                                            ></vue-google-autocomplete>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+
                                                                 <div class="col-2">
                                                                     <div class="data">
                                                                         <div class="form-group">
                                                                             <label><small>Type</small></label>
-                                                                            <select v-model="editedEventData.type" class="form-control form-control-sm" name="event-type">
+                                                                            <select v-model="editedEventData.type" class="form-control form-control-sm" name="type">
                                                                                 <option value="game">Game</option>
                                                                                 <option value="practice">Practice</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-5">
+
+                                                                <div class="col-4">
                                                                     <div class="data">
                                                                         <div class="form-group">
-                                                                            <label><small>Description [max 150 symbols]</small></label>
-                                                                            <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" name="event-description">
+                                                                            <label><small>Address</small></label>
+                                                                            <vue-google-autocomplete
+                                                                                ref="eventLocationAutocomplete"
+                                                                                :id="'map'+editedEventData.id"
+                                                                                classname="form-control form-control-sm"
+                                                                                placeholder="Change Event Location"
+                                                                                v-on:inputChange="getAddressData"
+                                                                                name="location"
+                                                                            ></vue-google-autocomplete>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="data">
+                                                                        <div class="form-group">
+                                                                            <label><small>Notes [max 150 symbols]</small></label>
+                                                                            <input type="text" v-model="editedEventData.description" class="form-control form-control-sm" @input="assertEventDescriptionMaxChars" name="notes">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1289,6 +1259,21 @@
                     }
                     if (select === 'end') {
                         this.editedEventData.startTime = '';
+                    }
+                } else {
+                    if (select === 'start') {
+                        let hours = sTime[0];
+                        hours = parseInt(hours) + 1;
+                        if (hours >= 12) {
+                            hours = hours-12;
+                        }
+                        if (hours < 10) {
+                            hours = '0'+hours;
+                        }
+
+                        let time = hours+':'+sTime[1]+' '+startTime[1];
+                        console.log(time);
+                        this.editedEventData.endTime = time;
                     }
                 }
             },

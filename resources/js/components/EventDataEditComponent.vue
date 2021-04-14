@@ -481,6 +481,21 @@ export default {
                 if (select === 'end') {
                     this.editedEventData.startTime = '';
                 }
+            } else {
+                if (select === 'start') {
+                    let hours = sTime[0];
+                    hours = parseInt(hours) + 1;
+                    if (hours >= 12) {
+                        hours = hours-12;
+                    }
+                    if (hours < 10) {
+                        hours = '0'+hours;
+                    }
+
+                    let time = hours+':'+sTime[1]+' '+startTime[1];
+                    console.log(time);
+                    this.editedEventData.endTime = time;
+                }
             }
         },
 

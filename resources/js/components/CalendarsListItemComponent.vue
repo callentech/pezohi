@@ -747,6 +747,7 @@ import moment from 'moment';
 		methods: {
 
             selectTimeAction: function(select) {
+
                 let startTime = this.editedEventData.startTime.split(' ');
                 let sTime = startTime[0].split(':');
                 let sHours = startTime[1] === 'PM' ? parseInt(sTime[0])+12 : parseInt(sTime[0]);
@@ -762,7 +763,23 @@ import moment from 'moment';
                     if (select === 'end') {
                         this.editedEventData.startTime = '';
                     }
+                } else {
+                    if (select === 'start') {
+                        let hours = sTime[0];
+                        hours = parseInt(hours) + 1;
+                        if (hours >= 12) {
+                            hours = hours-12;
+                        }
+                        if (hours < 10) {
+                            hours = '0'+hours;
+                        }
+
+                        let time = hours+':'+sTime[1]+' '+startTime[1];
+                        console.log(time);
+                        this.editedEventData.endTime = time;
+                    }
                 }
+
             },
 
             subscribeCalendarAction: function(id) {
@@ -896,6 +913,8 @@ import moment from 'moment';
                 this.editedEventData.startTime = (startDateTime.format('hh:mm a')).toUpperCase();
                 startDateTime.add(1, 'hours');
                 this.editedEventData.endTime = (startDateTime.format('hh:mm a')).toUpperCase();
+
+                this.showNewEventDataForm = true;
 			},
 
 			hideAddEventForm: function(event) {

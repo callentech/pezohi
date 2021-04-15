@@ -40,7 +40,6 @@ class CalendarController extends Controller
             $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();
             $calendar->isSubscribed = $subscribe ? TRUE : FALSE;
         }
-        $calendar->isSubscribe = $subscribe ? TRUE : FALSE;
 
         $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
         return view('frontend.calendar', ['calendar' =>$calendar, 'user' => Auth::user() ? Auth::user() : "{'status':'anonimous'}"]);

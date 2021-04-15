@@ -7,6 +7,7 @@ use App\Mail\EventStatusNotify;
 use App\Models\Calendar;
 use App\Models\Event;
 use App\Models\Subscribe;
+use App\Models\User;
 use App\Services\Google;
 use Google_Service_Calendar_Calendar;
 use Google_Service_Calendar_CalendarListEntry;

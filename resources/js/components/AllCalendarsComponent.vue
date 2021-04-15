@@ -323,19 +323,21 @@
                             currentObj.requestDanger = response.data.data.message;
                         } else if (response.data.code === 1) {
                             currentObj.requestSuccess = response.data.data.message;
-                            currentObj.requestSuccess = false;
+                            //currentObj.requestSuccess = false;
                             currentObj.delete_event_id = null;
                             document.getElementById("event"+id).remove();
-                            //location.reload();
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
                         } else {
                             currentObj.requestDanger = 'Request Error';
                         }
                     })
                     .catch(function (error) {
+                        currentObj.requestProcess = false;
                         currentObj.requestDanger = 'Error Request';
                     })
                     .then(function() {
-                        currentObj.requestProcess = false;
                         currentObj.showConfirmDeleteEventModal = false;
                     });
             },

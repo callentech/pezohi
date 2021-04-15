@@ -82,6 +82,8 @@
                     <label><small>End time</small></label>
                     <div class="input-group input-group-sm mb-3">
                         <select v-model="editedEventData.endTime" class="custom-select" name="event-start-time-hours" @change="selectTimeAction('end')">
+                            <option value="00:00 AM">00:00 AM</option>
+                            <option value="00:30 AM">00:30 AM</option>
                             <option value="01:00 AM">01:00 AM</option>
                             <option value="01:30 AM">01:30 AM</option>
                             <option value="02:00 AM">02:00 AM</option>
@@ -390,7 +392,7 @@
         <div class="row">
             <div class="col-4">
                 <div class="data">
-                    <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="requestProcess" @click="$event.stopPropagation(), submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
+                    <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || requestProcess" @click="$event.stopPropagation(), submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
                     <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideEditSingleEvent($event)"><i class="far fa-times-circle"></i> Cancel</button>
                 </div>
             </div>
@@ -462,6 +464,14 @@ export default {
 
     computed: {
 
+        newEventDataValid() {
+            let result = true;
+            if (this.editedEventData.startTime === '' || this.editedEventData.endTime === '') {
+                result = false;
+            }
+            return result;
+        }
+
     },
 
     methods: {
@@ -474,6 +484,8 @@ export default {
             let eTime = endTime[0].split(':');
             let eHours = endTime[1] === 'PM' ? parseInt(eTime[0])+12 : parseInt(eTime[0]);
             let eTimeMinutes = eHours*60+parseInt(eTime[1]);
+
+           
             if (sTimeMinutes > eTimeMinutes) {
                 if (select === 'start') {
                     this.editedEventData.endTime = '';
@@ -618,9 +630,10 @@ export default {
             let ampm = hours >= 12 ? 'PM' : 'AM';
             let minutes = date.getMinutes();
             hours = hours % 12;
-            hours = hours ? hours : 12;
+            ampm = hours == 0 ? 'AM' : ampm;
             hours = hours  < 10 ? '0'+hours : hours;
             minutes = Math.ceil(minutes/30)*30;
+            minutes = 60 ? 0 : minutes;
             minutes = minutes < 10 ? '0'+minutes : minutes;
             return hours +':'+minutes + ' '+ampm;
         },

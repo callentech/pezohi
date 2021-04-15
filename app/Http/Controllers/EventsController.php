@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\EventStatusNotify;
 use App\Models\Calendar;
 use App\Models\Event;
+use App\Models\Subscribe;
+use App\Models\User;
 use App\Services\Google;
 use Google_Service_Calendar_Event;
 use Google_Service_Calendar_EventExtendedProperties;
@@ -84,6 +86,8 @@ class EventsController extends Controller
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
 
+            
+
             $startTimeArray = explode(' ', $request->startTime);
             $startTime = explode(':', $startTimeArray[0]);
             $startTimeAmPm = $startTimeArray[1];
@@ -144,7 +148,7 @@ class EventsController extends Controller
                 'code' => 1,
                 'data' => [
                     'event' => $newEvent,
-                    'message' => 'Event updated successfully'
+                    'message' => 'Event duplicate successfully'
                 ]
             ]);
 
@@ -721,21 +725,41 @@ class EventsController extends Controller
                 ]
             ]);
         } catch(\Exception $ex) {
-            if ($ex->getCode() === 401) {
+            if ($ex->getCode() === 401) { //401 Unauthorized
                 Auth::logout();
                 return response()->json([
                     'code' => 401
                 ]);
-            } else if ($ex->getCode() === 404) {
+            } else if ($ex->getCode() === 404) { //404 Not Found 
                 return response()->json([
                     'code' => 404,
                     'data' => [
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
+            } else if ($ex->getCode() === 410) { //410 Gone 
+
+                // Delete event from DB
+                $event->calendar->touch();
+                $event->delete();
+                return response()->json([
+                    'code' => 1,
+                    'data' => [
+                        'message' => 'Google Event delete success',
+                        'calendarId' => $event->calendar->id
+                    ]
+                ]);
+                
+
             } else {
+
+                var_dump($ex->getCode());
+                exit;
                 return response()->json([
                     'code' => 0,
+                    'data' => [
+                        'message' => $ex->getMessage()
+                    ]
                 ]);
             }
         }

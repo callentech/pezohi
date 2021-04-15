@@ -257,15 +257,18 @@ export default {
             return month + '/' + day + '/' + year;
         },
 
-        formatTime: function (value) {
+        formatTime: function(value) {
             let date = new Date(value);
             let hours = date.getHours();
-            let minutes = date.getMinutes();
             let ampm = hours >= 12 ? 'PM' : 'AM';
+            let minutes = date.getMinutes();
             hours = hours % 12;
-            hours = hours ? hours : 12;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            return hours + ':' + minutes + ' ' + ampm;
+            ampm = hours == 0 ? 'AM' : ampm;
+            hours = hours  < 10 ? '0'+hours : hours;
+            minutes = Math.ceil(minutes/30)*30;
+            minutes = 60 ? 0 : minutes;
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            return hours +':'+minutes + ' '+ampm;
         },
 
         sliceString: function (value) {

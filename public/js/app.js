@@ -3622,9 +3622,10 @@ __webpack_require__.r(__webpack_exports__);
       var ampm = hours >= 12 ? 'PM' : 'AM';
       var minutes = date.getMinutes();
       hours = hours % 12;
-      hours = hours ? hours : 12;
+      ampm = hours == 0 ? 'AM' : ampm;
       hours = hours < 10 ? '0' + hours : hours;
       minutes = Math.ceil(minutes / 30) * 30;
+      minutes =  true ? 0 : 0;
       minutes = minutes < 10 ? '0' + minutes : minutes;
       return hours + ':' + minutes + ' ' + ampm;
     },
@@ -3984,17 +3985,20 @@ __webpack_require__.r(__webpack_exports__);
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
-          currentObj.requestSuccess = response.data.data.message;
-          currentObj.requestSuccess = false;
+          currentObj.requestSuccess = response.data.data.message; //currentObj.requestSuccess = false;
+
           currentObj.delete_event_id = null;
-          document.getElementById("event" + id).remove(); //location.reload();
+          document.getElementById("event" + id).remove();
+          setTimeout(function () {
+            location.reload();
+          }, 2000);
         } else {
           currentObj.requestDanger = 'Request Error';
         }
       })["catch"](function (error) {
+        currentObj.requestProcess = false;
         currentObj.requestDanger = 'Error Request';
       }).then(function () {
-        currentObj.requestProcess = false;
         currentObj.showConfirmDeleteEventModal = false;
       });
     },
@@ -5371,10 +5375,13 @@ __webpack_require__.r(__webpack_exports__);
     formatTime: function formatTime(value) {
       var date = new Date(value);
       var hours = date.getHours();
-      var minutes = date.getMinutes();
       var ampm = hours >= 12 ? 'PM' : 'AM';
+      var minutes = date.getMinutes();
       hours = hours % 12;
-      hours = hours ? hours : 12;
+      ampm = hours == 0 ? 'AM' : ampm;
+      hours = hours < 10 ? '0' + hours : hours;
+      minutes = Math.ceil(minutes / 30) * 30;
+      minutes =  true ? 0 : 0;
       minutes = minutes < 10 ? '0' + minutes : minutes;
       return hours + ':' + minutes + ' ' + ampm;
     },
@@ -5841,6 +5848,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -5881,7 +5890,17 @@ __webpack_require__.r(__webpack_exports__);
       moment: (moment__WEBPACK_IMPORTED_MODULE_2___default())
     };
   },
-  computed: {},
+  computed: {
+    newEventDataValid: function newEventDataValid() {
+      var result = true;
+
+      if (this.editedEventData.startTime === '' || this.editedEventData.endTime === '') {
+        result = false;
+      }
+
+      return result;
+    }
+  },
   methods: {
     selectTimeAction: function selectTimeAction(select) {
       var startTime = this.editedEventData.startTime.split(' ');
@@ -6026,9 +6045,10 @@ __webpack_require__.r(__webpack_exports__);
       var ampm = hours >= 12 ? 'PM' : 'AM';
       var minutes = date.getMinutes();
       hours = hours % 12;
-      hours = hours ? hours : 12;
+      ampm = hours == 0 ? 'AM' : ampm;
       hours = hours < 10 ? '0' + hours : hours;
       minutes = Math.ceil(minutes / 30) * 30;
+      minutes =  true ? 0 : 0;
       minutes = minutes < 10 ? '0' + minutes : minutes;
       return hours + ':' + minutes + ' ' + ampm;
     },
@@ -82196,6 +82216,14 @@ var render = function() {
                 }
               },
               [
+                _c("option", { attrs: { value: "00:00 AM" } }, [
+                  _vm._v("00:00 AM")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "00:30 AM" } }, [
+                  _vm._v("00:30 AM")
+                ]),
+                _vm._v(" "),
                 _c("option", { attrs: { value: "01:00 AM" } }, [
                   _vm._v("01:00 AM")
                 ]),
@@ -82509,7 +82537,10 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-success btn-sm pull-right btn-open",
-              attrs: { title: "Save", disabled: _vm.requestProcess },
+              attrs: {
+                title: "Save",
+                disabled: !_vm.newEventDataValid || _vm.requestProcess
+              },
               on: {
                 click: function($event) {
                   $event.stopPropagation(),

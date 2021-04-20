@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [07-Apr-2021 21:17:07 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 94208 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 509
 [07-Apr-2021 21:17:07 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
 [08-Apr-2021 10:28:06 UTC] PHP Fatal error:  Out of memory (allocated 17932288) (tried to allocate 1310720 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
@@ -152,3 +153,5 @@ Stack trace:
 [19-Apr-2021 12:47:07 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
 [20-Apr-2021 15:11:05 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 94208 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 509
 [20-Apr-2021 18:45:04 UTC] PHP Fatal error:  Out of memory (allocated 13737984) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+=======
+>>>>>>> 1334e33aad8fae830cf21468fd201423140e5c77

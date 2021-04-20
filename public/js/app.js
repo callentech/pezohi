@@ -3270,12 +3270,13 @@ __webpack_require__.r(__webpack_exports__);
     saveEvent: function saveEvent(event) {
       event.preventDefault();
       event.stopPropagation();
-      console.log(this.editedEventData);
 
       if (this.editedEventData.index === null) {
         // Add new Event
-        var started_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
-        var ended_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.endTime;
+        // let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
+        // let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+        var started_at = this.editedEventData.startDate + ' ' + this.editedEventData.startTime;
+        var ended_at = this.editedEventData.startDate + ' ' + this.editedEventData.endTime;
         var newEvent = {
           id: 'new',
           started_at: started_at,

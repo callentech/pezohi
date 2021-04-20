@@ -1456,13 +1456,14 @@
             saveEvent: function(event) {
                 event.preventDefault();
                 event.stopPropagation();
-
-                console.log(this.editedEventData);
-
+                
                 if (this.editedEventData.index === null) {
                     // Add new Event
-                    let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
-                    let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+                    // let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
+                    // let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+                    let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
+                    let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
+
                     let newEvent = {
                         id: 'new',
                         started_at: started_at,

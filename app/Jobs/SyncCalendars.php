@@ -107,7 +107,6 @@ class SyncCalendars implements ShouldQueue
                     $optParams = ['pageToken' => $eventsPageToken];
                     $eventsList = $service->events->listEvents($googleCalendar->id, $optParams);
                     foreach ($eventsList as $googleEvent) {
-
                         $calendar->events()->updateOrCreate(
                             [
                                 'google_id' => $googleEvent->id
@@ -115,7 +114,7 @@ class SyncCalendars implements ShouldQueue
                             [
                                 'google_id' => $googleEvent->id,
                                 'name' => $googleEvent->summary,
-                                'type' => $googleEvent->extendedProperties->getPrivate()['type'],
+                                'type' => $googleEvent->extendedProperties ? $googleEvent->extendedProperties->getPrivate()['type'] : NULL,
                                 'description' => $googleEvent->description,
                                 'location' => $googleEvent->location,
                                 'status' => $googleEvent->status,
@@ -125,9 +124,6 @@ class SyncCalendars implements ShouldQueue
                                 'updated_data_at' => Carbon::parse($googleEvent->updated)->setTimezone($googleEvent->start->timeZone)
                             ]
                         );
-
-
-
                     }
                     $eventsPageToken = $eventsList->getNextPageToken();
                 } while($eventsPageToken);

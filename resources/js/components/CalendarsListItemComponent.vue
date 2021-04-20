@@ -35,10 +35,6 @@
 	                    <i class="far fa-bell"></i> Subscribe
 	                </button>
 
-                    
-
-	                
-
 					<div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
 						<button type="button" class="btn btn-light btn-sm pull-right btn-open" >
 							<i class="fas fa-ellipsis-v"></i>
@@ -72,14 +68,14 @@
 				<div class="row align-items-center">
 	                <div class="col-lg-6" >
                         <div>
-                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i>
+                            {{view_events_start+1}} - {{view_events_end+1 >= calendar.events.length ? calendar.events.length : view_events_end+1}} of {{ calendar.events.length }} <i class="fa fa-angle-right"></i>
                             <a v-if="calendar.access_role === 'owner'" href="javascript:void(0)" @click="showEditCalendarModalAction(calendar.id)">View all</a>
                             <a v-if="calendar.access_role === 'reader'" :href="calendar.publicUrl" target="_blank">View all</a>
                         </div>
 	                </div>
 
 	                <div class="col-lg-6 text-right">
-	                    <button type="button"class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
+	                    <button type="button" class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
 	                </div>
 	            </div>
 
@@ -136,7 +132,11 @@
 	            	</div>
 
 	            	<div class="events-list">
-                        <div v-for="event in sortedEvents">
+                        <!-- <div v-for="event in sortedEvents" v-bind:class="{ hidden-event: isActive }">
+                            <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
+                        </div> -->
+
+                        <div v-for="(event, index) in sortedEvents"  v-bind:class="{ 'hidden-event': index < view_events_start || index > view_events_end }">
                             <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
                         </div>
 	            	</div>
@@ -557,6 +557,13 @@
                     </transition>
 
 	            </div>
+
+                <div class="row mt-2">
+                    <div class="col-12 text-right">
+                        <button class="btn btn-sm btn-secondary" @click="showEvents('prev')" :disabled="view_events_start <= 0">Prev</button>
+                        <button class="btn btn-sm btn-secondary" @click="showEvents('next')" :disabled="view_events_end >= calendar.events.length - 1">Next</button>
+                    </div>
+                </div>
 			</div>
 		</transition>
         <!-- END Calendar details -->
@@ -670,7 +677,8 @@ import moment from 'moment';
                 ranges: false,
                 showCalendar: true,
 
-
+                view_events_start: 0,
+                view_events_end: 4,
 
 				showBody: false,
 				showCalendarDropdownActions: false,
@@ -745,6 +753,15 @@ import moment from 'moment';
 		},
 
 		methods: {
+
+            showEvents: function(dir) {
+                if (dir === 'next') {
+                    this.view_events_start = this.view_events_end + 1;
+                } else if (dir === 'prev') {
+                    this.view_events_start = this.view_events_start - 5;
+                }
+                this.view_events_end = this.view_events_start + 4 > this.calendar.events.length ? this.calendar.events.length-1 : this.view_events_start + 4;
+            },
 
             selectTimeAction: function(select) {
 
@@ -991,16 +1008,6 @@ import moment from 'moment';
                     currentObj.requestProcess = false;
                 });
             },
-
-			/**
-            * When the location found
-            * @param {Object} addressData Data of the found location
-            * @param {Object} placeResultData PlaceResult object
-            * @param {String} id Input container ID
-            */
-            // getAddressData: function (addressData, placeResultData, id) {
-            //     this.address = addressData;
-            // }
 
             // Sort events list methods
             // sortCalendarsListBySummary: function() {

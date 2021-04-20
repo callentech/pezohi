@@ -4689,6 +4689,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4717,6 +4724,8 @@ __webpack_require__.r(__webpack_exports__);
       showDropdowns: false,
       ranges: false,
       showCalendar: true,
+      view_events_start: 0,
+      view_events_end: 4,
       showBody: false,
       showCalendarDropdownActions: false,
       showNewEventDataForm: false,
@@ -4777,6 +4786,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    showEvents: function showEvents(dir) {
+      if (dir === 'next') {
+        this.view_events_start = this.view_events_end + 1;
+      } else if (dir === 'prev') {
+        this.view_events_start = this.view_events_start - 5;
+      }
+
+      this.view_events_end = this.view_events_start + 4 > this.calendar.events.length ? this.calendar.events.length - 1 : this.view_events_start + 4;
+    },
     selectTimeAction: function selectTimeAction(select) {
       var startTime = this.editedEventData.startTime.split(' ');
       var sTime = startTime[0].split(':');
@@ -4997,16 +5015,6 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.requestProcess = false;
       });
     },
-
-    /**
-             * When the location found
-             * @param {Object} addressData Data of the found location
-             * @param {Object} placeResultData PlaceResult object
-             * @param {String} id Input container ID
-             */
-    // getAddressData: function (addressData, placeResultData, id) {
-    //     this.address = addressData;
-    // }
     // Sort events list methods
     // sortCalendarsListBySummary: function() {
     //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
@@ -79986,7 +79994,15 @@ var render = function() {
                 _c("div", { staticClass: "col-lg-6" }, [
                   _c("div", [
                     _vm._v(
-                      "\n                            1-5 of " +
+                      "\n                            " +
+                        _vm._s(_vm.view_events_start + 1) +
+                        " - " +
+                        _vm._s(
+                          _vm.view_events_end + 1 >= _vm.calendar.events.length
+                            ? _vm.calendar.events.length
+                            : _vm.view_events_end + 1
+                        ) +
+                        " of " +
                         _vm._s(_vm.calendar.events.length) +
                         " "
                     ),
@@ -80185,9 +80201,16 @@ var render = function() {
                   _c(
                     "div",
                     { staticClass: "events-list" },
-                    _vm._l(_vm.sortedEvents, function(event) {
+                    _vm._l(_vm.sortedEvents, function(event, index) {
                       return _c(
                         "div",
+                        {
+                          class: {
+                            "hidden-event":
+                              index < _vm.view_events_start ||
+                              index > _vm.view_events_end
+                          }
+                        },
                         [
                           _c("calendars-list-item-event-component", {
                             ref: "event",
@@ -81236,7 +81259,42 @@ var render = function() {
                   ])
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "row mt-2" }, [
+                _c("div", { staticClass: "col-12 text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-secondary",
+                      attrs: { disabled: _vm.view_events_start <= 0 },
+                      on: {
+                        click: function($event) {
+                          return _vm.showEvents("prev")
+                        }
+                      }
+                    },
+                    [_vm._v("Prev")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-secondary",
+                      attrs: {
+                        disabled:
+                          _vm.view_events_end >= _vm.calendar.events.length - 1
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.showEvents("next")
+                        }
+                      }
+                    },
+                    [_vm._v("Next")]
+                  )
+                ])
+              ])
             ])
           : _vm._e()
       ]),

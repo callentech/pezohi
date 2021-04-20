@@ -16141,6 +16141,10 @@ div.pac-container {
   padding: 0.1rem 0.3rem;
 }
 
+.hidden-event {
+  display: none;
+}
+
 #editedCalendarEventsContent .header, #duplicatedCalendarEventsContent .header {
   width: 100%;
   padding: 5px;

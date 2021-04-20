@@ -115,7 +115,7 @@ class SyncCalendars implements ShouldQueue
                             [
                                 'google_id' => $googleEvent->id,
                                 'name' => $googleEvent->summary,
-                                'type' => $googleEvent->extendedProperties->getPrivate()['type'],
+                                'type' => $googleEvent->extendedProperties ? $googleEvent->extendedProperties->getPrivate()['type'] : NULL,
                                 'description' => $googleEvent->description,
                                 'location' => $googleEvent->location,
                                 'status' => $googleEvent->status,

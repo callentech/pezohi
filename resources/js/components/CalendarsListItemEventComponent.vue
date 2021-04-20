@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div :id="'event'+event.id"  v-else class="card calendar-single event-active" @click="copyEventAddress">
+    <div :id="'event'+event.id"  v-else class="card calendar-single event-active">
         <div class="row">
             <div class="col-3">
                 <div class="data event-datetime">
@@ -100,7 +100,7 @@
                                 <strong>Address : </strong>
                             </div>
                             <div class="card-body text-secondary">
-                                {{ event.location }}
+                                <a title="Copy event address" href="javascript:void(0)" @click="copyEventAddress">{{ event.location }}</a>
                             </div>
                         </div>
 
@@ -204,7 +204,11 @@ export default {
         },
 
         copyEventAddress: function() {
-            if (this.showEditSingleEventForm || this.showEventDetails) {
+            // if (this.showEditSingleEventForm || this.showEventDetails) {
+            //     return false;
+            // }
+
+            if (this.showEditSingleEventForm) {
                 return false;
             }
             let input_temp = document.createElement('textarea');

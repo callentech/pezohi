@@ -5330,7 +5330,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     copyEventAddress: function copyEventAddress() {
-      if (this.showEditSingleEventForm || this.showEventDetails) {
+      // if (this.showEditSingleEventForm || this.showEventDetails) {
+      //     return false;
+      // }
+      if (this.showEditSingleEventForm) {
         return false;
       }
 
@@ -81642,8 +81645,7 @@ var render = function() {
         "div",
         {
           staticClass: "card calendar-single event-active",
-          attrs: { id: "event" + _vm.event.id },
-          on: { click: _vm.copyEventAddress }
+          attrs: { id: "event" + _vm.event.id }
         },
         [
           _c("div", { staticClass: "row" }, [
@@ -81871,10 +81873,16 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body text-secondary" }, [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(_vm.event.location) +
-                              "\n                        "
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                title: "Copy event address",
+                                href: "javascript:void(0)"
+                              },
+                              on: { click: _vm.copyEventAddress }
+                            },
+                            [_vm._v(_vm._s(_vm.event.location))]
                           )
                         ])
                       ]),

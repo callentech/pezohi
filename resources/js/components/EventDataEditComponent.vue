@@ -476,41 +476,16 @@ export default {
 
     methods: {
         selectTimeAction: function(select) {
-            let startTime = this.editedEventData.startTime.split(' ');
-            let sTime = startTime[0].split(':');
-            let sHours = startTime[1] === 'PM' ? parseInt(sTime[0])+12 : parseInt(sTime[0]);
-            let sTimeMinutes = sHours*60+parseInt(sTime[1]);
-            let endTime = this.editedEventData.endTime.split(' ');
-            let eTime = endTime[0].split(':');
-            let eHours = endTime[1] === 'PM' ? parseInt(eTime[0])+12 : parseInt(eTime[0]);
-            let eTimeMinutes = eHours*60+parseInt(eTime[1]);
-
-           
-            if (sTimeMinutes > eTimeMinutes) {
-                if (select === 'start') {
-                    this.editedEventData.endTime = '';
-                }
-                if (select === 'end') {
-                    this.editedEventData.startTime = '';
-                }
-            } else {
-                if (select === 'start') {
-                    let hours = sTime[0];
-                    hours = parseInt(hours) + 1;
-                    if (hours >= 12) {
-                        hours = hours-12;
-                    }
-                    if (hours < 10) {
-                        hours = '0'+hours;
-                    }
-
-                    let time = hours+':'+sTime[1]+' '+startTime[1];
-                    console.log(time);
-                    this.editedEventData.endTime = time;
-                }
+            let fromdt = this.editedEventData.startDate+' '+this.editedEventData.startTime;
+            //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
+            let from = new Date(Date.parse(fromdt));
+            //var to = new Date(Date.parse(todt));
+            
+            if (select === 'start') {
+                let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+                this.editedEventData.endTime = endTime;
             }
         },
-
 
         getAddressData: function (addressData, placeResultData, id) {
             this.editedEventData.location = addressData.newVal;
@@ -590,21 +565,14 @@ export default {
 
     mounted() {
 
-
         this.editedEventData = {
             id: this.event.id,
             duplicate_event_id: this.event.duplicate_event_id,
             startDate: this.$options.filters.formatDate(this.event.started_at),
-
-            startTime: this.$options.filters.formatTime(this.event.started_at),
-            endTime: this.$options.filters.formatTime(this.event.ended_at),
-            // startTimeHours: this.$options.filters.formatHours(this.event.started_at),
-            // startTimeMinutes: this.$options.filters.formatMinutes(this.event.started_at),
-            // startTimeAmPm: this.$options.filters.formatAmPm(this.event.started_at),
-            // endDate: this.$options.filters.formatDate(this.event.ended_at),
-            // endTimeHours: this.$options.filters.formatHours(this.event.ended_at),
-            // endTimeMinutes: this.$options.filters.formatMinutes(this.event.ended_at),
-            // endTimeAmPm: this.$options.filters.formatAmPm(this.event.ended_at),
+            
+            startTime: moment(this.event.started_at).format('hh:mm a').toUpperCase(),
+            endTime: moment(this.event.ended_at).format('hh:mm a').toUpperCase(),
+            
             location: this.event.location,
             type: this.event.type,
             description: this.event.description

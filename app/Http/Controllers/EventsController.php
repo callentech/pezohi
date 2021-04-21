@@ -513,6 +513,8 @@ class EventsController extends Controller
         $endedHours = $endTimeAmPm == 'AM' ? $endTime[0] : $endTime[0] + 12;
         $ended_at = new Carbon($request->startDate.' '.$endedHours.':'.$endTime[1]);
 
+        
+
         if ($started_at > $ended_at) {
             return response()->json([
                 'code' => 0,
@@ -551,6 +553,8 @@ class EventsController extends Controller
 
             $event->location = $updatedEvent->location;
 
+            
+
             $event->started_at = $this->parseDatetime($updatedEvent->start);
             $event->ended_at = $this->parseDatetime($updatedEvent->end);
             $event->updated_data_at = Carbon::parse($updatedEvent->updated)->setTimezone($updatedEvent->start->timeZone);
@@ -572,6 +576,7 @@ class EventsController extends Controller
             ]);
 
         } catch(\Exception $ex) {
+
             if ($ex->getCode() === 401) {
                 Auth::logout();
                 return response()->json([

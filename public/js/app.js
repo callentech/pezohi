@@ -3075,40 +3075,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectTimeAction: function selectTimeAction(select) {
-      var startTime = this.editedEventData.startTime.split(' ');
-      var sTime = startTime[0].split(':');
-      var sHours = startTime[1] === 'PM' ? parseInt(sTime[0]) + 12 : parseInt(sTime[0]);
-      var sTimeMinutes = sHours * 60 + parseInt(sTime[1]);
-      var endTime = this.editedEventData.endTime.split(' ');
-      var eTime = endTime[0].split(':');
-      var eHours = endTime[1] === 'PM' ? parseInt(eTime[0]) + 12 : parseInt(eTime[0]);
-      var eTimeMinutes = eHours * 60 + parseInt(eTime[1]);
+      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime; //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
-      if (sTimeMinutes > eTimeMinutes) {
-        if (select === 'start') {
-          this.editedEventData.endTime = '';
-        }
+      var from = new Date(Date.parse(fromdt)); //var to = new Date(Date.parse(todt));
 
-        if (select === 'end') {
-          this.editedEventData.startTime = '';
-        }
-      } else {
-        if (select === 'start') {
-          var hours = sTime[0];
-          hours = parseInt(hours) + 1;
-
-          if (hours >= 12) {
-            hours = hours - 12;
-          }
-
-          if (hours < 10) {
-            hours = '0' + hours;
-          }
-
-          var time = hours + ':' + sTime[1] + ' ' + startTime[1];
-          console.log(time);
-          this.editedEventData.endTime = time;
-        }
+      if (select === 'start') {
+        var endTime = moment__WEBPACK_IMPORTED_MODULE_2___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+        this.editedEventData.endTime = endTime;
       }
     },
     getAddressData: function getAddressData(addressData, placeResultData, id) {
@@ -3342,8 +3315,10 @@ __webpack_require__.r(__webpack_exports__);
         index: index,
         id: currentEvent.id,
         startDate: moment__WEBPACK_IMPORTED_MODULE_2___default()(currentEvent.started_at),
-        startTime: this.$options.filters.formatTime(currentEvent.started_at),
-        endTime: this.$options.filters.formatTime(currentEvent.ended_at),
+        //startTime: this.$options.filters.formatTime(currentEvent.started_at),
+        //endTime: this.$options.filters.formatTime(currentEvent.ended_at),
+        startTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(currentEvent.started_at).format('hh:mm a').toUpperCase(),
+        endTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(currentEvent.ended_at).format('hh:mm a').toUpperCase(),
         startTimeHours: this.$options.filters.formatHours(currentEvent.started_at),
         startTimeMinutes: this.$options.filters.formatMinutes(currentEvent.started_at),
         startTimeAmPm: this.$options.filters.formatAmPm(currentEvent.started_at),
@@ -4796,40 +4771,13 @@ __webpack_require__.r(__webpack_exports__);
       this.view_events_end = this.view_events_start + 4 > this.calendar.events.length ? this.calendar.events.length - 1 : this.view_events_start + 4;
     },
     selectTimeAction: function selectTimeAction(select) {
-      var startTime = this.editedEventData.startTime.split(' ');
-      var sTime = startTime[0].split(':');
-      var sHours = startTime[1] === 'PM' ? parseInt(sTime[0]) + 12 : parseInt(sTime[0]);
-      var sTimeMinutes = sHours * 60 + parseInt(sTime[1]);
-      var endTime = this.editedEventData.endTime.split(' ');
-      var eTime = endTime[0].split(':');
-      var eHours = endTime[1] === 'PM' ? parseInt(eTime[0]) + 12 : parseInt(eTime[0]);
-      var eTimeMinutes = eHours * 60 + parseInt(eTime[1]);
+      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime; //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
-      if (sTimeMinutes > eTimeMinutes) {
-        if (select === 'start') {
-          this.editedEventData.endTime = '';
-        }
+      var from = new Date(Date.parse(fromdt)); //var to = new Date(Date.parse(todt));
 
-        if (select === 'end') {
-          this.editedEventData.startTime = '';
-        }
-      } else {
-        if (select === 'start') {
-          var hours = sTime[0];
-          hours = parseInt(hours) + 1;
-
-          if (hours >= 12) {
-            hours = hours - 12;
-          }
-
-          if (hours < 10) {
-            hours = '0' + hours;
-          }
-
-          var time = hours + ':' + sTime[1] + ' ' + startTime[1];
-          console.log(time);
-          this.editedEventData.endTime = time;
-        }
+      if (select === 'start') {
+        var endTime = moment__WEBPACK_IMPORTED_MODULE_4___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+        this.editedEventData.endTime = endTime;
       }
     },
     subscribeCalendarAction: function subscribeCalendarAction(id) {
@@ -5385,17 +5333,33 @@ __webpack_require__.r(__webpack_exports__);
       return month + '/' + day + '/' + year;
     },
     formatTime: function formatTime(value) {
-      var date = new Date(value);
-      var hours = date.getHours();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
-      var minutes = date.getMinutes();
-      hours = hours % 12;
-      ampm = hours == 0 ? 'AM' : ampm;
-      hours = hours < 10 ? '0' + hours : hours;
-      minutes = Math.ceil(minutes / 30) * 30;
-      minutes =  true ? 0 : 0;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return hours + ':' + minutes + ' ' + ampm;
+      var dateTime = new Date(Date.parse(value));
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(dateTime).format('hh:mm a').toUpperCase(); // let date = new Date(value);
+      // let hours = date.getHours();
+      // let ampm = hours >= 12 ? 'PM' : 'AM';
+      // let minutes = date.getMinutes();
+      // hours = hours % 12;
+      // ampm = hours == 0 ? 'AM' : ampm;
+      // hours = hours  < 10 ? '0'+hours : hours;
+      // minutes = Math.ceil(minutes/30)*30;
+      // minutes = 60 ? 0 : minutes;
+      // minutes = minutes < 10 ? '0'+minutes : minutes;
+      // return hours +':'+minutes + ' '+ampm;
+
+      /*
+      
+      
+       let fromdt = this.editedEventData.startDate+' '+this.editedEventData.startTime;
+      //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
+      let from = new Date(Date.parse(fromdt));
+      //var to = new Date(Date.parse(todt));
+      
+      if (select === 'start') {
+          let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+          this.editedEventData.endTime = endTime;
+      }
+      
+      */
     },
     sliceString: function sliceString(value) {
       if (value && value.length > 10) {
@@ -5915,40 +5879,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectTimeAction: function selectTimeAction(select) {
-      var startTime = this.editedEventData.startTime.split(' ');
-      var sTime = startTime[0].split(':');
-      var sHours = startTime[1] === 'PM' ? parseInt(sTime[0]) + 12 : parseInt(sTime[0]);
-      var sTimeMinutes = sHours * 60 + parseInt(sTime[1]);
-      var endTime = this.editedEventData.endTime.split(' ');
-      var eTime = endTime[0].split(':');
-      var eHours = endTime[1] === 'PM' ? parseInt(eTime[0]) + 12 : parseInt(eTime[0]);
-      var eTimeMinutes = eHours * 60 + parseInt(eTime[1]);
+      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime; //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
-      if (sTimeMinutes > eTimeMinutes) {
-        if (select === 'start') {
-          this.editedEventData.endTime = '';
-        }
+      var from = new Date(Date.parse(fromdt)); //var to = new Date(Date.parse(todt));
 
-        if (select === 'end') {
-          this.editedEventData.startTime = '';
-        }
-      } else {
-        if (select === 'start') {
-          var hours = sTime[0];
-          hours = parseInt(hours) + 1;
-
-          if (hours >= 12) {
-            hours = hours - 12;
-          }
-
-          if (hours < 10) {
-            hours = '0' + hours;
-          }
-
-          var time = hours + ':' + sTime[1] + ' ' + startTime[1];
-          console.log(time);
-          this.editedEventData.endTime = time;
-        }
+      if (select === 'start') {
+        var endTime = moment__WEBPACK_IMPORTED_MODULE_2___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+        this.editedEventData.endTime = endTime;
       }
     },
     getAddressData: function getAddressData(addressData, placeResultData, id) {
@@ -6026,15 +5963,8 @@ __webpack_require__.r(__webpack_exports__);
       id: this.event.id,
       duplicate_event_id: this.event.duplicate_event_id,
       startDate: this.$options.filters.formatDate(this.event.started_at),
-      startTime: this.$options.filters.formatTime(this.event.started_at),
-      endTime: this.$options.filters.formatTime(this.event.ended_at),
-      // startTimeHours: this.$options.filters.formatHours(this.event.started_at),
-      // startTimeMinutes: this.$options.filters.formatMinutes(this.event.started_at),
-      // startTimeAmPm: this.$options.filters.formatAmPm(this.event.started_at),
-      // endDate: this.$options.filters.formatDate(this.event.ended_at),
-      // endTimeHours: this.$options.filters.formatHours(this.event.ended_at),
-      // endTimeMinutes: this.$options.filters.formatMinutes(this.event.ended_at),
-      // endTimeAmPm: this.$options.filters.formatAmPm(this.event.ended_at),
+      startTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(this.event.started_at).format('hh:mm a').toUpperCase(),
+      endTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(this.event.ended_at).format('hh:mm a').toUpperCase(),
       location: this.event.location,
       type: this.event.type,
       description: this.event.description

@@ -15,7 +15,8 @@ use Google_Service_Calendar_Event;
 use Google_Service_Calendar_EventExtendedProperties;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Session;
+use URL;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -401,7 +402,9 @@ class CalendarsController extends Controller
      */
     public function subscribeCalendarAction(Request $request): JsonResponse
     {
+        session_start();
         if (!Auth::user()) {
+            Session::put('backUrl', URL::previous());
     		return response()->json([
                 'code' => 401
             ]);

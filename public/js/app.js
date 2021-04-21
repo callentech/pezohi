@@ -7669,8 +7669,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/subscribe-calendar', {
         calendar_id: id
       }).then(function (response) {
-        console.log(response);
-
         if (response.data.code === 401) {
           document.location.href = "/";
         } else if (response.data.code === 404) {

@@ -59,7 +59,10 @@ class GoogleController extends Controller
 
             $this->dispatch(new SyncCalendars(Auth::user()));
 
-            return redirect()->intended('home');
+            // return redirect()->intended('home');
+
+            $previous   = Session::get('backUrl');
+            return $previous ? redirect($previous) :  redirect()->back();
 
         } catch (Exception $e) {
             Auth::logout();

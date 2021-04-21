@@ -848,7 +848,7 @@
                                             </div>
 
 											<div class="form-row">
-                                                <label>Events: {{ new_calendar.events.length }}</label>
+                                                <label>Events: {{ current_calendar.events.length }}</label>
 												<div class="card col-md-12">
                                                     <div class="card-body">
 
@@ -865,7 +865,8 @@
                                                             <tbody>
                                                             <tr v-for="(event, index) in current_calendar.events" :data-index="index">
                                                                 <td data-val="startDate">
-                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
+                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - 
+                                                                    {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                 </td>
 
                                                                 <td data-val="location">
@@ -1244,11 +1245,9 @@
 
 		methods: {
 
-           selectTimeAction: function(select) {
-                let fromdt = this.editedEventData.startDate+' '+this.editedEventData.startTime;
-                //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
+            selectTimeAction: function(select) {
+                let fromdt = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
                 let from = new Date(Date.parse(fromdt));
-                //var to = new Date(Date.parse(todt));
                 
                 if (select === 'start') {
                     let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
@@ -1435,11 +1434,13 @@
                 event.stopPropagation();
                 
                 if (this.editedEventData.index === null) {
+
+
                     // Add new Event
-                    // let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
-                    // let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
-                    let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
-                    let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
+                    let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
+                    let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+                    // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
+                    // let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
                     let newEvent = {
                         id: 'new',
@@ -1453,6 +1454,8 @@
 
                     this.showNewEventDataForm = false;
                     this.requestSuccess = false;
+
+
                 } else {
                     // Update current event
                     let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
@@ -1488,6 +1491,13 @@
                     this.showNewEventDataForm = false;
                     this.requestSuccess = false;
                 }
+            },
+
+            removeEvent: function(index, event) {
+                event.preventDefault();
+                 let eventsArray = this.current_calendar.events;
+                eventsArray.splice(index, 1);
+                this.current_calendar.events = eventsArray;
             },
 
             markRemoveEditedEvent: function(index) {
@@ -1744,7 +1754,6 @@
             },
             // END Duplicate Calendar Methods
 
-
             // Common methods
             editEvent: function(index, event) {
                 event.preventDefault();
@@ -1769,23 +1778,6 @@
                 this.showNewEventDataForm = true;
                 this.showEditedEventDetails = false;
             },
-            // getDateTime: function(date, hours, minutes, ampm) {
-            //     let dateArray = date.split ("/");
-            //     let day = dateArray[1];
-            //     let month = dateArray[0] < 10 ? '0' + dateArray[0] : dateArray[0];
-            //     hours = parseInt(hours);
-            //     minutes = parseInt(minutes);
-            //     if (hours === 12 && ampm === 'PM') {
-            //         hours = 0;
-            //     } else {
-            //         hours = ampm === 'PM' ? hours + 12 : hours;
-            //     }
-            //     hours = hours < 10 ? '0' + hours : hours;
-            //     minutes = minutes < 10 ? '0' + minutes : minutes;
-            //     let result = dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
-            //     return result;
-            // },
-
 		},
 
 		filters: {

@@ -2991,6 +2991,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -3075,9 +3076,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectTimeAction: function selectTimeAction(select) {
-      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime; //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
-
-      var from = new Date(Date.parse(fromdt)); //var to = new Date(Date.parse(todt));
+      var fromdt = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
+      var from = new Date(Date.parse(fromdt));
 
       if (select === 'start') {
         var endTime = moment__WEBPACK_IMPORTED_MODULE_2___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
@@ -3246,10 +3246,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.editedEventData.index === null) {
         // Add new Event
-        // let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
-        // let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
-        var started_at = this.editedEventData.startDate + ' ' + this.editedEventData.startTime;
-        var ended_at = this.editedEventData.startDate + ' ' + this.editedEventData.endTime;
+        var started_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
+        var ended_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.endTime; // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
+        // let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
+
         var newEvent = {
           id: 'new',
           started_at: started_at,
@@ -3295,6 +3295,12 @@ __webpack_require__.r(__webpack_exports__);
         this.showNewEventDataForm = false;
         this.requestSuccess = false;
       }
+    },
+    removeEvent: function removeEvent(index, event) {
+      event.preventDefault();
+      var eventsArray = this.current_calendar.events;
+      eventsArray.splice(index, 1);
+      this.current_calendar.events = eventsArray;
     },
     markRemoveEditedEvent: function markRemoveEditedEvent(index) {
       this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
@@ -3542,23 +3548,7 @@ __webpack_require__.r(__webpack_exports__);
       };
       this.showNewEventDataForm = true;
       this.showEditedEventDetails = false;
-    } // getDateTime: function(date, hours, minutes, ampm) {
-    //     let dateArray = date.split ("/");
-    //     let day = dateArray[1];
-    //     let month = dateArray[0] < 10 ? '0' + dateArray[0] : dateArray[0];
-    //     hours = parseInt(hours);
-    //     minutes = parseInt(minutes);
-    //     if (hours === 12 && ampm === 'PM') {
-    //         hours = 0;
-    //     } else {
-    //         hours = ampm === 'PM' ? hours + 12 : hours;
-    //     }
-    //     hours = hours < 10 ? '0' + hours : hours;
-    //     minutes = minutes < 10 ? '0' + minutes : minutes;
-    //     let result = dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
-    //     return result;
-    // },
-
+    }
   },
   filters: {
     formatHours: function formatHours(value) {
@@ -4028,218 +4018,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -76293,7 +76071,9 @@ var render = function() {
                                     _c("label", [
                                       _vm._v(
                                         "Events: " +
-                                          _vm._s(_vm.new_calendar.events.length)
+                                          _vm._s(
+                                            _vm.current_calendar.events.length
+                                          )
                                       )
                                     ]),
                                     _vm._v(" "),
@@ -76389,7 +76169,7 @@ var render = function() {
                                                                       event.started_at
                                                                     )
                                                                   ) +
-                                                                  " - " +
+                                                                  " - \n                                                                    " +
                                                                   _vm._s(
                                                                     _vm._f(
                                                                       "formatDate"
@@ -81215,40 +80995,43 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "row mt-2" }, [
-                _c("div", { staticClass: "col-12 text-right" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm btn-secondary",
-                      attrs: { disabled: _vm.view_events_start <= 0 },
-                      on: {
-                        click: function($event) {
-                          return _vm.showEvents("prev")
-                        }
-                      }
-                    },
-                    [_vm._v("Prev")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm btn-secondary",
-                      attrs: {
-                        disabled:
-                          _vm.view_events_end >= _vm.calendar.events.length - 1
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.showEvents("next")
-                        }
-                      }
-                    },
-                    [_vm._v("Next")]
-                  )
-                ])
-              ])
+              _vm.sortedEvents.length > 5
+                ? _c("div", { staticClass: "row mt-2" }, [
+                    _c("div", { staticClass: "col-12 text-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-secondary",
+                          attrs: { disabled: _vm.view_events_start <= 0 },
+                          on: {
+                            click: function($event) {
+                              return _vm.showEvents("prev")
+                            }
+                          }
+                        },
+                        [_vm._v("Prev")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-secondary",
+                          attrs: {
+                            disabled:
+                              _vm.view_events_end >=
+                              _vm.calendar.events.length - 1
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.showEvents("next")
+                            }
+                          }
+                        },
+                        [_vm._v("Next")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
             ])
           : _vm._e()
       ]),
@@ -84884,40 +84667,43 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "row mt-2" }, [
-                _c("div", { staticClass: "col-12 text-right" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm btn-secondary",
-                      attrs: { disabled: _vm.view_events_start <= 0 },
-                      on: {
-                        click: function($event) {
-                          return _vm.showEvents("prev")
-                        }
-                      }
-                    },
-                    [_vm._v("Prev")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm btn-secondary",
-                      attrs: {
-                        disabled:
-                          _vm.view_events_end >= _vm.calendar.events.length - 1
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.showEvents("next")
-                        }
-                      }
-                    },
-                    [_vm._v("Next")]
-                  )
-                ])
-              ])
+              _vm.sortedEvents.length > 5
+                ? _c("div", { staticClass: "row mt-2" }, [
+                    _c("div", { staticClass: "col-12 text-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-secondary",
+                          attrs: { disabled: _vm.view_events_start <= 0 },
+                          on: {
+                            click: function($event) {
+                              return _vm.showEvents("prev")
+                            }
+                          }
+                        },
+                        [_vm._v("Prev")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-secondary",
+                          attrs: {
+                            disabled:
+                              _vm.view_events_end >=
+                              _vm.calendar.events.length - 1
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.showEvents("next")
+                            }
+                          }
+                        },
+                        [_vm._v("Next")]
+                      )
+                    ])
+                  ])
+                : _vm._e()
             ])
           : _vm._e()
       ]),

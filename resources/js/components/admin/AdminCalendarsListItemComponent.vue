@@ -379,7 +379,7 @@
 
                 </div>
 
-                 <div class="row mt-2">
+                 <div v-if="sortedEvents.length > 5" class="row mt-2">
                     <div class="col-12 text-right">
                         <button class="btn btn-sm btn-secondary" @click="showEvents('prev')" :disabled="view_events_start <= 0">Prev</button>
                         <button class="btn btn-sm btn-secondary" @click="showEvents('next')" :disabled="view_events_end >= calendar.events.length - 1">Next</button>

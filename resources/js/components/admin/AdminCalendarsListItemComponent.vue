@@ -65,7 +65,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6" >
                         <div>
-                            1-5 of {{ calendar.events.length }} <i class="fa fa-angle-right"></i>
+                            {{view_events_start+1}} - {{view_events_end+1 >= calendar.events.length ? calendar.events.length : view_events_end+1}} of {{ calendar.events.length }} <i class="fa fa-angle-right"></i>
                             <a href="javascript:void(0)" @click="showEditCalendarModalAction(calendar.id)">View all</a>
                         </div>
                     </div>
@@ -127,8 +127,13 @@
                         </div>
                     </div>
 
+
                     <div class="events-list">
-                        <div v-for="event in sortedEvents">
+                        <!-- <div v-for="event in sortedEvents">
+                            <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
+                        </div> -->
+
+                        <div v-for="(event, index) in sortedEvents"  v-bind:class="{ 'hidden-event': index < view_events_start || index > view_events_end }">
                             <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
                         </div>
                     </div>
@@ -373,6 +378,13 @@
                     </transition>
 
                 </div>
+
+                 <div class="row mt-2">
+                    <div class="col-12 text-right">
+                        <button class="btn btn-sm btn-secondary" @click="showEvents('prev')" :disabled="view_events_start <= 0">Prev</button>
+                        <button class="btn btn-sm btn-secondary" @click="showEvents('next')" :disabled="view_events_end >= calendar.events.length - 1">Next</button>
+                    </div>
+                </div>
             </div>
         </transition>
         <!-- END Calendar details -->
@@ -445,6 +457,9 @@ export default {
             ranges: false,
             showCalendar: true,
 
+            view_events_start: 0,
+            view_events_end: 4,
+
 
 
             showBody: false,
@@ -516,6 +531,15 @@ export default {
     },
 
     methods: {
+
+        showEvents: function(dir) {
+            if (dir === 'next') {
+                this.view_events_start = this.view_events_end + 1;
+            } else if (dir === 'prev') {
+                this.view_events_start = this.view_events_start - 5;
+            }
+            this.view_events_end = this.view_events_start + 4 > this.calendar.events.length ? this.calendar.events.length-1 : this.view_events_start + 4;
+        },
 
         getAddressData: function (addressData, placeResultData, id) {
             this.editedEventData.location = addressData.newVal;

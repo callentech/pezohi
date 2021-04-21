@@ -3583,17 +3583,20 @@ __webpack_require__.r(__webpack_exports__);
       return date.getMonth() + 1 + '/' + day + '/' + date.getFullYear();
     },
     formatTime: function formatTime(value) {
-      var date = new Date(value);
-      var hours = date.getHours();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
-      var minutes = date.getMinutes();
-      hours = hours % 12;
-      ampm = hours == 0 ? 'AM' : ampm;
-      hours = hours < 10 ? '0' + hours : hours;
-      minutes = Math.ceil(minutes / 30) * 30;
-      minutes =  true ? 0 : 0;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return hours + ':' + minutes + ' ' + ampm;
+      var dateTime = new Date(Date.parse(value));
+      return moment__WEBPACK_IMPORTED_MODULE_2___default()(dateTime).format('hh:mm a').toUpperCase(); // let date = new Date(value);
+      // let hours = date.getHours();
+      // let ampm = hours >= 12 ? 'PM' : 'AM';
+      // let minutes = date.getMinutes();
+      // hours = hours % 12;
+      // ampm = hours == 0 ? 'AM' : ampm;
+      // hours = hours  < 10 ? '0'+hours : hours;
+      // minutes = Math.ceil(minutes/30)*30;
+      // minutes = 60 ? 0 : minutes;
+      // minutes = minutes < 10 ? '0'+minutes : minutes;
+      // return hours +':'+minutes + ' '+ampm;
+      //     
+      // 
     },
     sliceString: function sliceString(value) {
       if (value && value.length > 10) {
@@ -5759,19 +5762,19 @@ __webpack_require__.r(__webpack_exports__);
       var year = date.getFullYear();
       return month + '/' + day + '/' + year;
     },
-    formatTime: function formatTime(value) {
-      var date = new Date(value);
-      var hours = date.getHours();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
-      var minutes = date.getMinutes();
-      hours = hours % 12;
-      ampm = hours == 0 ? 'AM' : ampm;
-      hours = hours < 10 ? '0' + hours : hours;
-      minutes = Math.ceil(minutes / 30) * 30;
-      minutes =  true ? 0 : 0;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      return hours + ':' + minutes + ' ' + ampm;
-    },
+    // formatTime: function(value) {
+    //     let date = new Date(value);
+    //     let hours = date.getHours();
+    //     let ampm = hours >= 12 ? 'PM' : 'AM';
+    //     let minutes = date.getMinutes();
+    //     hours = hours % 12;
+    //     ampm = hours == 0 ? 'AM' : ampm;
+    //     hours = hours  < 10 ? '0'+hours : hours;
+    //     minutes = Math.ceil(minutes/30)*30;
+    //     minutes = 60 ? 0 : minutes;
+    //     minutes = minutes < 10 ? '0'+minutes : minutes;
+    //     return hours +':'+minutes + ' '+ampm;
+    // },
     formatHours: function formatHours(value) {
       var date = new Date(value);
       var hours = date.getHours();

@@ -1813,17 +1813,26 @@
                 return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear();
 			},
              formatTime: function(value) {
-                let date = new Date(value);
-                let hours = date.getHours();
-                let ampm = hours >= 12 ? 'PM' : 'AM';
-                let minutes = date.getMinutes();
-                hours = hours % 12;
-                ampm = hours == 0 ? 'AM' : ampm;
-                hours = hours  < 10 ? '0'+hours : hours;
-                minutes = Math.ceil(minutes/30)*30;
-                minutes = 60 ? 0 : minutes;
-                minutes = minutes < 10 ? '0'+minutes : minutes;
-                return hours +':'+minutes + ' '+ampm;
+
+                let dateTime = new Date(Date.parse(value));
+                return moment(dateTime).format('hh:mm a').toUpperCase();
+
+                
+                // let date = new Date(value);
+                // let hours = date.getHours();
+                // let ampm = hours >= 12 ? 'PM' : 'AM';
+                // let minutes = date.getMinutes();
+                // hours = hours % 12;
+                // ampm = hours == 0 ? 'AM' : ampm;
+                // hours = hours  < 10 ? '0'+hours : hours;
+                // minutes = Math.ceil(minutes/30)*30;
+                // minutes = 60 ? 0 : minutes;
+                // minutes = minutes < 10 ? '0'+minutes : minutes;
+                // return hours +':'+minutes + ' '+ampm;
+
+            //     
+
+            // 
             },
             sliceString: function(value) {
                 if (value && value.length > 10) {

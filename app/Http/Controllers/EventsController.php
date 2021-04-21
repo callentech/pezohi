@@ -57,7 +57,6 @@ class EventsController extends Controller
      */
     public function duplicateSingleEventAction(Request $request): JsonResponse
     {
-
         $request->validate([
             'duplicate_event_id' => 'required',
             'startDate' => 'required',
@@ -86,8 +85,6 @@ class EventsController extends Controller
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
 
-            
-
             $startTimeArray = explode(' ', $request->startTime);
             $startTime = explode(':', $startTimeArray[0]);
             $startTimeAmPm = $startTimeArray[1];
@@ -109,8 +106,10 @@ class EventsController extends Controller
                 ]);
             }
 
+            $eventSummary = $calendar->name.' '.$request->type;
+
             $newGoogleEvent = new Google_Service_Calendar_Event(array(
-                'summary' => 'Pezohi Event',
+                'summary' => $eventSummary,
                 'location' => isset($request->location) ? $request->location : '',
                 'description' => isset($request->description) ? $request->description : '',
                 'start' => array(
@@ -325,8 +324,10 @@ class EventsController extends Controller
                 ]);
             }
 
+            $eventSummary = $calendar->name.' '.$request->type;
+
             $newGoogleEvent = new Google_Service_Calendar_Event(array(
-                'summary' => 'Pezohi Event',
+                'summary' => $eventSummary,
                 'location' => $request->location ?? '',
                 'description' => $request->notes ?? '',
                 'start' => array(

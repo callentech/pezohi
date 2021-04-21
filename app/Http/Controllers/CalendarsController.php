@@ -83,8 +83,10 @@ class CalendarsController extends Controller
                 $started_at = date_create($event['started_at']);
                 $ended_at = date_create($event['ended_at']);
 
+                $eventSummary = trim($request->calendar_name).' '.$event['type'];
+
                 $newGoogleEvent = new Google_Service_Calendar_Event(array(
-                    'summary' => 'Pezohi Event',
+                    'summary' => $eventSummary,
                     'location' => trim($event['location']),
                     'description' => trim($event['description']),
                     'start' => array(
@@ -230,10 +232,13 @@ class CalendarsController extends Controller
                     if ($event['id'] == 'new') {
 
                         // Create ne event
+
+                        $eventSummary = $calendar->name.' '.$event['type'];
+
                         $started_at = date_create($event['started_at']);
                         $ended_at = date_create($event['ended_at']);
                         $newGoogleEvent = new Google_Service_Calendar_Event(array(
-                            'summary' => 'Pezohi Event',
+                            'summary' => $eventSummary,
                             'location' => trim($event['location']),
                             'description' => trim($event['description']),
                             'start' => array(

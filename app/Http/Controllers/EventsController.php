@@ -758,9 +758,6 @@ class EventsController extends Controller
                 
 
             } else {
-
-                var_dump($ex->getCode());
-                exit;
                 return response()->json([
                     'code' => 0,
                     'data' => [

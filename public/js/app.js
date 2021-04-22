@@ -3870,11 +3870,13 @@ __webpack_require__.r(__webpack_exports__);
         if (typeFilter.val === 'all') {
           sortedArray.push(item);
         } else if (typeFilter.val === 'owned') {
-          if (item.owned) {
+          if (item.owned === true) {
             sortedArray.push(item);
           }
+
+          sortedArray.push(item);
         } else if (typeFilter.val === 'shared') {
-          if (!item.owned) {
+          if (item.owned === false) {
             sortedArray.push(item);
           }
         }
@@ -3999,14 +4001,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    // let user_id = this.user_id;
-    // this.calendars.forEach(function(item) {
-    //     if (item.user.id === parseInt(user_id)) {
-    //         item.owned = true;
-    //     } else {    
-    //         item.owned = false;
-    //     }
-    // });
     this.sortCalendarsListByUpdated();
   }
 });
@@ -4031,6 +4025,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4861,6 +4861,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.sortEventsListByDate();
+  },
+  updated: function updated() {
+    this.sortedEvents = this.calendar.events;
   }
 });
 
@@ -79526,86 +79529,84 @@ var render = function() {
                   ]
                 ),
             _vm._v(" "),
-            _vm.calendar.owned
-              ? _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-calendar-actions",
-                    on: {
-                      mouseover: function($event) {
-                        _vm.showCalendarDropdownActions = true
-                      },
-                      mouseleave: function($event) {
-                        _vm.showCalendarDropdownActions = false
-                      }
-                    }
+            _c(
+              "div",
+              {
+                staticClass: "dropdown-calendar-actions",
+                on: {
+                  mouseover: function($event) {
+                    _vm.showCalendarDropdownActions = true
                   },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("transition", { attrs: { name: "fade" } }, [
-                      _vm.showCalendarDropdownActions
-                        ? _c("div", { staticClass: "items" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "javascript:void(0)" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.showEditCalendarModalAction(
-                                      _vm.calendar.id
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "far fa-edit" }),
-                                _vm._v(" Edit")
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "javascript:void(0)" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.showDuplicateCalendarModal(
-                                      _vm.calendar.id
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "far fa-clone" }),
-                                _vm._v(" Duplicate")
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "javascript:void(0)" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.showConfirmCalendarDelete(
-                                      _vm.calendar.id
-                                    )
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "far fa-trash-alt" }),
-                                _vm._v(" Delete")
-                              ]
-                            )
-                          ])
-                        : _vm._e()
-                    ])
-                  ],
-                  1
-                )
-              : _vm._e(),
+                  mouseleave: function($event) {
+                    _vm.showCalendarDropdownActions = false
+                  }
+                }
+              },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("transition", { attrs: { name: "fade" } }, [
+                  _vm.showCalendarDropdownActions
+                    ? _c("div", { staticClass: "items" }, [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showEditCalendarModalAction(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-edit" }),
+                            _vm._v(" Edit")
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showDuplicateCalendarModal(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-clone" }),
+                            _vm._v(" Duplicate")
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showConfirmCalendarDelete(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "far fa-trash-alt" }),
+                            _vm._v(" Delete")
+                          ]
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              ],
+              1
+            ),
             _vm._v(" "),
             _vm.showBody
               ? _c(
@@ -79692,25 +79693,22 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-lg-6 text-right" }, [
-                  _vm.calendar.owned
-                    ? _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn btn-outline-primary btn-sm pull-right",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.showAddEventForm(_vm.calendar.id)
-                            }
-                          }
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-plus" }),
-                          _vm._v(" Add event")
-                        ]
-                      )
-                    : _vm._e()
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary btn-sm pull-right",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.showAddEventForm(_vm.calendar.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-plus" }),
+                      _vm._v(" Add event")
+                    ]
+                  )
                 ])
               ]),
               _vm._v(" "),

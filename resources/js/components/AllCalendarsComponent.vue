@@ -226,22 +226,33 @@
                 let user_id = this.user_id;
 
                 let sortedArray = [];
+                
+
+
                 this.calendars.forEach(function(item) {
+
+                   
                     if (typeFilter.val === 'all') {
                         sortedArray.push(item);
                     } else if (typeFilter.val === 'owned') {
 
-                        if (item.owned) {
+                        if (item.owned === true) {
                             sortedArray.push(item);
                         }
 
+                        sortedArray.push(item);
+
                     } else if (typeFilter.val === 'shared') {
-                        if (!item.owned) {
+                        if (item.owned === false) {
                             sortedArray.push(item);
                         }
+
+                       
                     }
                 });
                 this.sortedCalendars = sortedArray;
+
+                
             },
 
             showAddCalendarModal: function() {
@@ -377,24 +388,6 @@
         },
 
         mounted() {
-
-            // let user_id = this.user_id;
-
-            // this.calendars.forEach(function(item) {
-
-            //     if (item.user.id === parseInt(user_id)) {
-                    
-            //         item.owned = true;
-
-            //     } else {    
-
-            //         item.owned = false;
-
-            //     }
-
-            // });
-
-
             this.sortCalendarsListByUpdated();
         }
     }

@@ -2,6 +2,8 @@
 
 	<div class="card calendar-single">
 
+        
+
 		<div class="card-heading">
 
 			<div class="row align-items-center">
@@ -39,7 +41,7 @@
 	                    <i class="far fa-bell"></i> Subscribe
 	                </button>
 
-					<div v-if="calendar.owned" @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
+					<div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
 						<button type="button" class="btn btn-light btn-sm pull-right btn-open" >
 							<i class="fas fa-ellipsis-v"></i>
 		                </button>
@@ -79,7 +81,7 @@
 	                </div>
 
 	                <div class="col-lg-6 text-right">
-	                    <button v-if="calendar.owned" type="button" class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
+	                    <button type="button" class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
 	                </div>
 	            </div>
 
@@ -140,6 +142,10 @@
                             <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
                         </div> -->
 
+                        
+
+                        
+                        
                         <div v-for="(event, index) in sortedEvents"  v-bind:class="{ 'hidden-event': index < view_events_start || index > view_events_end }">
                             <calendars-list-item-event-component :event="event" :calendar="calendar" ref="event"></calendars-list-item-event-component>
                         </div>
@@ -782,6 +788,7 @@ import moment from 'moment';
             sortEventsListByDate: function() {
                 this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
                 this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
+                
             },
             sortEventsListByLocation: function() {
                 this.sortByLocationDirection = this.sortByLocationDirection === 'desc' ? 'asc' : 'desc';
@@ -882,7 +889,10 @@ import moment from 'moment';
 
 		mounted() {
             this.sortEventsListByDate();
-		}
+		},
 
+        updated() {
+            this.sortedEvents = this.calendar.events;
+        },
 	}
 </script>

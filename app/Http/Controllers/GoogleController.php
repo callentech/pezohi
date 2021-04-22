@@ -62,7 +62,9 @@ class GoogleController extends Controller
             // return redirect()->intended('home');
 
             $previous   = Session::get('backUrl');
-            return $previous ? redirect($previous) :  redirect()->back();
+            //return $previous ? redirect($previous) :  redirect()->back();
+
+            return $previous ? redirect($previous) : redirect()->intended('home');
 
         } catch (Exception $e) {
             Auth::logout();

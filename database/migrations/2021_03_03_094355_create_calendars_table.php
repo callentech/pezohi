@@ -24,7 +24,7 @@ class CreateCalendarsTable extends Migration
 
             // Data.
             $table->string('google_id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('color');
             $table->string('timezone');
 

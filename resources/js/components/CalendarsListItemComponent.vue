@@ -23,6 +23,8 @@
 
 	            <div class="col-4 text-right actions">
 
+                    
+
 	            	<button type="button" class="btn btn-primary btn-sm" @click="shareCalendar(calendar.publicUrl)">
 	                    <i class="fas fa-user-friends"></i> Share
 	                </button>
@@ -31,11 +33,13 @@
 	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
 
+                    
+
 	                <button v-else type="button" class="btn btn-outline-primary btn-sm" name="button" @click="subscribeCalendarAction(calendar.id)">
 	                    <i class="far fa-bell"></i> Subscribe
 	                </button>
 
-					<div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
+					<div v-if="calendar.owned" @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
 						<button type="button" class="btn btn-light btn-sm pull-right btn-open" >
 							<i class="fas fa-ellipsis-v"></i>
 		                </button>
@@ -75,7 +79,7 @@
 	                </div>
 
 	                <div class="col-lg-6 text-right">
-	                    <button type="button" class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
+	                    <button v-if="calendar.owned" type="button" class="btn btn-outline-primary btn-sm pull-right" @click="showAddEventForm(calendar.id)"><i class="fa fa-plus"></i> Add event</button>
 	                </div>
 	            </div>
 
@@ -137,7 +141,7 @@
                         </div> -->
 
                         <div v-for="(event, index) in sortedEvents"  v-bind:class="{ 'hidden-event': index < view_events_start || index > view_events_end }">
-                            <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
+                            <calendars-list-item-event-component :event="event" :calendar="calendar" ref="event"></calendars-list-item-event-component>
                         </div>
 	            	</div>
 
@@ -683,10 +687,6 @@ import moment from 'moment';
 			showAddEventForm: function(calendar_id) {
 				this.calendar_id = calendar_id;
 				this.editedEventData.type = 'game';
-
-                this.$refs.event.forEach((element) => {
-                    element.showEditSingleEventForm = false;
-                });
 
                 this.editedEventData.startDate = moment();
                 let startDateTime = moment();

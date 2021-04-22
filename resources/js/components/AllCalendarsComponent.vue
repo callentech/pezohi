@@ -181,7 +181,7 @@
 
 <script>
     export default {
-        props:['data', 'jobs_status', 'user_role'],
+        props:['data', 'jobs_status', 'user_role', 'user_id'],
 
         data() {
             return {
@@ -223,17 +223,20 @@
                 });
                 typeFilter.active = true;
 
+                let user_id = this.user_id;
+
                 let sortedArray = [];
                 this.calendars.forEach(function(item) {
                     if (typeFilter.val === 'all') {
                         sortedArray.push(item);
                     } else if (typeFilter.val === 'owned') {
-                        if (item.access_role === 'owner') {
+
+                        if (item.owned) {
                             sortedArray.push(item);
                         }
-                    } else if (typeFilter.val === 'shared') {
 
-                        if (item.access_role !== 'owner') {
+                    } else if (typeFilter.val === 'shared') {
+                        if (!item.owned) {
                             sortedArray.push(item);
                         }
                     }
@@ -374,6 +377,24 @@
         },
 
         mounted() {
+
+            // let user_id = this.user_id;
+
+            // this.calendars.forEach(function(item) {
+
+            //     if (item.user.id === parseInt(user_id)) {
+                    
+            //         item.owned = true;
+
+            //     } else {    
+
+            //         item.owned = false;
+
+            //     }
+
+            // });
+
+
             this.sortCalendarsListByUpdated();
         }
     }

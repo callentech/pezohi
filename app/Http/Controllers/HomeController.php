@@ -30,7 +30,26 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $calendars = Auth::user()->calendars()->with('events')->get();
+        $calendars = [];
+
+        $usrCalendars = Auth::user()->calendars()->with('events')->get();
+        foreach ($usrCalendars as $item) {
+            $item->owned = TRUE;
+            $calendars[] = $item;
+        }
+        unset($item);
+
+        $usrSubscribes = Auth::user()->subscribes()->with('calendar')->get();
+        foreach ($usrSubscribes as $item) {
+            if ($item->calendar->user->id != Auth::user()->id) {
+                $item->calendar->owned = FALSE;
+                $calendars[] = $item->calendar;
+            }
+        }
+        unset($item);
+        
+
+       
         foreach ($calendars as $key => $calendar) {
             if ($calendar->google_id == Auth::user()->email) {
                 unset($calendars[$key]);
@@ -57,16 +76,21 @@ class HomeController extends Controller
             $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;
 
             // Calendar owner
-            if ($calendar->access_role == 'owner') {
-                $calendar->owner = $calendar->user->email;
-            } else {
-                $ownerCalendar = Calendar::where(['google_id' => $calendar->google_id, 'access_role' => 'owner'])->first();
-                if ($ownerCalendar) {
-                    $calendar->owner = $ownerCalendar->user->email;
-                } else {
-                    $calendar->owner = $calendar->user->email;
-                }
-            }
+            // if ($calendar->access_role == 'owner') {
+            //     $calendar->owner = $calendar->user->email;
+            // } else {
+            //     $ownerCalendar = Calendar::where(['google_id' => $calendar->google_id, 'access_role' => 'owner'])->first();
+            //     if ($ownerCalendar) {
+            //         $calendar->owner = $ownerCalendar->user->email;
+            //     } else {
+            //         $calendar->owner = $calendar->user->email;
+            //     }
+            // }
+
+            // Calendar owner
+            //$ownerCalendar = Calendar::where(['google_id' => $calendar->google_id, 'access_role' => 'owner'])->first();
+            $calendar->owner = $calendar->user->email;
+
 
             // Is subscribe
             $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();

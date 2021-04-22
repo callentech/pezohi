@@ -3824,7 +3824,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['data', 'jobs_status', 'user_role'],
+  props: ['data', 'jobs_status', 'user_role', 'user_id'],
   data: function data() {
     return {
       calendars: this.data,
@@ -3864,16 +3864,17 @@ __webpack_require__.r(__webpack_exports__);
         typeFilter.active = false;
       });
       typeFilter.active = true;
+      var user_id = this.user_id;
       var sortedArray = [];
       this.calendars.forEach(function (item) {
         if (typeFilter.val === 'all') {
           sortedArray.push(item);
         } else if (typeFilter.val === 'owned') {
-          if (item.access_role === 'owner') {
+          if (item.owned) {
             sortedArray.push(item);
           }
         } else if (typeFilter.val === 'shared') {
-          if (item.access_role !== 'owner') {
+          if (!item.owned) {
             sortedArray.push(item);
           }
         }
@@ -3998,6 +3999,14 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    // let user_id = this.user_id;
+    // this.calendars.forEach(function(item) {
+    //     if (item.user.id === parseInt(user_id)) {
+    //         item.owned = true;
+    //     } else {    
+    //         item.owned = false;
+    //     }
+    // });
     this.sortCalendarsListByUpdated();
   }
 });
@@ -4022,6 +4031,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
+//
+//
+//
+//
 //
 //
 //
@@ -4670,9 +4683,6 @@ __webpack_require__.r(__webpack_exports__);
     showAddEventForm: function showAddEventForm(calendar_id) {
       this.calendar_id = calendar_id;
       this.editedEventData.type = 'game';
-      this.$refs.event.forEach(function (element) {
-        element.showEditSingleEventForm = false;
-      });
       this.editedEventData.startDate = moment__WEBPACK_IMPORTED_MODULE_4___default()();
       var startDateTime = moment__WEBPACK_IMPORTED_MODULE_4___default()();
       startDateTime.add(30, 'minutes').startOf('hour');
@@ -4996,9 +5006,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['event'],
+  props: ['event', 'calendar'],
   data: function data() {
     return {
       showEditSingleEventForm: false,
@@ -79515,84 +79526,86 @@ var render = function() {
                   ]
                 ),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "dropdown-calendar-actions",
-                on: {
-                  mouseover: function($event) {
-                    _vm.showCalendarDropdownActions = true
+            _vm.calendar.owned
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-calendar-actions",
+                    on: {
+                      mouseover: function($event) {
+                        _vm.showCalendarDropdownActions = true
+                      },
+                      mouseleave: function($event) {
+                        _vm.showCalendarDropdownActions = false
+                      }
+                    }
                   },
-                  mouseleave: function($event) {
-                    _vm.showCalendarDropdownActions = false
-                  }
-                }
-              },
-              [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("transition", { attrs: { name: "fade" } }, [
-                  _vm.showCalendarDropdownActions
-                    ? _c("div", { staticClass: "items" }, [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "javascript:void(0)" },
-                            on: {
-                              click: function($event) {
-                                return _vm.showEditCalendarModalAction(
-                                  _vm.calendar.id
-                                )
-                              }
-                            }
-                          },
-                          [
-                            _c("i", { staticClass: "far fa-edit" }),
-                            _vm._v(" Edit")
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "javascript:void(0)" },
-                            on: {
-                              click: function($event) {
-                                return _vm.showDuplicateCalendarModal(
-                                  _vm.calendar.id
-                                )
-                              }
-                            }
-                          },
-                          [
-                            _c("i", { staticClass: "far fa-clone" }),
-                            _vm._v(" Duplicate")
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "javascript:void(0)" },
-                            on: {
-                              click: function($event) {
-                                return _vm.showConfirmCalendarDelete(
-                                  _vm.calendar.id
-                                )
-                              }
-                            }
-                          },
-                          [
-                            _c("i", { staticClass: "far fa-trash-alt" }),
-                            _vm._v(" Delete")
-                          ]
-                        )
-                      ])
-                    : _vm._e()
-                ])
-              ],
-              1
-            ),
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.showCalendarDropdownActions
+                        ? _c("div", { staticClass: "items" }, [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.showEditCalendarModalAction(
+                                      _vm.calendar.id
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "far fa-edit" }),
+                                _vm._v(" Edit")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.showDuplicateCalendarModal(
+                                      _vm.calendar.id
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "far fa-clone" }),
+                                _vm._v(" Duplicate")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.showConfirmCalendarDelete(
+                                      _vm.calendar.id
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "far fa-trash-alt" }),
+                                _vm._v(" Delete")
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ],
+                  1
+                )
+              : _vm._e(),
             _vm._v(" "),
             _vm.showBody
               ? _c(
@@ -79679,22 +79692,25 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-lg-6 text-right" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-outline-primary btn-sm pull-right",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.showAddEventForm(_vm.calendar.id)
-                        }
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "fa fa-plus" }),
-                      _vm._v(" Add event")
-                    ]
-                  )
+                  _vm.calendar.owned
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn btn-outline-primary btn-sm pull-right",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.showAddEventForm(_vm.calendar.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-plus" }),
+                          _vm._v(" Add event")
+                        ]
+                      )
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -79853,7 +79869,7 @@ var render = function() {
                           _c("calendars-list-item-event-component", {
                             ref: "event",
                             refInFor: true,
-                            attrs: { event: event }
+                            attrs: { event: event, calendar: _vm.calendar }
                           })
                         ],
                         1
@@ -81253,27 +81269,29 @@ var render = function() {
                 _c(
                   "span",
                   { staticClass: "badge badge-secondary event-status-badge" },
-                  [_vm._v(_vm._s(_vm.event.status))]
+                  [_vm._v(_vm._s(_vm.event.status) + " - HELLO")]
                 )
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-1" }, [
               _c("div", { staticClass: "data text-right" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-danger btn-sm btn-open",
-                    attrs: { type: "button", title: "Delete" },
-                    on: {
-                      click: function($event) {
-                        $event.stopPropagation(),
-                          _vm.showConfirmEventDeleteModal(_vm.event.id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "far fa-trash-alt" })]
-                )
+                _vm.calendar.owned
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-danger btn-sm btn-open",
+                        attrs: { type: "button", title: "Delete" },
+                        on: {
+                          click: function($event) {
+                            $event.stopPropagation(),
+                              _vm.showConfirmEventDeleteModal(_vm.event.id)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "far fa-trash-alt" })]
+                    )
+                  : _vm._e()
               ])
             ])
           ])
@@ -81394,104 +81412,108 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-2" }, [
-              _c("div", { staticClass: "data text-right" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "btn btn-outline-primary btn-sm pull-right btn-open",
-                    attrs: { type: "button", title: "Edit" },
-                    on: {
-                      click: function($event) {
-                        $event.stopPropagation(),
-                          _vm.showEditSingleEvent(_vm.event.id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "far fa-edit" })]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-event-actions",
-                    on: {
-                      mouseover: function($event) {
-                        _vm.showEventDropdownActions = true
+              _vm.calendar.owned
+                ? _c("div", { staticClass: "data text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn btn-outline-primary btn-sm pull-right btn-open",
+                        attrs: { type: "button", title: "Edit" },
+                        on: {
+                          click: function($event) {
+                            $event.stopPropagation(),
+                              _vm.showEditSingleEvent(_vm.event.id)
+                          }
+                        }
                       },
-                      mouseleave: function($event) {
-                        _vm.showEventDropdownActions = false
-                      },
-                      click: function($event) {
-                        return $event.stopPropagation()
-                      }
-                    }
-                  },
-                  [
-                    _vm._m(0),
+                      [_c("i", { staticClass: "far fa-edit" })]
+                    ),
                     _vm._v(" "),
-                    _c("transition", { attrs: { name: "fade" } }, [
-                      _vm.showEventDropdownActions
-                        ? _c("div", { staticClass: "items" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "javascript:void(0)" },
-                                on: {
-                                  click: function($event) {
-                                    $event.stopPropagation(),
-                                      _vm.duplicateEventAction()
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "far fa-clone" }),
-                                _vm._v(" Duplicate")
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "javascript:void(0)" },
-                                on: {
-                                  click: function($event) {
-                                    $event.stopPropagation(),
-                                      _vm.cancelEventAction(_vm.event.id)
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "fas fa-ban" }),
-                                _vm._v(" Cancel")
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "javascript:void(0)" },
-                                on: {
-                                  click: function($event) {
-                                    $event.stopPropagation(),
-                                      _vm.showConfirmEventDeleteModal(
-                                        _vm.event.id
-                                      )
-                                  }
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "far fa-trash-alt" }),
-                                _vm._v(" Delete")
-                              ]
-                            )
-                          ])
-                        : _vm._e()
-                    ])
-                  ],
-                  1
-                )
-              ])
+                    _c(
+                      "div",
+                      {
+                        staticClass: "dropdown-event-actions",
+                        on: {
+                          mouseover: function($event) {
+                            _vm.showEventDropdownActions = true
+                          },
+                          mouseleave: function($event) {
+                            _vm.showEventDropdownActions = false
+                          },
+                          click: function($event) {
+                            return $event.stopPropagation()
+                          }
+                        }
+                      },
+                      [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("transition", { attrs: { name: "fade" } }, [
+                          _vm.showEventDropdownActions
+                            ? _c("div", { staticClass: "items" }, [
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "javascript:void(0)" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation(),
+                                          _vm.duplicateEventAction()
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", { staticClass: "far fa-clone" }),
+                                    _vm._v(" Duplicate")
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "javascript:void(0)" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation(),
+                                          _vm.cancelEventAction(_vm.event.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", { staticClass: "fas fa-ban" }),
+                                    _vm._v(" Cancel")
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: { href: "javascript:void(0)" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.stopPropagation(),
+                                          _vm.showConfirmEventDeleteModal(
+                                            _vm.event.id
+                                          )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "far fa-trash-alt"
+                                    }),
+                                    _vm._v(" Delete")
+                                  ]
+                                )
+                              ])
+                            : _vm._e()
+                        ])
+                      ],
+                      1
+                    )
+                  ])
+                : _vm._e()
             ])
           ]),
           _vm._v(" "),

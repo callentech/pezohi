@@ -26,13 +26,13 @@
 
             <div class="col-2">
                 <div class="data">
-                    <span class="badge badge-secondary event-status-badge">{{event.status}}</span>
+                    <span class="badge badge-secondary event-status-badge">{{event.status}} - HELLO</span>
                 </div>
             </div>
 
             <div class="col-1">
                 <div class="data text-right">
-                    <button type="button" class="btn btn-outline-danger btn-sm btn-open" title="Delete" @click="$event.stopPropagation(), showConfirmEventDeleteModal(event.id);"><i class="far fa-trash-alt"></i></button>
+                    <button v-if="calendar.owned" type="button" class="btn btn-outline-danger btn-sm btn-open" title="Delete" @click="$event.stopPropagation(), showConfirmEventDeleteModal(event.id);"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
@@ -74,8 +74,9 @@
                     <span v-if="event.status === 'tentative'" class="badge badge-warning event-status-badge">{{event.status}}</span>
                 </div>
             </div>
+            
             <div class="col-2">
-                <div class="data text-right">
+                <div v-if="calendar.owned" class="data text-right">
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="$event.stopPropagation(), showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
 
                     <div @mouseover="showEventDropdownActions=true" @mouseleave="showEventDropdownActions=false" @click="$event.stopPropagation()" class="dropdown-event-actions">
@@ -131,7 +132,7 @@ import moment from 'moment';
 
 export default {
 
-    props: ['event'],
+    props: ['event', 'calendar'],
 
     data() {
 

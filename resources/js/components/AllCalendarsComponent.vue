@@ -232,7 +232,8 @@
                             sortedArray.push(item);
                         }
                     } else if (typeFilter.val === 'shared') {
-                        if (item.access_role === 'reader') {
+
+                        if (item.access_role !== 'owner') {
                             sortedArray.push(item);
                         }
                     }

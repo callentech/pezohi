@@ -757,16 +757,10 @@
 
                                                         <div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
                                                             <strong>Success!</strong> {{ requestSuccess }}
-                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
                                                         </div>
 
                                                         <div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
                                                             <strong>Error!</strong> {{ requestDanger }}
-                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
                                                         </div>
 
                                                     </transition>
@@ -1096,16 +1090,10 @@
 
 														<div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
 															<strong>Success!</strong> {{ requestSuccess }}
-															<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-																<span aria-hidden="true">&times;</span>
-															</button>
 														</div>
 
 														<div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
 															<strong>Error!</strong> {{ requestDanger }}
-															<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-														    	<span aria-hidden="true">&times;</span>
-														    </button>
 														</div>
 
 													</transition>
@@ -1246,14 +1234,24 @@
 		methods: {
 
             selectTimeAction: function(select) {
-                let fromdt = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
+                this.requestDanger = null;
+                let fromdt = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.startTime;
                 let from = new Date(Date.parse(fromdt));
-                
                 if (select === 'start') {
                     let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
                     this.editedEventData.endTime = endTime;
+                } else if (select === 'end') {
+                    let todt = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+                    let to = new Date(Date.parse(todt));
+
+                    if (from > to) {
+                        let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+                        this.editedEventData.endTime = endTime;
+                        this.requestDanger = 'Please set correct datetime range';
+                    }
                 }
             },
+
             getAddressData: function (addressData, placeResultData, id) {
                 this.editedEventData.location = addressData.newVal;
             },
@@ -1437,8 +1435,8 @@
 
 
                     // Add new Event
-                    let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
-                    let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+                    let started_at = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.startTime;
+                    let ended_at = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.endTime;
                     // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
                     // let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
@@ -1458,8 +1456,8 @@
 
                 } else {
                     // Update current event
-                    let started_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.startTime;
-                    let ended_at = this.editedEventData.startDate.format('M/DD/YYYY')+' '+this.editedEventData.endTime;
+                    let started_at = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.startTime;
+                    let ended_at = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.endTime;
                     this.current_calendar.events[this.editedEventData.index].startTime = this.editedEventData.startTime;
                     this.current_calendar.events[this.editedEventData.index].endTime = this.editedEventData.endTime;
                     this.current_calendar.events[this.editedEventData.index].started_at = started_at;
@@ -1614,6 +1612,8 @@
                 axios.interceptors.request.use(function (config) {
                     // Do something before request is sent
                     currentObj.formRequestProcess = true;
+                    currentObj.requestSuccess = false;
+                    currentObj.requestDanger = false;
                     return config;
                 }, function (error) {
                     // Do something with request error
@@ -1640,7 +1640,9 @@
                                 location.reload();
                             }, 2000);
                         } else {
-                            currentObj.requestDanger = 'Request Error';
+
+                           
+                            currentObj.requestDanger = response.data.data.message ? response.data.data.message : 'Request Error';
                         }
                     })
                     .catch(function(response) {

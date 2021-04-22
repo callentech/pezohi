@@ -2980,18 +2980,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3076,12 +3064,23 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectTimeAction: function selectTimeAction(select) {
-      var fromdt = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
+      this.requestDanger = null;
+      var fromdt = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
       var from = new Date(Date.parse(fromdt));
 
       if (select === 'start') {
         var endTime = moment__WEBPACK_IMPORTED_MODULE_2___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
         this.editedEventData.endTime = endTime;
+      } else if (select === 'end') {
+        var todt = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.endTime;
+        var to = new Date(Date.parse(todt));
+
+        if (from > to) {
+          var _endTime = moment__WEBPACK_IMPORTED_MODULE_2___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+
+          this.editedEventData.endTime = _endTime;
+          this.requestDanger = 'Please set correct datetime range';
+        }
       }
     },
     getAddressData: function getAddressData(addressData, placeResultData, id) {
@@ -3246,8 +3245,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.editedEventData.index === null) {
         // Add new Event
-        var started_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
-        var ended_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.endTime; // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
+        var started_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
+        var ended_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.endTime; // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
         // let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
         var newEvent = {
@@ -3263,9 +3262,9 @@ __webpack_require__.r(__webpack_exports__);
         this.requestSuccess = false;
       } else {
         // Update current event
-        var _started_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
+        var _started_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
 
-        var _ended_at = this.editedEventData.startDate.format('M/DD/YYYY') + ' ' + this.editedEventData.endTime;
+        var _ended_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.endTime;
 
         this.current_calendar.events[this.editedEventData.index].startTime = this.editedEventData.startTime;
         this.current_calendar.events[this.editedEventData.index].endTime = this.editedEventData.endTime;
@@ -3406,6 +3405,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.interceptors.request.use(function (config) {
         // Do something before request is sent
         currentObj.formRequestProcess = true;
+        currentObj.requestSuccess = false;
+        currentObj.requestDanger = false;
         return config;
       }, function (error) {
         // Do something with request error
@@ -3428,7 +3429,7 @@ __webpack_require__.r(__webpack_exports__);
             location.reload();
           }, 2000);
         } else {
-          currentObj.requestDanger = 'Request Error';
+          currentObj.requestDanger = response.data.data.message ? response.data.data.message : 'Request Error';
         }
       })["catch"](function (response) {
         currentObj.requestDanger = 'Request Error';
@@ -75661,32 +75662,7 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.requestSuccess
                                                           ) +
-                                                          "\n                                                            "
-                                                      ),
-                                                      _c(
-                                                        "button",
-                                                        {
-                                                          staticClass: "close",
-                                                          attrs: {
-                                                            type: "button",
-                                                            "data-dismiss":
-                                                              "alert",
-                                                            "aria-label":
-                                                              "Close"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              attrs: {
-                                                                "aria-hidden":
-                                                                  "true"
-                                                              }
-                                                            },
-                                                            [_vm._v("×")]
-                                                          )
-                                                        ]
+                                                          "\n                                                        "
                                                       )
                                                     ]
                                                   )
@@ -75709,32 +75685,7 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.requestDanger
                                                           ) +
-                                                          "\n                                                            "
-                                                      ),
-                                                      _c(
-                                                        "button",
-                                                        {
-                                                          staticClass: "close",
-                                                          attrs: {
-                                                            type: "button",
-                                                            "data-dismiss":
-                                                              "alert",
-                                                            "aria-label":
-                                                              "Close"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              attrs: {
-                                                                "aria-hidden":
-                                                                  "true"
-                                                              }
-                                                            },
-                                                            [_vm._v("×")]
-                                                          )
-                                                        ]
+                                                          "\n                                                        "
                                                       )
                                                     ]
                                                   )
@@ -78777,32 +78728,7 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.requestSuccess
                                                           ) +
-                                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
-                                                      ),
-                                                      _c(
-                                                        "button",
-                                                        {
-                                                          staticClass: "close",
-                                                          attrs: {
-                                                            type: "button",
-                                                            "data-dismiss":
-                                                              "alert",
-                                                            "aria-label":
-                                                              "Close"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              attrs: {
-                                                                "aria-hidden":
-                                                                  "true"
-                                                              }
-                                                            },
-                                                            [_vm._v("×")]
-                                                          )
-                                                        ]
+                                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
                                                       )
                                                     ]
                                                   )
@@ -78825,32 +78751,7 @@ var render = function() {
                                                           _vm._s(
                                                             _vm.requestDanger
                                                           ) +
-                                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
-                                                      ),
-                                                      _c(
-                                                        "button",
-                                                        {
-                                                          staticClass: "close",
-                                                          attrs: {
-                                                            type: "button",
-                                                            "data-dismiss":
-                                                              "alert",
-                                                            "aria-label":
-                                                              "Close"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              attrs: {
-                                                                "aria-hidden":
-                                                                  "true"
-                                                              }
-                                                            },
-                                                            [_vm._v("×")]
-                                                          )
-                                                        ]
+                                                          "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
                                                       )
                                                     ]
                                                   )

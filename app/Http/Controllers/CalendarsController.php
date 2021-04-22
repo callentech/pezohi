@@ -56,6 +56,8 @@ class CalendarsController extends Controller
             'calendar_name' => 'required'
         ]);
 
+        
+
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
             $calendar = new Google_Service_Calendar_Calendar();
@@ -131,14 +133,20 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 401
                 ]);
-            } else if ($ex->getErrors()[0]['message']) {
+            }
+            
+            
+            else if ($ex->getErrors()[0]['message']) {
                 return response()->json([
-                    'code' => 404,
+                    'code' => 0,
                     'data' => [
                         'message' => $ex->getErrors()[0]['message']
                     ]
                 ]);
-            } else {
+            }
+            
+            
+            else {
                 return response()->json([
                     'code' => 0,
                 ]);

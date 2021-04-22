@@ -26,7 +26,7 @@
 
             <div class="col-2">
                 <div class="data">
-                    <span class="badge badge-secondary event-status-badge">{{event.status}} - HELLO</span>
+                    <span class="badge badge-secondary event-status-badge">{{event.status}}</span>
                 </div>
             </div>
 

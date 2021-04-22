@@ -81269,7 +81269,7 @@ var render = function() {
                 _c(
                   "span",
                   { staticClass: "badge badge-secondary event-status-badge" },
-                  [_vm._v(_vm._s(_vm.event.status) + " - HELLO")]
+                  [_vm._v(_vm._s(_vm.event.status))]
                 )
               ])
             ]),

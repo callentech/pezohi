@@ -16154,7 +16154,7 @@ div.pac-container {
   font-weight: 700;
 }
 #editedCalendarEventsContent .content, #duplicatedCalendarEventsContent .content {
-  max-height: 300px;
+  max-height: 150px;
   overflow-y: scroll;
   overflow-x: hidden;
 }

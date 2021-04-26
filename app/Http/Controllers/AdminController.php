@@ -32,7 +32,7 @@ class AdminController extends Controller
 
         foreach ($calendars as $key => $calendar) {
             if ($calendar->google_id == Auth::user()->email) {
-                unset($calendars[$key]);;
+                unset($calendars[$key]);
             }
             $calendar->eventsCount = count($calendar->events);
             $calendar->publicUrl = url('/').'/calendar/'.$calendar->google_id;

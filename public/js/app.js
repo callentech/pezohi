@@ -2634,352 +2634,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3041,7 +2695,8 @@ __webpack_require__.r(__webpack_exports__);
         type: null,
         description: null
       },
-      moment: (moment__WEBPACK_IMPORTED_MODULE_2___default())
+      moment: (moment__WEBPACK_IMPORTED_MODULE_2___default()),
+      times: ['01:00 AM', '01:30 AM', '02:00 AM', '02:30 AM', '03:00 AM', '03:30 AM', '04:00 AM', '04:30 AM', '05:00 AM', '05:30 AM', '06:00 AM', '06:30 AM', '07:00 AM', '07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 AM', '12:30 AM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 PM']
     };
   },
   created: function created() {
@@ -3083,7 +2738,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    getAddressData: function getAddressData(addressData, placeResultData, id) {
+    getAddressData: function getAddressData(addressData) {
       this.editedEventData.location = addressData.newVal;
     },
     assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
@@ -3246,9 +2901,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.editedEventData.index === null) {
         // Add new Event
         var started_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.startTime;
-        var ended_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.endTime; // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
-        // let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
-
+        var ended_at = moment__WEBPACK_IMPORTED_MODULE_2___default()(this.editedEventData.startDate).format('M/DD/YYYY') + ' ' + this.editedEventData.endTime;
         var newEvent = {
           id: 'new',
           started_at: started_at,
@@ -3304,10 +2957,7 @@ __webpack_require__.r(__webpack_exports__);
     markRemoveEditedEvent: function markRemoveEditedEvent(index) {
       this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
       this.current_calendar.events[index].status = 'deleted';
-      this.current_calendar.events[index].action = 'delete'; //this.current_calendar.events.splice(index, 1);
-      // if (this.new_calendar) {
-      //     this.new_calendar.events.splice(index, 1);
-      // }
+      this.current_calendar.events[index].action = 'delete';
     },
     restoreEditedEventStatus: function restoreEditedEventStatus(index) {
       if (this.current_calendar.events[index].current_status) {
@@ -3320,8 +2970,6 @@ __webpack_require__.r(__webpack_exports__);
         index: index,
         id: currentEvent.id,
         startDate: moment__WEBPACK_IMPORTED_MODULE_2___default()(currentEvent.started_at),
-        //startTime: this.$options.filters.formatTime(currentEvent.started_at),
-        //endTime: this.$options.filters.formatTime(currentEvent.ended_at),
         startTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(currentEvent.started_at).format('hh:mm a').toUpperCase(),
         endTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(currentEvent.ended_at).format('hh:mm a').toUpperCase(),
         startTimeHours: this.$options.filters.formatHours(currentEvent.started_at),
@@ -3568,8 +3216,7 @@ __webpack_require__.r(__webpack_exports__);
     formatAmPm: function formatAmPm(value) {
       var date = new Date(value);
       var hours = date.getHours();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
-      return ampm;
+      return hours >= 12 ? 'PM' : 'AM';
     },
     capitalize: function capitalize(value) {
       if (!value) return '';
@@ -3577,27 +3224,13 @@ __webpack_require__.r(__webpack_exports__);
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     formatDate: function formatDate(value) {
-      var date = new Date(value); //let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
-
-      var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate(); //return day+'.'+month+'.'+date.getFullYear();
-
+      var date = new Date(value);
+      var day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
       return date.getMonth() + 1 + '/' + day + '/' + date.getFullYear();
     },
     formatTime: function formatTime(value) {
       var dateTime = new Date(Date.parse(value));
-      return moment__WEBPACK_IMPORTED_MODULE_2___default()(dateTime).format('hh:mm a').toUpperCase(); // let date = new Date(value);
-      // let hours = date.getHours();
-      // let ampm = hours >= 12 ? 'PM' : 'AM';
-      // let minutes = date.getMinutes();
-      // hours = hours % 12;
-      // ampm = hours == 0 ? 'AM' : ampm;
-      // hours = hours  < 10 ? '0'+hours : hours;
-      // minutes = Math.ceil(minutes/30)*30;
-      // minutes = 60 ? 0 : minutes;
-      // minutes = minutes < 10 ? '0'+minutes : minutes;
-      // return hours +':'+minutes + ' '+ampm;
-      //     
-      // 
+      return moment__WEBPACK_IMPORTED_MODULE_2___default()(dateTime).format('hh:mm a').toUpperCase();
     },
     sliceString: function sliceString(value) {
       if (value && value.length > 10) {
@@ -3642,9 +3275,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
 //
 //
 //
@@ -4463,9 +4093,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -4571,8 +4198,7 @@ __webpack_require__.r(__webpack_exports__);
       var from = new Date(Date.parse(fromdt)); //var to = new Date(Date.parse(todt));
 
       if (select === 'start') {
-        var endTime = moment__WEBPACK_IMPORTED_MODULE_4___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
-        this.editedEventData.endTime = endTime;
+        this.editedEventData.endTime = moment__WEBPACK_IMPORTED_MODULE_4___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
       }
     },
     subscribeCalendarAction: function subscribeCalendarAction(id) {
@@ -4650,7 +4276,7 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.hideConfirmUnsubscribeCalendarModal();
       });
     },
-    getAddressData: function getAddressData(addressData, placeResultData, id) {
+    getAddressData: function getAddressData(addressData) {
       this.editedEventData.location = addressData.newVal;
     },
     assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
@@ -4756,11 +4382,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     // Sort events list methods
-    // sortCalendarsListBySummary: function() {
-    //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
-    //     this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
-    //     this.sortBySummaryDirection = direction;
-    // },
     sortEventsListByDate: function sortEventsListByDate() {
       this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
       this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
@@ -4795,8 +4416,7 @@ __webpack_require__.r(__webpack_exports__);
 
       hours = hours < 10 ? '0' + hours : hours;
       minutes = minutes < 10 ? '0' + minutes : minutes;
-      var result = dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
-      return result;
+      return dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
     }
   },
   filters: {
@@ -4829,7 +4449,7 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           outputDate = minutesDiff + ' minutes ago';
         }
-      } else if (timeDiff == 1) {
+      } else if (timeDiff === 1) {
         outputDate = timeDiff + ' hour ago';
       } else if (timeDiff <= 24) {
         outputDate = timeDiff + ' hours ago';
@@ -4882,6 +4502,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
 //
 //
 //
@@ -5130,32 +4752,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     formatTime: function formatTime(value) {
       var dateTime = new Date(Date.parse(value));
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(dateTime).format('hh:mm a').toUpperCase(); // let date = new Date(value);
-      // let hours = date.getHours();
-      // let ampm = hours >= 12 ? 'PM' : 'AM';
-      // let minutes = date.getMinutes();
-      // hours = hours % 12;
-      // ampm = hours == 0 ? 'AM' : ampm;
-      // hours = hours  < 10 ? '0'+hours : hours;
-      // minutes = Math.ceil(minutes/30)*30;
-      // minutes = 60 ? 0 : minutes;
-      // minutes = minutes < 10 ? '0'+minutes : minutes;
-      // return hours +':'+minutes + ' '+ampm;
-
-      /*
-      
-      
-       let fromdt = this.editedEventData.startDate+' '+this.editedEventData.startTime;
-      //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
-      let from = new Date(Date.parse(fromdt));
-      //var to = new Date(Date.parse(todt));
-      
-      if (select === 'start') {
-          let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
-          this.editedEventData.endTime = endTime;
-      }
-      
-      */
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(dateTime).format('hh:mm a').toUpperCase();
     },
     sliceString: function sliceString(value) {
       if (value && value.length > 10) {
@@ -5320,308 +4917,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -5659,7 +4954,8 @@ __webpack_require__.r(__webpack_exports__);
       requestProcess: false,
       requestSuccess: null,
       requestError: null,
-      moment: (moment__WEBPACK_IMPORTED_MODULE_2___default())
+      moment: (moment__WEBPACK_IMPORTED_MODULE_2___default()),
+      times: ['01:00 AM', '01:30 AM', '02:00 AM', '02:30 AM', '03:00 AM', '03:30 AM', '04:00 AM', '04:30 AM', '05:00 AM', '05:30 AM', '06:00 AM', '06:30 AM', '07:00 AM', '07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 AM', '12:30 AM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 PM']
     };
   },
   computed: {
@@ -5675,16 +4971,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectTimeAction: function selectTimeAction(select) {
-      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime; //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
-
-      var from = new Date(Date.parse(fromdt)); //var to = new Date(Date.parse(todt));
+      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime;
+      var from = new Date(Date.parse(fromdt));
 
       if (select === 'start') {
         var endTime = moment__WEBPACK_IMPORTED_MODULE_2___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
         this.editedEventData.endTime = endTime;
       }
     },
-    getAddressData: function getAddressData(addressData, placeResultData, id) {
+    getAddressData: function getAddressData(addressData) {
       this.editedEventData.location = addressData.newVal;
     },
     assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
@@ -5806,8 +5101,7 @@ __webpack_require__.r(__webpack_exports__);
     formatAmPm: function formatAmPm(value) {
       var date = new Date(value);
       var hours = date.getHours();
-      var ampm = hours >= 12 ? 'PM' : 'AM';
-      return ampm;
+      return hours >= 12 ? 'PM' : 'AM';
     }
   }
 });
@@ -5825,35 +5119,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -6205,104 +5470,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-google-autocomplete */ "./node_modules/vue-google-autocomplete/src/VueGoogleAutocomplete.vue");
 /* harmony import */ var pc_bootstrap4_datetimepicker_build_css_bootstrap_datetimepicker_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css */ "./node_modules/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker/dist/vue2-daterange-picker.css */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.css");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
 //
 //
 //
@@ -6631,13 +5800,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- //import VueGoogleAutocomplete from 'vue-google-autocomplete'
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['calendar', 'jobs_status'],
   components: {
     datePicker: (vue_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0___default()),
-    //DateRangePicker
     VueGoogleAutocomplete: vue_google_autocomplete__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
@@ -6678,6 +5846,8 @@ __webpack_require__.r(__webpack_exports__);
       editedEventData: {
         id: null,
         startDate: null,
+        startTime: '',
+        endTime: '',
         startTimeHours: null,
         startTimeMinutes: null,
         startTimeAmPm: null,
@@ -6695,23 +5865,26 @@ __webpack_require__.r(__webpack_exports__);
       address: '',
       showInfoModal: false,
       infoModalHtml: '',
+      showConfirmUnsubscribeCalendarModal: false,
       sortByDateDirection: 'desc',
       sortByLocationDirection: 'desc',
       sortByTypeDirection: 'desc',
       sortByDescriptionDirection: 'desc',
-      sortedEvents: []
+      sortedEvents: [],
+      moment: (moment__WEBPACK_IMPORTED_MODULE_4___default()),
+      times: ['01:00 AM', '01:30 AM', '02:00 AM', '02:30 AM', '03:00 AM', '03:30 AM', '04:00 AM', '04:30 AM', '05:00 AM', '05:30 AM', '06:00 AM', '06:30 AM', '07:00 AM', '07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 AM', '12:30 AM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 PM']
     };
   },
-  computed: {// newEventDataValid() {
-    //     let result = true;
-    //     if (!this.editedEventData.location || this.editedEventData.location === '') {
-    //         result = false;
-    //     }
-    //     if (!this.editedEventData.description || this.editedEventData.description === '') {
-    //         result = false;
-    //     }
-    //     return result;
-    // }
+  computed: {
+    newEventDataValid: function newEventDataValid() {
+      var result = true;
+
+      if (this.editedEventData.startTime === '' || this.editedEventData.endTime === '') {
+        result = false;
+      }
+
+      return result;
+    }
   },
   methods: {
     showEvents: function showEvents(dir) {
@@ -6723,7 +5896,90 @@ __webpack_require__.r(__webpack_exports__);
 
       this.view_events_end = this.view_events_start + 4 > this.calendar.events.length ? this.calendar.events.length - 1 : this.view_events_start + 4;
     },
-    getAddressData: function getAddressData(addressData, placeResultData, id) {
+    selectTimeAction: function selectTimeAction(select) {
+      var fromdt = this.editedEventData.startDate + ' ' + this.editedEventData.startTime;
+      var from = new Date(Date.parse(fromdt));
+
+      if (select === 'start') {
+        this.editedEventData.endTime = moment__WEBPACK_IMPORTED_MODULE_4___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
+      }
+    },
+    subscribeCalendarAction: function subscribeCalendarAction(id) {
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.$parent.requestDanger = null;
+        currentObj.$parent.requestSuccess = null;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/subscribe-calendar', {
+        calendar_id: id
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.$parent.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.$parent.requestSuccess = response.data.data.message;
+          setTimeout(function () {
+            location.reload();
+          }, 2000);
+        } else {
+          currentObj.$parent.requestDanger = response.data.data.message;
+        }
+      })["catch"](function (error) {
+        currentObj.$parent.requestError = 'Request Error';
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
+    showUnsubscribeCalendarModalAction: function showUnsubscribeCalendarModalAction(id) {
+      this.showConfirmUnsubscribeCalendarModal = true;
+    },
+    hideConfirmUnsubscribeCalendarModal: function hideConfirmUnsubscribeCalendarModal() {
+      this.showConfirmUnsubscribeCalendarModal = false;
+    },
+    unsubscribeCalendar: function unsubscribeCalendar(id) {
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.$parent.requestDanger = null;
+        currentObj.$parent.requestSuccess = null;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/unsubscribe-calendar', {
+        calendar_id: id
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.$parent.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.$parent.requestSuccess = response.data.data.message;
+          setTimeout(function () {
+            location.reload();
+          }, 2000);
+        } else {
+          currentObj.$parent.requestDanger = response.data.data.message;
+        }
+      })["catch"](function (error) {
+        currentObj.$parent.requestError = 'Request Error';
+      }).then(function () {
+        currentObj.requestProcess = false;
+        currentObj.hideConfirmUnsubscribeCalendarModal();
+      });
+    },
+    getAddressData: function getAddressData(addressData) {
       this.editedEventData.location = addressData.newVal;
     },
     assertEventDescriptionMaxChars: function assertEventDescriptionMaxChars() {
@@ -6755,6 +6011,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     showAddEventForm: function showAddEventForm(calendar_id) {
       this.calendar_id = calendar_id;
+      this.editedEventData.type = 'game';
+      this.editedEventData.startDate = moment__WEBPACK_IMPORTED_MODULE_4___default()();
+      var startDateTime = moment__WEBPACK_IMPORTED_MODULE_4___default()();
+      startDateTime.add(30, 'minutes').startOf('hour');
+      this.editedEventData.startTime = startDateTime.format('hh:mm a').toUpperCase();
+      startDateTime.add(1, 'hours');
+      this.editedEventData.endTime = startDateTime.format('hh:mm a').toUpperCase();
       this.showNewEventDataForm = true;
     },
     hideAddEventForm: function hideAddEventForm(event) {
@@ -6763,13 +6026,11 @@ __webpack_require__.r(__webpack_exports__);
       this.showNewEventDataForm = false;
     },
     showConfirmCalendarDelete: function showConfirmCalendarDelete(id) {
-      // this.showBody = false;
-      // this.showCalendarDropdownActions = false;
-      // this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
-      alert();
+      this.showBody = false;
+      this.showCalendarDropdownActions = false;
+      this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
     },
     shareCalendar: function shareCalendar(url) {
-      console.log(url);
       var input_temp = document.createElement('textarea');
       input_temp.innerHTML = url;
       document.body.appendChild(input_temp);
@@ -6780,17 +6041,19 @@ __webpack_require__.r(__webpack_exports__);
       this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="' + url + '" readonly>';
       this.showInfoModal = true;
     },
+    hideShareCalendarModal: function hideShareCalendarModal(event) {
+      if (event.target.classList.contains("modal-wrapper") || event.target.classList.contains("message-modal")) {
+        event.stopPropagation();
+        event.preventDefault();
+        this.infoModalText = '';
+        this.showInfoModal = false;
+      }
+    },
     addEventSubmit: function addEventSubmit(event) {
       event.preventDefault();
       event.stopPropagation();
       var currentObj = this;
       var form = document.getElementById('addCalendarEventForm');
-
-      if (form.checkValidity() === false) {
-        form.classList.add('was-validated');
-        return false;
-      }
-
       axios.interceptors.request.use(function (config) {
         // Do something before request is sent
         currentObj.requestProcess = true;
@@ -6801,11 +6064,7 @@ __webpack_require__.r(__webpack_exports__);
         // Do something with request error
         return Promise.reject(error);
       });
-      var started_at = this.getDateTime(currentObj.editedEventData.startDate, currentObj.editedEventData.startTimeHours, currentObj.editedEventData.startTimeMinutes, currentObj.editedEventData.startTimeAmPm);
-      var ended_at = this.getDateTime(currentObj.editedEventData.endDate, currentObj.editedEventData.endTimeHours, currentObj.editedEventData.endTimeMinutes, currentObj.editedEventData.endTimeAmPm);
       var formData = new FormData(form);
-      formData.append('event_started_at', started_at);
-      formData.append('event_ended_at', ended_at);
       axios.post('/new-single-event', formData).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
@@ -6825,6 +6084,7 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.requestProcess = false;
       });
     },
+    // Sort events list methods
     sortEventsListByDate: function sortEventsListByDate() {
       this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
       this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
@@ -6859,8 +6119,7 @@ __webpack_require__.r(__webpack_exports__);
 
       hours = hours < 10 ? '0' + hours : hours;
       minutes = minutes < 10 ? '0' + minutes : minutes;
-      var result = dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
-      return result;
+      return dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
     }
   },
   filters: {
@@ -6868,19 +6127,6 @@ __webpack_require__.r(__webpack_exports__);
       if (!value) return '';
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
-    },
-    sliceString: function sliceString(value) {
-      if (value && value.length > 10) {
-        var sliced = value.slice(0, 10);
-
-        if (sliced.length < value.length) {
-          sliced += '...';
-        }
-
-        return sliced;
-      } else {
-        return value;
-      }
     },
     formatDate: function formatDate(value) {
       var today = new Date();
@@ -6938,6 +6184,311 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.sortEventsListByDate();
+  },
+  updated: function updated() {
+    this.sortedEvents = this.calendar.events;
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['event', 'calendar'],
+  data: function data() {
+    return {
+      showEditSingleEventForm: false,
+      showEventDetails: false,
+      showEventDropdownActions: false,
+      editedEventData: {
+        id: null,
+        dateTime: '',
+        location: '',
+        type: '',
+        description: ''
+      },
+      requestProcess: false,
+      requestSuccess: false,
+      requestDanger: false,
+      dateOptions: {
+        format: 'M/DD/YYYY',
+        useCurrent: true
+      },
+      moment: (moment__WEBPACK_IMPORTED_MODULE_0___default())
+    };
+  },
+  methods: {
+    duplicateEventAction: function duplicateEventAction() {
+      this.showEventDropdownActions = false;
+      this.event.duplicate_event_id = this.event.id;
+      this.showEditSingleEventForm = true;
+    },
+    cancelEventAction: function cancelEventAction(event_id) {
+      this.showEventDropdownActions = false;
+      var currentObj = this;
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.$parent.$parent.requestDanger = false;
+        currentObj.$parent.$parent.requestSuccess = false;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/cancel-event', {
+        event_id: event_id
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.$parent.$parent.requestDanger = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.$parent.$parent.requestSuccess = response.data.data.message;
+          currentObj.event.status = 'cancelled';
+        } else {
+          currentObj.$parent.$parent.requestDanger = 'Request Error';
+        }
+      })["catch"](function (error) {
+        currentObj.$parent.$parent.requestDanger = 'Error Request';
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
+    copyEventAddress: function copyEventAddress() {
+      // if (this.showEditSingleEventForm || this.showEventDetails) {
+      //     return false;
+      // }
+      if (this.showEditSingleEventForm) {
+        return false;
+      }
+
+      var input_temp = document.createElement('textarea');
+      input_temp.innerHTML = this.event.location;
+      document.body.appendChild(input_temp);
+      input_temp.select();
+      input_temp.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.body.removeChild(input_temp);
+      this.$parent.infoModalHtml = '<p>Event Address was copied to your clipboard</p><input type="text" value="' + input_temp.innerHTML + '" readonly>';
+      this.$parent.showInfoModal = true;
+    },
+    showEditSingleEvent: function showEditSingleEvent() {
+      this.$parent.$refs.event.forEach(function (element) {
+        element.showEditSingleEventForm = false;
+      });
+      this.showEditSingleEventForm = true;
+      this.showEventDropdownActions = false;
+    },
+    hideEditSingleEvent: function hideEditSingleEvent() {
+      this.showEditSingleEventForm = false;
+    },
+    showConfirmEventDeleteModal: function showConfirmEventDeleteModal(id) {
+      this.showEventDropdownActions = false;
+      this.$parent.$parent.delete_event_id = id;
+      this.$parent.$parent.showConfirmDeleteEventModal = true;
+    }
+  },
+  mounted: function mounted() {
+    this.editedEventData = {
+      id: this.event.id,
+      dateTime: this.event.dateTime,
+      location: this.event.location,
+      type: this.event.type,
+      description: this.event.description
+    };
+
+    if (this.moment(this.event.ended_at).isBefore(new Date())) {
+      this.event.status = 'over';
+    }
+  },
+  filters: {
+    formatDate: function formatDate(value) {
+      var date = new Date(value);
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var year = date.getFullYear();
+      return month + '/' + day + '/' + year;
+    },
+    formatTime: function formatTime(value) {
+      var dateTime = new Date(Date.parse(value));
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(dateTime).format('hh:mm a').toUpperCase();
+    },
+    sliceString: function sliceString(value) {
+      if (value && value.length > 10) {
+        var sliced = value.slice(0, 10);
+
+        if (sliced.length < value.length) {
+          sliced += '...';
+        }
+
+        return sliced;
+      } else {
+        return value;
+      }
+    },
+    capitalize: function capitalize(value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    date: function date(_date) {
+      var day = _date.getDate() >= 10 ? _date.getDate() : '0' + _date.getDate();
+
+      var dateHours = _date.getHours();
+
+      var dateAmpm = dateHours >= 12 ? 'PM' : 'AM';
+      dateHours = dateHours % 12;
+      dateHours = dateHours ? dateHours : 12;
+
+      var dateMinutes = _date.getMinutes();
+
+      dateMinutes = dateMinutes < 10 ? '0' + dateMinutes : dateMinutes;
+      return _date.getMonth() + 1 + '/' + day + '/' + _date.getFullYear() + ' ' + dateHours + ':' + dateMinutes + ' ' + dateAmpm;
+    }
   }
 });
 
@@ -6954,36 +6505,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -7194,9 +6715,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
 //
 //
 //
@@ -7606,6 +7124,7 @@ Vue.component('frontend-calendar-data-component', __webpack_require__(/*! ./comp
 Vue.component('admin-calendars-component', __webpack_require__(/*! ./components/admin/AdminCalendarsComponent.vue */ "./resources/js/components/admin/AdminCalendarsComponent.vue").default);
 Vue.component('admin-users-component', __webpack_require__(/*! ./components/admin/AdminUsersComponent.vue */ "./resources/js/components/admin/AdminUsersComponent.vue").default);
 Vue.component('admin-calendars-list-item-component', __webpack_require__(/*! ./components/admin/AdminCalendarsListItemComponent.vue */ "./resources/js/components/admin/AdminCalendarsListItemComponent.vue").default);
+Vue.component('admin-calendars-list-item-event-component', __webpack_require__(/*! ./components/admin/AdminCalendarsListItemEventComponent.vue */ "./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -68647,6 +68166,45 @@ component.options.__file = "resources/js/components/admin/AdminCalendarsListItem
 
 /***/ }),
 
+/***/ "./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AdminCalendarsListItemEventComponent_vue_vue_type_template_id_587fc325___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325& */ "./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325&");
+/* harmony import */ var _AdminCalendarsListItemEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AdminCalendarsListItemEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AdminCalendarsListItemEventComponent_vue_vue_type_template_id_587fc325___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AdminCalendarsListItemEventComponent_vue_vue_type_template_id_587fc325___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/AdminCalendarsListItemEventComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/AdminUsersComponent.vue":
 /*!***************************************************************!*\
   !*** ./resources/js/components/admin/AdminUsersComponent.vue ***!
@@ -68837,6 +68395,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemEventComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************!*\
   !*** ./resources/js/components/admin/AdminUsersComponent.vue?vue&type=script&lang=js& ***!
@@ -69017,6 +68591,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemComponent_vue_vue_type_template_id_5a28a84b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemComponent.vue?vue&type=template&id=5a28a84b&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325&":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325& ***!
+  \***************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemEventComponent_vue_vue_type_template_id_587fc325___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemEventComponent_vue_vue_type_template_id_587fc325___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminCalendarsListItemEventComponent_vue_vue_type_template_id_587fc325___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325&");
 
 
 /***/ }),
@@ -69712,6 +69303,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-danger btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Delete"
                                                                       },
@@ -69719,10 +69312,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.markRemoveEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.markRemoveEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -69751,6 +69343,8 @@ var render = function() {
                                                                           staticClass:
                                                                             "btn btn-outline-danger btn-sm",
                                                                           attrs: {
+                                                                            type:
+                                                                              "button",
                                                                             title:
                                                                               "Restore"
                                                                           },
@@ -69758,10 +69352,9 @@ var render = function() {
                                                                             click: function(
                                                                               $event
                                                                             ) {
-                                                                              $event.preventDefault(),
-                                                                                _vm.restoreEditedEventStatus(
-                                                                                  index
-                                                                                )
+                                                                              return _vm.restoreEditedEventStatus(
+                                                                                index
+                                                                              )
                                                                             }
                                                                           }
                                                                         },
@@ -69781,6 +69374,8 @@ var render = function() {
                                                                           staticClass:
                                                                             "btn btn-outline-danger btn-sm",
                                                                           attrs: {
+                                                                            type:
+                                                                              "button",
                                                                             title:
                                                                               "Delete"
                                                                           },
@@ -69788,10 +69383,9 @@ var render = function() {
                                                                             click: function(
                                                                               $event
                                                                             ) {
-                                                                              $event.preventDefault(),
-                                                                                _vm.markRemoveEditedEvent(
-                                                                                  index
-                                                                                )
+                                                                              return _vm.markRemoveEditedEvent(
+                                                                                index
+                                                                              )
                                                                             }
                                                                           }
                                                                         },
@@ -69822,6 +69416,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-danger btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Restore"
                                                                       },
@@ -69829,10 +69425,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.restoreEditedEventStatus(
-                                                                              index
-                                                                            )
+                                                                          return _vm.restoreEditedEventStatus(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -69860,6 +69455,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-secondary btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Edit"
                                                                       },
@@ -69867,10 +69464,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.editEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.editEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -69888,6 +69484,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-danger btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Delete"
                                                                       },
@@ -69895,10 +69493,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.removeDuplicatedEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.removeDuplicatedEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -69924,6 +69521,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-secondary btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Edit"
                                                                       },
@@ -69931,10 +69530,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.editEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.editEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -69952,6 +69550,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-secondary btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Duplicate"
                                                                       },
@@ -69959,10 +69559,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.duplicateEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.duplicateEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -69980,6 +69579,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-secondary btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Cancel"
                                                                       },
@@ -69987,10 +69588,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.markCancelEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.markCancelEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -70008,6 +69608,8 @@ var render = function() {
                                                                       staticClass:
                                                                         "btn btn-outline-danger btn-sm",
                                                                       attrs: {
+                                                                        type:
+                                                                          "button",
                                                                         title:
                                                                           "Delete"
                                                                       },
@@ -70015,10 +69617,9 @@ var render = function() {
                                                                         click: function(
                                                                           $event
                                                                         ) {
-                                                                          $event.preventDefault(),
-                                                                            _vm.markRemoveEditedEvent(
-                                                                              index
-                                                                            )
+                                                                          return _vm.markRemoveEditedEvent(
+                                                                            index
+                                                                          )
                                                                         }
                                                                       }
                                                                     },
@@ -70250,821 +69851,29 @@ var render = function() {
                                                                           ]
                                                                         }
                                                                       },
-                                                                      [
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "00:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "00:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ]
+                                                                      _vm._l(
+                                                                        _vm.times,
+                                                                        function(
+                                                                          time
+                                                                        ) {
+                                                                          return _c(
+                                                                            "option",
+                                                                            {
+                                                                              domProps: {
+                                                                                value: time
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                _vm._s(
+                                                                                  time
+                                                                                )
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        }
+                                                                      ),
+                                                                      0
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
@@ -71198,821 +70007,29 @@ var render = function() {
                                                                           ]
                                                                         }
                                                                       },
-                                                                      [
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "00:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "00:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ]
+                                                                      _vm._l(
+                                                                        _vm.times,
+                                                                        function(
+                                                                          time
+                                                                        ) {
+                                                                          return _c(
+                                                                            "option",
+                                                                            {
+                                                                              domProps: {
+                                                                                value: time
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                _vm._s(
+                                                                                  time
+                                                                                )
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        }
+                                                                      ),
+                                                                      0
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
@@ -72480,7 +70497,7 @@ var render = function() {
                                                 _vm._v(
                                                   " " +
                                                     _vm._s(_vm.requestSuccess) +
-                                                    "\n                                                        "
+                                                    "\n                                                    "
                                                 )
                                               ]
                                             )
@@ -72501,7 +70518,7 @@ var render = function() {
                                                 _vm._v(
                                                   " " +
                                                     _vm._s(_vm.requestDanger) +
-                                                    "\n                                                        "
+                                                    "\n                                                    "
                                                 )
                                               ]
                                             )
@@ -73168,6 +71185,8 @@ var render = function() {
                                                                   staticClass:
                                                                     "btn btn-outline-secondary btn-sm",
                                                                   attrs: {
+                                                                    type:
+                                                                      "button",
                                                                     title:
                                                                       "Edit"
                                                                   },
@@ -73175,10 +71194,9 @@ var render = function() {
                                                                     click: function(
                                                                       $event
                                                                     ) {
-                                                                      $event.preventDefault(),
-                                                                        _vm.editEditedEvent(
-                                                                          index
-                                                                        )
+                                                                      return _vm.editEditedEvent(
+                                                                        index
+                                                                      )
                                                                     }
                                                                   }
                                                                 },
@@ -73196,6 +71214,8 @@ var render = function() {
                                                                   staticClass:
                                                                     "btn btn-outline-danger btn-sm",
                                                                   attrs: {
+                                                                    type:
+                                                                      "button",
                                                                     title:
                                                                       "Delete"
                                                                   },
@@ -73203,10 +71223,9 @@ var render = function() {
                                                                     click: function(
                                                                       $event
                                                                     ) {
-                                                                      $event.preventDefault(),
-                                                                        _vm.removeDuplicatedEditedEvent(
-                                                                          index
-                                                                        )
+                                                                      return _vm.removeDuplicatedEditedEvent(
+                                                                        index
+                                                                      )
                                                                     }
                                                                   }
                                                                 },
@@ -73438,821 +71457,29 @@ var render = function() {
                                                                           ]
                                                                         }
                                                                       },
-                                                                      [
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "00:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "00:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ]
+                                                                      _vm._l(
+                                                                        _vm.times,
+                                                                        function(
+                                                                          time
+                                                                        ) {
+                                                                          return _c(
+                                                                            "option",
+                                                                            {
+                                                                              domProps: {
+                                                                                value: time
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                _vm._s(
+                                                                                  time
+                                                                                )
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        }
+                                                                      ),
+                                                                      0
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
@@ -74386,821 +71613,29 @@ var render = function() {
                                                                           ]
                                                                         }
                                                                       },
-                                                                      [
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "00:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "00:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ]
+                                                                      _vm._l(
+                                                                        _vm.times,
+                                                                        function(
+                                                                          time
+                                                                        ) {
+                                                                          return _c(
+                                                                            "option",
+                                                                            {
+                                                                              domProps: {
+                                                                                value: time
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                _vm._s(
+                                                                                  time
+                                                                                )
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        }
+                                                                      ),
+                                                                      0
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
@@ -76137,7 +72572,7 @@ var render = function() {
                                                                       event.started_at
                                                                     )
                                                                   ) +
-                                                                  " - \n                                                                    " +
+                                                                  " -\n                                                                    " +
                                                                   _vm._s(
                                                                     _vm._f(
                                                                       "formatDate"
@@ -76504,821 +72939,29 @@ var render = function() {
                                                                           ]
                                                                         }
                                                                       },
-                                                                      [
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "00:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "00:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ]
+                                                                      _vm._l(
+                                                                        _vm.times,
+                                                                        function(
+                                                                          time
+                                                                        ) {
+                                                                          return _c(
+                                                                            "option",
+                                                                            {
+                                                                              domProps: {
+                                                                                value: time
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                _vm._s(
+                                                                                  time
+                                                                                )
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        }
+                                                                      ),
+                                                                      0
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
@@ -77452,821 +73095,29 @@ var render = function() {
                                                                           ]
                                                                         }
                                                                       },
-                                                                      [
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "00:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "00:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:30 AM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:30 AM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "01:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "01:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "02:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "02:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "03:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "03:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "04:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "04:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "05:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "05:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "06:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "06:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "07:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "07:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "08:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "08:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "09:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "09:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "10:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "10:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "11:30 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "11:30 PM"
-                                                                            )
-                                                                          ]
-                                                                        ),
-                                                                        _vm._v(
-                                                                          " "
-                                                                        ),
-                                                                        _c(
-                                                                          "option",
-                                                                          {
-                                                                            attrs: {
-                                                                              value:
-                                                                                "12:00 PM"
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "12:00 PM"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ]
+                                                                      _vm._l(
+                                                                        _vm.times,
+                                                                        function(
+                                                                          time
+                                                                        ) {
+                                                                          return _c(
+                                                                            "option",
+                                                                            {
+                                                                              domProps: {
+                                                                                value: time
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                _vm._s(
+                                                                                  time
+                                                                                )
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        }
+                                                                      ),
+                                                                      0
                                                                     ),
                                                                     _vm._v(" "),
                                                                     _c(
@@ -79006,7 +73857,7 @@ var render = function() {
                         _vm._v(
                           "\n                            Name\n                            "
                         ),
-                        _vm.sortBySummaryDirection == "desc"
+                        _vm.sortBySummaryDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -79031,7 +73882,7 @@ var render = function() {
                         _vm._v(
                           "\n                            Events\n                            "
                         ),
-                        _vm.sortByEventsDirection == "desc"
+                        _vm.sortByEventsDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -79056,7 +73907,7 @@ var render = function() {
                         _vm._v(
                           "\n                            Owner\n                            "
                         ),
-                        _vm.sortByOwnerDirection == "desc"
+                        _vm.sortByOwnerDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -79081,7 +73932,7 @@ var render = function() {
                         _vm._v(
                           "\n                            Updated\n                            "
                         ),
-                        _vm.sortByUpdatedDirection == "desc"
+                        _vm.sortByUpdatedDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -81701,195 +76552,12 @@ var render = function() {
                   ]
                 }
               },
-              [
-                _c("option", { attrs: { value: "01:00 AM" } }, [
-                  _vm._v("01:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:30 AM" } }, [
-                  _vm._v("01:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:00 AM" } }, [
-                  _vm._v("02:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:30 AM" } }, [
-                  _vm._v("02:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:00 AM" } }, [
-                  _vm._v("03:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:30 AM" } }, [
-                  _vm._v("03:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:00 AM" } }, [
-                  _vm._v("04:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:30 AM" } }, [
-                  _vm._v("04:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:00 AM" } }, [
-                  _vm._v("05:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:30 AM" } }, [
-                  _vm._v("05:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:00 AM" } }, [
-                  _vm._v("06:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:30 AM" } }, [
-                  _vm._v("06:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:00 AM" } }, [
-                  _vm._v("07:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:30 AM" } }, [
-                  _vm._v("07:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:00 AM" } }, [
-                  _vm._v("08:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:30 AM" } }, [
-                  _vm._v("08:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:00 AM" } }, [
-                  _vm._v("09:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:30 AM" } }, [
-                  _vm._v("09:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:00 AM" } }, [
-                  _vm._v("10:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:30 AM" } }, [
-                  _vm._v("10:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:00 AM" } }, [
-                  _vm._v("11:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:30 AM" } }, [
-                  _vm._v("11:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "12:00 AM" } }, [
-                  _vm._v("12:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "12:30 AM" } }, [
-                  _vm._v("12:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:00 PM" } }, [
-                  _vm._v("01:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:30 PM" } }, [
-                  _vm._v("01:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:00 PM" } }, [
-                  _vm._v("02:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:30 PM" } }, [
-                  _vm._v("02:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:00 PM" } }, [
-                  _vm._v("03:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:30 PM" } }, [
-                  _vm._v("03:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:00 PM" } }, [
-                  _vm._v("04:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:30 PM" } }, [
-                  _vm._v("04:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:00 PM" } }, [
-                  _vm._v("05:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:30 PM" } }, [
-                  _vm._v("05:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:00 PM" } }, [
-                  _vm._v("06:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:30 PM" } }, [
-                  _vm._v("06:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:00 PM" } }, [
-                  _vm._v("07:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:30 PM" } }, [
-                  _vm._v("07:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:00 PM" } }, [
-                  _vm._v("08:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:30 PM" } }, [
-                  _vm._v("08:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:00 PM" } }, [
-                  _vm._v("09:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:30 PM" } }, [
-                  _vm._v("09:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:00 PM" } }, [
-                  _vm._v("10:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:30 PM" } }, [
-                  _vm._v("10:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:00 PM" } }, [
-                  _vm._v("11:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:30 PM" } }, [
-                  _vm._v("11:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "12:00 PM" } }, [
-                  _vm._v("12:00 PM")
+              _vm._l(_vm.times, function(time) {
+                return _c("option", { domProps: { value: time } }, [
+                  _vm._v(_vm._s(time))
                 ])
-              ]
+              }),
+              0
             ),
             _vm._v(" "),
             _vm._m(3)
@@ -81940,203 +76608,12 @@ var render = function() {
                   ]
                 }
               },
-              [
-                _c("option", { attrs: { value: "00:00 AM" } }, [
-                  _vm._v("00:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "00:30 AM" } }, [
-                  _vm._v("00:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:00 AM" } }, [
-                  _vm._v("01:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:30 AM" } }, [
-                  _vm._v("01:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:00 AM" } }, [
-                  _vm._v("02:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:30 AM" } }, [
-                  _vm._v("02:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:00 AM" } }, [
-                  _vm._v("03:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:30 AM" } }, [
-                  _vm._v("03:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:00 AM" } }, [
-                  _vm._v("04:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:30 AM" } }, [
-                  _vm._v("04:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:00 AM" } }, [
-                  _vm._v("05:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:30 AM" } }, [
-                  _vm._v("05:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:00 AM" } }, [
-                  _vm._v("06:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:30 AM" } }, [
-                  _vm._v("06:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:00 AM" } }, [
-                  _vm._v("07:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:30 AM" } }, [
-                  _vm._v("07:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:00 AM" } }, [
-                  _vm._v("08:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:30 AM" } }, [
-                  _vm._v("08:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:00 AM" } }, [
-                  _vm._v("09:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:30 AM" } }, [
-                  _vm._v("09:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:00 AM" } }, [
-                  _vm._v("10:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:30 AM" } }, [
-                  _vm._v("10:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:00 AM" } }, [
-                  _vm._v("11:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:30 AM" } }, [
-                  _vm._v("11:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "12:00 AM" } }, [
-                  _vm._v("12:00 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "12:30 AM" } }, [
-                  _vm._v("12:30 AM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:00 PM" } }, [
-                  _vm._v("01:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "01:30 PM" } }, [
-                  _vm._v("01:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:00 PM" } }, [
-                  _vm._v("02:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "02:30 PM" } }, [
-                  _vm._v("02:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:00 PM" } }, [
-                  _vm._v("03:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "03:30 PM" } }, [
-                  _vm._v("03:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:00 PM" } }, [
-                  _vm._v("04:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "04:30 PM" } }, [
-                  _vm._v("04:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:00 PM" } }, [
-                  _vm._v("05:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "05:30 PM" } }, [
-                  _vm._v("05:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:00 PM" } }, [
-                  _vm._v("06:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "06:30 PM" } }, [
-                  _vm._v("06:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:00 PM" } }, [
-                  _vm._v("07:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "07:30 PM" } }, [
-                  _vm._v("07:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:00 PM" } }, [
-                  _vm._v("08:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "08:30 PM" } }, [
-                  _vm._v("08:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:00 PM" } }, [
-                  _vm._v("09:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "09:30 PM" } }, [
-                  _vm._v("09:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:00 PM" } }, [
-                  _vm._v("10:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "10:30 PM" } }, [
-                  _vm._v("10:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:00 PM" } }, [
-                  _vm._v("11:00 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "11:30 PM" } }, [
-                  _vm._v("11:30 PM")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "12:00 PM" } }, [
-                  _vm._v("12:00 PM")
+              _vm._l(_vm.times, function(time) {
+                return _c("option", { domProps: { value: time } }, [
+                  _vm._v(_vm._s(time))
                 ])
-              ]
+              }),
+              0
             ),
             _vm._v(" "),
             _vm._m(5)
@@ -82215,6 +76692,8 @@ var render = function() {
         ])
       ])
     ]),
+    _vm._v(" "),
+    _c("hr"),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
@@ -82501,7 +76980,7 @@ var render = function() {
                         _vm._v(
                           "\n                                Name\n                                "
                         ),
-                        _vm.sortBySummaryDirection == "desc"
+                        _vm.sortBySummaryDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -82526,7 +77005,7 @@ var render = function() {
                         _vm._v(
                           "\n                                Events\n                                "
                         ),
-                        _vm.sortByEventsDirection == "desc"
+                        _vm.sortByEventsDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -82551,7 +77030,7 @@ var render = function() {
                         _vm._v(
                           "\n                                Owner\n                                "
                         ),
-                        _vm.sortByOwnerDirection == "desc"
+                        _vm.sortByOwnerDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -82576,7 +77055,7 @@ var render = function() {
                         _vm._v(
                           "\n                                Updated\n                                "
                         ),
-                        _vm.sortByUpdatedDirection == "desc"
+                        _vm.sortByUpdatedDirection === "desc"
                           ? _c("i", {
                               staticClass:
                                 "fas fa-sort-amount-up-alt float-right"
@@ -82946,33 +77425,33 @@ var render = function() {
         _c("div", { staticClass: "row align-items-center" }, [
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
-              "\n                    " +
+              "\n                " +
                 _vm._s(_vm.calendar.name) +
-                "\n                "
+                "\n            "
             )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
-              "\n                    " +
+              "\n                " +
                 _vm._s(_vm.calendar.eventsCount) +
-                "\n                "
+                "\n            "
             )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
-              "\n                    " +
+              "\n                " +
                 _vm._s(_vm.calendar.owner) +
-                "\n                "
+                "\n            "
             )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-2" }, [
             _vm._v(
-              "\n                    " +
+              "\n                " +
                 _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
-                "\n                "
+                "\n            "
             )
           ]),
           _vm._v(" "),
@@ -82990,7 +77469,7 @@ var render = function() {
               },
               [
                 _c("i", { staticClass: "fas fa-user-friends" }),
-                _vm._v(" Share\n                    ")
+                _vm._v(" Share\n                ")
               ]
             ),
             _vm._v(" "),
@@ -83111,7 +77590,7 @@ var render = function() {
                 _c("div", { staticClass: "col-lg-6" }, [
                   _c("div", [
                     _vm._v(
-                      "\n                            " +
+                      "\n                        " +
                         _vm._s(_vm.view_events_start + 1) +
                         " - " +
                         _vm._s(
@@ -83125,20 +77604,31 @@ var render = function() {
                     ),
                     _c("i", { staticClass: "fa fa-angle-right" }),
                     _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        attrs: { href: "javascript:void(0)" },
-                        on: {
-                          click: function($event) {
-                            return _vm.showEditCalendarModalAction(
-                              _vm.calendar.id
-                            )
-                          }
-                        }
-                      },
-                      [_vm._v("View all")]
-                    )
+                    _vm.calendar.access_role === "owner"
+                      ? _c(
+                          "a",
+                          {
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.showEditCalendarModalAction(
+                                  _vm.calendar.id
+                                )
+                              }
+                            }
+                          },
+                          [_vm._v("View all")]
+                        )
+                      : _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: _vm.calendar.publicUrl,
+                              target: "_blank"
+                            }
+                          },
+                          [_vm._v("View all")]
+                        )
                   ])
                 ]),
                 _vm._v(" "),
@@ -83178,7 +77668,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Event Date and Time\n                                    "
+                              "\n                                Event Date and Time\n                                "
                             ),
                             _vm.sortByDateDirection === "desc"
                               ? _c("i", {
@@ -83203,7 +77693,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Address\n                                    "
+                              "\n                                Address\n                                "
                             ),
                             _vm.sortByLocationDirection === "desc"
                               ? _c("i", {
@@ -83228,7 +77718,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Event Type\n                                    "
+                              "\n                                Event Type\n                                "
                             ),
                             _vm.sortByTypeDirection === "desc"
                               ? _c("i", {
@@ -83253,7 +77743,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Notes\n                                    "
+                              "\n                                Notes\n                                "
                             ),
                             _vm.sortByDescriptionDirection === "desc"
                               ? _c("i", {
@@ -83277,7 +77767,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Status\n                                "
+                              "\n                                Status\n                            "
                             )
                           ]
                         )
@@ -83292,7 +77782,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Actions\n                                "
+                              "\n                                Actions\n                            "
                             )
                           ]
                         )
@@ -83314,10 +77804,10 @@ var render = function() {
                           }
                         },
                         [
-                          _c("calendars-list-item-event-component", {
+                          _c("admin-calendars-list-item-event-component", {
                             ref: "event",
                             refInFor: true,
-                            attrs: { event: event }
+                            attrs: { event: event, calendar: _vm.calendar }
                           })
                         ],
                         1
@@ -83348,8 +77838,12 @@ var render = function() {
                               _c("hr"),
                               _vm._v(" "),
                               _c("div", { staticClass: "row" }, [
-                                _c("div", { staticClass: "col-3" }, [
+                                _c("div", { staticClass: "col-2" }, [
                                   _c("div", { staticClass: "data" }, [
+                                    _c("label", [
+                                      _c("small", [_vm._v("Date")])
+                                    ]),
+                                    _vm._v(" "),
                                     _c(
                                       "div",
                                       {
@@ -83357,27 +77851,11 @@ var render = function() {
                                           "input-group input-group-sm mb-3"
                                       },
                                       [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("Start Date")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
                                         _c("date-picker", {
                                           attrs: {
                                             config: _vm.dateOptions,
                                             readonly: "",
-                                            name: "event-start-date"
+                                            name: "startDate"
                                           },
                                           model: {
                                             value:
@@ -83418,8 +77896,12 @@ var render = function() {
                                   ])
                                 ]),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "col-3" }, [
+                                _c("div", { staticClass: "col-2" }, [
                                   _c("div", { staticClass: "data" }, [
+                                    _c("label", [
+                                      _c("small", [_vm._v("Start time")])
+                                    ]),
+                                    _vm._v(" "),
                                     _c(
                                       "div",
                                       {
@@ -83428,22 +77910,6 @@ var render = function() {
                                       },
                                       [
                                         _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("Start Time [hours]")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
                                           "select",
                                           {
                                             directives: [
@@ -83451,115 +77917,54 @@ var render = function() {
                                                 name: "model",
                                                 rawName: "v-model",
                                                 value:
-                                                  _vm.editedEventData
-                                                    .startTimeHours,
+                                                  _vm.editedEventData.startTime,
                                                 expression:
-                                                  "editedEventData.startTimeHours"
+                                                  "editedEventData.startTime"
                                               }
                                             ],
                                             staticClass: "custom-select",
-                                            attrs: {
-                                              name: "event-start-time-hours"
-                                            },
+                                            attrs: { name: "startTime" },
                                             on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
+                                              change: [
+                                                function($event) {
+                                                  var $$selectedVal = Array.prototype.filter
+                                                    .call(
+                                                      $event.target.options,
+                                                      function(o) {
+                                                        return o.selected
+                                                      }
+                                                    )
+                                                    .map(function(o) {
+                                                      var val =
+                                                        "_value" in o
+                                                          ? o._value
+                                                          : o.value
+                                                      return val
+                                                    })
+                                                  _vm.$set(
+                                                    _vm.editedEventData,
+                                                    "startTime",
+                                                    $event.target.multiple
+                                                      ? $$selectedVal
+                                                      : $$selectedVal[0]
                                                   )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.editedEventData,
-                                                  "startTimeHours",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
+                                                },
+                                                function($event) {
+                                                  return _vm.selectTimeAction(
+                                                    "start"
+                                                  )
+                                                }
+                                              ]
                                             }
                                           },
-                                          [
-                                            _c(
+                                          _vm._l(_vm.times, function(time) {
+                                            return _c(
                                               "option",
-                                              { attrs: { value: "1" } },
-                                              [_vm._v("01")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "2" } },
-                                              [_vm._v("02")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "3" } },
-                                              [_vm._v("03")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "4" } },
-                                              [_vm._v("04")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "5" } },
-                                              [_vm._v("05")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "6" } },
-                                              [_vm._v("06")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "7" } },
-                                              [_vm._v("07")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "8" } },
-                                              [_vm._v("08")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "9" } },
-                                              [_vm._v("09")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "10" } },
-                                              [_vm._v("10")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "11" } },
-                                              [_vm._v("11")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "12" } },
-                                              [_vm._v("12")]
+                                              { domProps: { value: time } },
+                                              [_vm._v(_vm._s(time))]
                                             )
-                                          ]
+                                          }),
+                                          0
                                         ),
                                         _vm._v(" "),
                                         _c(
@@ -83584,8 +77989,12 @@ var render = function() {
                                   ])
                                 ]),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "col-3" }, [
+                                _c("div", { staticClass: "col-2" }, [
                                   _c("div", { staticClass: "data" }, [
+                                    _c("label", [
+                                      _c("small", [_vm._v("End time")])
+                                    ]),
+                                    _vm._v(" "),
                                     _c(
                                       "div",
                                       {
@@ -83594,22 +78003,6 @@ var render = function() {
                                       },
                                       [
                                         _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("Start Time [minutes]")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
                                           "select",
                                           {
                                             directives: [
@@ -83617,115 +78010,54 @@ var render = function() {
                                                 name: "model",
                                                 rawName: "v-model",
                                                 value:
-                                                  _vm.editedEventData
-                                                    .startTimeMinutes,
+                                                  _vm.editedEventData.endTime,
                                                 expression:
-                                                  "editedEventData.startTimeMinutes"
+                                                  "editedEventData.endTime"
                                               }
                                             ],
                                             staticClass: "custom-select",
-                                            attrs: {
-                                              name: "event-start-time-minutes"
-                                            },
+                                            attrs: { name: "endTime" },
                                             on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
+                                              change: [
+                                                function($event) {
+                                                  var $$selectedVal = Array.prototype.filter
+                                                    .call(
+                                                      $event.target.options,
+                                                      function(o) {
+                                                        return o.selected
+                                                      }
+                                                    )
+                                                    .map(function(o) {
+                                                      var val =
+                                                        "_value" in o
+                                                          ? o._value
+                                                          : o.value
+                                                      return val
+                                                    })
+                                                  _vm.$set(
+                                                    _vm.editedEventData,
+                                                    "endTime",
+                                                    $event.target.multiple
+                                                      ? $$selectedVal
+                                                      : $$selectedVal[0]
                                                   )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.editedEventData,
-                                                  "startTimeMinutes",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
+                                                },
+                                                function($event) {
+                                                  return _vm.selectTimeAction(
+                                                    "end"
+                                                  )
+                                                }
+                                              ]
                                             }
                                           },
-                                          [
-                                            _c(
+                                          _vm._l(_vm.times, function(time) {
+                                            return _c(
                                               "option",
-                                              { attrs: { value: "0" } },
-                                              [_vm._v("00")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "5" } },
-                                              [_vm._v("05")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "10" } },
-                                              [_vm._v("10")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "15" } },
-                                              [_vm._v("15")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "20" } },
-                                              [_vm._v("20")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "25" } },
-                                              [_vm._v("25")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "30" } },
-                                              [_vm._v("30")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "35" } },
-                                              [_vm._v("35")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "40" } },
-                                              [_vm._v("40")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "45" } },
-                                              [_vm._v("45")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "50" } },
-                                              [_vm._v("50")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "55" } },
-                                              [_vm._v("55")]
+                                              { domProps: { value: time } },
+                                              [_vm._v(_vm._s(time))]
                                             )
-                                          ]
+                                          }),
+                                          0
                                         ),
                                         _vm._v(" "),
                                         _c(
@@ -83746,653 +78078,6 @@ var render = function() {
                                           ]
                                         )
                                       ]
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "col-3" }, [
-                                  _c("div", { staticClass: "data" }, [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "input-group input-group-sm mb-3"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("Start Time [am/pm]")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "select",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value:
-                                                  _vm.editedEventData
-                                                    .startTimeAmPm,
-                                                expression:
-                                                  "editedEventData.startTimeAmPm"
-                                              }
-                                            ],
-                                            staticClass: "custom-select",
-                                            attrs: {
-                                              name: "event-start-time-ampm"
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
-                                                  )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.editedEventData,
-                                                  "startTimeAmPm",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "AM" } },
-                                              [_vm._v("AM")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "PM" } },
-                                              [_vm._v("PM")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          { staticClass: "input-group-append" },
-                                          [
-                                            _c(
-                                              "label",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [
-                                                _c("i", {
-                                                  staticClass: "far fa-clock"
-                                                })
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "row" }, [
-                                _c("div", { staticClass: "col-3" }, [
-                                  _c("div", { staticClass: "data" }, [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "input-group input-group-sm mb-3"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("End Date")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("date-picker", {
-                                          attrs: {
-                                            config: _vm.dateOptions,
-                                            readonly: "",
-                                            name: "event-end-date"
-                                          },
-                                          model: {
-                                            value: _vm.editedEventData.endDate,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.editedEventData,
-                                                "endDate",
-                                                $$v
-                                              )
-                                            },
-                                            expression:
-                                              "editedEventData.endDate"
-                                          }
-                                        }),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          { staticClass: "input-group-append" },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [
-                                                _c("i", {
-                                                  staticClass:
-                                                    "far fa-calendar-alt"
-                                                })
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "col-3" }, [
-                                  _c("div", { staticClass: "data" }, [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "input-group input-group-sm mb-3"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("End Time [hours]")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "select",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value:
-                                                  _vm.editedEventData
-                                                    .endTimeHours,
-                                                expression:
-                                                  "editedEventData.endTimeHours"
-                                              }
-                                            ],
-                                            staticClass: "custom-select",
-                                            attrs: {
-                                              name: "event-end-time-hours"
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
-                                                  )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.editedEventData,
-                                                  "endTimeHours",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "1" } },
-                                              [_vm._v("01")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "2" } },
-                                              [_vm._v("02")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "3" } },
-                                              [_vm._v("03")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "4" } },
-                                              [_vm._v("04")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "5" } },
-                                              [_vm._v("05")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "6" } },
-                                              [_vm._v("06")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "7" } },
-                                              [_vm._v("07")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "8" } },
-                                              [_vm._v("08")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "9" } },
-                                              [_vm._v("09")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "10" } },
-                                              [_vm._v("10")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "11" } },
-                                              [_vm._v("11")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "12" } },
-                                              [_vm._v("12")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          { staticClass: "input-group-append" },
-                                          [
-                                            _c(
-                                              "label",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [
-                                                _c("i", {
-                                                  staticClass: "far fa-clock"
-                                                })
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "col-3" }, [
-                                  _c("div", { staticClass: "data" }, [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "input-group input-group-sm mb-3"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("End Time [minutes]")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "select",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value:
-                                                  _vm.editedEventData
-                                                    .endTimeMinutes,
-                                                expression:
-                                                  "editedEventData.endTimeMinutes"
-                                              }
-                                            ],
-                                            staticClass: "custom-select",
-                                            attrs: {
-                                              name: "event-end-time-minutes"
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
-                                                  )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.editedEventData,
-                                                  "endTimeMinutes",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "0" } },
-                                              [_vm._v("00")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "5" } },
-                                              [_vm._v("05")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "10" } },
-                                              [_vm._v("10")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "15" } },
-                                              [_vm._v("15")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "20" } },
-                                              [_vm._v("20")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "25" } },
-                                              [_vm._v("25")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "30" } },
-                                              [_vm._v("30")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "35" } },
-                                              [_vm._v("35")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "40" } },
-                                              [_vm._v("40")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "45" } },
-                                              [_vm._v("45")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "50" } },
-                                              [_vm._v("50")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "55" } },
-                                              [_vm._v("55")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          { staticClass: "input-group-append" },
-                                          [
-                                            _c(
-                                              "label",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [
-                                                _c("i", {
-                                                  staticClass: "far fa-clock"
-                                                })
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "col-3" }, [
-                                  _c("div", { staticClass: "data" }, [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "input-group input-group-sm mb-3"
-                                      },
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "input-group-prepend"
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [_vm._v("End Time [am/pm]")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "select",
-                                          {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value:
-                                                  _vm.editedEventData
-                                                    .endTimeAmPm,
-                                                expression:
-                                                  "editedEventData.endTimeAmPm"
-                                              }
-                                            ],
-                                            staticClass: "custom-select",
-                                            attrs: {
-                                              name: "event-end-time-ampm"
-                                            },
-                                            on: {
-                                              change: function($event) {
-                                                var $$selectedVal = Array.prototype.filter
-                                                  .call(
-                                                    $event.target.options,
-                                                    function(o) {
-                                                      return o.selected
-                                                    }
-                                                  )
-                                                  .map(function(o) {
-                                                    var val =
-                                                      "_value" in o
-                                                        ? o._value
-                                                        : o.value
-                                                    return val
-                                                  })
-                                                _vm.$set(
-                                                  _vm.editedEventData,
-                                                  "endTimeAmPm",
-                                                  $event.target.multiple
-                                                    ? $$selectedVal
-                                                    : $$selectedVal[0]
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "AM" } },
-                                              [_vm._v("AM")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "PM" } },
-                                              [_vm._v("PM")]
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          { staticClass: "input-group-append" },
-                                          [
-                                            _c(
-                                              "label",
-                                              {
-                                                staticClass: "input-group-text"
-                                              },
-                                              [
-                                                _c("i", {
-                                                  staticClass: "far fa-clock"
-                                                })
-                                              ]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ])
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("hr"),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "row" }, [
-                                _c("div", { staticClass: "col-5" }, [
-                                  _c("div", { staticClass: "data" }, [
-                                    _c(
-                                      "div",
-                                      { staticClass: "form-group" },
-                                      [
-                                        _c("label", [
-                                          _c("small", [_vm._v("Location")])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("vue-google-autocomplete", {
-                                          attrs: {
-                                            id: "map" + _vm.editedEventData.id,
-                                            classname:
-                                              "form-control form-control-sm",
-                                            name: "event-location",
-                                            placeholder: "Change Event Location"
-                                          },
-                                          on: {
-                                            placechanged: _vm.getAddressData
-                                          }
-                                        })
-                                      ],
-                                      1
                                     )
                                   ])
                                 ]),
@@ -84417,7 +78102,7 @@ var render = function() {
                                           ],
                                           staticClass:
                                             "form-control form-control-sm",
-                                          attrs: { name: "event_type" },
+                                          attrs: { name: "type" },
                                           on: {
                                             change: function($event) {
                                               var $$selectedVal = Array.prototype.filter
@@ -84462,14 +78147,44 @@ var render = function() {
                                   ])
                                 ]),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "col-5" }, [
+                                _c("div", { staticClass: "col-4" }, [
+                                  _c("div", { staticClass: "data" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "form-group" },
+                                      [
+                                        _c("label", [
+                                          _c("small", [_vm._v("Address")])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("vue-google-autocomplete", {
+                                          ref: "eventLocationAutocomplete",
+                                          attrs: {
+                                            id: "map" + _vm.editedEventData.id,
+                                            classname:
+                                              "form-control form-control-sm",
+                                            placeholder:
+                                              "Change Event Location",
+                                            name: "location"
+                                          },
+                                          on: {
+                                            inputChange: _vm.getAddressData
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ])
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row" }, [
+                                _c("div", { staticClass: "col-12" }, [
                                   _c("div", { staticClass: "data" }, [
                                     _c("div", { staticClass: "form-group" }, [
                                       _c("label", [
                                         _c("small", [
-                                          _vm._v(
-                                            "Description [max 150 symbols]"
-                                          )
+                                          _vm._v("Notes [max 150 symbols]")
                                         ])
                                       ]),
                                       _vm._v(" "),
@@ -84486,10 +78201,7 @@ var render = function() {
                                         ],
                                         staticClass:
                                           "form-control form-control-sm",
-                                        attrs: {
-                                          type: "text",
-                                          name: "event_description"
-                                        },
+                                        attrs: { type: "text", name: "notes" },
                                         domProps: {
                                           value: _vm.editedEventData.description
                                         },
@@ -84514,8 +78226,6 @@ var render = function() {
                                 ])
                               ]),
                               _vm._v(" "),
-                              _c("hr"),
-                              _vm._v(" "),
                               _c("div", { staticClass: "row" }, [
                                 _c("div", { staticClass: "col-4" }, [
                                   _c("div", { staticClass: "data" }, [
@@ -84526,7 +78236,9 @@ var render = function() {
                                           "btn btn-success btn-sm pull-right btn-open",
                                         attrs: {
                                           title: "Save",
-                                          disabled: _vm.requestProcess
+                                          disabled:
+                                            !_vm.newEventDataValid ||
+                                            _vm.requestProcess
                                         }
                                       },
                                       [
@@ -84638,41 +78350,141 @@ var render = function() {
             [
               _c("transition", { attrs: { name: "modal" } }, [
                 _c("div", { staticClass: "modal-mask" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal-wrapper",
+                      on: {
+                        click: function($event) {
+                          return _vm.hideShareCalendarModal($event)
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "message-modal",
+                          attrs: { tabindex: "-1", role: "dialog" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "modal-dialog",
+                              attrs: { role: "document" }
+                            },
+                            [
+                              _c("div", { staticClass: "modal-content" }, [
+                                _c("div", { staticClass: "modal-header" }, [
+                                  _c("h5", { staticClass: "modal-title" }, [
+                                    _vm._v("Information")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "close",
+                                      attrs: {
+                                        type: "button",
+                                        "data-dismiss": "modal",
+                                        "aria-label": "Close"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          ;(_vm.infoModalText = ""),
+                                            (_vm.showInfoModal = false)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { attrs: { "aria-hidden": "true" } },
+                                        [_vm._v("×")]
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", {
+                                  staticClass: "modal-body",
+                                  domProps: {
+                                    innerHTML: _vm._s(_vm.infoModalHtml)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "modal-footer" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-secondary",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          ;(_vm.infoModalText = ""),
+                                            (_vm.showInfoModal = false)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Close")]
+                                  )
+                                ])
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showConfirmUnsubscribeCalendarModal
+        ? _c(
+            "div",
+            [
+              _c("transition", { attrs: { name: "modal" } }, [
+                _c("div", { staticClass: "modal-mask" }, [
                   _c("div", { staticClass: "modal-wrapper" }, [
                     _c(
                       "div",
                       {
-                        staticClass: "message-modal",
-                        attrs: { tabindex: "-1", role: "dialog" }
+                        attrs: {
+                          id: "confirmDeleteCalendarModal",
+                          tabindex: "-1",
+                          role: "dialog"
+                        }
                       },
                       [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "modal-dialog",
-                            attrs: { role: "document" }
-                          },
-                          [
-                            _c("div", { staticClass: "modal-content" }, [
-                              _c("div", { staticClass: "modal-header" }, [
-                                _c("h5", { staticClass: "modal-title" }, [
-                                  _vm._v("Information")
-                                ]),
+                        _c("div", { staticClass: "modal-dialog" }, [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "modal-header text-white bg-danger"
+                              },
+                              [
+                                _c(
+                                  "h5",
+                                  {
+                                    staticClass: "modal-title w-100 text-center"
+                                  },
+                                  [_vm._v("Confirm unsubscribe from calendar")]
+                                ),
                                 _vm._v(" "),
                                 _c(
                                   "button",
                                   {
                                     staticClass: "close",
-                                    attrs: {
-                                      type: "button",
-                                      "data-dismiss": "modal",
-                                      "aria-label": "Close"
-                                    },
+                                    attrs: { type: "button" },
                                     on: {
-                                      click: function($event) {
-                                        ;(_vm.infoModalText = ""),
-                                          (_vm.showInfoModal = false)
-                                      }
+                                      click:
+                                        _vm.hideConfirmUnsubscribeCalendarModal
                                     }
                                   },
                                   [
@@ -84683,34 +78495,72 @@ var render = function() {
                                     )
                                   ]
                                 )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c("p", [
+                                _vm._v(
+                                  "You are about to unsubscribe from calendar, this procedure is irreversible."
+                                )
                               ]),
                               _vm._v(" "),
-                              _c("div", {
-                                staticClass: "modal-body",
-                                domProps: {
-                                  innerHTML: _vm._s(_vm.infoModalHtml)
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "modal-footer" }, [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-secondary",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        ;(_vm.infoModalText = ""),
-                                          (_vm.showInfoModal = false)
+                              _c("p", [_vm._v("Do you want to proceed?")])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              !_vm.requestProcess
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.unsubscribeCalendar(
+                                            _vm.calendar.id
+                                          )
+                                        }
                                       }
-                                    }
-                                  },
-                                  [_vm._v("Close")]
-                                )
-                              ])
+                                    },
+                                    [_vm._v("Process")]
+                                  )
+                                : _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary",
+                                      attrs: { type: "button", disabled: "" }
+                                    },
+                                    [
+                                      _c("span", {
+                                        staticClass:
+                                          "spinner-border spinner-border-sm",
+                                        attrs: {
+                                          role: "status",
+                                          "aria-hidden": "true"
+                                        }
+                                      }),
+                                      _vm._v(
+                                        "\n                                        Loading...\n                                    "
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click:
+                                      _vm.hideConfirmUnsubscribeCalendarModal
+                                  }
+                                },
+                                [_vm._v("Close")]
+                              )
                             ])
-                          ]
-                        )
+                          ])
+                        ])
                       ]
                     )
                   ])
@@ -84734,6 +78584,403 @@ var staticRenderFns = [
       {
         staticClass: "btn btn-light btn-sm pull-right btn-open",
         attrs: { type: "button" }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-v" })]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325&":
+/*!******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/AdminCalendarsListItemEventComponent.vue?vue&type=template&id=587fc325& ***!
+  \******************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.event.status === "cancelled" || _vm.event.status === "over"
+    ? _c(
+        "div",
+        {
+          staticClass: "card calendar-single event-cancelled",
+          attrs: { id: "event" + _vm.event.id }
+        },
+        [
+          _c("div", { staticClass: "row text-muted" }, [
+            _c("div", { staticClass: "col-3" }, [
+              _c("div", { staticClass: "data event-datetime" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.event.started_at)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("sliceString")(_vm.event.location)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("capitalize")(_vm.event.type)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c("del", [
+                  _vm._v(_vm._s(_vm._f("sliceString")(_vm.event.description)))
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c(
+                  "span",
+                  { staticClass: "badge badge-secondary event-status-badge" },
+                  [_vm._v(_vm._s(_vm.event.status))]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-1" }, [
+              _c("div", { staticClass: "data text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-danger btn-sm btn-open",
+                    attrs: { type: "button", title: "Delete" },
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation(),
+                          _vm.showConfirmEventDeleteModal(_vm.event.id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-trash-alt" })]
+                )
+              ])
+            ])
+          ])
+        ]
+      )
+    : _c(
+        "div",
+        {
+          staticClass: "card calendar-single event-active",
+          attrs: { id: "event" + _vm.event.id }
+        },
+        [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-3" }, [
+              _c("div", { staticClass: "data event-datetime" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm._f("formatDate")(_vm.event.started_at)) +
+                    " " +
+                    _vm._s(_vm._f("formatTime")(_vm.event.started_at)) +
+                    " - " +
+                    _vm._s(_vm._f("formatDate")(_vm.event.ended_at)) +
+                    " " +
+                    _vm._s(_vm._f("formatTime")(_vm.event.ended_at)) +
+                    "\n            "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { title: "Details", href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation(),
+                          (_vm.showEventDetails = !_vm.showEventDetails)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm._f("sliceString")(_vm.event.location)) +
+                        " "
+                    ),
+                    _c("i", { staticClass: "fas fa-angle-down" })
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm._f("capitalize")(_vm.event.type)) +
+                    "\n            "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data" }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { title: "Details", href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation(),
+                          (_vm.showEventDetails = !_vm.showEventDetails)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm._f("sliceString")(_vm.event.description)) +
+                        " "
+                    ),
+                    _c("i", { staticClass: "fas fa-angle-down" })
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-1" }, [
+              _c("div", { staticClass: "data" }, [
+                _vm.event.status === "over"
+                  ? _c(
+                      "span",
+                      {
+                        staticClass: "badge badge-secondary event-status-badge"
+                      },
+                      [_vm._v(_vm._s(_vm.event.status))]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.event.status === "confirmed"
+                  ? _c(
+                      "span",
+                      { staticClass: "badge badge-success event-status-badge" },
+                      [_vm._v(_vm._s(_vm.event.status))]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.event.status === "tentative"
+                  ? _c(
+                      "span",
+                      { staticClass: "badge badge-warning event-status-badge" },
+                      [_vm._v(_vm._s(_vm.event.status))]
+                    )
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-2" }, [
+              _c("div", { staticClass: "data text-right" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "btn btn-outline-primary btn-sm pull-right btn-open",
+                    attrs: { type: "button", title: "Edit" },
+                    on: {
+                      click: function($event) {
+                        $event.stopPropagation(),
+                          _vm.showEditSingleEvent(_vm.event.id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "far fa-edit" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dropdown-event-actions",
+                    on: {
+                      mouseover: function($event) {
+                        _vm.showEventDropdownActions = true
+                      },
+                      mouseleave: function($event) {
+                        _vm.showEventDropdownActions = false
+                      },
+                      click: function($event) {
+                        return $event.stopPropagation()
+                      }
+                    }
+                  },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("transition", { attrs: { name: "fade" } }, [
+                      _vm.showEventDropdownActions
+                        ? _c("div", { staticClass: "items" }, [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    $event.stopPropagation(),
+                                      _vm.duplicateEventAction()
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "far fa-clone" }),
+                                _vm._v(" Duplicate")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    $event.stopPropagation(),
+                                      _vm.cancelEventAction(_vm.event.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fas fa-ban" }),
+                                _vm._v(" Cancel")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    $event.stopPropagation(),
+                                      _vm.showConfirmEventDeleteModal(
+                                        _vm.event.id
+                                      )
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "far fa-trash-alt" }),
+                                _vm._v(" Delete")
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ],
+                  1
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("transition", { attrs: { name: "fade" } }, [
+            _vm.showEventDetails
+              ? _c("div", { staticClass: "row event-details" }, [
+                  _c("div", { staticClass: "col-12" }, [
+                    _c("div", [
+                      _c("div", { staticClass: "card border-secondary" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "card-header bg-transparent border-secondary"
+                          },
+                          [_c("strong", [_vm._v("Address : ")])]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body text-secondary" }, [
+                          _c(
+                            "a",
+                            {
+                              attrs: {
+                                title: "Copy event address",
+                                href: "javascript:void(0)"
+                              },
+                              on: { click: _vm.copyEventAddress }
+                            },
+                            [_vm._v(_vm._s(_vm.event.location))]
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card border-secondary" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "card-header bg-transparent border-secondary"
+                          },
+                          [_c("strong", [_vm._v("Notes : ")])]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body text-secondary" }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(_vm.event.description) +
+                              "\n                        "
+                          )
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("transition", { attrs: { name: "fade" } }, [
+            _vm.showEditSingleEventForm
+              ? _c(
+                  "div",
+                  [
+                    _c("event-data-edit-component", {
+                      ref: "event",
+                      attrs: { event: _vm.event }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ])
+        ],
+        1
+      )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-outline-primary btn-sm pull-right btn-open",
+        attrs: { type: "button", title: "More" }
       },
       [_c("i", { staticClass: "fas fa-ellipsis-v" })]
     )
@@ -84781,9 +79028,7 @@ var render = function() {
                 [
                   _c("strong", [_vm._v("Error!")]),
                   _vm._v(
-                    " " +
-                      _vm._s(_vm.requestDanger) +
-                      "\n                        "
+                    " " + _vm._s(_vm.requestDanger) + "\n                    "
                   ),
                   _vm._m(0)
                 ]
@@ -84801,9 +79046,7 @@ var render = function() {
                 [
                   _c("strong", [_vm._v("Success!")]),
                   _vm._v(
-                    " " +
-                      _vm._s(_vm.requestSuccess) +
-                      "\n                        "
+                    " " + _vm._s(_vm.requestSuccess) + "\n                    "
                   ),
                   _vm._m(1)
                 ]
@@ -84843,7 +79086,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                                    User Email\n                                    "
+                            "\n                                User Email\n                                "
                           ),
                           _vm.sortByEmailDirection === "desc"
                             ? _c("i", {
@@ -84868,7 +79111,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                                    Owned Calendars\n                                    "
+                            "\n                                Owned Calendars\n                                "
                           ),
                           _vm.sortByOwnCalendarsDirection === "desc"
                             ? _c("i", {
@@ -84893,7 +79136,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                                    Shared Calendars\n                                    "
+                            "\n                                Shared Calendars\n                                "
                           ),
                           _vm.sortByPublicCalendarsDirection === "desc"
                             ? _c("i", {
@@ -84918,7 +79161,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                                    Role(Admin/User)\n                                    "
+                            "\n                                Role(Admin/User)\n                                "
                           ),
                           _vm.sortByRoleDirection === "desc"
                             ? _c("i", {
@@ -84983,11 +79226,7 @@ var render = function() {
             _c(
               "div",
               { staticClass: "alert alert-info", attrs: { role: "alert" } },
-              [
-                _vm._v(
-                  "\n                    Users not found ...\n                "
-                )
-              ]
+              [_vm._v("\n                Users not found ...\n            ")]
             )
           ])
     ])

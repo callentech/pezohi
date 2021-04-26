@@ -37,6 +37,7 @@ Vue.component('frontend-calendar-data-component', require('./components/frontend
 Vue.component('admin-calendars-component', require('./components/admin/AdminCalendarsComponent.vue').default);
 Vue.component('admin-users-component', require('./components/admin/AdminUsersComponent.vue').default);
 Vue.component('admin-calendars-list-item-component', require('./components/admin/AdminCalendarsListItemComponent.vue').default);
+Vue.component('admin-calendars-list-item-event-component', require('./components/admin/AdminCalendarsListItemEventComponent.vue').default);
 
 
 /**

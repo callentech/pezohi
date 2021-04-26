@@ -25,28 +25,6 @@ use Illuminate\Support\Facades\Mail;
 class CalendarsController extends Controller
 {
     /**
-     * @param $event
-     * @param $action
-     */
-    private function sendMainNotify($event, $action)
-    {
-        $params = [
-            'calendar' => $event->calendar,
-            'event' => $event,
-            'action' => $action,
-            'dateTime' => now()
-        ];
-        $calendars = Calendar::where('google_id', $event->calendar->google_id)->get();
-        foreach ($calendars as $calendar) {
-            $subscribes = Subscribe::where('calendar_id', $calendar->id)->get();
-            foreach ($subscribes as $subscribe) {
-                $user = User::find($subscribe->user_id);
-                Mail::to($user->email)->send(new EventStatusNotify($params));
-            }
-            Mail::to($calendar->user->email)->send(new EventStatusNotify($params));
-        }
-    }
-    /**
      * @param Request $request
      * @return JsonResponse
      */
@@ -55,8 +33,6 @@ class CalendarsController extends Controller
         $request->validate([
             'calendar_name' => 'required'
         ]);
-
-        
 
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
@@ -133,20 +109,14 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 401
                 ]);
-            }
-            
-            
-            else if ($ex->getErrors()[0]['message']) {
+            } else if ($ex->getErrors()[0]['message']) {
                 return response()->json([
                     'code' => 0,
                     'data' => [
                         'message' => $ex->getErrors()[0]['message']
                     ]
                 ]);
-            }
-            
-            
-            else {
+            } else {
                 return response()->json([
                     'code' => 0,
                 ]);
@@ -461,7 +431,7 @@ class CalendarsController extends Controller
                 'code' => 401
             ]);
     	}
-    	
+
         $request->validate([
             'calendar_id' => 'required'
         ]);

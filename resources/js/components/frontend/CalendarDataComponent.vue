@@ -10,9 +10,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <div v-else class="row p-3 px-md-4 mb-3">
                     <div class="col-4">
                         <div class="title">
@@ -312,9 +309,6 @@ export default {
                 location.reload();
             }, 5000);
         }
-
-
-
     },
 
     filters: {
@@ -382,7 +376,7 @@ export default {
             } else {
                 return '';
             }
-            
+
         },
 
         capitalize: function (value) {

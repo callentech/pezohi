@@ -95,54 +95,52 @@
                                                                     </div>
 
                                                                     <div v-if="event.status === 'over'" class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Delete" @click="markRemoveEditedEvent(index)">
                                                                             <i class="far fa-trash-alt"></i>
                                                                         </button>
                                                                     </div>
 
                                                                     <div v-else-if="event.status === 'cancelled'" class="col-2 text-right actions">
-                                                                        <button v-if="event.current_status" class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
+                                                                        <button v-if="event.current_status" type="button" class="btn btn-outline-danger btn-sm" title="Restore" @click="restoreEditedEventStatus(index)">
                                                                             <i class="fas fa-trash-restore-alt"></i>
                                                                         </button>
-                                                                        <button v-else class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                        <button v-else type="button" class="btn btn-outline-danger btn-sm" title="Delete" @click="markRemoveEditedEvent(index)">
                                                                             <i class="far fa-trash-alt"></i>
                                                                         </button>
                                                                     </div>
 
                                                                     <div v-else-if="event.status === 'deleted'" class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Restore" @click="restoreEditedEventStatus(index)">
                                                                             <i class="fas fa-trash-restore-alt"></i>
                                                                         </button>
                                                                     </div>
 
                                                                     <div v-else-if="event.status === 'duplicated'" class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEditedEvent(index)">
                                                                             <i class="fas fa-pencil-alt"></i>
                                                                         </button>
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeDuplicatedEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Delete" @click="removeDuplicatedEditedEvent(index)">
                                                                             <i class="far fa-trash-alt"></i>
                                                                         </button>
                                                                     </div>
 
                                                                     <div v-else class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEditedEvent(index)">
                                                                             <i class="fas fa-pencil-alt"></i>
                                                                         </button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Duplicate" @click="$event.preventDefault(), duplicateEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Duplicate" @click="duplicateEditedEvent(index)">
                                                                             <i class="far fa-clone"></i>
                                                                         </button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Cancel" @click="$event.preventDefault(), markCancelEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Cancel" @click="markCancelEditedEvent(index)">
                                                                             <i class="fas fa-ban"></i>
                                                                         </button>
-
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Delete" @click="markRemoveEditedEvent(index)">
                                                                             <i class="far fa-trash-alt"></i>
                                                                         </button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
 
                                                     <transition name="fade">
@@ -168,54 +166,7 @@
                                                                         <label><small>Start time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
                                                                             <select v-model="editedEventData.startTime" class="custom-select" name="startTime" @change="selectTimeAction('start')">
-                                                                                <option value="00:30 AM">00:30 AM</option>
-                                                                                <option value="01:00 AM">01:00 AM</option>
-                                                                                <option value="01:30 AM">01:30 AM</option>
-                                                                                <option value="02:00 AM">02:00 AM</option>
-                                                                                <option value="02:30 AM">02:30 AM</option>
-                                                                                <option value="03:00 AM">03:00 AM</option>
-                                                                                <option value="03:30 AM">03:30 AM</option>
-                                                                                <option value="04:00 AM">04:00 AM</option>
-                                                                                <option value="04:30 AM">04:30 AM</option>
-                                                                                <option value="05:00 AM">05:00 AM</option>
-                                                                                <option value="05:30 AM">05:30 AM</option>
-                                                                                <option value="06:00 AM">06:00 AM</option>
-                                                                                <option value="06:30 AM">06:30 AM</option>
-                                                                                <option value="07:00 AM">07:00 AM</option>
-                                                                                <option value="07:30 AM">07:30 AM</option>
-                                                                                <option value="08:00 AM">08:00 AM</option>
-                                                                                <option value="08:30 AM">08:30 AM</option>
-                                                                                <option value="09:00 AM">09:00 AM</option>
-                                                                                <option value="09:30 AM">09:30 AM</option>
-                                                                                <option value="10:00 AM">10:00 AM</option>
-                                                                                <option value="10:30 AM">10:30 AM</option>
-                                                                                <option value="11:00 AM">11:00 AM</option>
-                                                                                <option value="11:30 AM">11:30 AM</option>
-                                                                                <option value="12:00 AM">12:00 AM</option>
-                                                                                <option value="12:30 AM">12:30 AM</option>
-                                                                                <option value="01:00 PM">01:00 PM</option>
-                                                                                <option value="01:30 PM">01:30 PM</option>
-                                                                                <option value="02:00 PM">02:00 PM</option>
-                                                                                <option value="02:30 PM">02:30 PM</option>
-                                                                                <option value="03:00 PM">03:00 PM</option>
-                                                                                <option value="03:30 PM">03:30 PM</option>
-                                                                                <option value="04:00 PM">04:00 PM</option>
-                                                                                <option value="04:30 PM">04:30 PM</option>
-                                                                                <option value="05:00 PM">05:00 PM</option>
-                                                                                <option value="05:30 PM">05:30 PM</option>
-                                                                                <option value="06:00 PM">06:00 PM</option>
-                                                                                <option value="06:30 PM">06:30 PM</option>
-                                                                                <option value="07:00 PM">07:00 PM</option>
-                                                                                <option value="07:30 PM">07:30 PM</option>
-                                                                                <option value="08:00 PM">08:00 PM</option>
-                                                                                <option value="08:30 PM">08:30 PM</option>
-                                                                                <option value="09:00 PM">09:00 PM</option>
-                                                                                <option value="09:30 PM">09:30 PM</option>
-                                                                                <option value="10:00 PM">10:00 PM</option>
-                                                                                <option value="10:30 PM">10:30 PM</option>
-                                                                                <option value="11:00 PM">11:00 PM</option>
-                                                                                <option value="11:30 PM">11:30 PM</option>
-                                                                                <option value="12:00 PM">12:00 PM</option>
+                                                                                <option v-for="time in times" :value="time">{{time}}</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -229,55 +180,7 @@
                                                                         <label><small>End time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
                                                                             <select v-model="editedEventData.endTime" class="custom-select" name="endTime" @change="selectTimeAction('end')">
-                                                                                
-                                                                                <option value="00:30 AM">00:30 AM</option>
-                                                                                <option value="01:00 AM">01:00 AM</option>
-                                                                                <option value="01:30 AM">01:30 AM</option>
-                                                                                <option value="02:00 AM">02:00 AM</option>
-                                                                                <option value="02:30 AM">02:30 AM</option>
-                                                                                <option value="03:00 AM">03:00 AM</option>
-                                                                                <option value="03:30 AM">03:30 AM</option>
-                                                                                <option value="04:00 AM">04:00 AM</option>
-                                                                                <option value="04:30 AM">04:30 AM</option>
-                                                                                <option value="05:00 AM">05:00 AM</option>
-                                                                                <option value="05:30 AM">05:30 AM</option>
-                                                                                <option value="06:00 AM">06:00 AM</option>
-                                                                                <option value="06:30 AM">06:30 AM</option>
-                                                                                <option value="07:00 AM">07:00 AM</option>
-                                                                                <option value="07:30 AM">07:30 AM</option>
-                                                                                <option value="08:00 AM">08:00 AM</option>
-                                                                                <option value="08:30 AM">08:30 AM</option>
-                                                                                <option value="09:00 AM">09:00 AM</option>
-                                                                                <option value="09:30 AM">09:30 AM</option>
-                                                                                <option value="10:00 AM">10:00 AM</option>
-                                                                                <option value="10:30 AM">10:30 AM</option>
-                                                                                <option value="11:00 AM">11:00 AM</option>
-                                                                                <option value="11:30 AM">11:30 AM</option>
-                                                                                <option value="12:00 AM">12:00 AM</option>
-                                                                                <option value="12:30 AM">12:30 AM</option>
-                                                                                <option value="01:00 PM">01:00 PM</option>
-                                                                                <option value="01:30 PM">01:30 PM</option>
-                                                                                <option value="02:00 PM">02:00 PM</option>
-                                                                                <option value="02:30 PM">02:30 PM</option>
-                                                                                <option value="03:00 PM">03:00 PM</option>
-                                                                                <option value="03:30 PM">03:30 PM</option>
-                                                                                <option value="04:00 PM">04:00 PM</option>
-                                                                                <option value="04:30 PM">04:30 PM</option>
-                                                                                <option value="05:00 PM">05:00 PM</option>
-                                                                                <option value="05:30 PM">05:30 PM</option>
-                                                                                <option value="06:00 PM">06:00 PM</option>
-                                                                                <option value="06:30 PM">06:30 PM</option>
-                                                                                <option value="07:00 PM">07:00 PM</option>
-                                                                                <option value="07:30 PM">07:30 PM</option>
-                                                                                <option value="08:00 PM">08:00 PM</option>
-                                                                                <option value="08:30 PM">08:30 PM</option>
-                                                                                <option value="09:00 PM">09:00 PM</option>
-                                                                                <option value="09:30 PM">09:30 PM</option>
-                                                                                <option value="10:00 PM">10:00 PM</option>
-                                                                                <option value="10:30 PM">10:30 PM</option>
-                                                                                <option value="11:00 PM">11:00 PM</option>
-                                                                                <option value="11:30 PM">11:30 PM</option>
-                                                                                <option value="12:00 PM">12:00 PM</option>
+                                                                                <option v-for="time in times" :value="time">{{time}}</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -351,20 +254,14 @@
                                                 </div>
 
                                                 <div class="col-md-8">
-
-                                                        <div v-if="requestSuccess" class="alert alert-success fade show" role="alert">
-                                                            <strong>Success!</strong> {{ requestSuccess }}
-                                                        </div>
-
-
-                                                        <div v-if="requestDanger" class="alert alert-danger fade show" role="alert">
-                                                            <strong>Error!</strong> {{ requestDanger }}
-                                                        </div>
-
-
+                                                    <div v-if="requestSuccess" class="alert alert-success fade show" role="alert">
+                                                        <strong>Success!</strong> {{ requestSuccess }}
+                                                    </div>
+                                                    <div v-if="requestDanger" class="alert alert-danger fade show" role="alert">
+                                                        <strong>Error!</strong> {{ requestDanger }}
+                                                    </div>
                                                 </div>
                                             </div>
-
                                         </form>
                                     </div>
 
@@ -484,67 +381,16 @@
                                                                     </div>
 
                                                                     <div class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-secondary btn-sm" title="Edit" @click="editEditedEvent(index)">
                                                                             <i class="fas fa-pencil-alt"></i>
                                                                         </button>
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeDuplicatedEditedEvent(index)">
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Delete" @click="removeDuplicatedEditedEvent(index)">
                                                                             <i class="far fa-trash-alt"></i>
                                                                         </button>
                                                                     </div>
-
-                                                                    <!--
-
-                                                                    <div v-if="event.status === 'over'" class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
-                                                                            <i class="far fa-trash-alt"></i>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div v-else-if="event.status === 'cancelled'" class="col-2 text-right actions">
-                                                                        <button v-if="event.current_status" class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
-                                                                            <i class="fas fa-trash-restore-alt"></i>
-                                                                        </button>
-                                                                        <button v-else class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
-                                                                            <i class="far fa-trash-alt"></i>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div v-else-if="event.status === 'deleted'" class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Restore" @click="$event.preventDefault(), restoreEditedEventStatus(index)">
-                                                                            <i class="fas fa-trash-restore-alt"></i>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div v-else-if="event.status === 'duplicated'" class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
-                                                                            <i class="fas fa-pencil-alt"></i>
-                                                                        </button>
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), removeDuplicatedEditedEvent(index)">
-                                                                            <i class="far fa-trash-alt"></i>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div v-else class="col-2 text-right actions">
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Edit" @click="$event.preventDefault(), editEditedEvent(index)">
-                                                                            <i class="fas fa-pencil-alt"></i>
-                                                                        </button>
-
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Duplicate" @click="$event.preventDefault(), duplicateEditedEvent(index)">
-                                                                            <i class="far fa-clone"></i>
-                                                                        </button>
-                                                                        <button class="btn btn-outline-secondary btn-sm" title="Cancel" @click="$event.preventDefault(), markCancelEditedEvent(index)">
-                                                                            <i class="fas fa-ban"></i>
-                                                                        </button>
-
-                                                                        <button class="btn btn-outline-danger btn-sm" title="Delete" @click="$event.preventDefault(), markRemoveEditedEvent(index)">
-                                                                            <i class="far fa-trash-alt"></i>
-                                                                        </button>
-                                                                    </div>
-                                                                    -->
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
 
                                                     <transition name="fade">
@@ -570,54 +416,7 @@
                                                                         <label><small>Start time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
                                                                             <select v-model="editedEventData.startTime" class="custom-select" name="startTime" @change="selectTimeAction('start')">
-                                                                                <option value="00:30 AM">00:30 AM</option>
-                                                                                <option value="01:00 AM">01:00 AM</option>
-                                                                                <option value="01:30 AM">01:30 AM</option>
-                                                                                <option value="02:00 AM">02:00 AM</option>
-                                                                                <option value="02:30 AM">02:30 AM</option>
-                                                                                <option value="03:00 AM">03:00 AM</option>
-                                                                                <option value="03:30 AM">03:30 AM</option>
-                                                                                <option value="04:00 AM">04:00 AM</option>
-                                                                                <option value="04:30 AM">04:30 AM</option>
-                                                                                <option value="05:00 AM">05:00 AM</option>
-                                                                                <option value="05:30 AM">05:30 AM</option>
-                                                                                <option value="06:00 AM">06:00 AM</option>
-                                                                                <option value="06:30 AM">06:30 AM</option>
-                                                                                <option value="07:00 AM">07:00 AM</option>
-                                                                                <option value="07:30 AM">07:30 AM</option>
-                                                                                <option value="08:00 AM">08:00 AM</option>
-                                                                                <option value="08:30 AM">08:30 AM</option>
-                                                                                <option value="09:00 AM">09:00 AM</option>
-                                                                                <option value="09:30 AM">09:30 AM</option>
-                                                                                <option value="10:00 AM">10:00 AM</option>
-                                                                                <option value="10:30 AM">10:30 AM</option>
-                                                                                <option value="11:00 AM">11:00 AM</option>
-                                                                                <option value="11:30 AM">11:30 AM</option>
-                                                                                <option value="12:00 AM">12:00 AM</option>
-                                                                                <option value="12:30 AM">12:30 AM</option>
-                                                                                <option value="01:00 PM">01:00 PM</option>
-                                                                                <option value="01:30 PM">01:30 PM</option>
-                                                                                <option value="02:00 PM">02:00 PM</option>
-                                                                                <option value="02:30 PM">02:30 PM</option>
-                                                                                <option value="03:00 PM">03:00 PM</option>
-                                                                                <option value="03:30 PM">03:30 PM</option>
-                                                                                <option value="04:00 PM">04:00 PM</option>
-                                                                                <option value="04:30 PM">04:30 PM</option>
-                                                                                <option value="05:00 PM">05:00 PM</option>
-                                                                                <option value="05:30 PM">05:30 PM</option>
-                                                                                <option value="06:00 PM">06:00 PM</option>
-                                                                                <option value="06:30 PM">06:30 PM</option>
-                                                                                <option value="07:00 PM">07:00 PM</option>
-                                                                                <option value="07:30 PM">07:30 PM</option>
-                                                                                <option value="08:00 PM">08:00 PM</option>
-                                                                                <option value="08:30 PM">08:30 PM</option>
-                                                                                <option value="09:00 PM">09:00 PM</option>
-                                                                                <option value="09:30 PM">09:30 PM</option>
-                                                                                <option value="10:00 PM">10:00 PM</option>
-                                                                                <option value="10:30 PM">10:30 PM</option>
-                                                                                <option value="11:00 PM">11:00 PM</option>
-                                                                                <option value="11:30 PM">11:30 PM</option>
-                                                                                <option value="12:00 PM">12:00 PM</option>
+                                                                                <option v-for="time in times" :value="time">{{time}}</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -631,55 +430,7 @@
                                                                         <label><small>End time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
                                                                             <select v-model="editedEventData.endTime" class="custom-select" name="endTime" @change="selectTimeAction('end')">
-                                                                                
-                                                                                <option value="00:30 AM">00:30 AM</option>
-                                                                                <option value="01:00 AM">01:00 AM</option>
-                                                                                <option value="01:30 AM">01:30 AM</option>
-                                                                                <option value="02:00 AM">02:00 AM</option>
-                                                                                <option value="02:30 AM">02:30 AM</option>
-                                                                                <option value="03:00 AM">03:00 AM</option>
-                                                                                <option value="03:30 AM">03:30 AM</option>
-                                                                                <option value="04:00 AM">04:00 AM</option>
-                                                                                <option value="04:30 AM">04:30 AM</option>
-                                                                                <option value="05:00 AM">05:00 AM</option>
-                                                                                <option value="05:30 AM">05:30 AM</option>
-                                                                                <option value="06:00 AM">06:00 AM</option>
-                                                                                <option value="06:30 AM">06:30 AM</option>
-                                                                                <option value="07:00 AM">07:00 AM</option>
-                                                                                <option value="07:30 AM">07:30 AM</option>
-                                                                                <option value="08:00 AM">08:00 AM</option>
-                                                                                <option value="08:30 AM">08:30 AM</option>
-                                                                                <option value="09:00 AM">09:00 AM</option>
-                                                                                <option value="09:30 AM">09:30 AM</option>
-                                                                                <option value="10:00 AM">10:00 AM</option>
-                                                                                <option value="10:30 AM">10:30 AM</option>
-                                                                                <option value="11:00 AM">11:00 AM</option>
-                                                                                <option value="11:30 AM">11:30 AM</option>
-                                                                                <option value="12:00 AM">12:00 AM</option>
-                                                                                <option value="12:30 AM">12:30 AM</option>
-                                                                                <option value="01:00 PM">01:00 PM</option>
-                                                                                <option value="01:30 PM">01:30 PM</option>
-                                                                                <option value="02:00 PM">02:00 PM</option>
-                                                                                <option value="02:30 PM">02:30 PM</option>
-                                                                                <option value="03:00 PM">03:00 PM</option>
-                                                                                <option value="03:30 PM">03:30 PM</option>
-                                                                                <option value="04:00 PM">04:00 PM</option>
-                                                                                <option value="04:30 PM">04:30 PM</option>
-                                                                                <option value="05:00 PM">05:00 PM</option>
-                                                                                <option value="05:30 PM">05:30 PM</option>
-                                                                                <option value="06:00 PM">06:00 PM</option>
-                                                                                <option value="06:30 PM">06:30 PM</option>
-                                                                                <option value="07:00 PM">07:00 PM</option>
-                                                                                <option value="07:30 PM">07:30 PM</option>
-                                                                                <option value="08:00 PM">08:00 PM</option>
-                                                                                <option value="08:30 PM">08:30 PM</option>
-                                                                                <option value="09:00 PM">09:00 PM</option>
-                                                                                <option value="09:30 PM">09:30 PM</option>
-                                                                                <option value="10:00 PM">10:00 PM</option>
-                                                                                <option value="10:30 PM">10:30 PM</option>
-                                                                                <option value="11:00 PM">11:00 PM</option>
-                                                                                <option value="11:30 PM">11:30 PM</option>
-                                                                                <option value="12:00 PM">12:00 PM</option>
+                                                                                <option v-for="time in times" :value="time">{{time}}</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -779,14 +530,12 @@
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             Loading...
                                         </button>
-
                                         <button type="button" class="btn btn-secondary" @click="hideDuplicateCalendarModalAction">Close</button>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </transition>
@@ -859,7 +608,7 @@
                                                             <tbody>
                                                             <tr v-for="(event, index) in current_calendar.events" :data-index="index">
                                                                 <td data-val="startDate">
-                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} - 
+                                                                    {{ event.started_at|formatDate }} {{ event.started_at|formatTime }} -
                                                                     {{ event.ended_at|formatDate }} {{ event.ended_at|formatTime }}
                                                                 </td>
 
@@ -905,54 +654,7 @@
                                                                         <label><small>Start time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
                                                                             <select v-model="editedEventData.startTime" class="custom-select" name="startTime" @change="selectTimeAction('start')">
-                                                                                <option value="00:30 AM">00:30 AM</option>
-                                                                                <option value="01:00 AM">01:00 AM</option>
-                                                                                <option value="01:30 AM">01:30 AM</option>
-                                                                                <option value="02:00 AM">02:00 AM</option>
-                                                                                <option value="02:30 AM">02:30 AM</option>
-                                                                                <option value="03:00 AM">03:00 AM</option>
-                                                                                <option value="03:30 AM">03:30 AM</option>
-                                                                                <option value="04:00 AM">04:00 AM</option>
-                                                                                <option value="04:30 AM">04:30 AM</option>
-                                                                                <option value="05:00 AM">05:00 AM</option>
-                                                                                <option value="05:30 AM">05:30 AM</option>
-                                                                                <option value="06:00 AM">06:00 AM</option>
-                                                                                <option value="06:30 AM">06:30 AM</option>
-                                                                                <option value="07:00 AM">07:00 AM</option>
-                                                                                <option value="07:30 AM">07:30 AM</option>
-                                                                                <option value="08:00 AM">08:00 AM</option>
-                                                                                <option value="08:30 AM">08:30 AM</option>
-                                                                                <option value="09:00 AM">09:00 AM</option>
-                                                                                <option value="09:30 AM">09:30 AM</option>
-                                                                                <option value="10:00 AM">10:00 AM</option>
-                                                                                <option value="10:30 AM">10:30 AM</option>
-                                                                                <option value="11:00 AM">11:00 AM</option>
-                                                                                <option value="11:30 AM">11:30 AM</option>
-                                                                                <option value="12:00 AM">12:00 AM</option>
-                                                                                <option value="12:30 AM">12:30 AM</option>
-                                                                                <option value="01:00 PM">01:00 PM</option>
-                                                                                <option value="01:30 PM">01:30 PM</option>
-                                                                                <option value="02:00 PM">02:00 PM</option>
-                                                                                <option value="02:30 PM">02:30 PM</option>
-                                                                                <option value="03:00 PM">03:00 PM</option>
-                                                                                <option value="03:30 PM">03:30 PM</option>
-                                                                                <option value="04:00 PM">04:00 PM</option>
-                                                                                <option value="04:30 PM">04:30 PM</option>
-                                                                                <option value="05:00 PM">05:00 PM</option>
-                                                                                <option value="05:30 PM">05:30 PM</option>
-                                                                                <option value="06:00 PM">06:00 PM</option>
-                                                                                <option value="06:30 PM">06:30 PM</option>
-                                                                                <option value="07:00 PM">07:00 PM</option>
-                                                                                <option value="07:30 PM">07:30 PM</option>
-                                                                                <option value="08:00 PM">08:00 PM</option>
-                                                                                <option value="08:30 PM">08:30 PM</option>
-                                                                                <option value="09:00 PM">09:00 PM</option>
-                                                                                <option value="09:30 PM">09:30 PM</option>
-                                                                                <option value="10:00 PM">10:00 PM</option>
-                                                                                <option value="10:30 PM">10:30 PM</option>
-                                                                                <option value="11:00 PM">11:00 PM</option>
-                                                                                <option value="11:30 PM">11:30 PM</option>
-                                                                                <option value="12:00 PM">12:00 PM</option>
+                                                                                <option v-for="time in times" :value="time">{{time}}</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -966,55 +668,7 @@
                                                                         <label><small>End time</small></label>
                                                                         <div class="input-group input-group-sm mb-3">
                                                                             <select v-model="editedEventData.endTime" class="custom-select" name="endTime" @change="selectTimeAction('end')">
-                                                                                
-                                                                                <option value="00:30 AM">00:30 AM</option>
-                                                                                <option value="01:00 AM">01:00 AM</option>
-                                                                                <option value="01:30 AM">01:30 AM</option>
-                                                                                <option value="02:00 AM">02:00 AM</option>
-                                                                                <option value="02:30 AM">02:30 AM</option>
-                                                                                <option value="03:00 AM">03:00 AM</option>
-                                                                                <option value="03:30 AM">03:30 AM</option>
-                                                                                <option value="04:00 AM">04:00 AM</option>
-                                                                                <option value="04:30 AM">04:30 AM</option>
-                                                                                <option value="05:00 AM">05:00 AM</option>
-                                                                                <option value="05:30 AM">05:30 AM</option>
-                                                                                <option value="06:00 AM">06:00 AM</option>
-                                                                                <option value="06:30 AM">06:30 AM</option>
-                                                                                <option value="07:00 AM">07:00 AM</option>
-                                                                                <option value="07:30 AM">07:30 AM</option>
-                                                                                <option value="08:00 AM">08:00 AM</option>
-                                                                                <option value="08:30 AM">08:30 AM</option>
-                                                                                <option value="09:00 AM">09:00 AM</option>
-                                                                                <option value="09:30 AM">09:30 AM</option>
-                                                                                <option value="10:00 AM">10:00 AM</option>
-                                                                                <option value="10:30 AM">10:30 AM</option>
-                                                                                <option value="11:00 AM">11:00 AM</option>
-                                                                                <option value="11:30 AM">11:30 AM</option>
-                                                                                <option value="12:00 AM">12:00 AM</option>
-                                                                                <option value="12:30 AM">12:30 AM</option>
-                                                                                <option value="01:00 PM">01:00 PM</option>
-                                                                                <option value="01:30 PM">01:30 PM</option>
-                                                                                <option value="02:00 PM">02:00 PM</option>
-                                                                                <option value="02:30 PM">02:30 PM</option>
-                                                                                <option value="03:00 PM">03:00 PM</option>
-                                                                                <option value="03:30 PM">03:30 PM</option>
-                                                                                <option value="04:00 PM">04:00 PM</option>
-                                                                                <option value="04:30 PM">04:30 PM</option>
-                                                                                <option value="05:00 PM">05:00 PM</option>
-                                                                                <option value="05:30 PM">05:30 PM</option>
-                                                                                <option value="06:00 PM">06:00 PM</option>
-                                                                                <option value="06:30 PM">06:30 PM</option>
-                                                                                <option value="07:00 PM">07:00 PM</option>
-                                                                                <option value="07:30 PM">07:30 PM</option>
-                                                                                <option value="08:00 PM">08:00 PM</option>
-                                                                                <option value="08:30 PM">08:30 PM</option>
-                                                                                <option value="09:00 PM">09:00 PM</option>
-                                                                                <option value="09:30 PM">09:30 PM</option>
-                                                                                <option value="10:00 PM">10:00 PM</option>
-                                                                                <option value="10:30 PM">10:30 PM</option>
-                                                                                <option value="11:00 PM">11:00 PM</option>
-                                                                                <option value="11:30 PM">11:30 PM</option>
-                                                                                <option value="12:00 PM">12:00 PM</option>
+                                                                                <option v-for="time in times" :value="time">{{time}}</option>
                                                                             </select>
                                                                             <div class="input-group-append">
                                                                                 <label class="input-group-text"><i class="far fa-clock"></i></label>
@@ -1200,7 +854,57 @@
                     description: null
                 },
 
-                moment: moment
+                moment: moment,
+
+                times: [
+                    '01:00 AM',
+                    '01:30 AM',
+                    '02:00 AM',
+                    '02:30 AM',
+                    '03:00 AM',
+                    '03:30 AM',
+                    '04:00 AM',
+                    '04:30 AM',
+                    '05:00 AM',
+                    '05:30 AM',
+                    '06:00 AM',
+                    '06:30 AM',
+                    '07:00 AM',
+                    '07:30 AM',
+                    '08:00 AM',
+                    '08:30 AM',
+                    '09:00 AM',
+                    '09:30 AM',
+                    '10:00 AM',
+                    '10:30 AM',
+                    '11:00 AM',
+                    '11:30 AM',
+                    '12:00 AM',
+                    '12:30 AM',
+                    '01:00 PM',
+                    '01:30 PM',
+                    '02:00 PM',
+                    '02:30 PM',
+                    '03:00 PM',
+                    '03:30 PM',
+                    '04:00 PM',
+                    '04:30 PM',
+                    '05:00 PM',
+                    '05:30 PM',
+                    '06:00 PM',
+                    '06:30 PM',
+                    '07:00 PM',
+                    '07:30 PM',
+                    '08:00 PM',
+                    '08:30 PM',
+                    '09:00 PM',
+                    '09:30 PM',
+                    '10:00 PM',
+                    '10:30 PM',
+                    '11:00 PM',
+                    '11:30 PM',
+                    '12:00 PM'
+                ]
 			}
 		},
 
@@ -1252,7 +956,7 @@
                 }
             },
 
-            getAddressData: function (addressData, placeResultData, id) {
+            getAddressData: function (addressData) {
                 this.editedEventData.location = addressData.newVal;
             },
 
@@ -1306,7 +1010,7 @@
                         startDate: null,
                         startTime: null,
                         endTime: null,
-                    
+
                         startTimeHours: null,
                         startTimeMinutes: null,
                         startTimeAmPm: null,
@@ -1385,7 +1089,7 @@
                 let startTime = (startDateTime.format('hh:mm a')).toUpperCase();
                 startDateTime.add(1, 'hours');
                 let endTime = (startDateTime.format('hh:mm a')).toUpperCase();
-               
+
                 this.editedEventData = {
                     index: null,
                     id: null,
@@ -1430,15 +1134,13 @@
             saveEvent: function(event) {
                 event.preventDefault();
                 event.stopPropagation();
-                
+
                 if (this.editedEventData.index === null) {
 
 
                     // Add new Event
                     let started_at = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.startTime;
                     let ended_at = moment(this.editedEventData.startDate).format('M/DD/YYYY')+' '+this.editedEventData.endTime;
-                    // let started_at = this.editedEventData.startDate+' '+this.editedEventData.startTime;
-                    // let ended_at = this.editedEventData.startDate+' '+this.editedEventData.endTime;
 
                     let newEvent = {
                         id: 'new',
@@ -1452,7 +1154,6 @@
 
                     this.showNewEventDataForm = false;
                     this.requestSuccess = false;
-
 
                 } else {
                     // Update current event
@@ -1502,12 +1203,6 @@
                 this.current_calendar.events[index].current_status = this.current_calendar.events[index].status;
                 this.current_calendar.events[index].status = 'deleted';
                 this.current_calendar.events[index].action = 'delete';
-
-                    //this.current_calendar.events.splice(index, 1);
-
-                // if (this.new_calendar) {
-                //     this.new_calendar.events.splice(index, 1);
-                // }
             },
             restoreEditedEventStatus: function(index) {
                if(this.current_calendar.events[index].current_status) {
@@ -1520,15 +1215,9 @@
                     index: index,
                     id: currentEvent.id,
                     startDate: moment(currentEvent.started_at),
-                    
-                    //startTime: this.$options.filters.formatTime(currentEvent.started_at),
-                    //endTime: this.$options.filters.formatTime(currentEvent.ended_at),
-                    
                     startTime: moment(currentEvent.started_at).format('hh:mm a').toUpperCase(),
                     endTime: moment(currentEvent.ended_at).format('hh:mm a').toUpperCase(),
-                    
-                    
-                    
+
                     startTimeHours: this.$options.filters.formatHours(currentEvent.started_at),
                     startTimeMinutes: this.$options.filters.formatMinutes(currentEvent.started_at),
                     startTimeAmPm: this.$options.filters.formatAmPm(currentEvent.started_at),
@@ -1641,7 +1330,7 @@
                             }, 2000);
                         } else {
 
-                           
+
                             currentObj.requestDanger = response.data.data.message ? response.data.data.message : 'Request Error';
                         }
                     })
@@ -1799,8 +1488,7 @@
             formatAmPm: function(value) {
                 let date = new Date(value);
                 let hours = date.getHours();
-                let ampm = hours >= 12 ? 'PM' : 'AM';
-                return ampm;
+                return hours >= 12 ? 'PM' : 'AM';
             },
             capitalize: function (value) {
 				if (!value) return ''
@@ -1809,32 +1497,12 @@
 			},
 			formatDate: function(value) {
 				let date = new Date(value);
-				//let month = parseInt(date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1);
 				let day = date.getDate() >= 10 ? date.getDate() : '0'+date.getDate();
-				//return day+'.'+month+'.'+date.getFullYear();
                 return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear();
 			},
              formatTime: function(value) {
-
                 let dateTime = new Date(Date.parse(value));
                 return moment(dateTime).format('hh:mm a').toUpperCase();
-
-                
-                // let date = new Date(value);
-                // let hours = date.getHours();
-                // let ampm = hours >= 12 ? 'PM' : 'AM';
-                // let minutes = date.getMinutes();
-                // hours = hours % 12;
-                // ampm = hours == 0 ? 'AM' : ampm;
-                // hours = hours  < 10 ? '0'+hours : hours;
-                // minutes = Math.ceil(minutes/30)*30;
-                // minutes = 60 ? 0 : minutes;
-                // minutes = minutes < 10 ? '0'+minutes : minutes;
-                // return hours +':'+minutes + ' '+ampm;
-
-            //     
-
-            // 
             },
             sliceString: function(value) {
                 if (value && value.length > 10) {

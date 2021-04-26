@@ -13,7 +13,6 @@
                         </span>
                     </p>
                 </div>
-
                 <div class="col-lg-6">
                     <div v-if="requestDanger" class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Error!</strong> {{ requestDanger }}
@@ -21,7 +20,6 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
                     <div v-if="requestSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong>Success!</strong> {{ requestSuccess }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -29,7 +27,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="col-lg-2 text-lg-right">
                     <button type="button" class="btn btn-primary" @click="showAddCalendarModal"><i class="fa fa-plus"></i>Add Calendar</button>
                 </div>
@@ -48,28 +45,28 @@
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListBySummary">
                                 Name
-                                <i v-if="sortBySummaryDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortBySummaryDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByEvents">
                                 Events
-                                <i v-if="sortByEventsDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortByEventsDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByOwner">
                                 Owner
-                                <i v-if="sortByOwnerDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortByOwnerDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByUpdated">
                                 Updated
-                                <i v-if="sortByUpdatedDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortByUpdatedDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
@@ -197,8 +194,6 @@
                 requestSuccess: false,
                 requestProcess: false,
 
-
-
                 sortBySummaryDirection: 'asc',
                 sortByEventsDirection: 'asc',
                 sortByOwnerDirection: 'asc',
@@ -224,14 +219,9 @@
                 typeFilter.active = true;
 
                 let user_id = this.user_id;
-
                 let sortedArray = [];
-                
-
 
                 this.calendars.forEach(function(item) {
-
-                   
                     if (typeFilter.val === 'all') {
                         sortedArray.push(item);
                     } else if (typeFilter.val === 'owned') {
@@ -239,20 +229,14 @@
                         if (item.owned === true) {
                             sortedArray.push(item);
                         }
-
                         sortedArray.push(item);
-
                     } else if (typeFilter.val === 'shared') {
                         if (item.owned === false) {
                             sortedArray.push(item);
                         }
-
-                       
                     }
                 });
                 this.sortedCalendars = sortedArray;
-
-                
             },
 
             showAddCalendarModal: function() {

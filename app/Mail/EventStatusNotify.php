@@ -30,6 +30,6 @@ class EventStatusNotify extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.eventStatusNotify')->with($this->params);;
+        return $this->markdown('emails.eventStatusNotify')->with($this->params);
     }
 }

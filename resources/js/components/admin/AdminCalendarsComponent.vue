@@ -43,28 +43,28 @@
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListBySummary">
                                 Name
-                                <i v-if="sortBySummaryDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortBySummaryDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByEvents">
                                 Events
-                                <i v-if="sortByEventsDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortByEventsDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByOwner">
                                 Owner
-                                <i v-if="sortByOwnerDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortByOwnerDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
                         <div class="col-2">
                             <a class="sort-link" href="javascript:void(0)" @click="sortCalendarsListByUpdated">
                                 Updated
-                                <i v-if="sortByUpdatedDirection == 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
+                                <i v-if="sortByUpdatedDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>
                                 <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                             </a>
                         </div>
@@ -87,35 +87,6 @@
 
             </div>
         </div>
-
-        <!--
-        <div class="modal fade" id="confirmCalendarDelete" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmCalendarDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header text-white bg-danger">
-                        <h5 class="modal-title" id="confirmCalendarDeleteLabel">Delete calendar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>You are about to delete calendar, this procedure is irreversible.</p>
-                        <p>Do you want to proceed?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" :disabled="requestProcess">Cancel</button>
-
-                        <button v-if="!requestProcess" type="button" class="btn btn-danger" @click="deleteCalendar(delete_calendar_id)">Delete</button>
-
-                        <button v-else class="btn btn-danger" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Loading...
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
 
         <!-- Confirm Delete Calendar -->
         <div v-if="showConfirmDeleteCalendarModal">
@@ -301,9 +272,6 @@ export default {
                     });
             },
 
-
-
-
         deleteCalendar: function(id) {
 
             let currentObj = this;
@@ -379,8 +347,6 @@ export default {
 
     mounted() {
         this.sortCalendarsListByUpdated();
-
-
     }
 }
 </script>

@@ -32,7 +32,7 @@
 
             <div class="col-1">
                 <div class="data text-right">
-                    <button v-if="calendar.owned" type="button" class="btn btn-outline-danger btn-sm btn-open" title="Delete" @click="$event.stopPropagation(), showConfirmEventDeleteModal(event.id);"><i class="far fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-outline-danger btn-sm btn-open" title="Delete" @click="$event.stopPropagation(), showConfirmEventDeleteModal(event.id);"><i class="far fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
             <div class="col-2">
 
 
-                <div v-if="calendar.owned" class="data text-right">
+                <div class="data text-right">
                     <button type="button" class="btn btn-outline-primary btn-sm pull-right btn-open" title="Edit" @click="$event.stopPropagation(), showEditSingleEvent(event.id)"><i class="far fa-edit"></i></button>
 
                     <div @mouseover="showEventDropdownActions=true" @mouseleave="showEventDropdownActions=false" @click="$event.stopPropagation()" class="dropdown-event-actions">
@@ -186,24 +186,24 @@ export default {
                 return Promise.reject(error);
             });
             axios.post('/cancel-event', { event_id: event_id })
-            .then(function (response) {
-                if (response.data.code === 401) {
-                    document.location.href="/";
-                } else if (response.data.code === 404) {
-                    currentObj.$parent.$parent.requestDanger = response.data.data.message;
-                } else if (response.data.code === 1) {
-                    currentObj.$parent.$parent.requestSuccess = response.data.data.message;
-                    currentObj.event.status = 'cancelled';
-                } else {
-                    currentObj.$parent.$parent.requestDanger = 'Request Error';
-                }
-            })
-            .catch(function (error) {
-                currentObj.$parent.$parent.requestDanger = 'Error Request';
-            })
-            .then(function() {
-                currentObj.requestProcess = false;
-            });
+                .then(function (response) {
+                    if (response.data.code === 401) {
+                        document.location.href="/";
+                    } else if (response.data.code === 404) {
+                        currentObj.$parent.$parent.requestDanger = response.data.data.message;
+                    } else if (response.data.code === 1) {
+                        currentObj.$parent.$parent.requestSuccess = response.data.data.message;
+                        currentObj.event.status = 'cancelled';
+                    } else {
+                        currentObj.$parent.$parent.requestDanger = 'Request Error';
+                    }
+                })
+                .catch(function (error) {
+                    currentObj.$parent.$parent.requestDanger = 'Error Request';
+                })
+                .then(function() {
+                    currentObj.requestProcess = false;
+                });
         },
 
         copyEventAddress: function() {

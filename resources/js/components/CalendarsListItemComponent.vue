@@ -2,8 +2,6 @@
 
 	<div class="card calendar-single">
 
-        
-
 		<div class="card-heading">
 
 			<div class="row align-items-center">
@@ -19,13 +17,12 @@
 		        <div class="col-2">
                     {{ calendar.owner }}
 	            </div>
+
                 <div class="col-2">
                     {{ calendar.updated_at|formatDate }}
                 </div>
 
 	            <div class="col-4 text-right actions">
-
-                    
 
 	            	<button type="button" class="btn btn-primary btn-sm" @click="shareCalendar(calendar.publicUrl)">
 	                    <i class="fas fa-user-friends"></i> Share
@@ -35,7 +32,7 @@
 	                    <i class="far fa-bell"></i> Unsubscribe
 	                </button>
 
-                    
+
 
 	                <button v-else type="button" class="btn btn-outline-primary btn-sm" name="button" @click="subscribeCalendarAction(calendar.id)">
 	                    <i class="far fa-bell"></i> Subscribe
@@ -142,10 +139,10 @@
                             <calendars-list-item-event-component :event="event" ref="event"></calendars-list-item-event-component>
                         </div> -->
 
-                        
 
-                        
-                        
+
+
+
                         <div v-for="(event, index) in sortedEvents"  v-bind:class="{ 'hidden-event': index < view_events_start || index > view_events_end }">
                             <calendars-list-item-event-component :event="event" :calendar="calendar" ref="event"></calendars-list-item-event-component>
                         </div>
@@ -566,15 +563,14 @@ import moment from 'moment';
                 //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
                 let from = new Date(Date.parse(fromdt));
                 //var to = new Date(Date.parse(todt));
-                
+
                 if (select === 'start') {
-                    let endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
-                    this.editedEventData.endTime = endTime;
+                    this.editedEventData.endTime = moment(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
                 }
             },
 
             subscribeCalendarAction: function(id) {
-               
+
                 let currentObj = this;
                 // Send request
                 axios.interceptors.request.use(function (config) {
@@ -655,7 +651,7 @@ import moment from 'moment';
                     });
             },
 
-            getAddressData: function (addressData, placeResultData, id) {
+            getAddressData: function (addressData) {
                 this.editedEventData.location = addressData.newVal;
             },
 
@@ -780,15 +776,11 @@ import moment from 'moment';
             },
 
             // Sort events list methods
-            // sortCalendarsListBySummary: function() {
-            //     let direction = this.sortBySummaryDirection == 'desc' ? 'asc' : 'desc';
-            //     this.sortedCalendars = this.sortArray(this.calendars, 'name', direction);
-            //     this.sortBySummaryDirection = direction;
-            // },
+
             sortEventsListByDate: function() {
                 this.sortByDateDirection = this.sortByDateDirection === 'desc' ? 'asc' : 'desc';
                 this.sortedEvents = this.sortArray(this.calendar.events, 'started_at', this.sortByDateDirection);
-                
+
             },
             sortEventsListByLocation: function() {
                 this.sortByLocationDirection = this.sortByLocationDirection === 'desc' ? 'asc' : 'desc';
@@ -820,8 +812,7 @@ import moment from 'moment';
                 }
                 hours = hours < 10 ? '0' + hours : hours;
                 minutes = minutes < 10 ? '0' + minutes : minutes;
-                let result = dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
-                return result;
+                return dateArray[2] + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':00';
             }
 		},
 
@@ -859,7 +850,7 @@ import moment from 'moment';
 					} else {
 						outputDate = minutesDiff + ' minutes ago';
 					}
-				} else if (timeDiff == 1) {
+				} else if (timeDiff === 1) {
 					outputDate = timeDiff + ' hour ago';
 				} else if (timeDiff <= 24) {
 					outputDate = timeDiff + ' hours ago';
@@ -884,7 +875,6 @@ import moment from 'moment';
                 dateMinutes = dateMinutes < 10 ? '0'+dateMinutes : dateMinutes;
                 return (date.getMonth()+1)+'/'+day+'/'+date.getFullYear()+' '+dateHours+':'+dateMinutes+' '+dateAmpm;
             }
-
 		},
 
 		mounted() {

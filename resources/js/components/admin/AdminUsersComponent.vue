@@ -29,10 +29,6 @@
             </div>
         </div>
 
-<!--        <div class="filter-links">-->
-<!--            <button v-for="typeFilter in calendarsTypesFilters" :key="typeFilter.title" @click="applyCalendarsTypeFilter(typeFilter)" type="button" class="btn btn-sm" :class="{ 'active': typeFilter.active }">{{ typeFilter.title }}</button>-->
-<!--        </div>-->
-
         <div>
 
 
@@ -42,21 +38,6 @@
                     <table class="table table-bordered table-sm">
                         <thead>
                         <tr>
-<!--                            <th scope="col">-->
-<!--                                <a class="sort-link" href="javascript:void(0)" @click="sortUsersListById">-->
-<!--                                    ID-->
-<!--                                    <i v-if="sortByIdDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>-->
-<!--                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>-->
-<!--                                </a>-->
-<!--                            </th>-->
-
-<!--                            <th scope="col">-->
-<!--                                <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByName">-->
-<!--                                    Name-->
-<!--                                    <i v-if="sortByNameDirection === 'desc'" class="fas fa-sort-amount-up-alt float-right"></i>-->
-<!--                                    <i v-else class="fas fa-sort-amount-down-alt float-right"></i>-->
-<!--                                </a>-->
-<!--                            </th>-->
                             <th scope="col">
                                 <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByEmail">
                                     User Email
@@ -64,9 +45,6 @@
                                     <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                 </a>
                             </th>
-<!--                            <th scope="col">-->
-<!--                                Is Admin-->
-<!--                            </th>-->
                             <th scope="col">
                                 <a class="sort-link" href="javascript:void(0)" @click="sortUsersListByOwnCalendars">
                                     Owned Calendars
@@ -92,14 +70,9 @@
                         </thead>
                         <tbody>
                         <tr v-for="user in sortedUsers" >
-<!--                            <td>{{ user.id }}</td>-->
-<!--                            <td>{{ user.name }}</td>-->
                             <td>{{ user.email }}</td>
-
                             <td>{{ user.ownCalendarsCount}}</td>
                             <td>{{ user.publicCalendarsCount}}</td>
-<!--                            <td>{{ user.role}}</td>-->
-
                             <td>
                                 <div class="form-group form-check">
                                     <input :id="'user_'+user.id+'_role'" type="checkbox" class="form-check-input" :checked="user.role === 'admin'" :disabled="requestProcess" @change="setUserRole(user.id, $event)">
@@ -116,10 +89,7 @@
                     Users not found ...
                 </div>
             </div>
-
-
         </div>
-
     </div>
 </template>
 

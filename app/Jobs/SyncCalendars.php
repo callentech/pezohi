@@ -46,8 +46,6 @@ class SyncCalendars implements ShouldQueue
         $options = compact('pageToken');
         $service = app(Google::class)->connectUsing($tokens)->service('Calendar');
 
-
-
         do {
             $calendarsList = $service->calendarList->listCalendarList($options);
 
@@ -115,9 +113,7 @@ class SyncCalendars implements ShouldQueue
                             [
                                 'google_id' => $googleEvent->id,
                                 'name' => $googleEvent->summary,
-                                
                                 'type' => $googleEvent->extendedProperties ? $googleEvent->extendedProperties->getPrivate()['type'] : NULL,
-                                
                                 'description' => $googleEvent->description,
                                 'location' => $googleEvent->location,
                                 'status' => $googleEvent->status,
@@ -127,9 +123,6 @@ class SyncCalendars implements ShouldQueue
                                 'updated_data_at' => Carbon::parse($googleEvent->updated)->setTimezone($googleEvent->start->timeZone)
                             ]
                         );
-
-
-
                     }
                     $eventsPageToken = $eventsList->getNextPageToken();
                 } while($eventsPageToken);

@@ -155,3 +155,58 @@ Stack trace:
 [20-Apr-2021 18:45:04 UTC] PHP Fatal error:  Out of memory (allocated 13737984) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
 =======
 >>>>>>> 1334e33aad8fae830cf21468fd201423140e5c77
+[20-Apr-2021 21:07:04 UTC] PHP Fatal error:  Out of memory (allocated 15835136) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[20-Apr-2021 22:19:08 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 94208 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 509
+[20-Apr-2021 22:19:08 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[21-Apr-2021 07:51:02 UTC] PHP Fatal error:  Out of memory (allocated 17932288) (tried to allocate 1310720 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[21-Apr-2021 14:53:08 UTC] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 102400 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/CarbonImmutable.php on line 509
+[21-Apr-2021 14:53:08 UTC] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php on line 483
+[22-Apr-2021 17:11:15 UTC] PHP Fatal error:  Out of memory (allocated 17932288) (tried to allocate 1310720 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[22-Apr-2021 18:20:10 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php on line 1
+[22-Apr-2021 18:20:10 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[22-Apr-2021 20:40:07 UTC] PHP Fatal error:  Uncaught ReflectionException: Class request does not exist in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php:830
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php(830): ReflectionClass->__construct('request')
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php(712): Illuminate\Container\Container->build('request')
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('request', Array, true)
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\Foundation\Application->resolve('request', Array)
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container-> in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 832
+[22-Apr-2021 20:40:07 UTC] PHP Fatal error:  Uncaught ReflectionException: Class request does not exist in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php:830
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php(830): ReflectionClass->__construct('request')
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php(712): Illuminate\Container\Container->build('request')
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(841): Illuminate\Container\Container->resolve('request', Array, true)
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\Foundation\Application->resolve('request', Array)
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(826): Illuminate\Container\Container-> in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 832
+[23-Apr-2021 08:39:09 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 94208 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 509
+[23-Apr-2021 08:39:09 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[24-Apr-2021 03:51:04 UTC] PHP Fatal error:  Out of memory (allocated 15835136) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[24-Apr-2021 03:55:04 UTC] PHP Fatal error:  Out of memory (allocated 15835136) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[24-Apr-2021 14:40:08 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php on line 1
+[24-Apr-2021 14:40:08 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[24-Apr-2021 17:04:16 UTC] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 102400 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/CarbonImmutable.php on line 509
+[24-Apr-2021 17:04:16 UTC] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php on line 483
+[24-Apr-2021 23:05:10 UTC] PHP Fatal error:  Out of memory (allocated 17932288) (tried to allocate 1310720 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[25-Apr-2021 23:05:02 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/storage/framework/views/f9460d9a3483d1c5efb38ba0cf778124f98734c4.php on line 1
+[26-Apr-2021 13:16:08 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 94208 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 509
+[26-Apr-2021 13:16:08 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[26-Apr-2021 14:28:07 UTC] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 102400 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/CarbonImmutable.php on line 509
+[26-Apr-2021 19:12:06 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php on line 1
+[26-Apr-2021 19:12:06 UTC] PHP Fatal error:  Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/symfony/error-handler/Error/FatalError.php on line 1
+[26-Apr-2021 23:57:07 UTC] PHP Fatal error:  Out of memory (allocated 16777216) (tried to allocate 94208 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/Carbon.php on line 509
+[27-Apr-2021 13:58:07 EST] PHP Fatal error:  Out of memory (allocated 23068672) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Session/Console/SessionTableCommand.php on line 16
+[27-Apr-2021 13:58:07 EST] PHP Fatal error:  Out of memory (allocated 23068672) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php on line 129
+[27-Apr-2021 15:12:34 EST] PHP Fatal error:  Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 1
+[27-Apr-2021 15:12:34 EST] PHP Fatal error:  Uncaught Error: Class 'Monolog\Handler\StreamHandler' not found in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php:168
+Stack trace:
+#0 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(122): Illuminate\Log\LogManager->createEmergencyLogger()
+#1 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(98): Illuminate\Log\LogManager->get('stack')
+#2 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php(551): Illuminate\Log\LogManager->driver()
+#3 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(242): Illuminate\Log\LogManager->error('Out of memory (...', Array)
+#4 /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(88): Illuminate\Foundation\Exceptions\Handler->report(Obj in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Log/LogManager.php on line 168
+[28-Apr-2021 02:12:02 UTC] PHP Fatal error:  Out of memory (allocated 13737984) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[28-Apr-2021 04:17:05 EST] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 102400 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/CarbonImmutable.php on line 509
+[28-Apr-2021 04:17:05 EST] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php on line 483
+[28-Apr-2021 12:54:07 UTC] PHP Fatal error:  Out of memory (allocated 15835136) (tried to allocate 4096 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/composer/autoload_static.php on line 579
+[29-Apr-2021 03:29:07 Etc/GMT-5] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 102400 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/nesbot/carbon/src/Carbon/CarbonImmutable.php on line 509
+[29-Apr-2021 03:29:07 Etc/GMT-5] PHP Fatal error:  Out of memory (allocated 18874368) (tried to allocate 20480 bytes) in /home/stagingtechnolog/public_html/calendar/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php on line 483

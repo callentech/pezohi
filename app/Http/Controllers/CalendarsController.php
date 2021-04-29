@@ -407,17 +407,45 @@ class CalendarsController extends Controller
             ]);
         }
 
-        $subscribe = new Subscribe();
-        $subscribe->calendar_id = $calendar->id;
-        $subscribe->user_id = Auth::user()->id;
-        $subscribe->save();
+        try {
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
 
-        return response()->json([
-            'code' => 1,
-            'data' => [
-                'message' => 'Subscribe success',
-            ]
-        ]);
+            $calendarListEntry = new Google_Service_Calendar_CalendarListEntry();
+            $calendarListEntry->setId($calendar->google_id);
+            $createdCalendarListEntry = $service->calendarList->insert($calendarListEntry);
+
+            $subscribe = new Subscribe();
+            $subscribe->calendar_id = $calendar->id;
+            $subscribe->user_id = Auth::user()->id;
+            $subscribe->save();
+
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => 'Subscribe success',
+                ]
+            ]);
+
+        } catch(\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                    'message' => 'Subscribe error'
+                ]);
+            }
+        }
     }
 
     /**
@@ -436,7 +464,6 @@ class CalendarsController extends Controller
             'calendar_id' => 'required'
         ]);
 
-
         $calendar = Calendar::with('events')->find($request->calendar_id);
         if (!$calendar) {
             return response()->json([
@@ -447,24 +474,49 @@ class CalendarsController extends Controller
             ]);
         }
 
-        $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();
-        if (!$subscribe) {
+        try {
+
+            $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
+            $service->calendarList->delete($calendar->google_id);
+
+            $subscribe = Subscribe::where(['user_id' => Auth::user()->id, 'calendar_id' => $calendar->id])->first();
+            if (!$subscribe) {
+                return response()->json([
+                    'code' => 0,
+                    'data' => [
+                        'message' => 'Subscribe not found',
+                    ]
+                ]);
+            }
+            $subscribe->delete();
+
             return response()->json([
-                'code' => 0,
+                'code' => 1,
                 'data' => [
-                    'message' => 'Subscribe not found',
+                    'message' => 'Unsubscribe success',
                 ]
             ]);
+
+        } catch (\Exception $ex) {
+            if ($ex->getCode() === 401) {
+                Auth::logout();
+                return response()->json([
+                    'code' => 401
+                ]);
+            } else if ($ex->getCode() === 404) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Google calendar or event not found'
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 0,
+                    'message' => 'Subscribe error'
+                ]);
+            }
         }
-
-        $subscribe->delete();
-
-        return response()->json([
-            'code' => 1,
-            'data' => [
-                'message' => 'Unsubscribe success',
-            ]
-        ]);
     }
 
     /**

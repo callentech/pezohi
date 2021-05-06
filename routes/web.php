@@ -55,8 +55,12 @@ Route::post('google/webhook', [App\Http\Controllers\GoogleWebhookController::cla
 Route::post('/subscribe-calendar', [App\Http\Controllers\CalendarsController::class, 'subscribeCalendarAction'])->name('subscribeCalendar');
 Route::post('/unsubscribe-calendar', [App\Http\Controllers\CalendarsController::class, 'unsubscribeCalendarAction'])->name('unsubscribeCalendar');
 
+Route::post('/attendee-event', [App\Http\Controllers\EventsController::class, 'attendeeEventAction'])->name('attendeeEvent');
+
 
 Route::get('/test-mail', [App\Http\Controllers\EventsController::class, 'testMailAction'])->name('testMail');
+
+Route::get('/test-twilio', [App\Http\Controllers\EventsController::class, 'testTwilioAction'])->name('testTwilio');
 
 Route::get('/mail-preview', function() {
 

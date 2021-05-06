@@ -33,7 +33,6 @@ class CalendarsController extends Controller
         $request->validate([
             'calendar_name' => 'required'
         ]);
-
         try {
             $service = app(Google::class)->connectUsing(Auth::user()->google_access_token)->service('Calendar');
             $calendar = new Google_Service_Calendar_Calendar();
@@ -51,6 +50,18 @@ class CalendarsController extends Controller
                 'color' => '#FFFFFF',
                 'timezone' => $createdGoogleCalendar->timeZone
             ]);
+
+//            if ($request->calendar_hash_tag) {
+//                $createdCalendar->hash_tag = $request->calendar_hash_tag;
+//            }
+//
+//            if ($request->calendar_zip_code) {
+//                $createdCalendar->hash_tag = $request->calendar_zip_code;
+//            }
+//
+//            if ($request->calendar_league) {
+//                $createdCalendar->hash_tag = $request->calendar_league;
+//            }
             Auth::user()->calendars()->save($createdCalendar);
 
             // Create events

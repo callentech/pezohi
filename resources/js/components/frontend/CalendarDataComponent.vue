@@ -95,6 +95,11 @@
                                         <i v-else class="fas fa-sort-amount-down-alt float-right"></i>
                                     </a>
                                 </th>
+                                <th scope="col">
+                                    <a href="javascript:void(0)" class="sort-link">
+                                        Actions
+                                    </a>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,14 +107,22 @@
                                 <td>{{ event.started_at|formatEventDate }}</td>
                                 <td>{{ event.started_at|formatEventTime }} - {{ event.ended_at|formatEventTime }}</td>
                                 <td><a href="javascript:void(0)" :title="event.location">{{ event.location|sliceString }}</a></td>
-                                 <td>{{ event.type|capitalize }}</td>
+                                <td>{{ event.type|capitalize }}</td>
                                 <td><a href="javascript:void(0)" :title="event.description">{{ event.description|sliceString }}</a></td>
+
                                 <td v-if="moment(event.ended_at).isBefore(new Date())">
                                     Over
                                 </td>
                                 <td v-else>
                                     {{ event.status|capitalize }}
                                 </td>
+
+                                <td v-if="!moment(event.ended_at).isBefore(new Date())" width="10%">
+                                    <button v-if="!event.attendee" type="button" class="btn btn-primary btn-sm" @click="attendeeEvent(event.id, true);">I'll attend</button>
+                                    <button v-else type="button" class="btn btn-outline-success btn-sm" @click="attendeeEvent(event.id, false);">I'll not attend</button>
+                                </td>
+
+                                <td v-else></td>
                             </tr>
                         </tbody>
                     </table>
@@ -178,6 +191,50 @@ export default {
     },
 
     methods: {
+
+        attendeeEvent: function(eventId, attendee) {
+            let currentObj = this;
+            // Send request
+            axios.interceptors.request.use(function (config) {
+                // Do something before request is sent
+                currentObj.requestProcess = true;
+                currentObj.requestError = null;
+                currentObj.requestSuccess = null;
+                return config;
+            }, function (error) {
+                // Do something with request error
+                return Promise.reject(error);
+            });
+            axios.post('/attendee-event', {eventId: eventId, attendee: attendee})
+            .then(function (response) {
+                if (response.data.code === 404) {
+                    currentObj.requestError = response.data.data.message;
+                } else if (response.data.code === 1) {
+                    currentObj.requestSuccess = response.data.data.message;
+                    currentObj.sortedEvents.map(function(value, key) {
+                        if (value.id === eventId) {
+                            value.attendee = !value.attendee;
+                        }
+                    });
+
+                    setTimeout(function() {
+                        currentObj.requestSuccess = null;
+                    }, 2000);
+                } else {
+                    currentObj.requestError = 'Request Error';
+                }
+            })
+            .catch(function (error) {
+                if (error.response.status === 401) {
+                    document.location.href = '/';
+                } else {
+                    currentObj.requestError = 'Request Error';
+                }
+            })
+            .then(function () {
+                currentObj.requestProcess = false;
+            });
+        },
 
         unsubscribeCalendar: function(id) {
             let currentObj = this;

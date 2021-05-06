@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendee;
 use App\Models\Calendar;
 use App\Models\Subscribe;
 use Carbon\Carbon;
@@ -31,6 +32,9 @@ class CalendarController extends Controller
                 $location = json_decode($event->location);
                 $event->location = $location->route.', '.$location->country;
             }
+
+            $attendee = Attendee::where(['user_id' => Auth::user()->id, 'event_id' => $event->id])->first();
+            $event->attendee = (bool)$attendee;
         }
         $calendar->updated = $updated;
 

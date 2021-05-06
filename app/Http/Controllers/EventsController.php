@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\EventStatusNotify;
+use App\Models\Attendee;
 use App\Models\Calendar;
 use App\Models\Event;
 use App\Models\Subscribe;
@@ -16,6 +17,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
+
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Rest\Client;
+
 class EventsController extends Controller
 {
 
@@ -27,6 +32,61 @@ class EventsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function attendeeEventAction(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'eventId' => 'required',
+                'attendee' => 'required'
+            ]);
+            $event = Event::find($request->eventId);
+            if (!$event) {
+                return response()->json([
+                    'code' => 404,
+                    'data' => [
+                        'message' => 'Event not found'
+                    ]
+                ]);
+            }
+            if ($request->attendee) {
+                $attendee = new Attendee();
+                $attendee->event_id = $event->id;
+                $attendee->user_id = Auth::user()->id;
+                $attendee->save();
+                $message = 'Event subscribe success';
+            } else {
+                $attendee = Attendee::where(['user_id' => Auth::user()->id, 'event_id' => $event->id])->first();
+                if (!$attendee) {
+                    return response()->json([
+                        'code' => 404,
+                        'data' => [
+                            'message' => 'Subscribe event not found',
+                        ]
+                    ]);
+                }
+                $attendee->delete();
+                $message = 'Event unsubscribe success';
+            }
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => $message
+                ]
+            ]);
+        } catch (\Exception $ex) {
+            return response()->json([
+                'code' => 0,
+                'data' => [
+                    'message' => 'Request Error'
+                ]
+            ]);
+        }
     }
 
     /**
@@ -538,6 +598,39 @@ class EventsController extends Controller
 
     private function isJSON($string){
         return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE);
+    }
+
+
+    /**
+     * @throws ConfigurationException
+     */
+    public function testTwilioAction()
+    {
+        // Your Account SID and Auth Token from twilio.com/console
+//        $sid = config('services.twilio.sid');
+//        $token = config('services.twilio.token');
+//        $from = config('services.twilio.from');
+
+        $sid = 'AC61bc8ac19958f26d1143d9f01cb06862';
+        $token = 'f8f581fe22d76a5e32f29c9ac2121974';
+
+        $client = new Client( $sid, $token );
+
+        //$from = 'MG458a8c4f670b6b0ba868c550889e577f';
+        $from = '+1 218 616 7703';
+
+        $number = '+380632456740';
+
+        $client->messages->create(
+            $number,
+            [
+                'from' => $from,
+                'body' => 'Hello Twilio',
+            ]
+        );
+
+        var_dump($client);
+        exit;
     }
 
 }

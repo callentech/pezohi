@@ -2634,6 +2634,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2677,7 +2701,10 @@ __webpack_require__.r(__webpack_exports__);
           email: null
         },
         summary: '',
-        events: []
+        events: [],
+        hash_tag: '',
+        zip_code: '',
+        league: ''
       },
       editedEventData: {
         id: null,
@@ -3493,8 +3520,8 @@ __webpack_require__.r(__webpack_exports__);
       this.calendarsTypesFilters.forEach(function (typeFilter) {
         typeFilter.active = false;
       });
-      typeFilter.active = true;
-      var user_id = this.user_id;
+      typeFilter.active = true; //let user_id = this.user_id;
+
       var sortedArray = [];
       this.calendars.forEach(function (item) {
         if (typeFilter.val === 'all') {
@@ -3503,8 +3530,6 @@ __webpack_require__.r(__webpack_exports__);
           if (item.owned === true) {
             sortedArray.push(item);
           }
-
-          sortedArray.push(item);
         } else if (typeFilter.val === 'shared') {
           if (item.owned === false) {
             sortedArray.push(item);
@@ -6865,6 +6890,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'user'],
@@ -6886,6 +6924,48 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    attendeeEvent: function attendeeEvent(eventId, attendee) {
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.requestProcess = true;
+        currentObj.requestError = null;
+        currentObj.requestSuccess = null;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/attendee-event', {
+        eventId: eventId,
+        attendee: attendee
+      }).then(function (response) {
+        if (response.data.code === 404) {
+          currentObj.requestError = response.data.data.message;
+        } else if (response.data.code === 1) {
+          currentObj.requestSuccess = response.data.data.message;
+          currentObj.sortedEvents.map(function (value, key) {
+            if (value.id === eventId) {
+              value.attendee = !value.attendee;
+            }
+          });
+          setTimeout(function () {
+            currentObj.requestSuccess = null;
+          }, 2000);
+        } else {
+          currentObj.requestError = 'Request Error';
+        }
+      })["catch"](function (error) {
+        if (error.response.status === 401) {
+          document.location.href = '/';
+        } else {
+          currentObj.requestError = 'Request Error';
+        }
+      }).then(function () {
+        currentObj.requestProcess = false;
+      });
+    },
     unsubscribeCalendar: function unsubscribeCalendar(id) {
       var currentObj = this; // Send request
 
@@ -72445,7 +72525,6 @@ var render = function() {
                                             attrs: {
                                               type: "checkbox",
                                               value: "",
-                                              id: "newOwnerByMeCheckbox",
                                               checked: "",
                                               disabled: ""
                                             }
@@ -72453,12 +72532,7 @@ var render = function() {
                                           _vm._v(" "),
                                           _c(
                                             "label",
-                                            {
-                                              staticClass: "form-check-label",
-                                              attrs: {
-                                                for: "newOwnerByMeCheckbox"
-                                              }
-                                            },
+                                            { staticClass: "form-check-label" },
                                             [
                                               _vm._v(
                                                 "\n                                                            Owned by me\n                                                        "
@@ -79635,7 +79709,9 @@ var render = function() {
                                 })
                           ]
                         )
-                      ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(1)
                     ])
                   ]),
                   _vm._v(" "),
@@ -79709,7 +79785,46 @@ var render = function() {
                                   _vm._s(_vm._f("capitalize")(event.status)) +
                                   "\n                            "
                               )
+                            ]),
+                        _vm._v(" "),
+                        !_vm.moment(event.ended_at).isBefore(new Date())
+                          ? _c("td", { attrs: { width: "10%" } }, [
+                              !event.attendee
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.attendeeEvent(
+                                            event.id,
+                                            true
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("I'll attend")]
+                                  )
+                                : _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-outline-success btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.attendeeEvent(
+                                            event.id,
+                                            false
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("I'll not attend")]
+                                  )
                             ])
+                          : _c("td")
                       ])
                     }),
                     0
@@ -79833,6 +79948,22 @@ var staticRenderFns = [
           _vm._v("404 Calendar not found ...")
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("th", { attrs: { scope: "col" } }, [
+      _c(
+        "a",
+        { staticClass: "sort-link", attrs: { href: "javascript:void(0)" } },
+        [
+          _vm._v(
+            "\n                                    Actions\n                                "
+          )
+        ]
+      )
     ])
   }
 ]

@@ -17,4 +17,9 @@ class Event extends Model
     {
         return $this->belongsTo(Calendar::class, 'calendar_id');
     }
+
+    public function attendee()
+    {
+        return $this->hasMany(Attendee::class);
+    }
 }

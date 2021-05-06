@@ -582,14 +582,38 @@
                                                 </div>
                                                 <div class="col-2">
                                                     <div class="form-group form-check form-group-sm">
-                                                        <input class="form-check-input" type="checkbox" value="" id="newOwnerByMeCheckbox" checked disabled>
-                                                        <label class="form-check-label" for="newOwnerByMeCheckbox">
+                                                        <input class="form-check-input" type="checkbox" value="" checked disabled>
+                                                        <label class="form-check-label">
                                                             Owned by me
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <!--
+                                            <div class="form-row">
+                                                <div class="input-group input-group-sm mb-3 col-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Hash Tag</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_hash_tag" v-model="new_calendar.hash_tag" required :disabled="formRequestProcess">
+                                                </div>
+
+                                                <div class="input-group input-group-sm mb-3 col-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Zip Code</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_zip_code" v-model="new_calendar.zip_code" required :disabled="formRequestProcess">
+                                                </div>
+
+                                                <div class="input-group input-group-sm mb-3 col-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">League</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_league" v-model="new_calendar.league" required :disabled="formRequestProcess">
+                                                </div>
+                                            </div>
+                                            -->
 											<div class="form-row">
                                                 <label>Events: {{ current_calendar.events.length }}</label>
 												<div class="card col-md-12">
@@ -834,7 +858,10 @@
                         email: null
                     },
                     summary: '',
-                    events: []
+                    events: [],
+                    hash_tag: '',
+                    zip_code:'',
+                    league: ''
                 },
 
                 editedEventData: {

@@ -218,18 +218,16 @@
                 });
                 typeFilter.active = true;
 
-                let user_id = this.user_id;
+                //let user_id = this.user_id;
                 let sortedArray = [];
 
                 this.calendars.forEach(function(item) {
                     if (typeFilter.val === 'all') {
                         sortedArray.push(item);
                     } else if (typeFilter.val === 'owned') {
-
                         if (item.owned === true) {
                             sortedArray.push(item);
                         }
-                        sortedArray.push(item);
                     } else if (typeFilter.val === 'shared') {
                         if (item.owned === false) {
                             sortedArray.push(item);

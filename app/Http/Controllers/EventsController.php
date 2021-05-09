@@ -195,6 +195,13 @@ class EventsController extends Controller
                 return response()->json([
                     'code' => 401
                 ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
+                ]);
             } else if ($ex->getCode() === 404) {
                 return response()->json([
                     'code' => 404,
@@ -311,6 +318,13 @@ class EventsController extends Controller
                 Auth::logout();
                 return response()->json([
                     'code' => 401
+                ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
                 ]);
             } else if ($ex->getCode() === 404) {
                 return response()->json([
@@ -429,6 +443,13 @@ class EventsController extends Controller
                 return response()->json([
                     'code' => 401
                 ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
+                ]);
             } else if ($ex->getCode() === 404) {
                 return response()->json([
                     'code' => 404,
@@ -492,6 +513,13 @@ class EventsController extends Controller
                 Auth::logout();
                 return response()->json([
                     'code' => 401
+                ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
                 ]);
             } else if ($ex->getCode() === 404) { //404 Not Found
                 return response()->json([
@@ -570,6 +598,13 @@ class EventsController extends Controller
                 Auth::logout();
                 return response()->json([
                     'code' => 401
+                ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
                 ]);
             } else if ($ex->getCode() === 404) {
                 return response()->json([

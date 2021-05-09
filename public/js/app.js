@@ -2853,6 +2853,8 @@ __webpack_require__.r(__webpack_exports__);
           document.location.href = "/";
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 403) {
+          currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message;
           setTimeout(function () {
@@ -3566,6 +3568,8 @@ __webpack_require__.r(__webpack_exports__);
           document.location.href = "/";
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 403) {
+          currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message;
           currentObj.requestSuccess = false;
@@ -3610,6 +3614,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
+        } else if (response.data.code === 403) {
+          currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
@@ -4390,6 +4396,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/new-single-event', formData).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
+        } else if (response.data.code === 403) {
+          currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
@@ -4706,6 +4714,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
+        } else if (response.data.code === 403) {
+          currentObj.$parent.$parent.requestDanger = response.data.data.message;
         } else if (response.data.code === 404) {
           currentObj.$parent.$parent.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
@@ -5036,6 +5046,8 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.code === 401) {
           document.location.href = "/";
         } else if (response.data.code === 404) {
+          currentObj.requestError = response.data.data.message;
+        } else if (response.data.code === 403) {
           currentObj.requestError = response.data.data.message;
         } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message;
@@ -6095,6 +6107,8 @@ __webpack_require__.r(__webpack_exports__);
           document.location.href = "/";
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
+        } else if (response.data.code === 403) {
+          currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {
           currentObj.requestSuccess = response.data.data.message;
           setTimeout(function () {
@@ -6665,6 +6679,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
+        } else if (response.data.code === 404) {
+          currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 404) {
           currentObj.requestDanger = response.data.data.message;
         } else if (response.data.code === 1) {

@@ -273,6 +273,8 @@ export default {
                     document.location.href = "/";
                 } else if (response.data.code === 404) {
                     currentObj.requestError = response.data.data.message;
+                } else if (response.data.code === 403) {
+                    currentObj.requestError = response.data.data.message;
                 } else if (response.data.code === 1) {
                     currentObj.requestSuccess = response.data.data.message;
                     if (currentObj.editedEventData.duplicate_event_id) {

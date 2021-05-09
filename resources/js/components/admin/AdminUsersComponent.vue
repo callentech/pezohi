@@ -142,6 +142,8 @@ export default {
                     document.location.href="/";
                 } else if (response.data.code === 404) {
                     currentObj.requestDanger = response.data.data.message;
+                } else if (response.data.code === 404) {
+                    currentObj.requestDanger = response.data.data.message;
                 } else if (response.data.code === 1) {
                     currentObj.requestSuccess = response.data.data.message;
                     setTimeout(function() {

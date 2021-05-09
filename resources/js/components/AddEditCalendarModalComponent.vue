@@ -1078,11 +1078,11 @@
                 formData.append('events', JSON.stringify(currentObj.current_calendar.events));
                 axios.post('/edit-calendar', formData)
                     .then(function(response) {
-
-
                         if (response.data.code === 401) {
                             document.location.href="/";
                         } else if (response.data.code === 404) {
+                            currentObj.requestDanger = response.data.data.message;
+                        } else if (response.data.code === 403) {
                             currentObj.requestDanger = response.data.data.message;
                         } else if (response.data.code === 1) {
                             currentObj.requestSuccess = response.data.data.message;

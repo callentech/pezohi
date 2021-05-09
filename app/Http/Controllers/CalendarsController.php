@@ -115,6 +115,7 @@ class CalendarsController extends Controller
                 ]
             ]);
         } catch(\Exception $ex) {
+
             if ($ex->getCode() === 401) {
                 Auth::logout();
                 return response()->json([
@@ -314,6 +315,13 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 401
                 ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
+                ]);
             } else if ($ex->getCode() === 404) {
                 return response()->json([
                     'code' => 404,
@@ -367,6 +375,13 @@ class CalendarsController extends Controller
                 Auth::logout();
                 return response()->json([
                     'code' => 401
+                ]);
+            } else if ($ex->getCode() === 403) {
+                return response()->json([
+                    'code' => 403,
+                    'data' => [
+                        'message' => 'You need to have owner access to this calendar'
+                    ]
                 ]);
             } else if ($ex->getCode() === 404) {
                 return response()->json([

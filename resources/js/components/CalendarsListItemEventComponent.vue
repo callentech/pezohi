@@ -189,6 +189,8 @@ export default {
             .then(function (response) {
                 if (response.data.code === 401) {
                     document.location.href="/";
+                } else if (response.data.code === 403) {
+                    currentObj.$parent.$parent.requestDanger = response.data.data.message;
                 } else if (response.data.code === 404) {
                     currentObj.$parent.$parent.requestDanger = response.data.data.message;
                 } else if (response.data.code === 1) {

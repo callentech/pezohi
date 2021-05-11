@@ -33,8 +33,11 @@ class CalendarController extends Controller
                 $event->location = $location->route.', '.$location->country;
             }
 
-            $attendee = Attendee::where(['user_id' => Auth::user()->id, 'event_id' => $event->id])->first();
-            $event->attendee = (bool)$attendee;
+            $event->attendee = FALSE;
+            if (Auth::user())  {
+                $attendee = Attendee::where(['user_id' => Auth::user()->id, 'event_id' => $event->id])->first();
+                $event->attendee = (bool)$attendee;
+            }
         }
         $calendar->updated = $updated;
 

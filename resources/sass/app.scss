@@ -543,6 +543,16 @@ body #app nav.navbar .navbar-brand {
     color: #949fae;
 }
 
+#infoModal {
+    .alert {
+        padding: 5px 5px 5px 10px;
+    }
+
+    .spinner-border {
+        vertical-align: sub;
+        margin-right: 5px;
+    }
+}
 // Calendar Modal
 #addCalendarModal .modal-content .modal-header,
 #editCalendarModal .modal-content .modal-header,

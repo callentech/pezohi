@@ -57,6 +57,8 @@ Route::post('/unsubscribe-calendar', [App\Http\Controllers\CalendarsController::
 
 Route::post('/attendee-event', [App\Http\Controllers\EventsController::class, 'attendeeEventAction'])->name('attendeeEvent');
 
+Route::post('/calendar-send-shared-link', [App\Http\Controllers\CalendarsController::class, 'sendSharedCalendarLinkAction'])->name('calendarSendSharedLink');
+
 
 Route::get('/test-mail', [App\Http\Controllers\EventsController::class, 'testMailAction'])->name('testMail');
 
@@ -64,15 +66,22 @@ Route::get('/test-twilio', [App\Http\Controllers\EventsController::class, 'testT
 
 Route::get('/mail-preview', function() {
 
-    $calendar = Calendar::first();
-    $event = Event::first();
+//    $calendar = Calendar::first();
+//    $event = Event::first();
+//    $params = [
+//        'calendar' => $calendar,
+//        'event' => $event,
+//        'action' => 'Deleted',
+//        'dateTime' => now()
+//    ];
+//
+//    return new App\Mail\EventStatusNotify($params);
+
     $params = [
-        'calendar' => $calendar,
-        'event' => $event,
-        'action' => 'Deleted',
+        'url' => 'calendar.mail.com',
         'dateTime' => now()
     ];
 
-    return new App\Mail\EventStatusNotify($params);
+    return new App\Mail\SharedCalendarNotify($params);
 });
 

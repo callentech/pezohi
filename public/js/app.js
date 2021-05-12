@@ -4124,6 +4124,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4193,6 +4253,12 @@ __webpack_require__.r(__webpack_exports__);
       address: '',
       showInfoModal: false,
       infoModalHtml: '',
+      sharedCalendarUrl: '',
+      sharedCalendarEmail: 'dev.alex42@gmail.com',
+      sharedCalendarPhone: '+380632456740',
+      infoModalRequest: null,
+      infoModalRequestError: null,
+      infoModalRequestSuccess: null,
       showConfirmUnsubscribeCalendarModal: false,
       sortByDateDirection: 'desc',
       sortByLocationDirection: 'desc',
@@ -4214,6 +4280,53 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    sendSharedCalendarLink: function sendSharedCalendarLink(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var form = event.target;
+
+      if (form.checkValidity() === false) {
+        form.classList.add('was-validated');
+        return false;
+      }
+
+      var currentObj = this; // Send request
+
+      axios.interceptors.request.use(function (config) {
+        // Do something before request is sent
+        currentObj.infoModalRequest = true;
+        currentObj.infoModalRequestError = null;
+        currentObj.infoModalRequestSuccess = null;
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      });
+      axios.post('/calendar-send-shared-link', {
+        url: currentObj.sharedCalendarUrl,
+        email: currentObj.sharedCalendarEmail,
+        phone: currentObj.sharedCalendarPhone
+      }).then(function (response) {
+        if (response.data.code === 401) {
+          document.location.href = "/";
+        } else if (response.data.code === 1) {
+          currentObj.infoModalRequestSuccess = response.data.data.message;
+          currentObj.sharedCalendarEmail = null;
+          currentObj.sharedCalendarPhone = null;
+          setTimeout(function () {
+            currentObj.infoModalRequest = false;
+          }, 2000);
+        }
+      })["catch"](function (error) {
+        if (error.response && error.response.status === 422) {
+          currentObj.infoModalRequestError = error.response.data.message;
+        } else {
+          currentObj.infoModalRequestError = 'Request Error';
+        }
+      }).then(function () {
+        currentObj.infoModalRequest = false;
+      });
+    },
     showEvents: function showEvents(dir) {
       if (dir === 'next') {
         this.view_events_start = this.view_events_end + 1;
@@ -4359,14 +4472,20 @@ __webpack_require__.r(__webpack_exports__);
       this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
     },
     shareCalendar: function shareCalendar(url) {
+      this.infoModalRequest = null;
+      this.infoModalRequestError = null;
+      this.infoModalRequestSuccess = null; //this.sharedCalendarEmail = null;
+      //this.sharedCalendarPhone = null;
+
       var input_temp = document.createElement('textarea');
       input_temp.innerHTML = url;
       document.body.appendChild(input_temp);
       input_temp.select();
       input_temp.setSelectionRange(0, 99999);
       document.execCommand('copy');
-      document.body.removeChild(input_temp);
-      this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="' + url + '" readonly>';
+      document.body.removeChild(input_temp); //this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
+
+      this.sharedCalendarUrl = url;
       this.showInfoModal = true;
     },
     hideShareCalendarModal: function hideShareCalendarModal(event) {
@@ -75916,7 +76035,11 @@ var render = function() {
                         "div",
                         {
                           staticClass: "message-modal",
-                          attrs: { tabindex: "-1", role: "dialog" }
+                          attrs: {
+                            id: "infoModal",
+                            tabindex: "-1",
+                            role: "dialog"
+                          }
                         },
                         [
                           _c(
@@ -75958,23 +76081,320 @@ var render = function() {
                                   )
                                 ]),
                                 _vm._v(" "),
-                                _c("div", {
-                                  staticClass: "modal-body",
-                                  domProps: {
-                                    innerHTML: _vm._s(_vm.infoModalHtml)
-                                  }
-                                }),
+                                _c("div", { staticClass: "modal-body" }, [
+                                  _c("p", [
+                                    _vm._v(
+                                      "Public link to calendar was copied to your clipboard"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "form",
+                                    {
+                                      staticClass: "needs-validation",
+                                      attrs: {
+                                        id: "sendSharedCalendarLinkForm",
+                                        novalidate: ""
+                                      },
+                                      on: { submit: _vm.sendSharedCalendarLink }
+                                    },
+                                    [
+                                      _c("div", { staticClass: "form-group" }, [
+                                        _c(
+                                          "div",
+                                          { staticClass: "form-group row" },
+                                          [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "col-sm-2 col-form-label",
+                                                attrs: {
+                                                  for: "shareCalendarUrl"
+                                                }
+                                              },
+                                              [_vm._v("URL:")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "col-sm-10" },
+                                              [
+                                                _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value:
+                                                        _vm.sharedCalendarUrl,
+                                                      expression:
+                                                        "sharedCalendarUrl"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "form-control form-control-sm",
+                                                  attrs: {
+                                                    type: "text",
+                                                    id: "shareCalendarUrl",
+                                                    readonly: ""
+                                                  },
+                                                  domProps: {
+                                                    value: _vm.sharedCalendarUrl
+                                                  },
+                                                  on: {
+                                                    input: function($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.sharedCalendarUrl =
+                                                        $event.target.value
+                                                    }
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "form-group row" },
+                                          [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "col-sm-2 col-form-label",
+                                                attrs: {
+                                                  for: "shareCalendarEmail"
+                                                }
+                                              },
+                                              [_vm._v("Email:")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "col-sm-10" },
+                                              [
+                                                _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value:
+                                                        _vm.sharedCalendarEmail,
+                                                      expression:
+                                                        "sharedCalendarEmail"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "form-control form-control-sm",
+                                                  attrs: {
+                                                    type: "email",
+                                                    id: "shareCalendarEmail"
+                                                  },
+                                                  domProps: {
+                                                    value:
+                                                      _vm.sharedCalendarEmail
+                                                  },
+                                                  on: {
+                                                    input: function($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.sharedCalendarEmail =
+                                                        $event.target.value
+                                                    }
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "invalid-feedback"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Please provide a valid email."
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "form-group row" },
+                                          [
+                                            _c(
+                                              "label",
+                                              {
+                                                staticClass:
+                                                  "col-sm-2 col-form-label",
+                                                attrs: {
+                                                  for: "shareCalendarPhone"
+                                                }
+                                              },
+                                              [_vm._v("Phone:")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "col-sm-10" },
+                                              [
+                                                _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value:
+                                                        _vm.sharedCalendarPhone,
+                                                      expression:
+                                                        "sharedCalendarPhone"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "form-control form-control-sm",
+                                                  attrs: {
+                                                    type: "text",
+                                                    id: "shareCalendarPhone"
+                                                  },
+                                                  domProps: {
+                                                    value:
+                                                      _vm.sharedCalendarPhone
+                                                  },
+                                                  on: {
+                                                    input: function($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.sharedCalendarPhone =
+                                                        $event.target.value
+                                                    }
+                                                  }
+                                                }),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "invalid-feedback"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "Please provide a valid phone."
+                                                    )
+                                                  ]
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "form-group row" },
+                                          [
+                                            _c(
+                                              "div",
+                                              { staticClass: "col-sm-12" },
+                                              [
+                                                _vm.infoModalRequestSuccess
+                                                  ? _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "alert alert-success",
+                                                        attrs: { role: "alert" }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                                            " +
+                                                            _vm._s(
+                                                              _vm.infoModalRequestSuccess
+                                                            ) +
+                                                            "\n                                                        "
+                                                        )
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                _vm.infoModalRequestError
+                                                  ? _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "alert alert-danger",
+                                                        attrs: { role: "alert" }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                                            " +
+                                                            _vm._s(
+                                                              _vm.infoModalRequestError
+                                                            ) +
+                                                            "\n                                                        "
+                                                        )
+                                                      ]
+                                                    )
+                                                  : _vm._e()
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ]
+                                  )
+                                ]),
                                 _vm._v(" "),
                                 _c("div", { staticClass: "modal-footer" }, [
                                   _c(
                                     "button",
                                     {
-                                      staticClass: "btn btn-secondary",
+                                      staticClass: "btn btn-primary btn-sm",
+                                      attrs: {
+                                        type: "submit",
+                                        form: "sendSharedCalendarLinkForm",
+                                        disabled:
+                                          _vm.infoModalRequest ||
+                                          (!_vm.sharedCalendarEmail &&
+                                            !_vm.sharedCalendarPhone)
+                                      }
+                                    },
+                                    [
+                                      _vm.infoModalRequest
+                                        ? _c("span", {
+                                            staticClass:
+                                              "spinner-border spinner-border-sm",
+                                            attrs: {
+                                              role: "status",
+                                              "aria-hidden": "true"
+                                            }
+                                          })
+                                        : _vm._e(),
+                                      _vm._v(
+                                        "Send\n                                        "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-secondary btn-sm",
                                       attrs: { type: "button" },
                                       on: {
                                         click: function($event) {
-                                          ;(_vm.infoModalText = ""),
-                                            (_vm.showInfoModal = false)
+                                          _vm.showInfoModal = false
                                         }
                                       }
                                     },

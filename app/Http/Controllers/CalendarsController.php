@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SyncCalendars;
 use App\Mail\EventStatusNotify;
+use App\Mail\SharedCalendar;
 use App\Models\Calendar;
 use App\Models\Event;
 use App\Models\Subscribe;
@@ -16,6 +17,9 @@ use Google_Service_Calendar_EventExtendedProperties;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Session;
+use Twilio\Exceptions\ConfigurationException;
+use Twilio\Exceptions\TwilioException;
+use Twilio\Rest\Client;
 use URL;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -559,4 +563,42 @@ class CalendarsController extends Controller
         return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE);
     }
 
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sendSharedCalendarLinkAction(Request $request): JsonResponse
+    {
+        if (!Auth::user()) {
+            return response()->json([
+                'code' => 401
+            ]);
+        }
+        $request->validate([
+            'url' => 'required'
+        ]);
+        try {
+            if ($request->email) {
+                $this->sendSharedCalendarNotify($request->url, $request->email);
+            }
+
+            if ($request->phone) {
+                $this->sendSharedCalendarSms($request->url, $request->phone);
+            }
+            return response()->json([
+                'code' => 1,
+                'data' => [
+                    'message' => 'Link send success'
+                ]
+            ]);
+        } catch (\Exception $ex) {
+            return response()->json([
+                'code' => 0,
+                'data' => [
+                    'message' => $ex->getMessage()
+                ]
+            ]);
+        }
+    }
 }

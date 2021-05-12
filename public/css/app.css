@@ -16560,6 +16560,14 @@ body #app nav.navbar .navbar-brand .badge.brand-logo {
   color: #949fae;
 }
 
+#infoModal .alert {
+  padding: 5px 5px 5px 10px;
+}
+#infoModal .spinner-border {
+  vertical-align: sub;
+  margin-right: 5px;
+}
+
 #addCalendarModal .modal-content .modal-header,
 #editCalendarModal .modal-content .modal-header,
 #duplicateCalendarModal .modal-content .modal-header {

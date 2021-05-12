@@ -368,7 +368,7 @@
 			<transition name="modal">
 				<div class="modal-mask">
 	        		<div class="modal-wrapper" @click="hideShareCalendarModal($event)">
-	        			<div class="message-modal" tabindex="-1" role="dialog">
+	        			<div id="infoModal" class="message-modal" tabindex="-1" role="dialog">
 				  			<div class="modal-dialog" role="document">
 				    			<div class="modal-content">
 				      				<div class="modal-header">
@@ -377,11 +377,71 @@
 								          <span aria-hidden="true">&times;</span>
 								        </button>
 								    </div>
+
+                                    <!--
 								    <div v-html="infoModalHtml" class="modal-body">
+                                        <p>Public link to calendar was copied to your clipboard</p>
+                                        <input type="text" value="'+url+'" readonly>
 								    </div>
 								    <div class="modal-footer">
 								    	<button type="button" class="btn btn-secondary" @click="infoModalText='', showInfoModal=false">Close</button>
 								    </div>
+
+								    -->
+
+                                    <div class="modal-body">
+
+                                        <!--
+                                        <p>Public link to calendar was copied to your clipboard</p>
+                                        <input v-model="sharedCalendarUrl" type="text" readonly>
+                                        -->
+                                        <p>Public link to calendar was copied to your clipboard</p>
+
+                                        <form @submit="sendSharedCalendarLink" id="sendSharedCalendarLinkForm" class="needs-validation" novalidate>
+                                            <div class="form-group">
+                                                <div class="form-group row">
+                                                    <label for="shareCalendarUrl" class="col-sm-2 col-form-label">URL:</label>
+                                                    <div class="col-sm-10">
+                                                        <input v-model="sharedCalendarUrl" type="text" class="form-control form-control-sm" id="shareCalendarUrl" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="shareCalendarEmail" class="col-sm-2 col-form-label">Email:</label>
+                                                    <div class="col-sm-10">
+                                                        <input v-model="sharedCalendarEmail" type="email" class="form-control form-control-sm" id="shareCalendarEmail">
+                                                        <div class="invalid-feedback">Please provide a valid email.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="shareCalendarPhone" class="col-sm-2 col-form-label">Phone:</label>
+                                                    <div class="col-sm-10">
+                                                        <input v-model="sharedCalendarPhone" type="text" class="form-control form-control-sm" id="shareCalendarPhone">
+                                                        <div class="invalid-feedback">Please provide a valid phone.</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <div v-if="infoModalRequestSuccess" class="alert alert-success" role="alert">
+                                                            {{ infoModalRequestSuccess }}
+                                                        </div>
+                                                        <div v-if="infoModalRequestError" class="alert alert-danger" role="alert">
+                                                            {{ infoModalRequestError }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" form="sendSharedCalendarLinkForm" class="btn btn-primary btn-sm" :disabled="infoModalRequest || (!sharedCalendarEmail && !sharedCalendarPhone)">
+                                            <span v-if="infoModalRequest" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Send
+                                        </button>
+                                        <button type="button" class="btn btn-secondary btn-sm" @click="showInfoModal=false">Close</button>
+                                    </div>
 				    			</div>
 				  			</div>
 						</div>
@@ -522,10 +582,15 @@ import moment from 'moment';
 
                 showInfoModal: false,
 				infoModalHtml: '',
+                sharedCalendarUrl: '',
+                sharedCalendarEmail: 'dev.alex42@gmail.com',
+                sharedCalendarPhone:  '+380632456740',
+                infoModalRequest: null,
+                infoModalRequestError: null,
+                infoModalRequestSuccess: null,
 
                 showConfirmUnsubscribeCalendarModal: false,
-
-
+                
                 sortByDateDirection: 'desc',
                 sortByLocationDirection: 'desc',
                 sortByTypeDirection: 'desc',
@@ -549,6 +614,51 @@ import moment from 'moment';
 
 		methods: {
 
+            sendSharedCalendarLink: function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                let form = event.target;
+                if (form.checkValidity() === false) {
+                    form.classList.add('was-validated');
+                    return false;
+                }
+                let currentObj = this;
+                // Send request
+                axios.interceptors.request.use(function (config) {
+                    // Do something before request is sent
+                    currentObj.infoModalRequest = true;
+                    currentObj.infoModalRequestError = null;
+                    currentObj.infoModalRequestSuccess = null;
+                    return config;
+                }, function (error) {
+                    // Do something with request error
+                    return Promise.reject(error);
+                });
+                axios.post('/calendar-send-shared-link', {url: currentObj.sharedCalendarUrl, email: currentObj.sharedCalendarEmail, phone: currentObj.sharedCalendarPhone})
+                .then(function(response) {
+                    if (response.data.code === 401) {
+                        document.location.href = "/";
+                    } else if (response.data.code === 1) {
+                        currentObj.infoModalRequestSuccess = response.data.data.message;
+                        currentObj.sharedCalendarEmail = null;
+                        currentObj.sharedCalendarPhone = null;
+                        setTimeout(function () {
+                            currentObj.infoModalRequest = false;
+                        }, 2000);
+                    }
+                })
+                .catch(function(error) {
+                    if (error.response && error.response.status === 422) {
+                        currentObj.infoModalRequestError = error.response.data.message;
+                    } else {
+                        currentObj.infoModalRequestError = 'Request Error';
+                    }
+                })
+                .then(function() {
+                    currentObj.infoModalRequest = false;
+                });
+            },
+
             showEvents: function(dir) {
                 if (dir === 'next') {
                     this.view_events_start = this.view_events_end + 1;
@@ -558,7 +668,7 @@ import moment from 'moment';
                 this.view_events_end = this.view_events_start + 4 > this.calendar.events.length ? this.calendar.events.length-1 : this.view_events_start + 4;
             },
 
-           selectTimeAction: function(select) {
+            selectTimeAction: function(select) {
                 let fromdt = this.editedEventData.startDate+' '+this.editedEventData.startTime;
                 //let todt = this.editedEventData.startDate+' '+this.editedEventData.endTime;
                 let from = new Date(Date.parse(fromdt));
@@ -712,7 +822,13 @@ import moment from 'moment';
 				this.$root.$refs.allCalendars.showConfirmCalendarDeleteModal(id);
             },
 
-			shareCalendar: function(url) {
+            shareCalendar: function(url) {
+                this.infoModalRequest = null;
+                this.infoModalRequestError = null;
+                this.infoModalRequestSuccess = null;
+                //this.sharedCalendarEmail = null;
+                //this.sharedCalendarPhone = null;
+
 				let input_temp = document.createElement('textarea');
 				input_temp.innerHTML = url;
 				document.body.appendChild(input_temp);
@@ -720,7 +836,8 @@ import moment from 'moment';
 				input_temp.setSelectionRange(0, 99999);
 				document.execCommand('copy');
 				document.body.removeChild(input_temp);
-				this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
+				//this.infoModalHtml = '<p>Public link to calendar was copied to your clipboard</p><input type="text" value="'+url+'" readonly>';
+                this.sharedCalendarUrl = url;
 				this.showInfoModal = true;
 			},
 

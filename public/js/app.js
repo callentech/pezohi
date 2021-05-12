@@ -4315,6 +4315,7 @@ __webpack_require__.r(__webpack_exports__);
           currentObj.sharedCalendarPhone = null;
           setTimeout(function () {
             currentObj.infoModalRequest = false;
+            currentObj.showInfoModal = false;
           }, 2000);
         }
       })["catch"](function (error) {

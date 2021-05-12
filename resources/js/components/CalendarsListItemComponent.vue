@@ -644,6 +644,7 @@ import moment from 'moment';
                         currentObj.sharedCalendarPhone = null;
                         setTimeout(function () {
                             currentObj.infoModalRequest = false;
+                            currentObj.showInfoModal = false;
                         }, 2000);
                     }
                 })

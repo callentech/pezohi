@@ -583,14 +583,14 @@ import moment from 'moment';
                 showInfoModal: false,
 				infoModalHtml: '',
                 sharedCalendarUrl: '',
-                sharedCalendarEmail: 'dev.alex42@gmail.com',
-                sharedCalendarPhone:  '+380632456740',
+                sharedCalendarEmail: '',
+                sharedCalendarPhone: '',
                 infoModalRequest: null,
                 infoModalRequestError: null,
                 infoModalRequestSuccess: null,
 
                 showConfirmUnsubscribeCalendarModal: false,
-                
+
                 sortByDateDirection: 'desc',
                 sortByLocationDirection: 'desc',
                 sortByTypeDirection: 'desc',

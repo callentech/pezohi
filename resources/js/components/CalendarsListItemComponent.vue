@@ -646,6 +646,8 @@ import moment from 'moment';
                             currentObj.infoModalRequest = false;
                             currentObj.showInfoModal = false;
                         }, 2000);
+                    } else {
+                        currentObj.infoModalRequestError = 'Request Error';
                     }
                 })
                 .catch(function(error) {

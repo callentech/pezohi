@@ -4317,6 +4317,8 @@ __webpack_require__.r(__webpack_exports__);
             currentObj.infoModalRequest = false;
             currentObj.showInfoModal = false;
           }, 2000);
+        } else {
+          currentObj.infoModalRequestError = 'Request Error';
         }
       })["catch"](function (error) {
         if (error.response && error.response.status === 422) {

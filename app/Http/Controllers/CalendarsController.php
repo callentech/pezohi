@@ -55,17 +55,17 @@ class CalendarsController extends Controller
                 'timezone' => $createdGoogleCalendar->timeZone
             ]);
 
-//            if ($request->calendar_hash_tag) {
-//                $createdCalendar->hash_tag = $request->calendar_hash_tag;
-//            }
-//
-//            if ($request->calendar_zip_code) {
-//                $createdCalendar->hash_tag = $request->calendar_zip_code;
-//            }
-//
-//            if ($request->calendar_league) {
-//                $createdCalendar->hash_tag = $request->calendar_league;
-//            }
+            if ($request->calendar_hash_tag) {
+                $createdCalendar->hash_tag = $request->calendar_hash_tag;
+            }
+
+            if ($request->calendar_zip_code) {
+                $createdCalendar->zip_code = $request->calendar_zip_code;
+            }
+
+            if ($request->calendar_league) {
+                $createdCalendar->league = $request->calendar_league;
+            }
             Auth::user()->calendars()->save($createdCalendar);
 
             // Create events
@@ -183,6 +183,8 @@ class CalendarsController extends Controller
         ]);
 
         $calendar = Calendar::with('events')->find($request->calendar_id);
+        $notify = intval(request('notify', 0));
+
         if (!$calendar) {
             return response()->json([
                 'code' => 0,
@@ -199,6 +201,19 @@ class CalendarsController extends Controller
 
             // Update calendar data in DB
             $calendar->name = $updatedGoogleCalendar->summary;
+
+            if ($request->calendar_hash_tag) {
+                $calendar->hash_tag = $request->calendar_hash_tag;
+            }
+
+            if ($request->calendar_zip_code) {
+                $calendar->zip_code = $request->calendar_zip_code;
+            }
+
+            if ($request->calendar_league) {
+                $calendar->league = $request->calendar_league;
+            }
+
             $calendar->save();
 
             // Sync events Data
@@ -210,7 +225,9 @@ class CalendarsController extends Controller
                     $deletedEvent = Event::find($event['id']);
 
                     // Send Mail to Calendar Shared and Owned users
-                    $this->sendMainNotify($event, 'Deleted');
+                    if($notify === 1) {
+                        $this->sendMainNotify($event, 'Deleted');
+                    }
                     $deletedEvent->delete();
                 } else if (isset($event['status']) && $event['status'] == 'cancelled') {
                     $googleEvent = $service->events->get($updatedGoogleCalendar->id, $event['google_id']);
@@ -219,7 +236,9 @@ class CalendarsController extends Controller
                     $updatedEvent->status = 'cancelled';
 
                     // Send Mail to Calendar Shared and Owned users
-                    $this->sendMainNotify($updatedEvent, 'Cancelled');
+                    if($notify === 1) {
+                        $this->sendMainNotify($updatedEvent, 'Cancelled');
+                    }
                     $updatedEvent->save();
                 } else {
 
@@ -297,7 +316,9 @@ class CalendarsController extends Controller
                         $updatedLocalEvent->updated_data_at = Carbon::parse($updatedEvent->updated)->setTimezone($updatedEvent->start->timeZone);
 
                         // Send Mail to Calendar Shared and Owned users
-                        $this->sendMainNotify($updatedLocalEvent, 'Updated');
+                        if($notify === 1) {
+                            $this->sendMainNotify($updatedLocalEvent, 'Updated');
+                        }
                         $updatedLocalEvent->save();
                         $calendar->touch();
                     }
@@ -423,11 +444,20 @@ class CalendarsController extends Controller
             ]);
     	}
 
-        $request->validate([
+        $validator_array = [
             'calendar_id' => 'required'
-        ]);
+        ];
+
+        $notify = intval(request('notify', 0));
+
+        if($notify) {
+            $validator_array['phone'] = 'required';
+        }
+
+        $request->validate($validator_array);
 
         $calendar = Calendar::with('events')->find($request->calendar_id);
+        $phone = request('phone', '');
         if (!$calendar) {
             return response()->json([
                 'code' => 0,
@@ -447,6 +477,11 @@ class CalendarsController extends Controller
             $subscribe = new Subscribe();
             $subscribe->calendar_id = $calendar->id;
             $subscribe->user_id = Auth::user()->id;
+            $subscribe->notify = $notify;
+            if($phone) {
+                $subscribe->phone = $phone;
+            }
+
             $subscribe->save();
 
             return response()->json([

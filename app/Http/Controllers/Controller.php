@@ -39,6 +39,15 @@ class Controller extends BaseController
             foreach ($subscribes as $subscribe) {
                 $user = User::find($subscribe->user_id);
                 Mail::to($user->email)->send(new EventStatusNotify($params));
+
+                if($subscribe->notify === 1 && $subscribe->phone) {
+                    $sid = config('services.twilio.sid');
+                    $token = config('services.twilio.token');
+                    $from = config('services.twilio.from');
+                    $client = new Client($sid, $token);
+                    $message = 'Event was changed. Calendar ('. $calendar->name .')' . url('/').'/calendar/'.$calendar->google_id;
+                    $client->messages->create($subscribe->phone, ['from' => $from, 'body' => $message]);
+                }
             }
             Mail::to($calendar->user->email)->send(new EventStatusNotify($params));
         }

@@ -78,7 +78,7 @@
 
                 <div v-if="Object.keys(calendars).length > 0" class="calendars-list">
                     <div v-for="calendar in sortedCalendars">
-                        <calendars-list-item-component :calendar="calendar" :jobs_status="jobs_status" ref='calendar'></calendars-list-item-component>
+                        <calendars-list-item-component @toggle="filterCalendars" :calendar="calendar" :jobs_status="jobs_status" ref='calendar'></calendars-list-item-component>
                     </div>
                 </div>
                 <div v-else class="calendars-list">
@@ -211,6 +211,12 @@
         },
 
         methods: {
+
+            filterCalendars: function(param, value) {
+                this.sortedCalendars = this.calendars.filter(calendar => {
+                    return calendar[param] === value;
+                })
+            },
 
             applyCalendarsTypeFilter: function(typeFilter) {
                 this.calendarsTypesFilters.forEach(typeFilter => {

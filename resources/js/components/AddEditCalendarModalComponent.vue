@@ -53,6 +53,27 @@
                                             </div>
 
                                             <div class="form-row">
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Hashtag</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_hash_tag" v-model="current_calendar.hash_tag" :disabled="formRequestProcess">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">League</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_league" v-model="current_calendar.league" :disabled="formRequestProcess">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Zip</span>
+                                                    </div>
+                                                    <input type="number" class="form-control" name="calendar_zip_code" v-model="current_calendar.zip_code" :disabled="formRequestProcess">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
                                                 <label>Events: {{ current_calendar.events.length }}</label>
                                                 <div class="card col-md-12">
 
@@ -267,6 +288,13 @@
 
                                     <div class="modal-footer">
 
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="" id="userNotify" v-model="userNotify">
+                                            <label class="form-check-label" for="userNotify">
+                                                Notify users about changes
+                                            </label>
+                                        </div>
+
                                         <div v-if="showCancelModalAlert" class="alert alert-warning" role="alert">
                                             Please save all data before closing modal...
                                         </div>
@@ -335,6 +363,27 @@
                                                             Owned by me
                                                         </label>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Hashtag</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_hash_tag" v-model="current_calendar.hash_tag" :disabled="formRequestProcess">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">League</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="calendar_league" v-model="current_calendar.league" :disabled="formRequestProcess">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Zip</span>
+                                                    </div>
+                                                    <input type="number" class="form-control" name="calendar_zip_code" v-model="current_calendar.zip_code" :disabled="formRequestProcess">
                                                 </div>
                                             </div>
 
@@ -590,30 +639,27 @@
                                                 </div>
                                             </div>
 
-                                            <!--
                                             <div class="form-row">
-                                                <div class="input-group input-group-sm mb-3 col-4">
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text">Hash Tag</span>
+                                                        <span class="input-group-text">Hashtag</span>
                                                     </div>
-                                                    <input type="text" class="form-control" name="calendar_hash_tag" v-model="new_calendar.hash_tag" required :disabled="formRequestProcess">
+                                                    <input type="text" class="form-control" name="calendar_hash_tag" :disabled="formRequestProcess">
                                                 </div>
-
-                                                <div class="input-group input-group-sm mb-3 col-4">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Zip Code</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" name="calendar_zip_code" v-model="new_calendar.zip_code" required :disabled="formRequestProcess">
-                                                </div>
-
-                                                <div class="input-group input-group-sm mb-3 col-4">
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">League</span>
                                                     </div>
-                                                    <input type="text" class="form-control" name="calendar_league" v-model="new_calendar.league" required :disabled="formRequestProcess">
+                                                    <input type="text" class="form-control" name="calendar_league" :disabled="formRequestProcess">
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3 col-lg-4">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Zip</span>
+                                                    </div>
+                                                    <input type="number" class="form-control" name="calendar_zip_code" :disabled="formRequestProcess">
                                                 </div>
                                             </div>
-                                            -->
+
 											<div class="form-row">
                                                 <label>Events: {{ current_calendar.events.length }}</label>
 												<div class="card col-md-12">
@@ -931,7 +977,9 @@
                     '11:00 PM',
                     '11:30 PM',
                     '12:00 PM'
-                ]
+                ],
+
+                userNotify: true,
 			}
 		},
 
@@ -1076,6 +1124,7 @@
 
                 let formData = new FormData(form);
                 formData.append('events', JSON.stringify(currentObj.current_calendar.events));
+                formData.append('notify', currentObj.userNotify ? 1 : 0);
                 axios.post('/edit-calendar', formData)
                     .then(function(response) {
                         if (response.data.code === 401) {

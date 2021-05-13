@@ -34,8 +34,7 @@
 
 
 
-	                <button v-else type="button" class="btn btn-outline-primary btn-sm" name="button" @click="subscribeCalendarAction(calendar.id)">
-	                    <i class="far fa-bell"></i> Subscribe
+	                <button v-else type="button" class="btn btn-outline-primary btn-sm" name="button" @click="showSubscribeModal = true">         <i class="far fa-bell"></i> Subscribe
 	                </button>
 
 					<div @mouseover="showCalendarDropdownActions=true" @mouseleave="showCalendarDropdownActions=false" class="dropdown-calendar-actions">
@@ -353,11 +352,45 @@
 
 	            </div>
 
-                <div v-if="sortedEvents.length > 5" class="row mt-2">
-                    <div class="col-12 text-right">
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <div v-if="calendar.hash_tag || calendar.league || calendar.zip_code">
+                            <p v-if="calendar.hash_tag" class="mb-0">
+                                <span class="font-weight-bold">Hashtag:</span>
+                                <button
+                                    @click="getCalendars('hash_tag', calendar.hash_tag)"
+                                    type="button"
+                                    class="btn btn-link py-0"
+                                >
+                                    {{ calendar.hash_tag }}
+                                </button>
+                            </p>
+                            <p v-if="calendar.league" class="mb-0">
+                                <span class="font-weight-bold">League:</span>
+                                <button
+                                    @click="getCalendars('league', calendar.league)"
+                                    type="button"
+                                    class="btn btn-link py-0"
+                                >
+                                    {{ calendar.league }}
+                                </button>
+                            </p>
+                            <p v-if="calendar.zip_code" class="mb-0">
+                                <span class="font-weight-bold">Zip</span>
+                                <button
+                                    @click="getCalendars('zip_code', calendar.zip_code)"
+                                    type="button" class="btn btn-link py-0"
+                                >
+                                    {{ calendar.zip_code }}
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                    <div v-if="sortedEvents.length > 5" class="col-md-6 text-right mt-2">
                         <button class="btn btn-sm btn-secondary" @click="showEvents('prev')" :disabled="view_events_start <= 0">Prev</button>
                         <button class="btn btn-sm btn-secondary" @click="showEvents('next')" :disabled="view_events_end >= calendar.events.length - 1">Next</button>
                     </div>
+
                 </div>
 			</div>
 		</transition>
@@ -492,6 +525,55 @@
         </div>
         <!-- END Confirm Delete Calendar Modal -->
 
+        <!-- Subscribe modal agronom 13.05.2021-->
+        <div v-if="showSubscribeModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Subscribe</h5>
+                                        <button type="button" class="close" @click="showSubscribeModal = false">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="" id="userNotify" v-model="userNotify">
+                                            <label class="form-check-label" for="userNotify">
+                                                I'd like to receive a text message when event is changed
+                                            </label>
+                                        </div>
+                                        <div class="">
+                                            <label class="form-label">Phone Number</label>
+                                            <input
+                                                v-model="userPhone"
+                                                @input="clearValidError"
+                                                type="tel"
+                                                class="form-control"
+                                                :class="{'border-danger': !userPhoneValid}"
+                                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                            >
+                                            <small v-if="!userPhoneValid" class="form-text text-center text-danger">Add phone number please</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="showSubscribeModal = false">Close</button>
+                                        <button type="button" class="btn btn-primary" @click="subscribeCalendarAction(calendar.id)">
+                                            <span v-if="subscribeRequestProcess" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Subscribe
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- END Subscribe modal -->
+
 	</div>
 
 </template>
@@ -598,7 +680,13 @@ import moment from 'moment';
 
                 sortedEvents: [],
 
-                moment: moment
+                moment: moment,
+
+                showSubscribeModal: false,
+                subscribeRequestProcess: false,
+                userNotify: false,
+                userPhone: '',
+                userPhoneValid: true
 			}
 		},
 
@@ -613,6 +701,10 @@ import moment from 'moment';
 		},
 
 		methods: {
+
+            getCalendars(param, value) {
+                this.$emit('toggle', param, value)
+            },
 
             sendSharedCalendarLink: function(event) {
                 event.preventDefault();
@@ -682,13 +774,25 @@ import moment from 'moment';
                 }
             },
 
+            clearValidError: function () {
+                this.userPhoneValid = true;
+            },
+
             subscribeCalendarAction: function(id) {
 
+                if(this.userNotify && !this.userPhone) {
+                    this.userPhoneValid = false;
+                    return false;
+                }
+
                 let currentObj = this;
+                let notify = this.userNotify ? 1 : 0;
+                let phone = this.userPhone;
                 // Send request
                 axios.interceptors.request.use(function (config) {
                     // Do something before request is sent
                     currentObj.requestProcess = true;
+                    currentObj.subscribeRequestProcess = true;
                     currentObj.$parent.requestDanger = null;
                     currentObj.$parent.requestSuccess = null;
                     return config;
@@ -697,7 +801,7 @@ import moment from 'moment';
                     return Promise.reject(error);
                 });
 
-                axios.post('/subscribe-calendar', {calendar_id: id})
+                axios.post('/subscribe-calendar', {calendar_id: id, notify, phone })
                     .then(function (response) {
                         if (response.data.code === 401) {
                             document.location.href = "/";
@@ -717,6 +821,8 @@ import moment from 'moment';
                     })
                     .then(function () {
                         currentObj.requestProcess = false;
+                        currentObj.subscribeRequestProcess = false;
+                        currentObj.showSubscribeModal = false;
                     });
             },
 

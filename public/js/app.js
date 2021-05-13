@@ -2658,6 +2658,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2723,7 +2769,8 @@ __webpack_require__.r(__webpack_exports__);
         description: null
       },
       moment: (moment__WEBPACK_IMPORTED_MODULE_2___default()),
-      times: ['01:00 AM', '01:30 AM', '02:00 AM', '02:30 AM', '03:00 AM', '03:30 AM', '04:00 AM', '04:30 AM', '05:00 AM', '05:30 AM', '06:00 AM', '06:30 AM', '07:00 AM', '07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 AM', '12:30 AM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 PM']
+      times: ['01:00 AM', '01:30 AM', '02:00 AM', '02:30 AM', '03:00 AM', '03:30 AM', '04:00 AM', '04:30 AM', '05:00 AM', '05:30 AM', '06:00 AM', '06:30 AM', '07:00 AM', '07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 AM', '12:30 AM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 PM'],
+      userNotify: true
     };
   },
   created: function created() {
@@ -2848,6 +2895,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       var formData = new FormData(form);
       formData.append('events', JSON.stringify(currentObj.current_calendar.events));
+      formData.append('notify', currentObj.userNotify ? 1 : 0);
       axios.post('/edit-calendar', formData).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
@@ -3518,6 +3566,11 @@ __webpack_require__.r(__webpack_exports__);
     this.$root.$refs.allCalendars = this;
   },
   methods: {
+    filterCalendars: function filterCalendars(param, value) {
+      this.sortedCalendars = this.calendars.filter(function (calendar) {
+        return calendar[param] === value;
+      });
+    },
     applyCalendarsTypeFilter: function applyCalendarsTypeFilter(typeFilter) {
       this.calendarsTypesFilters.forEach(function (typeFilter) {
         typeFilter.active = false;
@@ -4184,6 +4237,88 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4265,7 +4400,12 @@ __webpack_require__.r(__webpack_exports__);
       sortByTypeDirection: 'desc',
       sortByDescriptionDirection: 'desc',
       sortedEvents: [],
-      moment: (moment__WEBPACK_IMPORTED_MODULE_4___default())
+      moment: (moment__WEBPACK_IMPORTED_MODULE_4___default()),
+      showSubscribeModal: false,
+      subscribeRequestProcess: false,
+      userNotify: false,
+      userPhone: '',
+      userPhoneValid: true
     };
   },
   computed: {
@@ -4280,6 +4420,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getCalendars: function getCalendars(param, value) {
+      this.$emit('toggle', param, value);
+    },
     sendSharedCalendarLink: function sendSharedCalendarLink(event) {
       event.preventDefault();
       event.stopPropagation();
@@ -4348,12 +4491,23 @@ __webpack_require__.r(__webpack_exports__);
         this.editedEventData.endTime = moment__WEBPACK_IMPORTED_MODULE_4___default()(from.setHours(from.getHours() + 1)).format('hh:mm a').toUpperCase();
       }
     },
+    clearValidError: function clearValidError() {
+      this.userPhoneValid = true;
+    },
     subscribeCalendarAction: function subscribeCalendarAction(id) {
-      var currentObj = this; // Send request
+      if (this.userNotify && !this.userPhone) {
+        this.userPhoneValid = false;
+        return false;
+      }
+
+      var currentObj = this;
+      var notify = this.userNotify ? 1 : 0;
+      var phone = this.userPhone; // Send request
 
       axios.interceptors.request.use(function (config) {
         // Do something before request is sent
         currentObj.requestProcess = true;
+        currentObj.subscribeRequestProcess = true;
         currentObj.$parent.requestDanger = null;
         currentObj.$parent.requestSuccess = null;
         return config;
@@ -4362,7 +4516,9 @@ __webpack_require__.r(__webpack_exports__);
         return Promise.reject(error);
       });
       axios.post('/subscribe-calendar', {
-        calendar_id: id
+        calendar_id: id,
+        notify: notify,
+        phone: phone
       }).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
@@ -4380,6 +4536,8 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.$parent.requestError = 'Request Error';
       }).then(function () {
         currentObj.requestProcess = false;
+        currentObj.subscribeRequestProcess = false;
+        currentObj.showSubscribeModal = false;
       });
     },
     showUnsubscribeCalendarModalAction: function showUnsubscribeCalendarModalAction(id) {
@@ -69197,6 +69355,185 @@ var render = function() {
                                   ]),
                                   _vm._v(" "),
                                   _c("div", { staticClass: "form-row" }, [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("Hashtag")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.current_calendar.hash_tag,
+                                              expression:
+                                                "current_calendar.hash_tag"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_hash_tag",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.hash_tag
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "hash_tag",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("League")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.current_calendar.league,
+                                              expression:
+                                                "current_calendar.league"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_league",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.league
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "league",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("Zip")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.current_calendar.zip_code,
+                                              expression:
+                                                "current_calendar.zip_code"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "number",
+                                            name: "calendar_zip_code",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.zip_code
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "zip_code",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "form-row" }, [
                                     _c("label", [
                                       _vm._v(
                                         "Events: " +
@@ -70749,6 +71086,65 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-footer" }, [
+                              _c("div", { staticClass: "form-check mb-2" }, [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.userNotify,
+                                      expression: "userNotify"
+                                    }
+                                  ],
+                                  staticClass: "form-check-input",
+                                  attrs: {
+                                    type: "checkbox",
+                                    value: "",
+                                    id: "userNotify"
+                                  },
+                                  domProps: {
+                                    checked: Array.isArray(_vm.userNotify)
+                                      ? _vm._i(_vm.userNotify, "") > -1
+                                      : _vm.userNotify
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$a = _vm.userNotify,
+                                        $$el = $event.target,
+                                        $$c = $$el.checked ? true : false
+                                      if (Array.isArray($$a)) {
+                                        var $$v = "",
+                                          $$i = _vm._i($$a, $$v)
+                                        if ($$el.checked) {
+                                          $$i < 0 &&
+                                            (_vm.userNotify = $$a.concat([$$v]))
+                                        } else {
+                                          $$i > -1 &&
+                                            (_vm.userNotify = $$a
+                                              .slice(0, $$i)
+                                              .concat($$a.slice($$i + 1)))
+                                        }
+                                      } else {
+                                        _vm.userNotify = $$c
+                                      }
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "form-check-label",
+                                    attrs: { for: "userNotify" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                                Notify users about changes\n                                            "
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
                               _vm.showCancelModalAlert
                                 ? _c(
                                     "div",
@@ -71073,6 +71469,185 @@ var render = function() {
                                         ]
                                       )
                                     ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "form-row" }, [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("Hashtag")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.current_calendar.hash_tag,
+                                              expression:
+                                                "current_calendar.hash_tag"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_hash_tag",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.hash_tag
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "hash_tag",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("League")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.current_calendar.league,
+                                              expression:
+                                                "current_calendar.league"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_league",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.league
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "league",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("Zip")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.current_calendar.zip_code,
+                                              expression:
+                                                "current_calendar.zip_code"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "number",
+                                            name: "calendar_zip_code",
+                                            disabled: _vm.formRequestProcess
+                                          },
+                                          domProps: {
+                                            value: _vm.current_calendar.zip_code
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.current_calendar,
+                                                "zip_code",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]
+                                    )
                                   ]),
                                   _vm._v(" "),
                                   _c("div", { staticClass: "form-row" }, [
@@ -72683,6 +73258,110 @@ var render = function() {
                                   ]),
                                   _vm._v(" "),
                                   _c("div", { staticClass: "form-row" }, [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("Hashtag")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_hash_tag",
+                                            disabled: _vm.formRequestProcess
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("League")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            name: "calendar_league",
+                                            disabled: _vm.formRequestProcess
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "input-group input-group-sm mb-3 col-lg-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "input-group-prepend"
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass: "input-group-text"
+                                              },
+                                              [_vm._v("Zip")]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("input", {
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "number",
+                                            name: "calendar_zip_code",
+                                            disabled: _vm.formRequestProcess
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "form-row" }, [
                                     _c("label", [
                                       _vm._v(
                                         "Events: " +
@@ -74175,7 +74854,8 @@ var render = function() {
                             attrs: {
                               calendar: calendar,
                               jobs_status: _vm.jobs_status
-                            }
+                            },
+                            on: { toggle: _vm.filterCalendars }
                           })
                         ],
                         1
@@ -74582,7 +75262,7 @@ var render = function() {
                     attrs: { type: "button", name: "button" },
                     on: {
                       click: function($event) {
-                        return _vm.subscribeCalendarAction(_vm.calendar.id)
+                        _vm.showSubscribeModal = true
                       }
                     }
                   },
@@ -75976,9 +76656,110 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _vm.sortedEvents.length > 5
-                ? _c("div", { staticClass: "row mt-2" }, [
-                    _c("div", { staticClass: "col-12 text-right" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-6 mt-2" }, [
+                  _vm.calendar.hash_tag ||
+                  _vm.calendar.league ||
+                  _vm.calendar.zip_code
+                    ? _c("div", [
+                        _vm.calendar.hash_tag
+                          ? _c("p", { staticClass: "mb-0" }, [
+                              _c("span", { staticClass: "font-weight-bold" }, [
+                                _vm._v("Hashtag:")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-link py-0",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.getCalendars(
+                                        "hash_tag",
+                                        _vm.calendar.hash_tag
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(_vm.calendar.hash_tag) +
+                                      "\n                                "
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.calendar.league
+                          ? _c("p", { staticClass: "mb-0" }, [
+                              _c("span", { staticClass: "font-weight-bold" }, [
+                                _vm._v("League:")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-link py-0",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.getCalendars(
+                                        "league",
+                                        _vm.calendar.league
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(_vm.calendar.league) +
+                                      "\n                                "
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.calendar.zip_code
+                          ? _c("p", { staticClass: "mb-0" }, [
+                              _c("span", { staticClass: "font-weight-bold" }, [
+                                _vm._v("Zip")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-link py-0",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.getCalendars(
+                                        "zip_code",
+                                        _vm.calendar.zip_code
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(_vm.calendar.zip_code) +
+                                      "\n                                "
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _vm.sortedEvents.length > 5
+                  ? _c("div", { staticClass: "col-md-6 text-right mt-2" }, [
                       _c(
                         "button",
                         {
@@ -76011,8 +76792,8 @@ var render = function() {
                         [_vm._v("Next")]
                       )
                     ])
-                  ])
-                : _vm._e()
+                  : _vm._e()
+              ])
             ])
           : _vm._e()
       ]),
@@ -76537,6 +77318,217 @@ var render = function() {
                         ])
                       ]
                     )
+                  ])
+                ])
+              ])
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showSubscribeModal
+        ? _c(
+            "div",
+            [
+              _c("transition", { attrs: { name: "modal" } }, [
+                _c("div", { staticClass: "modal-mask" }, [
+                  _c("div", { staticClass: "modal-wrapper" }, [
+                    _c("div", { attrs: { tabindex: "-1", role: "dialog" } }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _c("div", { staticClass: "modal-header" }, [
+                              _c("h5", { staticClass: "modal-title" }, [
+                                _vm._v("Subscribe")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "close",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.showSubscribeModal = false
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { attrs: { "aria-hidden": "true" } },
+                                    [_vm._v("×")]
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c("div", { staticClass: "form-check mb-2" }, [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.userNotify,
+                                      expression: "userNotify"
+                                    }
+                                  ],
+                                  staticClass: "form-check-input",
+                                  attrs: {
+                                    type: "checkbox",
+                                    value: "",
+                                    id: "userNotify"
+                                  },
+                                  domProps: {
+                                    checked: Array.isArray(_vm.userNotify)
+                                      ? _vm._i(_vm.userNotify, "") > -1
+                                      : _vm.userNotify
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$a = _vm.userNotify,
+                                        $$el = $event.target,
+                                        $$c = $$el.checked ? true : false
+                                      if (Array.isArray($$a)) {
+                                        var $$v = "",
+                                          $$i = _vm._i($$a, $$v)
+                                        if ($$el.checked) {
+                                          $$i < 0 &&
+                                            (_vm.userNotify = $$a.concat([$$v]))
+                                        } else {
+                                          $$i > -1 &&
+                                            (_vm.userNotify = $$a
+                                              .slice(0, $$i)
+                                              .concat($$a.slice($$i + 1)))
+                                        }
+                                      } else {
+                                        _vm.userNotify = $$c
+                                      }
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "form-check-label",
+                                    attrs: { for: "userNotify" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                                I'd like to receive a text message when event is changed\n                                            "
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", {}, [
+                                _c("label", { staticClass: "form-label" }, [
+                                  _vm._v("Phone Number")
+                                ]),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.userPhone,
+                                      expression: "userPhone"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  class: {
+                                    "border-danger": !_vm.userPhoneValid
+                                  },
+                                  attrs: {
+                                    type: "tel",
+                                    pattern: "[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                  },
+                                  domProps: { value: _vm.userPhone },
+                                  on: {
+                                    input: [
+                                      function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.userPhone = $event.target.value
+                                      },
+                                      _vm.clearValidError
+                                    ]
+                                  }
+                                }),
+                                _vm._v(" "),
+                                !_vm.userPhoneValid
+                                  ? _c(
+                                      "small",
+                                      {
+                                        staticClass:
+                                          "form-text text-center text-danger"
+                                      },
+                                      [_vm._v("Add phone number please")]
+                                    )
+                                  : _vm._e()
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-bs-dismiss": "modal"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.showSubscribeModal = false
+                                    }
+                                  }
+                                },
+                                [_vm._v("Close")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.subscribeCalendarAction(
+                                        _vm.calendar.id
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm.subscribeRequestProcess
+                                    ? _c("span", {
+                                        staticClass:
+                                          "spinner-border spinner-border-sm",
+                                        attrs: {
+                                          role: "status",
+                                          "aria-hidden": "true"
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(
+                                    " Subscribe\n                                        "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ])
                   ])
                 ])
               ])

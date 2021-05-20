@@ -368,6 +368,8 @@ class EventsController extends Controller
             ]);
         }
 
+        $notify = intval(request('notify', 0));
+
         $startTimeArray = explode(' ', $request->startTime);
         $startTime = explode(':', $startTimeArray[0]);
         $startTimeAmPm = $startTimeArray[1];
@@ -426,7 +428,10 @@ class EventsController extends Controller
 
             // Send Mail to Calendar Shared and Owned users
             $action = 'Updated';
-            $this->sendMainNotify($event, $action);
+
+            if($notify === 1) {
+                $this->sendMainNotify( $event, $action );
+            }
 
             return response()->json([
                 'code' => 1,

@@ -5232,6 +5232,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5264,12 +5270,14 @@ __webpack_require__.r(__webpack_exports__);
         location: null,
         addressData: null,
         type: null,
-        description: null
+        description: null,
+        notify: 0
       },
       requestProcess: false,
       requestSuccess: null,
       requestError: null,
       moment: (moment__WEBPACK_IMPORTED_MODULE_2___default()),
+      userNotify: true,
       times: ['01:00 AM', '01:30 AM', '02:00 AM', '02:30 AM', '03:00 AM', '03:30 AM', '04:00 AM', '04:30 AM', '05:00 AM', '05:30 AM', '06:00 AM', '06:30 AM', '07:00 AM', '07:30 AM', '08:00 AM', '08:30 AM', '09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 AM', '12:30 AM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 PM']
     };
   },
@@ -5322,6 +5330,11 @@ __webpack_require__.r(__webpack_exports__);
         return Promise.reject(error);
       });
       var url = currentObj.editedEventData.duplicate_event_id ? '/duplicate-single-event' : '/edit-single-event';
+
+      if (url === '/edit-single-event') {
+        currentObj.editedEventData.notify = this.userNotify ? 1 : 0;
+      }
+
       axios.post(url, currentObj.editedEventData).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
@@ -5375,7 +5388,8 @@ __webpack_require__.r(__webpack_exports__);
       endTime: moment__WEBPACK_IMPORTED_MODULE_2___default()(this.event.ended_at).format('hh:mm a').toUpperCase(),
       location: this.event.location,
       type: this.event.type,
-      description: this.event.description
+      description: this.event.description,
+      notify: 0
     };
     this.$refs.eventLocationAutocomplete.focus();
     this.$refs.eventLocationAutocomplete.update(this.event.location);
@@ -78275,6 +78289,60 @@ var render = function() {
               }
             },
             [_c("i", { staticClass: "far fa-times-circle" }), _vm._v(" Cancel")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-check mt-2" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.userNotify,
+                expression: "userNotify"
+              }
+            ],
+            staticClass: "form-check-input",
+            attrs: { type: "checkbox", value: "", id: "userNotifyInput" },
+            domProps: {
+              checked: Array.isArray(_vm.userNotify)
+                ? _vm._i(_vm.userNotify, "") > -1
+                : _vm.userNotify
+            },
+            on: {
+              change: function($event) {
+                var $$a = _vm.userNotify,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = "",
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.userNotify = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.userNotify = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.userNotify = $$c
+                }
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass: "form-check-label",
+              attrs: { for: "userNotifyInput" }
+            },
+            [
+              _vm._v(
+                "\n                    Notify users about changes\n                "
+              )
+            ]
           )
         ])
       ]),

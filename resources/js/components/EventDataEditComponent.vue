@@ -93,6 +93,12 @@
                     <button class="btn btn-success btn-sm pull-right btn-open" title="Save" :disabled="!newEventDataValid || requestProcess" @click="$event.stopPropagation(), submitEditSingleEvent(event.id, $event)"><i class="far fa-save"></i> Save Event Data</button>
                     <button class="btn btn-danger btn-sm pull-right btn-open" title="Cancel" :disabled="requestProcess" @click="hideEditSingleEvent($event)"><i class="far fa-times-circle"></i> Cancel</button>
                 </div>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" value="" id="userNotifyInput" v-model="userNotify">
+                    <label class="form-check-label" for="userNotifyInput">
+                        Notify users about changes
+                    </label>
+                </div>
             </div>
 
             <div class="col-8">
@@ -149,7 +155,8 @@ export default {
                 location: null,
                 addressData: null,
                 type: null,
-                description: null
+                description: null,
+                notify: 0
             },
 
             requestProcess: false,
@@ -157,6 +164,8 @@ export default {
             requestError: null,
 
             moment: moment,
+
+            userNotify: true,
 
             times: [
                 '01:00 AM',
@@ -265,7 +274,11 @@ export default {
                 return Promise.reject(error);
             });
 
+
             let url = currentObj.editedEventData.duplicate_event_id ? '/duplicate-single-event' : '/edit-single-event';
+            if(url === '/edit-single-event') {
+                currentObj.editedEventData.notify = this.userNotify ? 1 : 0;
+            }
 
             axios.post(url, currentObj.editedEventData)
             .then(function (response) {
@@ -323,7 +336,8 @@ export default {
 
             location: this.event.location,
             type: this.event.type,
-            description: this.event.description
+            description: this.event.description,
+            notify: 0
         };
 
         this.$refs.eventLocationAutocomplete.focus();

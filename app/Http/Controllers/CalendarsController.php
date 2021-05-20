@@ -217,6 +217,7 @@ class CalendarsController extends Controller
             $calendar->save();
 
             // Sync events Data
+            
             $editedEvents = json_decode($request->events, TRUE);
             foreach ($editedEvents as $event) {
 
@@ -240,11 +241,13 @@ class CalendarsController extends Controller
                         $this->sendMainNotify($updatedEvent, 'Cancelled');
                     }
                     $updatedEvent->save();
+                } else if (isset($event['status']) && $event['status'] == 'over') { 
+                    continue;
                 } else {
 
                     if ($event['id'] == 'new') {
 
-                        // Create ne event
+                        // Create new event
 
                         $eventSummary = $calendar->name.' '.$event['type'];
 
@@ -325,6 +328,7 @@ class CalendarsController extends Controller
 
                 }
             }
+            
 
             return response()->json([
                 'code' => 1,
@@ -351,7 +355,7 @@ class CalendarsController extends Controller
                 return response()->json([
                     'code' => 404,
                     'data' => [
-                        'message' => 'Google calendar or event not found'
+                        'message' => 'Google calendar or event not found - 1'
                     ]
                 ]);
             } else {

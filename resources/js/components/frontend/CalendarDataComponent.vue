@@ -32,14 +32,15 @@
                     </div>
                     <div v-if="user.status && user.status === 'anonimous'" class="col-md-4 text-right">
                         <div class="actions mt-2">
-                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>
+                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="showSubscribeModal = true"><i class="fas fa-bell"></i> Subscribe</button>
                             <button v-else type="button" class="btn btn-primary" @click="unsubscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Unsubscribe</button>
                             <button type="button" class="btn btn-primary" @click="shareCalendar(calendar.publicUrl)"><i class="fas fa-user-plus"></i> Share</button>
                         </div>
                     </div>
                     <div v-else class="col-md-4 text-right">
                         <div v-if="user.jobs_status === 'finished'" class="actions mt-2">
-                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>
+<!--                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Subscribe</button>-->
+                            <button v-if="!calendar.isSubscribed" type="button" class="btn btn-primary" @click="showSubscribeModal = true"><i class="fas fa-bell"></i> Subscribe</button>
                             <button v-else type="button" class="btn btn-primary" @click="unsubscribeCalendar(calendar.id)"><i class="fas fa-bell"></i> Unsubscribe</button>
                             <button type="button" class="btn btn-primary" @click="shareCalendar(calendar.publicUrl)"><i class="fas fa-user-plus"></i> Share</button>
                         </div>
@@ -157,6 +158,55 @@
             </transition>
         </div>
         <!-- END Share Calendar Message modal -->
+
+        <!-- Subscribe modal agronom 25.05.2021-->
+        <div v-if="showSubscribeModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Subscribe</h5>
+                                        <button type="button" class="close" @click="showSubscribeModal = false">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" value="" id="userNotify" v-model="userNotify">
+                                            <label class="form-check-label" for="userNotify">
+                                                I'd like to receive a text message when event is changed
+                                            </label>
+                                        </div>
+                                        <div class="">
+                                            <label class="form-label">Phone Number</label>
+                                            <input
+                                                v-model="userPhone"
+                                                @input="clearValidError"
+                                                type="tel"
+                                                class="form-control"
+                                                :class="{'border-danger': !userPhoneValid}"
+                                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                            >
+                                            <small v-if="!userPhoneValid" class="form-text text-center text-danger">Add phone number please</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="showSubscribeModal = false">Close</button>
+                                        <button type="button" class="btn btn-primary" @click="subscribeCalendar(calendar.id)">
+                                            <span v-if="subscribeRequestProcess" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Subscribe
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- END Subscribe modal -->
     </div>
 
 </template>
@@ -186,7 +236,13 @@ export default {
             requestError: '',
             requestSuccess: '',
 
-            moment: moment
+            moment: moment,
+
+            showSubscribeModal: false,
+            subscribeRequestProcess: false,
+            userNotify: false,
+            userPhone: '',
+            userPhoneValid: true
         }
     },
 
@@ -273,13 +329,25 @@ export default {
                 });
         },
 
+        clearValidError: function () {
+            this.userPhoneValid = true;
+        },
+
         subscribeCalendar: function(id) {
 
+            if(this.userNotify && !this.userPhone) {
+                this.userPhoneValid = false;
+                return false;
+            }
+
             let currentObj = this;
+            let notify = this.userNotify ? 1 : 0;
+            let phone = this.userPhone;
             // Send request
             axios.interceptors.request.use(function (config) {
                 // Do something before request is sent
                 currentObj.requestProcess = true;
+                currentObj.subscribeRequestProcess = true;
                 currentObj.requestError = null;
                 currentObj.requestSuccess = null;
                 return config;
@@ -288,7 +356,7 @@ export default {
                 return Promise.reject(error);
             });
 
-            axios.post('/subscribe-calendar', {calendar_id: id})
+            axios.post('/subscribe-calendar', {calendar_id: id, notify, phone })
             .then(function (response) {
                 if (response.data.code === 401) {
                     document.location.href = "/";
@@ -309,6 +377,8 @@ export default {
             })
             .then(function () {
                 currentObj.requestProcess = false;
+                currentObj.subscribeRequestProcess = false;
+                currentObj.showSubscribeModal = false;
             });
         },
 

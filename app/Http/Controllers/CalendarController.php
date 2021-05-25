@@ -15,7 +15,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::where('google_id', $google_id)->with('events')->with('user')->first();
         if (!$calendar) {
-            return view('frontend.calendar', ['calendar' => '404']);
+            return view('frontend.calendar', ['calendar' => '404', 'user' => Auth::user() ? Auth::user() : "{'status':'anonimous'}" ]);
         }
 
         // Get Calendar Updated Date by Events updated date

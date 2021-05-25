@@ -574,6 +574,35 @@
         </div>
         <!-- END Subscribe modal -->
 
+        <!-- Success copy event address modal -->
+        <div v-if="showSuccessCopyEventAdddressModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper" @click="showSuccessCopyEventAdddressModal = false">
+                        <div id="successCopyEventAdddressModal" class="message-modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Information</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showSuccessCopyEventAdddressModal = false">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Event address was copied to your clipboard</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" @click="infoModalText='', showInfoModal=false">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!-- END Success copy event address modal -->
+
 	</div>
 
 </template>
@@ -672,6 +701,7 @@ import moment from 'moment';
                 infoModalRequestSuccess: null,
 
                 showConfirmUnsubscribeCalendarModal: false,
+                showSuccessCopyEventAdddressModal: false,
 
                 sortByDateDirection: 'desc',
                 sortByLocationDirection: 'desc',

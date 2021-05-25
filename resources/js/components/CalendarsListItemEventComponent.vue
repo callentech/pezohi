@@ -209,10 +209,6 @@ export default {
         },
 
         copyEventAddress: function() {
-            // if (this.showEditSingleEventForm || this.showEventDetails) {
-            //     return false;
-            // }
-
             if (this.showEditSingleEventForm) {
                 return false;
             }
@@ -223,8 +219,7 @@ export default {
             input_temp.setSelectionRange(0, 99999);
             document.execCommand('copy');
             document.body.removeChild(input_temp);
-            this.$parent.infoModalHtml = '<p>Event Address was copied to your clipboard</p><input type="text" value="'+input_temp.innerHTML+'" readonly>';
-            this.$parent.showInfoModal = true;
+            this.$parent.showSuccessCopyEventAdddressModal = true;
         },
         showEditSingleEvent: function () {
             this.$parent.$refs.event.forEach((element) => {

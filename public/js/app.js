@@ -4319,6 +4319,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4395,6 +4424,7 @@ __webpack_require__.r(__webpack_exports__);
       infoModalRequestError: null,
       infoModalRequestSuccess: null,
       showConfirmUnsubscribeCalendarModal: false,
+      showSuccessCopyEventAdddressModal: false,
       sortByDateDirection: 'desc',
       sortByLocationDirection: 'desc',
       sortByTypeDirection: 'desc',
@@ -5011,9 +5041,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     copyEventAddress: function copyEventAddress() {
-      // if (this.showEditSingleEventForm || this.showEventDetails) {
-      //     return false;
-      // }
       if (this.showEditSingleEventForm) {
         return false;
       }
@@ -5025,8 +5052,7 @@ __webpack_require__.r(__webpack_exports__);
       input_temp.setSelectionRange(0, 99999);
       document.execCommand('copy');
       document.body.removeChild(input_temp);
-      this.$parent.infoModalHtml = '<p>Event Address was copied to your clipboard</p><input type="text" value="' + input_temp.innerHTML + '" readonly>';
-      this.$parent.showInfoModal = true;
+      this.$parent.showSuccessCopyEventAdddressModal = true;
     },
     showEditSingleEvent: function showEditSingleEvent() {
       this.$parent.$refs.event.forEach(function (element) {
@@ -7213,6 +7239,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['data', 'user'],
@@ -7230,7 +7306,12 @@ __webpack_require__.r(__webpack_exports__);
       requestProcess: false,
       requestError: '',
       requestSuccess: '',
-      moment: (moment__WEBPACK_IMPORTED_MODULE_0___default())
+      moment: (moment__WEBPACK_IMPORTED_MODULE_0___default()),
+      showSubscribeModal: false,
+      subscribeRequestProcess: false,
+      userNotify: false,
+      userPhone: '',
+      userPhoneValid: true
     };
   },
   methods: {
@@ -7310,12 +7391,23 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.requestProcess = false;
       });
     },
+    clearValidError: function clearValidError() {
+      this.userPhoneValid = true;
+    },
     subscribeCalendar: function subscribeCalendar(id) {
-      var currentObj = this; // Send request
+      if (this.userNotify && !this.userPhone) {
+        this.userPhoneValid = false;
+        return false;
+      }
+
+      var currentObj = this;
+      var notify = this.userNotify ? 1 : 0;
+      var phone = this.userPhone; // Send request
 
       axios.interceptors.request.use(function (config) {
         // Do something before request is sent
         currentObj.requestProcess = true;
+        currentObj.subscribeRequestProcess = true;
         currentObj.requestError = null;
         currentObj.requestSuccess = null;
         return config;
@@ -7324,7 +7416,9 @@ __webpack_require__.r(__webpack_exports__);
         return Promise.reject(error);
       });
       axios.post('/subscribe-calendar', {
-        calendar_id: id
+        calendar_id: id,
+        notify: notify,
+        phone: phone
       }).then(function (response) {
         if (response.data.code === 401) {
           document.location.href = "/";
@@ -7343,6 +7437,8 @@ __webpack_require__.r(__webpack_exports__);
         currentObj.requestError = 'Request Error';
       }).then(function () {
         currentObj.requestProcess = false;
+        currentObj.subscribeRequestProcess = false;
+        currentObj.showSubscribeModal = false;
       });
     },
     shareCalendar: function shareCalendar(url) {
@@ -77549,6 +77645,110 @@ var render = function() {
             ],
             1
           )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showSuccessCopyEventAdddressModal
+        ? _c(
+            "div",
+            [
+              _c("transition", { attrs: { name: "modal" } }, [
+                _c("div", { staticClass: "modal-mask" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal-wrapper",
+                      on: {
+                        click: function($event) {
+                          _vm.showSuccessCopyEventAdddressModal = false
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "message-modal",
+                          attrs: {
+                            id: "successCopyEventAdddressModal",
+                            tabindex: "-1",
+                            role: "dialog"
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "modal-dialog",
+                              attrs: { role: "document" }
+                            },
+                            [
+                              _c("div", { staticClass: "modal-content" }, [
+                                _c("div", { staticClass: "modal-header" }, [
+                                  _c("h5", { staticClass: "modal-title" }, [
+                                    _vm._v("Information")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "close",
+                                      attrs: {
+                                        type: "button",
+                                        "data-dismiss": "modal",
+                                        "aria-label": "Close"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.showSuccessCopyEventAdddressModal = false
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { attrs: { "aria-hidden": "true" } },
+                                        [_vm._v("×")]
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "modal-body" }, [
+                                  _c("p", [
+                                    _vm._v(
+                                      "Event address was copied to your clipboard"
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "modal-footer" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-secondary",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          ;(_vm.infoModalText = ""),
+                                            (_vm.showInfoModal = false)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Close")]
+                                  )
+                                ])
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ],
+            1
+          )
         : _vm._e()
     ],
     1
@@ -80882,21 +81082,21 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "description" }, [
                   _vm._v(
-                    "\n                        " +
+                    "\n                            " +
                       _vm._s(_vm.calendar.events.length) +
                       " events "
                   ),
                   _c("i", { staticClass: "fas fa-circle" }),
                   _vm._v(
-                    "\n                        Owned by : " +
+                    "\n                            Owned by : " +
                       _vm._s(_vm.calendar.user.email) +
                       " "
                   ),
                   _c("i", { staticClass: "fas fa-circle" }),
                   _vm._v(
-                    "\n                        Last updated : " +
+                    "\n                            Last updated : " +
                       _vm._s(_vm._f("formatDate")(_vm.calendar.updated_at)) +
-                      "\n                    "
+                      "\n                        "
                   )
                 ])
               ]),
@@ -80911,9 +81111,9 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        " +
+                          "\n                            " +
                             _vm._s(_vm.requestSuccess) +
-                            "\n                    "
+                            "\n                        "
                         )
                       ]
                     )
@@ -80928,9 +81128,9 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                        " +
+                          "\n                            " +
                             _vm._s(_vm.requestError) +
-                            "\n                    "
+                            "\n                        "
                         )
                       ]
                     )
@@ -80948,7 +81148,7 @@ var render = function() {
                               attrs: { type: "button" },
                               on: {
                                 click: function($event) {
-                                  return _vm.subscribeCalendar(_vm.calendar.id)
+                                  _vm.showSubscribeModal = true
                                 }
                               }
                             },
@@ -81005,9 +81205,7 @@ var render = function() {
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.subscribeCalendar(
-                                        _vm.calendar.id
-                                      )
+                                      _vm.showSubscribeModal = true
                                     }
                                   }
                                 },
@@ -81063,7 +81261,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                            Sync in process. Please wait ...\n                        "
+                                "\n                                Sync in process. Please wait ...\n                            "
                               )
                             ]
                           )
@@ -81093,7 +81291,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Date\n                                    "
+                              "\n                                        Date\n                                        "
                             ),
                             _vm.sortByDateDirection === "desc"
                               ? _c("i", {
@@ -81120,7 +81318,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Address\n                                    "
+                              "\n                                        Address\n                                        "
                             ),
                             _vm.sortByLocationDirection === "desc"
                               ? _c("i", {
@@ -81145,7 +81343,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Event type\n                                    "
+                              "\n                                        Event type\n                                        "
                             ),
                             _vm.sortByTypeDirection === "desc"
                               ? _c("i", {
@@ -81170,7 +81368,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Notes\n                                    "
+                              "\n                                        Notes\n                                        "
                             ),
                             _vm.sortByDescriptionDirection === "desc"
                               ? _c("i", {
@@ -81195,7 +81393,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                    Status\n                                    "
+                              "\n                                        Status\n                                        "
                             ),
                             _vm.sortByStatusDirection === "desc"
                               ? _c("i", {
@@ -81275,14 +81473,14 @@ var render = function() {
                         _vm.moment(event.ended_at).isBefore(new Date())
                           ? _c("td", [
                               _vm._v(
-                                "\n                                Over\n                            "
+                                "\n                                    Over\n                                "
                               )
                             ])
                           : _c("td", [
                               _vm._v(
-                                "\n                                " +
+                                "\n                                    " +
                                   _vm._s(_vm._f("capitalize")(event.status)) +
-                                  "\n                            "
+                                  "\n                                "
                               )
                             ]),
                         _vm._v(" "),
@@ -81433,6 +81631,215 @@ var render = function() {
           ],
           1
         )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.showSubscribeModal
+      ? _c(
+          "div",
+          [
+            _c("transition", { attrs: { name: "modal" } }, [
+              _c("div", { staticClass: "modal-mask" }, [
+                _c("div", { staticClass: "modal-wrapper" }, [
+                  _c("div", { attrs: { tabindex: "-1", role: "dialog" } }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "modal-dialog",
+                        attrs: { role: "document" }
+                      },
+                      [
+                        _c("div", { staticClass: "modal-content" }, [
+                          _c("div", { staticClass: "modal-header" }, [
+                            _c("h5", { staticClass: "modal-title" }, [
+                              _vm._v("Subscribe")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "close",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.showSubscribeModal = false
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "span",
+                                  { attrs: { "aria-hidden": "true" } },
+                                  [_vm._v("×")]
+                                )
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-body" }, [
+                            _c("div", { staticClass: "form-check mb-2" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.userNotify,
+                                    expression: "userNotify"
+                                  }
+                                ],
+                                staticClass: "form-check-input",
+                                attrs: {
+                                  type: "checkbox",
+                                  value: "",
+                                  id: "userNotify"
+                                },
+                                domProps: {
+                                  checked: Array.isArray(_vm.userNotify)
+                                    ? _vm._i(_vm.userNotify, "") > -1
+                                    : _vm.userNotify
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.userNotify,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = "",
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          (_vm.userNotify = $$a.concat([$$v]))
+                                      } else {
+                                        $$i > -1 &&
+                                          (_vm.userNotify = $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1)))
+                                      }
+                                    } else {
+                                      _vm.userNotify = $$c
+                                    }
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "form-check-label",
+                                  attrs: { for: "userNotify" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                                I'd like to receive a text message when event is changed\n                                            "
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", {}, [
+                              _c("label", { staticClass: "form-label" }, [
+                                _vm._v("Phone Number")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.userPhone,
+                                    expression: "userPhone"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: { "border-danger": !_vm.userPhoneValid },
+                                attrs: {
+                                  type: "tel",
+                                  pattern: "[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                },
+                                domProps: { value: _vm.userPhone },
+                                on: {
+                                  input: [
+                                    function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.userPhone = $event.target.value
+                                    },
+                                    _vm.clearValidError
+                                  ]
+                                }
+                              }),
+                              _vm._v(" "),
+                              !_vm.userPhoneValid
+                                ? _c(
+                                    "small",
+                                    {
+                                      staticClass:
+                                        "form-text text-center text-danger"
+                                    },
+                                    [_vm._v("Add phone number please")]
+                                  )
+                                : _vm._e()
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "modal-footer" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary",
+                                attrs: {
+                                  type: "button",
+                                  "data-bs-dismiss": "modal"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.showSubscribeModal = false
+                                  }
+                                }
+                              },
+                              [_vm._v("Close")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.subscribeCalendar(
+                                      _vm.calendar.id
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _vm.subscribeRequestProcess
+                                  ? _c("span", {
+                                      staticClass:
+                                        "spinner-border spinner-border-sm",
+                                      attrs: {
+                                        role: "status",
+                                        "aria-hidden": "true"
+                                      }
+                                    })
+                                  : _vm._e(),
+                                _vm._v(
+                                  " Subscribe\n                                        "
+                                )
+                              ]
+                            )
+                          ])
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ],
+          1
+        )
       : _vm._e()
   ])
 }
@@ -81459,7 +81866,7 @@ var staticRenderFns = [
         { staticClass: "sort-link", attrs: { href: "javascript:void(0)" } },
         [
           _vm._v(
-            "\n                                    Actions\n                                "
+            "\n                                        Actions\n                                    "
           )
         ]
       )

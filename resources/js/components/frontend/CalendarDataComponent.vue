@@ -192,6 +192,11 @@
                                             >
                                             <small v-if="!userPhoneValid" class="form-text text-center text-danger">Add phone number please</small>
                                         </div>
+                                        <div class="modal-terms">
+                                            <small>
+                                                By clicking "Sign Up", you agree to Pezohi's Terms of Use and Privacy Policy. You consent to receive phone calls and SMS messages from Pezohi to provide updates on your order and/or for marketing purposes. Message frequency depends on your activity. You may opt-out by texting "STOP" to 86753. Message and data rates may apply.
+                                            </small>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="showSubscribeModal = false">Close</button>

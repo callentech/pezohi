@@ -4348,6 +4348,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -7076,6 +7081,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -77584,6 +77594,14 @@ var render = function() {
                                       [_vm._v("Add phone number please")]
                                     )
                                   : _vm._e()
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "modal-terms" }, [
+                                _c("small", [
+                                  _vm._v(
+                                    '\n                                                By clicking "Sign Up", you agree to Pezohi\'s Terms of Use and Privacy Policy. You consent to receive phone calls and SMS messages from Pezohi to provide updates on your order and/or for marketing purposes. Message frequency depends on your activity. You may opt-out by texting "STOP" to 86753. Message and data rates may apply.\n                                            '
+                                  )
+                                ])
                               ])
                             ]),
                             _vm._v(" "),
@@ -81779,6 +81797,14 @@ var render = function() {
                                     [_vm._v("Add phone number please")]
                                   )
                                 : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-terms" }, [
+                              _c("small", [
+                                _vm._v(
+                                  '\n                                                By clicking "Sign Up", you agree to Pezohi\'s Terms of Use and Privacy Policy. You consent to receive phone calls and SMS messages from Pezohi to provide updates on your order and/or for marketing purposes. Message frequency depends on your activity. You may opt-out by texting "STOP" to 86753. Message and data rates may apply.\n                                            '
+                                )
+                              ])
                             ])
                           ]),
                           _vm._v(" "),

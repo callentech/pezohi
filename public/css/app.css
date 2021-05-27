@@ -16145,6 +16145,11 @@ div.pac-container {
   display: none;
 }
 
+.modal-dialog .modal-terms {
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
 #editedCalendarEventsContent .header, #duplicatedCalendarEventsContent .header {
   width: 100%;
   padding: 5px;

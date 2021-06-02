@@ -462,14 +462,22 @@ class EventsController extends Controller
                         'message' => 'Google calendar or event not found'
                     ]
                 ]);
-            } else {
+            } else if ($ex->getMessage()) {
                 return response()->json([
+                    'code' => 0,
+                    'data' => [
+                        'message' => $ex->getMessage()
+                    ]
+                ]);
+            } else {
+            	return response()->json([
                     'code' => 0,
                     'data' => [
                         'message' => 'Request Error'
                     ]
                 ]);
             }
+            
         }
     }
 
